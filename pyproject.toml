@@ -38,7 +38,8 @@ ntc = ["ntc-templates>=4"]
 genie = ["pyats.topology", "genie.libs.parser"]
 netmiko = ["netmiko>=4"]
 scrapli = ["scrapli>=2023.7.30"]
-all = ["PyYAML>=5.4", "rich>=12", "ntc-templates>=4"]
+mcp = ["mcp>=2"]
+all = ["PyYAML>=5.4", "rich>=12", "ntc-templates>=4", "mcp>=2"]
 
 [project.scripts]
 clijson = "clijson.cli:main"
@@ -130,5 +131,5 @@ enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 
 [[tool.mypy.overrides]]
 # optional integrations without type information
-module = ["ntc_templates.*", "genie.*", "scrapli.*", "netmiko.*", "rich.*", "pandas.*"]
+module = ["ntc_templates.*", "genie.*", "scrapli.*", "netmiko.*", "rich.*", "pandas.*", "mcp.*", "pydantic.*"]
 ignore_missing_imports = true

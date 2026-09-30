@@ -32,6 +32,7 @@ It has **no runtime dependencies**.
 | **Tells you how it got the answer** | Every result carries `engine`, `parser`, `confidence`, `warnings` (for example "output was filtered by `| include`") and metadata such as the hostname and timestamp. |
 | **Tested on real output** | 238 regression fixtures: 217 captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices, plus 21 written from vendor documentation formats. |
 | **Easy to use from any language** | Python API, a full CLI (`clijson`), and a zero-dependency HTTP API (`clijson serve`). |
+| **Built for AI assistants** | `clijson mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. Claude, Cursor, VS Code and any agent can call clijson as a tool and reason over exact, schema'd data. |
 
 ## What it looks like
 
@@ -77,6 +78,7 @@ flags. Output is abbreviated here:
 pip install clijson                 # core, no dependencies
 pip install "clijson[all]"          # + YAML output, pretty tables, ntc-templates fallback
 pip install "clijson[netmiko]"      # + collect from live devices (or [scrapli])
+pip install "clijson[mcp]"          # + MCP server for AI assistants
 ```
 
 With [uv](https://docs.astral.sh/uv/):
@@ -164,6 +166,7 @@ clijson detect mystery.txt                       # which OS produced this?
 clijson schema bgp.summary                       # JSON Schema of a normalized model
 clijson run 10.0.0.1 -p iosxr -c "show version" -c "show bgp summary" -u admin
 clijson serve --port 8080                        # HTTP API for other languages/tools
+clijson mcp                                      # MCP server for AI assistants
 ```
 
 ### HTTP API
@@ -173,6 +176,17 @@ clijson serve --port 8080 &
 curl -s localhost:8080/parse -d '{"platform":"vrp","command":"display interface brief","output":"...","normalize":true}'
 curl -s "localhost:8080/commands?platform=junos"
 ```
+
+### AI assistants (MCP)
+
+```bash
+claude mcp add clijson -- uvx --from "clijson[mcp]" clijson mcp     # Claude Code
+```
+
+For Claude Desktop, Cursor or VS Code, add the same command (`uvx --from clijson[mcp] clijson mcp`) to the
+client's MCP config. The assistant gets read-only tools: `parse_output`, `parse_session`, `detect_platform`,
+`diff_outputs`, `list_commands` and `get_model_schema`. Setup for each client and the HTTP transport are
+covered in **[docs/mcp.md](docs/mcp.md)**.
 
 ## How it works
 

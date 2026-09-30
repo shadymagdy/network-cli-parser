@@ -15,6 +15,10 @@ All notable changes to this project are documented here. The format follows
 * `clijson.models.validate()` and `clijson schema <model> --check FILE` to check data against a model without
   extra dependencies. The test suite checks every normalized fixture against its schema with both this validator
   and `jsonschema`.
+* MCP server (`clijson mcp`, extra `clijson[mcp]`). AI assistants and agents can parse output, parse session
+  logs, detect platforms, diff captures, list commands and fetch model schemas through read-only tools. It also
+  exposes `clijson://commands` and `clijson://models/{intent}` resources, supports stdio and Streamable HTTP,
+  and is built on the official `mcp` SDK v2. See [docs/mcp.md](docs/mcp.md).
 
 ### Changed
 
@@ -30,10 +34,8 @@ All notable changes to this project are documented here. The format follows
   runs and builds and smoke-tests the wheel.
 * GitHub Actions are pinned to commit SHAs. Dependabot keeps them and `uv.lock` up to date.
 * A plugin that fails to load now raises a `RuntimeWarning` instead of failing silently.
-
 * The codebase uses modern Python 3.10 syntax (`list[str]`, `X | None`, PEP 613 aliases). It is checked with
   `mypy --strict` in CI and pre-commit, and ships `py.typed` so your editor and type checker see full types.
-
 * **Normalized output:** `ospf.neighbors.dead_time`, `arp.age` and `ipv6.neighbors.age` are now always integer
   seconds on every vendor. Before, IOS XR gave `"00:00:31"` strings and VRP gave ARP expiry in minutes.
 
