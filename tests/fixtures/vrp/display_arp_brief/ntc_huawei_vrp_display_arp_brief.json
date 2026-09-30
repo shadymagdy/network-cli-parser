@@ -49,14 +49,14 @@
       "ip_address": "192.168.120.1",
       "mac_address": "70:54:f5:df:9b:40",
       "interface": "GE0/0/0",
-      "age": 3,
+      "age": 180,
       "type": "dynamic"
     },
     {
       "ip_address": "192.168.120.252",
       "mac_address": "04:f9:38:95:83:00",
       "interface": "GE0/0/0",
-      "age": 19,
+      "age": 1140,
       "type": "dynamic"
     }
   ]

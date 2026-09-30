@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/bgp.summary.json",
+  "title": "clijson bgp.summary",
+  "description": "One row per BGP peer (and address family, where the device splits them).",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "One row per BGP peer (and address family, where the device splits them).",
+    "properties": {
+      "neighbor": {
+        "type": "string",
+        "description": "Peer address"
+      },
+      "remote_as": {
+        "type": [
+          "integer",
+          "string"
+        ],
+        "description": "Peer AS; asdot notation (65000.1) stays a string"
+      },
+      "state": {
+        "type": "string",
+        "description": "Established, Idle, Active, Connect, OpenSent, OpenConfirm, ..."
+      },
+      "established": {
+        "type": "boolean",
+        "description": "True when the session is Established"
+      },
+      "uptime": {
+        "type": "string",
+        "description": "Up/down time as printed by the device"
+      },
+      "uptime_seconds": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Up/down time in seconds"
+      },
+      "prefixes_received": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Accepted prefixes (when established)"
+      },
+      "vrf": {
+        "type": "string",
+        "description": "VRF / routing instance (default for the global table)"
+      },
+      "address_family": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "e.g. ipv4 unicast, vpnv4 unicast"
+      }
+    },
+    "required": [
+      "neighbor",
+      "remote_as",
+      "state",
+      "established",
+      "uptime",
+      "uptime_seconds",
+      "prefixes_received",
+      "vrf",
+      "address_family"
+    ],
+    "additionalProperties": false
+  }
+}

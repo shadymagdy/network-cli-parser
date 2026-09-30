@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/inventory.json",
+  "title": "clijson inventory",
+  "description": "Hardware components.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "Hardware components.",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "part_number": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "serial_number": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "version": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Hardware revision"
+      }
+    },
+    "required": [
+      "name",
+      "description",
+      "part_number",
+      "serial_number",
+      "version"
+    ],
+    "additionalProperties": false
+  }
+}

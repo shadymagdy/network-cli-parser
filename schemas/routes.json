@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/routes.json",
+  "title": "clijson routes",
+  "description": "Routing table entries.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "Routing table entries.",
+    "properties": {
+      "prefix": {
+        "type": "string",
+        "description": "Destination prefix with length"
+      },
+      "protocol": {
+        "type": "string",
+        "description": "connected, static, ospf, isis, bgp, local, ... (lowercase)"
+      },
+      "next_hops": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/NextHop"
+        }
+      },
+      "distance": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Administrative distance / preference"
+      },
+      "metric": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "vrf": {
+        "type": "string",
+        "description": "VRF / routing table (default for the global table)"
+      },
+      "age": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Route age as printed by the device"
+      }
+    },
+    "required": [
+      "prefix",
+      "protocol",
+      "next_hops",
+      "distance",
+      "metric",
+      "vrf",
+      "age"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "NextHop": {
+      "type": "object",
+      "description": "One next hop of a route.",
+      "properties": {
+        "next_hop": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Next-hop address (None for connected / discard routes)"
+        },
+        "interface": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Outgoing interface"
+        }
+      },
+      "required": [
+        "next_hop",
+        "interface"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

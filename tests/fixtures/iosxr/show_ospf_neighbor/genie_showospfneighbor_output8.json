@@ -50,7 +50,7 @@
       "state": "exstart",
       "address": "10.13.14.1",
       "interface": "Bundle-Ether1314.511",
-      "dead_time": "00:00:39"
+      "dead_time": 39
     },
     {
       "neighbor_id": "10.0.0.4",
@@ -58,7 +58,7 @@
       "state": "full",
       "address": "10.4.14.1",
       "interface": "Bundle-Ether414",
-      "dead_time": "00:00:38"
+      "dead_time": 38
     },
     {
       "neighbor_id": "10.0.0.13",
@@ -66,7 +66,7 @@
       "state": "full",
       "address": "10.13.14.5",
       "interface": "Bundle-Ether1314.510",
-      "dead_time": "00:00:34"
+      "dead_time": 34
     }
   ]
 }

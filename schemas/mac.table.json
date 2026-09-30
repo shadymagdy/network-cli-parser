@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/mac.table.json",
+  "title": "clijson mac.table",
+  "description": "MAC address table entries.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "MAC address table entries.",
+    "properties": {
+      "mac_address": {
+        "type": "string",
+        "description": "MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff)"
+      },
+      "vlan": {
+        "type": [
+          "integer",
+          "string"
+        ],
+        "description": "VLAN ID, or VLAN / bridge-domain name where the device shows one"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "description": "dynamic, static, ... (vendor word)"
+      }
+    },
+    "required": [
+      "mac_address",
+      "vlan",
+      "interface",
+      "type"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/lag.json",
+  "title": "clijson lag",
+  "description": "Link aggregation groups.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "Link aggregation groups.",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "members": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Member interfaces"
+      }
+    },
+    "required": [
+      "name",
+      "status",
+      "members"
+    ],
+    "additionalProperties": false
+  }
+}

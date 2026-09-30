@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/lldp.neighbors.json",
+  "title": "clijson lldp.neighbors",
+  "description": "LLDP neighbors.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "LLDP neighbors.",
+    "properties": {
+      "local_interface": {
+        "type": "string"
+      },
+      "neighbor": {
+        "type": "string",
+        "description": "Neighbor system name"
+      },
+      "neighbor_interface": {
+        "type": "string",
+        "description": "Neighbor port ID"
+      },
+      "chassis_id": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "capabilities": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "Enabled capabilities, e.g. [\"router\", \"bridge\"]"
+      },
+      "ttl": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Hold time in seconds"
+      }
+    },
+    "required": [
+      "local_interface",
+      "neighbor",
+      "neighbor_interface",
+      "chassis_id",
+      "capabilities",
+      "ttl"
+    ],
+    "additionalProperties": false
+  }
+}

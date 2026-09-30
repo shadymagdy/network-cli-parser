@@ -40,14 +40,14 @@
       "mac_address": "70:7b:e8:e9:d3:29",
       "interface": "GE0/0/0",
       "state": "stale",
-      "age": "00h05m12s"
+      "age": 312
     },
     {
       "ip_address": "FE80::727B:E8FF:FEE9:D329",
       "mac_address": "70:7b:e8:e9:d3:29",
       "interface": "GE0/0/1",
       "state": "stale",
-      "age": "00h03m02s"
+      "age": 182
     }
   ]
 }

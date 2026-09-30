@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/ldp.neighbors.json",
+  "title": "clijson ldp.neighbors",
+  "description": "LDP sessions.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "LDP sessions.",
+    "properties": {
+      "neighbor": {
+        "type": "string",
+        "description": "Peer LDP ID or address"
+      },
+      "state": {
+        "type": "string"
+      },
+      "uptime": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "discovery_sources": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "Interfaces / targeted sources the peer was discovered on"
+      }
+    },
+    "required": [
+      "neighbor",
+      "state",
+      "uptime",
+      "discovery_sources"
+    ],
+    "additionalProperties": false
+  }
+}

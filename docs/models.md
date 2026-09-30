@@ -6,17 +6,34 @@
 models below. Each record has **exactly** these keys, in this order, on every vendor. A value is `None`
 when the device doesn't report it.
 
+Every model is a `TypedDict` in `clijson.models` (for editors and type checkers) and has a
+[JSON Schema](https://json-schema.org/) (draft 2020-12) in [`schemas/`](../schemas/). Print one with
+`clijson schema <model>` or `clijson.models.json_schema(model)`. Check output with
+`clijson schema <model> --check out.json` or `clijson.models.validate(model, data)`.
+
 Values are standardised:
 
 * statuses become `up` / `down` / `admin-down`
 * MAC addresses become `aa:bb:cc:dd:ee:ff`
 * uptimes are given as text and also in seconds where the schema has `*_seconds`
+* ages, dead timers and hold times are integer seconds
 * the protocol in `routes` is always lower case (`bgp`, `ospf`, `isis`, `static`, `connected`, `local`, …)
 * `vrf` is `default` for the global table
 
 ## `system.version`
 
-Fields: `hostname`, `vendor`, `os`, `version`, `model`, `serial_number`, `uptime`, `uptime_seconds`
+Device identity and software release. Python type: `clijson.models.SystemVersion` (one object).
+
+| field | type | description |
+|---|---|---|
+| `hostname` | string \| null | Configured hostname |
+| `vendor` | string | cisco | juniper | huawei |
+| `os` | string | iosxr | junos | vrp |
+| `version` | string | Software release, e.g. 7.9.2, 23.4R1.9, V800R021C10SPC600 |
+| `model` | string \| null | Chassis / platform model |
+| `serial_number` | string \| null | Chassis serial number |
+| `uptime` | string \| null | Uptime as printed by the device |
+| `uptime_seconds` | integer \| null | Uptime in seconds |
 
 Produced by:
 
@@ -26,7 +43,16 @@ Produced by:
 
 ## `interfaces.brief`
 
-Fields: `name`, `admin_status`, `oper_status`, `ip_address`, `vrf`, `description`
+One row per interface. Python type: `clijson.models.Interface` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string | Interface name as the device prints it |
+| `admin_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `oper_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `ip_address` | string \| null | Primary IPv4 address, with /len when shown |
+| `vrf` | string \| null | VRF / routing instance, if not the default |
+| `description` | string \| null | Interface description |
 
 Produced by:
 
@@ -44,7 +70,24 @@ Produced by:
 
 ## `interfaces.detail`
 
-Fields: `name`, `admin_status`, `oper_status`, `description`, `mac_address`, `mtu`, `bandwidth_kbps`, `ipv4_addresses`, `input_rate_bps`, `output_rate_bps`, `input_packets`, `output_packets`, `input_errors`, `output_errors`
+Per-interface state, addressing and counters. Python type: `clijson.models.InterfaceDetail` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string |  |
+| `admin_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `oper_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `description` | string \| null |  |
+| `mac_address` | string \| null | MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff) |
+| `mtu` | integer \| null | MTU in bytes |
+| `bandwidth_kbps` | integer \| null | Configured / negotiated bandwidth in kbit/s |
+| `ipv4_addresses` | array of string | IPv4 addresses with prefix length |
+| `input_rate_bps` | integer \| null | Input rate in bit/s |
+| `output_rate_bps` | integer \| null | Output rate in bit/s |
+| `input_packets` | integer \| null |  |
+| `output_packets` | integer \| null |  |
+| `input_errors` | integer \| null |  |
+| `output_errors` | integer \| null |  |
 
 Produced by:
 
@@ -56,7 +99,14 @@ Produced by:
 
 ## `interfaces.description`
 
-Fields: `name`, `admin_status`, `oper_status`, `description`
+Interface descriptions with state. Python type: `clijson.models.InterfaceDescription` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string |  |
+| `admin_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `oper_status` | string | up | down | admin-down (vendor word if unrecognised) |
+| `description` | string \| null |  |
 
 Produced by:
 
@@ -67,7 +117,19 @@ Produced by:
 
 ## `bgp.summary`
 
-Fields: `neighbor`, `remote_as`, `state`, `established`, `uptime`, `uptime_seconds`, `prefixes_received`, `vrf`, `address_family`
+One row per BGP peer (and address family, where the device splits them). Python type: `clijson.models.BgpNeighbor` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `neighbor` | string | Peer address |
+| `remote_as` | integer \| string | Peer AS; asdot notation (65000.1) stays a string |
+| `state` | string | Established, Idle, Active, Connect, OpenSent, OpenConfirm, ... |
+| `established` | boolean | True when the session is Established |
+| `uptime` | string | Up/down time as printed by the device |
+| `uptime_seconds` | integer \| null | Up/down time in seconds |
+| `prefixes_received` | integer \| null | Accepted prefixes (when established) |
+| `vrf` | string | VRF / routing instance (default for the global table) |
+| `address_family` | string \| null | e.g. ipv4 unicast, vpnv4 unicast |
 
 Produced by:
 
@@ -81,7 +143,16 @@ Produced by:
 
 ## `ospf.neighbors`
 
-Fields: `neighbor_id`, `priority`, `state`, `address`, `interface`, `dead_time`
+OSPF adjacencies. Python type: `clijson.models.OspfNeighbor` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `neighbor_id` | string | Neighbor router ID |
+| `priority` | integer \| null |  |
+| `state` | string | full, 2way, init, exstart, ... (lowercase, without /DR suffix) |
+| `address` | string \| null | Neighbor interface address |
+| `interface` | string |  |
+| `dead_time` | integer \| null | Seconds until the dead timer expires |
 
 Produced by:
 
@@ -93,7 +164,16 @@ Produced by:
 
 ## `isis.adjacency`
 
-Fields: `system_id`, `interface`, `state`, `level`, `hold_time`, `snpa`
+IS-IS adjacencies. Python type: `clijson.models.IsisAdjacency` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `system_id` | string | Neighbor system ID or hostname |
+| `interface` | string |  |
+| `state` | string |  |
+| `level` | string | L1, L2 or L1L2 |
+| `hold_time` | integer \| null | Seconds of hold time left |
+| `snpa` | string \| null | Subnetwork point of attachment (MAC) |
 
 Produced by:
 
@@ -104,7 +184,16 @@ Produced by:
 
 ## `lldp.neighbors`
 
-Fields: `local_interface`, `neighbor`, `neighbor_interface`, `chassis_id`, `capabilities`, `ttl`
+LLDP neighbors. Python type: `clijson.models.LldpNeighbor` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `local_interface` | string |  |
+| `neighbor` | string | Neighbor system name |
+| `neighbor_interface` | string | Neighbor port ID |
+| `chassis_id` | string \| null |  |
+| `capabilities` | array of string \| null | Enabled capabilities, e.g. ["router", "bridge"] |
+| `ttl` | integer \| null | Hold time in seconds |
 
 Produced by:
 
@@ -120,7 +209,15 @@ Produced by:
 
 ## `arp`
 
-Fields: `ip_address`, `mac_address`, `interface`, `age`, `type`
+IPv4 ARP entries. Python type: `clijson.models.Arp` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `ip_address` | string |  |
+| `mac_address` | string | MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff) |
+| `interface` | string |  |
+| `age` | integer \| null | Seconds since learned (or remaining lifetime when that is all the device shows) |
+| `type` | string | dynamic, static, interface, ... (vendor word) |
 
 Produced by:
 
@@ -132,7 +229,15 @@ Produced by:
 
 ## `ipv6.neighbors`
 
-Fields: `ip_address`, `mac_address`, `interface`, `state`, `age`
+IPv6 neighbor discovery cache. Python type: `clijson.models.Ipv6Neighbor` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `ip_address` | string |  |
+| `mac_address` | string \| null | MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff) |
+| `interface` | string \| null |  |
+| `state` | string \| null | reach, stale, delay, probe, ... (lowercase) |
+| `age` | integer \| null | Seconds since last reachability confirmation (or remaining lifetime) |
 
 Produced by:
 
@@ -142,7 +247,24 @@ Produced by:
 
 ## `routes`
 
-Fields: `prefix`, `protocol`, `next_hops`, `distance`, `metric`, `vrf`, `age`
+Routing table entries. Python type: `clijson.models.Route` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `prefix` | string | Destination prefix with length |
+| `protocol` | string | connected, static, ospf, isis, bgp, local, ... (lowercase) |
+| `next_hops` | array of NextHop |  |
+| `distance` | integer \| null | Administrative distance / preference |
+| `metric` | integer \| null |  |
+| `vrf` | string | VRF / routing table (default for the global table) |
+| `age` | string \| null | Route age as printed by the device |
+
+`NextHop`: One next hop of a route.
+
+| field | type | description |
+|---|---|---|
+| `next_hop` | string \| null | Next-hop address (None for connected / discard routes) |
+| `interface` | string \| null | Outgoing interface |
 
 Produced by:
 
@@ -154,7 +276,14 @@ Produced by:
 
 ## `ldp.neighbors`
 
-Fields: `neighbor`, `state`, `uptime`, `discovery_sources`
+LDP sessions. Python type: `clijson.models.LdpNeighbor` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `neighbor` | string | Peer LDP ID or address |
+| `state` | string |  |
+| `uptime` | string \| null |  |
+| `discovery_sources` | array of string \| null | Interfaces / targeted sources the peer was discovered on |
 
 Produced by:
 
@@ -165,7 +294,16 @@ Produced by:
 
 ## `bfd.sessions`
 
-Fields: `neighbor`, `interface`, `state`, `local_discriminator`, `remote_discriminator`, `detect_time_ms`
+BFD sessions. Python type: `clijson.models.BfdSession` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `neighbor` | string |  |
+| `interface` | string \| null |  |
+| `state` | string | up, down, init, admindown (lowercase) |
+| `local_discriminator` | integer \| null |  |
+| `remote_discriminator` | integer \| null |  |
+| `detect_time_ms` | integer \| null | Detection time in milliseconds |
 
 Produced by:
 
@@ -175,7 +313,15 @@ Produced by:
 
 ## `inventory`
 
-Fields: `name`, `description`, `part_number`, `serial_number`, `version`
+Hardware components. Python type: `clijson.models.Inventory` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string |  |
+| `description` | string \| null |  |
+| `part_number` | string \| null |  |
+| `serial_number` | string \| null |  |
+| `version` | string \| null | Hardware revision |
 
 Produced by:
 
@@ -185,7 +331,14 @@ Produced by:
 
 ## `cpu`
 
-Fields: `location`, `one_minute`, `five_minute`, `five_second`
+CPU utilisation per location, in percent. Python type: `clijson.models.Cpu` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `location` | string \| null | Node / slot / routing engine |
+| `one_minute` | integer \| null |  |
+| `five_minute` | integer \| null |  |
+| `five_second` | integer \| null |  |
 
 Produced by:
 
@@ -196,7 +349,13 @@ Produced by:
 
 ## `vrfs`
 
-Fields: `name`, `rd`, `interfaces`
+VRFs / routing instances. Python type: `clijson.models.Vrf` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string |  |
+| `rd` | string \| null | Route distinguisher |
+| `interfaces` | array of string \| null |  |
 
 Produced by:
 
@@ -206,7 +365,14 @@ Produced by:
 
 ## `mac.table`
 
-Fields: `mac_address`, `vlan`, `interface`, `type`
+MAC address table entries. Python type: `clijson.models.MacEntry` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `mac_address` | string | MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff) |
+| `vlan` | integer \| string | VLAN ID, or VLAN / bridge-domain name where the device shows one |
+| `interface` | string |  |
+| `type` | string | dynamic, static, ... (vendor word) |
 
 Produced by:
 
@@ -216,7 +382,13 @@ Produced by:
 
 ## `lag`
 
-Fields: `name`, `status`, `members`
+Link aggregation groups. Python type: `clijson.models.Lag` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `name` | string |  |
+| `status` | string |  |
+| `members` | array of string | Member interfaces |
 
 Produced by:
 

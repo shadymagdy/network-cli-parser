@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ...models import mac, record
+from ...models import mac, record, seconds
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, none_if, snake, to_num
 
@@ -171,7 +171,7 @@ class DisplayArp(Parser):
                 ip_address=e["ip_address"],
                 mac_address=mac(e.get("mac_address")),
                 interface=e["interface"],
-                age=e.get("expire_minutes"),
+                age=e["expire_minutes"] * 60 if isinstance(e.get("expire_minutes"), int) else None,
                 type=e["type"],
             )
             for e in data["entries"]
@@ -212,7 +212,7 @@ class DisplayIpv6Neighbors(Parser):
                 mac_address=mac(e.get("mac_address")),
                 interface=e.get("interface"),
                 state=str(e.get("state", "")).lower() or None,
-                age=e.get("age"),
+                age=seconds(e.get("age")),
             )
             for e in data["entries"]
         ]

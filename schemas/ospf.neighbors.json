@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/ospf.neighbors.json",
+  "title": "clijson ospf.neighbors",
+  "description": "OSPF adjacencies.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "OSPF adjacencies.",
+    "properties": {
+      "neighbor_id": {
+        "type": "string",
+        "description": "Neighbor router ID"
+      },
+      "priority": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "state": {
+        "type": "string",
+        "description": "full, 2way, init, exstart, ... (lowercase, without /DR suffix)"
+      },
+      "address": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Neighbor interface address"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "dead_time": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Seconds until the dead timer expires"
+      }
+    },
+    "required": [
+      "neighbor_id",
+      "priority",
+      "state",
+      "address",
+      "interface",
+      "dead_time"
+    ],
+    "additionalProperties": false
+  }
+}

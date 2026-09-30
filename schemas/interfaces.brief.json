@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/interfaces.brief.json",
+  "title": "clijson interfaces.brief",
+  "description": "One row per interface.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "One row per interface.",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Interface name as the device prints it"
+      },
+      "admin_status": {
+        "type": "string",
+        "description": "up | down | admin-down (vendor word if unrecognised)"
+      },
+      "oper_status": {
+        "type": "string",
+        "description": "up | down | admin-down (vendor word if unrecognised)"
+      },
+      "ip_address": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Primary IPv4 address, with /len when shown"
+      },
+      "vrf": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "VRF / routing instance, if not the default"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Interface description"
+      }
+    },
+    "required": [
+      "name",
+      "admin_status",
+      "oper_status",
+      "ip_address",
+      "vrf",
+      "description"
+    ],
+    "additionalProperties": false
+  }
+}

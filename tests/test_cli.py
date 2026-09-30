@@ -26,7 +26,7 @@ def test_cli_shorthand_and_normalize(capsys, tmp_path):
             "state": "full",
             "address": "10.1.2.1",
             "interface": "Gi0/0/0/1",
-            "dead_time": "00:00:39",
+            "dead_time": 39,
         }
     ]
 

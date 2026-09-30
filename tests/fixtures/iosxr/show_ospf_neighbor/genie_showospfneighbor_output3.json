@@ -61,7 +61,7 @@
       "state": "full",
       "address": "172.31.80.37",
       "interface": "GigabitEthernet 0/3/0/2",
-      "dead_time": "0:00:31"
+      "dead_time": 31
     },
     {
       "neighbor_id": "192.168.48.1",
@@ -69,7 +69,7 @@
       "state": "full",
       "address": "192.168.48.1",
       "interface": "GigabitEthernet 0/3/0/3",
-      "dead_time": "0:00:33"
+      "dead_time": 33
     },
     {
       "neighbor_id": "192.168.48.200",
@@ -77,7 +77,7 @@
       "state": "full",
       "address": "192.168.48.200",
       "interface": "GigabitEthernet 0/3/0/3",
-      "dead_time": "0:00:33"
+      "dead_time": 33
     },
     {
       "neighbor_id": "192.168.199.138",
@@ -85,7 +85,7 @@
       "state": "full",
       "address": "192.168.48.189",
       "interface": "GigabitEthernet 0/3/0/3",
-      "dead_time": "0:00:33"
+      "dead_time": 33
     }
   ]
 }

@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+### Added
+
+* Typed normalized models: every intent is a `TypedDict` in `clijson.models` (`BgpNeighbor`, `Route`, `Interface`,
+  `Arp`, ...) with per-field descriptions, so editors and type checkers know the shape of `result.normalized`.
+* JSON Schema (draft 2020-12) for every model: `clijson.models.json_schema()`, `clijson schema` (list, print,
+  export with `--out`) and the committed `schemas/` directory.
+* `clijson.models.validate()` and `clijson schema <model> --check FILE` to check data against a model without
+  extra dependencies. The test suite checks every normalized fixture against its schema with both this validator
+  and `jsonschema`.
+
 ### Changed
 
 * Build and packaging moved to [uv](https://docs.astral.sh/uv/). The `uv_build` backend replaces setuptools,
@@ -23,6 +33,9 @@ All notable changes to this project are documented here. The format follows
 
 * The codebase uses modern Python 3.10 syntax (`list[str]`, `X | None`, PEP 613 aliases). It is checked with
   `mypy --strict` in CI and pre-commit, and ships `py.typed` so your editor and type checker see full types.
+
+* **Normalized output:** `ospf.neighbors.dead_time`, `arp.age` and `ipv6.neighbors.age` are now always integer
+  seconds on every vendor. Before, IOS XR gave `"00:00:31"` strings and VRP gave ARP expiry in minutes.
 
 ### Removed
 

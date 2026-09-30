@@ -283,63 +283,63 @@
       "ip_address": "10.10.10.101",
       "mac_address": "aa:bb:cc:00:65:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:23",
+      "age": 5123,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.102",
       "mac_address": "aa:bb:cc:00:66:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:22",
+      "age": 5122,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.103",
       "mac_address": "aa:bb:cc:00:67:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:21",
+      "age": 5121,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.104",
       "mac_address": "aa:bb:cc:00:68:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:20",
+      "age": 5120,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.105",
       "mac_address": "aa:bb:cc:00:69:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:19",
+      "age": 5119,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.106",
       "mac_address": "aa:bb:cc:00:6a:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:18",
+      "age": 5118,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.107",
       "mac_address": "aa:bb:cc:00:6b:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:17",
+      "age": 5117,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.108",
       "mac_address": "aa:bb:cc:00:6c:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:25:16",
+      "age": 5116,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.10.109",
       "mac_address": "00:00:00:00:00:00",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "00:00:03",
+      "age": 3,
       "type": "incomplete"
     },
     {
@@ -353,63 +353,63 @@
       "ip_address": "10.10.20.101",
       "mac_address": "aa:cc:cc:00:65:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:23",
+      "age": 8723,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.102",
       "mac_address": "aa:cc:cc:00:66:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:22",
+      "age": 8722,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.103",
       "mac_address": "aa:cc:cc:00:67:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:21",
+      "age": 8721,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.104",
       "mac_address": "aa:cc:cc:00:68:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:20",
+      "age": 8720,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.105",
       "mac_address": "aa:cc:cc:00:69:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:19",
+      "age": 8719,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.106",
       "mac_address": "aa:cc:cc:00:6a:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:18",
+      "age": 8718,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.107",
       "mac_address": "aa:cc:cc:00:6b:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:17",
+      "age": 8717,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.108",
       "mac_address": "aa:cc:cc:00:6c:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "02:25:16",
+      "age": 8716,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.20.109",
       "mac_address": "00:00:00:00:00:00",
       "interface": "GigabitEthernet0/1/0/0",
-      "age": "00:00:03",
+      "age": 3,
       "type": "incomplete"
     },
     {
@@ -423,63 +423,63 @@
       "ip_address": "10.10.30.101",
       "mac_address": "aa:dd:cc:00:65:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:23",
+      "age": 12323,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.102",
       "mac_address": "aa:dd:cc:00:66:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:22",
+      "age": 12322,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.103",
       "mac_address": "aa:dd:cc:00:67:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:21",
+      "age": 12321,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.104",
       "mac_address": "aa:dd:cc:00:68:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:20",
+      "age": 12320,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.105",
       "mac_address": "aa:dd:cc:00:69:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:19",
+      "age": 12319,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.106",
       "mac_address": "aa:dd:cc:00:6a:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:18",
+      "age": 12318,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.107",
       "mac_address": "aa:dd:cc:00:6b:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:17",
+      "age": 12317,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.108",
       "mac_address": "aa:dd:cc:00:6c:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "03:25:16",
+      "age": 12316,
       "type": "dynamic"
     },
     {
       "ip_address": "10.10.30.109",
       "mac_address": "00:00:00:00:00:00",
       "interface": "GigabitEthernet0/2/0/0",
-      "age": "00:00:03",
+      "age": 3,
       "type": "incomplete"
     }
   ]

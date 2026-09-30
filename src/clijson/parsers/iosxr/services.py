@@ -7,7 +7,7 @@ import operator
 import re
 from typing import Any
 
-from ...models import mac, record, status
+from ...models import mac, record, seconds, status
 from ...registry import Parser, register
 from ...textutils import blocks, compact, match_lines, none_if, to_num
 
@@ -489,7 +489,7 @@ class ShowArp(Parser):
                 ip_address=r["ip_address"],
                 mac_address=mac(r["mac_address"]),
                 interface=r["interface"],
-                age=r.get("age"),
+                age=seconds(r.get("age")),
                 type=r["state"].lower(),
             )
             for r in data
@@ -532,7 +532,7 @@ class ShowIpv6Neighbors(Parser):
                 mac_address=mac(r["mac_address"]),
                 interface=r["interface"],
                 state=r["state"].lower(),
-                age=r.get("age"),
+                age=seconds(r.get("age")),
             )
             for r in data
         ]

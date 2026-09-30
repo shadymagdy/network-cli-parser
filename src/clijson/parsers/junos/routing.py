@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ...models import record
+from ...models import record, seconds
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, snake, to_num
 
@@ -622,7 +622,7 @@ class ShowOspfNeighbor(Parser):
                 state=n["state"].lower(),
                 address=n.get("address"),
                 interface=n["interface"],
-                dead_time=n["dead_time"],
+                dead_time=seconds(n["dead_time"]),
             )
             for n in data["neighbors"]
         ]

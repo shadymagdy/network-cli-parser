@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/cpu.json",
+  "title": "clijson cpu",
+  "description": "CPU utilisation per location, in percent.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "CPU utilisation per location, in percent.",
+    "properties": {
+      "location": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Node / slot / routing engine"
+      },
+      "one_minute": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "five_minute": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "five_second": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "location",
+      "one_minute",
+      "five_minute",
+      "five_second"
+    ],
+    "additionalProperties": false
+  }
+}
