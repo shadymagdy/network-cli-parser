@@ -1,0 +1,13 @@
+{
+  "command": "display memory-usage",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "stat_time": "2024-05-14 10:16:02+00:00",
+    "total": 4166139904,
+    "unit": "bytes",
+    "used": 1263796224,
+    "used_percent": 30,
+    "free": 2902343680
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "command": "show rsvp session",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "ingress": {
+      "sessions": 0,
+      "lsps": [],
+      "displayed": 0,
+      "up": 0,
+      "down": 0
+    },
+    "egress": {
+      "sessions": 0,
+      "lsps": [],
+      "displayed": 0,
+      "up": 0,
+      "down": 0
+    },
+    "transit": {
+      "sessions": 30,
+      "lsps": [
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 46,
+          "label_out": 44,
+          "name": "test_lsp_01"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 37,
+          "label_out": 35,
+          "name": "test_lsp_02"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 28,
+          "label_out": 26,
+          "name": "test_lsp_03"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 20,
+          "label_out": 18,
+          "name": "test_lsp_04"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 26,
+          "label_out": 24,
+          "name": "test_lsp_05"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 30,
+          "label_out": 28,
+          "name": "test_lsp_06"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 19,
+          "label_out": 17,
+          "name": "test_lsp_07"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 21,
+          "label_out": 19,
+          "name": "test_lsp_08"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 39,
+          "label_out": 37,
+          "name": "test_lsp_09"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 45,
+          "label_out": 43,
+          "name": "test_lsp_10"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 23,
+          "label_out": 21,
+          "name": "test_lsp_11"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 36,
+          "label_out": 34,
+          "name": "test_lsp_12"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 42,
+          "label_out": 40,
+          "name": "test_lsp_13"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 47,
+          "label_out": 45,
+          "name": "test_lsp_14"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 18,
+          "label_out": 16,
+          "name": "test_lsp_15"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 40,
+          "label_out": 38,
+          "name": "test_lsp_16"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 22,
+          "label_out": 20,
+          "name": "test_lsp_17"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 31,
+          "label_out": 29,
+          "name": "test_lsp_18"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 41,
+          "label_out": 39,
+          "name": "test_lsp_19"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 24,
+          "label_out": 22,
+          "name": "test_lsp_20"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 32,
+          "label_out": 30,
+          "name": "test_lsp_21"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 33,
+          "label_out": 31,
+          "name": "test_lsp_22"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 34,
+          "label_out": 32,
+          "name": "test_lsp_23"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 38,
+          "label_out": 36,
+          "name": "test_lsp_24"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 43,
+          "label_out": 41,
+          "name": "test_lsp_25"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 29,
+          "label_out": 27,
+          "name": "test_lsp_26"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 44,
+          "label_out": 42,
+          "name": "test_lsp_27"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 27,
+          "label_out": 25,
+          "name": "test_lsp_28"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 25,
+          "label_out": 23,
+          "name": "test_lsp_29"
+        },
+        {
+          "to": "10.49.194.125",
+          "from": "10.49.194.127",
+          "state": "Up",
+          "route_count": 0,
+          "style": "1 FF",
+          "label_in": 35,
+          "label_out": 33,
+          "name": "test_lsp_30"
+        }
+      ],
+      "displayed": 30,
+      "up": 30,
+      "down": 0
+    }
+  }
+}

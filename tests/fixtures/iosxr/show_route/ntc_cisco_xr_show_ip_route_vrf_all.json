@@ -1,0 +1,41 @@
+{
+  "command": "show route",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "routes": [
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "management",
+        "next_hops": [
+          {
+            "next_hop": "172.1.1.1",
+            "metric": 0
+          }
+        ],
+        "protocol": "static",
+        "distance": 1,
+        "metric": 0,
+        "candidate_default": true,
+        "installed": "Jan  7 19:42:10.791",
+        "age": "1w1d"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "172.1.1.1",
+          "interface": null
+        }
+      ],
+      "distance": 1,
+      "metric": 0,
+      "vrf": "management",
+      "age": "1w1d"
+    }
+  ]
+}

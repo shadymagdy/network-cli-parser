@@ -1,0 +1,47 @@
+{
+  "command": "show system storage",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "filesystem": "/dev/gpt/junos",
+      "size": "20G",
+      "used": "1.2G",
+      "available": "17G",
+      "capacity_percent": 7,
+      "mounted_on": "/.mount"
+    },
+    {
+      "filesystem": "/dev/gpt/config",
+      "size": "793M",
+      "used": "60K",
+      "available": "730M",
+      "capacity_percent": 0,
+      "mounted_on": "/.mount/config"
+    },
+    {
+      "filesystem": "/dev/gpt/var",
+      "size": "7.0G",
+      "used": "117M",
+      "available": "6.3G",
+      "capacity_percent": 2,
+      "mounted_on": "/.mount/var"
+    },
+    {
+      "filesystem": "tmpfs",
+      "size": "3.2G",
+      "used": "196K",
+      "available": "3.2G",
+      "capacity_percent": 0,
+      "mounted_on": "/.mount/tmp"
+    },
+    {
+      "filesystem": "tmpfs",
+      "size": "334M",
+      "used": "748K",
+      "available": "333M",
+      "capacity_percent": 0,
+      "mounted_on": "/.mount/mfs"
+    }
+  ]
+}

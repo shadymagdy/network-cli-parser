@@ -1,0 +1,129 @@
+{
+  "command": "show arp no-resolve",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "00:00:00:00:00:04",
+        "ip_address": "10.1.100.130",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:05",
+        "ip_address": "10.1.100.132",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:08",
+        "ip_address": "10.1.100.72",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:09",
+        "ip_address": "10.1.100.73",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:0a",
+        "ip_address": "10.1.100.74",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:0b",
+        "ip_address": "10.1.100.75",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:00:0c",
+        "ip_address": "10.1.100.76",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:11:11",
+        "ip_address": "10.1.111.11",
+        "interface": "vlan.20",
+        "flags": "none"
+      },
+      {
+        "mac_address": "00:00:00:00:13:13",
+        "ip_address": "10.1.13.13",
+        "interface": "vlan.20",
+        "flags": "none"
+      }
+    ],
+    "total": 9
+  },
+  "normalized": [
+    {
+      "ip_address": "10.1.100.130",
+      "mac_address": "00:00:00:00:00:04",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.132",
+      "mac_address": "00:00:00:00:00:05",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.72",
+      "mac_address": "00:00:00:00:00:08",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.73",
+      "mac_address": "00:00:00:00:00:09",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.74",
+      "mac_address": "00:00:00:00:00:0a",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.75",
+      "mac_address": "00:00:00:00:00:0b",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.100.76",
+      "mac_address": "00:00:00:00:00:0c",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.111.11",
+      "mac_address": "00:00:00:00:11:11",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.1.13.13",
+      "mac_address": "00:00:00:00:13:13",
+      "interface": "vlan.20",
+      "age": null,
+      "type": "dynamic"
+    }
+  ]
+}

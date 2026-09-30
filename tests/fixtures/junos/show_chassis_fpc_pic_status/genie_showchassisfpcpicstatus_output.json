@@ -1,0 +1,41 @@
+{
+  "command": "show chassis fpc pic-status",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "slot": 0,
+      "state": "Online",
+      "description": "DPCE 2x 10GE R",
+      "pics": [
+        {
+          "pic": 0,
+          "state": "Online",
+          "description": "1x 10GE(LAN/WAN)"
+        },
+        {
+          "pic": 1,
+          "state": "Online",
+          "description": "1x 10GE(LAN/WAN)"
+        }
+      ]
+    },
+    {
+      "slot": 1,
+      "state": "Online",
+      "description": "DPCE 2x 10GE R",
+      "pics": [
+        {
+          "pic": 0,
+          "state": "Online",
+          "description": "1x 10GE(LAN/WAN)"
+        },
+        {
+          "pic": 1,
+          "state": "Online",
+          "description": "1x 10GE(LAN/WAN)"
+        }
+      ]
+    }
+  ]
+}

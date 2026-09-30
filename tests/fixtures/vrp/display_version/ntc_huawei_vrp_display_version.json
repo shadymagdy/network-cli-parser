@@ -1,0 +1,120 @@
+{
+  "command": "display version",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vrp_version": "8.180",
+    "product_series": "NE40E",
+    "version": "V800R011C00SPC200",
+    "model": "NE40E-X2-M8A",
+    "uptime": "161 days, 0 hour, 20 minutes",
+    "uptime_seconds": 13911600,
+    "boards": [
+      {
+        "board": "BKP",
+        "versions": {
+          "pcb": "CX68BKP02D REV A"
+        }
+      },
+      {
+        "board": "MPU",
+        "slot": 11,
+        "role": "slave",
+        "uptime": "160 days, 22 hours, 1 minute",
+        "versions": {
+          "pcb": "CX68MPUK1 REV A",
+          "epld": "111",
+          "fpga": "105",
+          "bootrom": "06.14",
+          "boot_load": "06.14"
+        },
+        "startup_time": "2019/09/10 03:33:17",
+        "sdram_memory_mb": 8192,
+        "flash_memory_mb": 32,
+        "nvram_memory_kb": 512,
+        "cfcard_memory_mb": 2048
+      },
+      {
+        "board": "MPU",
+        "slot": 12,
+        "role": "master",
+        "uptime": "161 days, 0 hour, 18 minutes",
+        "versions": {
+          "pcb": "CX68MPUK1 REV A",
+          "epld": "111",
+          "fpga": "105",
+          "bootrom": "06.14",
+          "boot_load": "06.14"
+        },
+        "startup_time": "2019/09/10 01:16:12",
+        "sdram_memory_mb": 8192,
+        "flash_memory_mb": 32,
+        "nvram_memory_kb": 512,
+        "cfcard_memory_mb": 2048
+      },
+      {
+        "board": "NPU",
+        "slot": 9,
+        "uptime": "160 days, 12 hours, 38 minutes",
+        "versions": {
+          "pcb": "CX68EAGFD REV A",
+          "epld": "007",
+          "fpga": "010",
+          "fpga2": "111",
+          "np": "100",
+          "tm": "110",
+          "bootrom": "04.36",
+          "nse": "NSE REV A",
+          "cmac": "110",
+          "bom": "000"
+        },
+        "startup_time": "2019/09/10 12:56:23",
+        "sdram_memory_mb": 16384,
+        "flash_memory_mb": 128
+      },
+      {
+        "board": "POWER",
+        "slot": 13,
+        "versions": {
+          "pcb": "CX68PSUC REV C"
+        }
+      },
+      {
+        "board": "FAN",
+        "versions": {
+          "pcb": "CX67FCBB REV A"
+        }
+      },
+      {
+        "board": "CLK",
+        "slot": 16,
+        "uptime": "160 days, 22 hours, 1 minute",
+        "versions": {
+          "fpga": "105",
+          "dsp": "17060011"
+        },
+        "startup_time": "2019/09/10 03:33:17"
+      },
+      {
+        "board": "CLK",
+        "slot": 17,
+        "uptime": "161 days, 0 hour, 18 minutes",
+        "versions": {
+          "fpga": "105",
+          "dsp": "17060011"
+        },
+        "startup_time": "2019/09/10 01:16:12"
+      }
+    ]
+  },
+  "normalized": {
+    "hostname": null,
+    "vendor": "Huawei",
+    "os": "VRP",
+    "version": "V800R011C00SPC200",
+    "model": "NE40E-X2-M8A",
+    "serial_number": null,
+    "uptime": "161 days, 0 hour, 20 minutes",
+    "uptime_seconds": 13911600
+  }
+}

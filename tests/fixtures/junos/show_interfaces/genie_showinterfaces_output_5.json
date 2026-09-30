@@ -1,0 +1,85 @@
+{
+  "command": "show interfaces",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "lo0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {
+        "lo0.16384": {
+          "index": 321,
+          "protocols": {
+            "inet": {
+              "addresses": [
+                {
+                  "local": "127.0.0.1"
+                }
+              ],
+              "mtu": "Unlimited"
+            }
+          },
+          "snmp_index": 21,
+          "flags": [
+            "SNMP-Traps"
+          ],
+          "encapsulation": "Unspecified",
+          "input_packets": 0,
+          "output_packets": 0
+        },
+        "lo0.16385": {
+          "index": 320,
+          "protocols": {
+            "inet": {
+              "addresses": [],
+              "mtu": "Unlimited"
+            }
+          },
+          "snmp_index": 22,
+          "flags": [
+            "SNMP-Traps"
+          ],
+          "encapsulation": "Unspecified",
+          "input_packets": 8821078,
+          "output_packets": 8821078
+        }
+      },
+      "index": 6,
+      "snmp_index": 6,
+      "type": "Loopback",
+      "mtu": "Unlimited",
+      "device_flags": [
+        "Present",
+        "Running",
+        "Loopback"
+      ],
+      "interface_flags": [
+        "SNMP-Traps"
+      ],
+      "link_flags": null,
+      "last_flapped": "Never",
+      "input_packets": 8823688,
+      "output_packets": 8823688
+    }
+  },
+  "normalized": [
+    {
+      "name": "lo0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": null,
+      "bandwidth_kbps": null,
+      "ipv4_addresses": [
+        "127.0.0.1"
+      ],
+      "input_rate_bps": null,
+      "output_rate_bps": null,
+      "input_packets": 8823688,
+      "output_packets": 8823688,
+      "input_errors": null,
+      "output_errors": null
+    }
+  ]
+}

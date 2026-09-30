@@ -1,0 +1,4 @@
+ Memory utilization statistics at 2024-05-14 10:16:02+00:00
+ System Total Memory Is: 4166139904 bytes
+ Total Memory Used Is: 1263796224 bytes
+ Memory Using Percentage Is: 30%

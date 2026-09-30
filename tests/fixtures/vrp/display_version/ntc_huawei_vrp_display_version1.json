@@ -1,0 +1,76 @@
+{
+  "command": "display version",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vrp_version": "8.100",
+    "product_series": "CX600",
+    "version": "V800R007C10SPC100",
+    "model": "CX600-M2E",
+    "uptime": "266 days, 8 hours, 59 minutes",
+    "uptime_seconds": 23014740,
+    "patch_version": "V800R007SPH019",
+    "boards": [
+      {
+        "board": "BKP",
+        "versions": {
+          "pcb": "CR68BKP01C REV A"
+        }
+      },
+      {
+        "board": "IPU",
+        "slot": 3,
+        "role": "master",
+        "uptime": "266 days, 8 hours, 58 minutes",
+        "versions": {
+          "cpu_pcb": "CX68L2XEFGFB REV B",
+          "epld": "111",
+          "fpga": "014",
+          "npu_pcb": "CX68L2XEFGFA REV B",
+          "np": "100",
+          "tm": "110",
+          "nse": "NSE REV A",
+          "bootrom": "06.11",
+          "boot_load": "06.11",
+          "pcb": "CX67P4CFA REV B"
+        },
+        "startup_time": "2019/05/28 02:26:30",
+        "sdram_memory_mb": 4096,
+        "flash_memory_mb": 32,
+        "nvram_memory_kb": 512,
+        "cfcard_memory_mb": 2048
+      },
+      {
+        "board": "POWER",
+        "slot": 4,
+        "versions": {
+          "pcb": "CX68PSUF REV B"
+        }
+      },
+      {
+        "board": "FAN",
+        "versions": {
+          "pcb": "CX68FCBD REV A"
+        }
+      },
+      {
+        "board": "CLK",
+        "versions": {
+          "fpga": "017",
+          "dsp": "17010002"
+        },
+        "startup_time": "2019/05/28 02:26:30"
+      }
+    ]
+  },
+  "normalized": {
+    "hostname": null,
+    "vendor": "Huawei",
+    "os": "VRP",
+    "version": "V800R007C10SPC100",
+    "model": "CX600-M2E",
+    "serial_number": null,
+    "uptime": "266 days, 8 hours, 59 minutes",
+    "uptime_seconds": 23014740
+  }
+}

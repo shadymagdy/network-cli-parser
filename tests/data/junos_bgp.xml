@@ -1,0 +1,21 @@
+<rpc-reply xmlns:junos="http://xml.juniper.net/junos/20.4R0/junos">
+    <bgp-information xmlns="http://xml.juniper.net/junos/20.4R0/junos-routing">
+        <group-count>1</group-count>
+        <peer-count>2</peer-count>
+        <down-peer-count>1</down-peer-count>
+        <bgp-peer junos:style="terse">
+            <peer-address>10.0.0.2</peer-address>
+            <peer-as>65001</peer-as>
+            <elapsed-time junos:seconds="93784">1d 2:03:04</elapsed-time>
+            <peer-state>Established</peer-state>
+        </bgp-peer>
+        <bgp-peer junos:style="terse">
+            <peer-address>10.0.0.3</peer-address>
+            <peer-as>65002</peer-as>
+            <peer-state>Active</peer-state>
+        </bgp-peer>
+    </bgp-information>
+    <cli>
+        <banner></banner>
+    </cli>
+</rpc-reply>

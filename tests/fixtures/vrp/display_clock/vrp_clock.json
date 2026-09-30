@@ -1,0 +1,13 @@
+{
+  "command": "display clock",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "date": "2024-05-14",
+    "time": "10:20:31",
+    "utc_offset": "+08:00",
+    "weekday": "Tuesday",
+    "time_zone": "UTC+08:00",
+    "time_zone_name": "Beijing"
+  }
+}

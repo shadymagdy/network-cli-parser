@@ -1,0 +1,50 @@
+{
+  "command": "show lldp neighbors",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "neighbors": [
+      {
+        "device_id": "ASR-OCC-P1",
+        "local_interface": "Gi0/0/0/0",
+        "hold_time": 120,
+        "capabilities": [
+          "R"
+        ],
+        "port_id": "Gi0/0/0/2"
+      },
+      {
+        "device_id": "ASR-LON-P1",
+        "local_interface": "Gi0/0/0/3",
+        "hold_time": 120,
+        "capabilities": [
+          "R"
+        ],
+        "port_id": "Gi0/0/0/2"
+      }
+    ],
+    "total": 2
+  },
+  "normalized": [
+    {
+      "local_interface": "Gi0/0/0/0",
+      "neighbor": "ASR-OCC-P1",
+      "neighbor_interface": "Gi0/0/0/2",
+      "chassis_id": null,
+      "capabilities": [
+        "R"
+      ],
+      "ttl": 120
+    },
+    {
+      "local_interface": "Gi0/0/0/3",
+      "neighbor": "ASR-LON-P1",
+      "neighbor_interface": "Gi0/0/0/2",
+      "chassis_id": null,
+      "capabilities": [
+        "R"
+      ],
+      "ttl": 120
+    }
+  ]
+}

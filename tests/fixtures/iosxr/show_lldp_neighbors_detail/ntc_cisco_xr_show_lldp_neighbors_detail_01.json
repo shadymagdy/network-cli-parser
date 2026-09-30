@@ -1,0 +1,177 @@
+{
+  "command": "show lldp neighbors detail",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "local_interface": "FourHundredGigE0/0/0/0",
+      "chassis_id": "6c03.b5aa.bbcc",
+      "port_id": "Fou1/0/22",
+      "port_description": "uplink:router1:FH0/0/0/0",
+      "system_name": "router-400.router.com",
+      "system_description": "Cisco IOS Software [Cupertino], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.9.3, RELEASE SOFTWARE (fc6)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2023 by Cisco Systems, Inc.\nCompiled Tue 14-Mar-23 18:26 by mcpre",
+      "time_remaining": 90,
+      "hold_time": 120,
+      "age": 732802,
+      "system_capabilities": [
+        "B",
+        "R"
+      ],
+      "enabled_capabilities": [
+        "B",
+        "R"
+      ],
+      "management_addresses": [
+        "172.1.1.79",
+        "2407:abcd:0:aaaa::0000"
+      ],
+      "peer_mac_address": "6c:03:b5:aa:bb:cc"
+    },
+    {
+      "local_interface": "FourHundredGigE0/0/0/28",
+      "chassis_id": "d0dc.2cdd.aabc",
+      "port_id": "FourHundredGigE0/0/0/28",
+      "port_description": "uplink:router1::FH0/0/0/28",
+      "system_name": "router2.com",
+      "system_description": "7.9.2, 8000",
+      "time_remaining": 98,
+      "hold_time": 120,
+      "age": 729378,
+      "system_capabilities": [
+        "R"
+      ],
+      "enabled_capabilities": [
+        "R"
+      ],
+      "management_addresses": [
+        "172.1.1.64",
+        "2407:abcd::aaab::0000"
+      ],
+      "peer_mac_address": "d0:dc:2c:aa:bb:cc"
+    },
+    {
+      "local_interface": "FourHundredGigE0/0/0/29",
+      "chassis_id": "d0dc.abcd.dcba",
+      "port_id": "FourHundredGigE0/0/0/29",
+      "port_description": "uplink:router1:FH0/0/0/29",
+      "system_name": "router66.router.com",
+      "system_description": "7.9.2, 8000",
+      "time_remaining": 100,
+      "hold_time": 120,
+      "age": 729313,
+      "system_capabilities": [
+        "R"
+      ],
+      "enabled_capabilities": [
+        "R"
+      ],
+      "management_addresses": [
+        "172.1.1.66",
+        "2407:abcd:0:aaac::0000"
+      ],
+      "peer_mac_address": "d0:dc:2c:aa:bb:cd"
+    },
+    {
+      "local_interface": "HundredGigE0/0/0/30",
+      "chassis_id": "247e.32bb.0000",
+      "port_id": "Eth1/4",
+      "port_description": "router1:Hun1/0/30",
+      "system_name": "otter-buffy",
+      "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00",
+      "time_remaining": 117,
+      "hold_time": 120,
+      "age": 732508,
+      "system_capabilities": [
+        "B",
+        "R"
+      ],
+      "enabled_capabilities": [
+        "B",
+        "R"
+      ],
+      "management_addresses": [
+        "172.1.1.158"
+      ],
+      "peer_mac_address": "24:7e:12:aa:bb:cc"
+    },
+    {
+      "local_interface": "HundredGigE0/0/0/31",
+      "chassis_id": "2cab.ebe1.ffff",
+      "port_id": "Eth2/4",
+      "port_description": "uplink:router1:Hun1/0/31",
+      "system_name": "onyx.mgmt.com",
+      "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00",
+      "time_remaining": 104,
+      "hold_time": 120,
+      "age": 732462,
+      "system_capabilities": [
+        "B",
+        "R"
+      ],
+      "enabled_capabilities": [
+        "B",
+        "R"
+      ],
+      "management_addresses": [
+        "172.1.1.158"
+      ],
+      "peer_mac_address": "2c:ab:eb:aa:bb:cc",
+      "total_entries_displayed": "5"
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "FourHundredGigE0/0/0/0",
+      "neighbor": "router-400.router.com",
+      "neighbor_interface": "Fou1/0/22",
+      "chassis_id": "6c:03:b5:aa:bb:cc",
+      "capabilities": [
+        "B",
+        "R"
+      ],
+      "ttl": 120
+    },
+    {
+      "local_interface": "FourHundredGigE0/0/0/28",
+      "neighbor": "router2.com",
+      "neighbor_interface": "FourHundredGigE0/0/0/28",
+      "chassis_id": "d0:dc:2c:dd:aa:bc",
+      "capabilities": [
+        "R"
+      ],
+      "ttl": 120
+    },
+    {
+      "local_interface": "FourHundredGigE0/0/0/29",
+      "neighbor": "router66.router.com",
+      "neighbor_interface": "FourHundredGigE0/0/0/29",
+      "chassis_id": "d0:dc:ab:cd:dc:ba",
+      "capabilities": [
+        "R"
+      ],
+      "ttl": 120
+    },
+    {
+      "local_interface": "HundredGigE0/0/0/30",
+      "neighbor": "otter-buffy",
+      "neighbor_interface": "Eth1/4",
+      "chassis_id": "24:7e:32:bb:00:00",
+      "capabilities": [
+        "B",
+        "R"
+      ],
+      "ttl": 120
+    },
+    {
+      "local_interface": "HundredGigE0/0/0/31",
+      "neighbor": "onyx.mgmt.com",
+      "neighbor_interface": "Eth2/4",
+      "chassis_id": "2c:ab:eb:e1:ff:ff",
+      "capabilities": [
+        "B",
+        "R"
+      ],
+      "ttl": 120
+    }
+  ]
+}

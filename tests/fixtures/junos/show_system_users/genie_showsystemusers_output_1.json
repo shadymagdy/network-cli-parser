@@ -1,0 +1,40 @@
+{
+  "command": "show system users",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "users": [
+      {
+        "user": "cisco",
+        "tty": "pts/0",
+        "from": "10.1.0.1",
+        "login": "2:35AM",
+        "idle": null,
+        "what": "-cl"
+      },
+      {
+        "user": "cisco",
+        "tty": "pts/1",
+        "from": "10.1.0.1",
+        "login": "8:31AM",
+        "idle": "56",
+        "what": "-cl"
+      },
+      {
+        "user": "cisco",
+        "tty": "pts/2",
+        "from": "10.1.0.1",
+        "login": "7:45AM",
+        "idle": "3",
+        "what": "-cl"
+      }
+    ],
+    "uptime": "209 days, 37 mins",
+    "user_count": 3,
+    "load_average": {
+      "1min": 0.28,
+      "5min": 0.39,
+      "15min": 0.37
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "command": "display ipv6 neighbors",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "ip_address": "2::1",
+        "mac_address": "707b-e8e9-d329",
+        "state": "STALE",
+        "interface": "GE0/0/0",
+        "age": "00h05m12s",
+        "vlan": 200,
+        "cevlan": null,
+        "vpn_name": null,
+        "is_router": "TRUE",
+        "secure_flag": "UN-SECURE"
+      },
+      {
+        "ip_address": "FE80::727B:E8FF:FEE9:D329",
+        "mac_address": "707b-e8e9-d329",
+        "state": "STALE",
+        "interface": "GE0/0/1",
+        "age": "00h03m02s",
+        "vlan": 100,
+        "cevlan": null,
+        "is_router": "TRUE",
+        "secure_flag": "UN-SECURE"
+      }
+    ],
+    "summary": {
+      "total": 2,
+      "dynamic": 2,
+      "static": 0
+    }
+  },
+  "normalized": [
+    {
+      "ip_address": "2::1",
+      "mac_address": "70:7b:e8:e9:d3:29",
+      "interface": "GE0/0/0",
+      "state": "stale",
+      "age": "00h05m12s"
+    },
+    {
+      "ip_address": "FE80::727B:E8FF:FEE9:D329",
+      "mac_address": "70:7b:e8:e9:d3:29",
+      "interface": "GE0/0/1",
+      "state": "stale",
+      "age": "00h03m02s"
+    }
+  ]
+}

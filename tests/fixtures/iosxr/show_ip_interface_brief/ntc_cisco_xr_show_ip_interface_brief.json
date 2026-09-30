@@ -1,0 +1,99 @@
+{
+  "command": "show ip interface brief",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "GigabitEthernet0/0/1/18",
+      "ip_address": null,
+      "status": "Shutdown",
+      "protocol": "Down",
+      "vrf": "default"
+    },
+    {
+      "interface": "GigabitEthernet0/0/1/19",
+      "ip_address": null,
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "default"
+    },
+    {
+      "interface": "GigabitEthernet0/0/1/19.2003",
+      "ip_address": "10.79.255.0",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "WAG:OOB"
+    },
+    {
+      "interface": "TenGigE0/0/2/0",
+      "ip_address": null,
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "default"
+    },
+    {
+      "interface": "TenGigE0/0/2/0.2396",
+      "ip_address": "10.79.255.96",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "WAG:123"
+    },
+    {
+      "interface": "TenGigE0/0/2/0.2397",
+      "ip_address": "10.79.255.80",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "WAG:ABC"
+    }
+  ],
+  "normalized": [
+    {
+      "name": "GigabitEthernet0/0/1/18",
+      "admin_status": "admin-down",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": "default",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet0/0/1/19",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": "default",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet0/0/1/19.2003",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.79.255.0",
+      "vrf": "WAG:OOB",
+      "description": null
+    },
+    {
+      "name": "TenGigE0/0/2/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": "default",
+      "description": null
+    },
+    {
+      "name": "TenGigE0/0/2/0.2396",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.79.255.96",
+      "vrf": "WAG:123",
+      "description": null
+    },
+    {
+      "name": "TenGigE0/0/2/0.2397",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.79.255.80",
+      "vrf": "WAG:ABC",
+      "description": null
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "command": "display arp brief",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "ip_address": "192.168.1.1",
+        "mac_address": "fc73-fb9e-601c",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif1"
+      },
+      {
+        "ip_address": "192.168.1.118",
+        "mac_address": "a078-17b2-7bc0",
+        "expire_minutes": 20,
+        "type": "dynamic",
+        "type_code": "D-0",
+        "interface": "Wlan-Bss7",
+        "vlan": "1/-"
+      },
+      {
+        "ip_address": "192.168.120.1",
+        "mac_address": "fc73-fb9e-601c",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif2",
+        "vlan": "10/-"
+      },
+      {
+        "ip_address": "100.95.15.241",
+        "mac_address": "fc73-fb9e-601c",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif100"
+      }
+    ],
+    "summary": {
+      "total": 4,
+      "dynamic": 1,
+      "static": 0,
+      "interface": 3
+    }
+  },
+  "normalized": [
+    {
+      "ip_address": "192.168.1.1",
+      "mac_address": "fc:73:fb:9e:60:1c",
+      "interface": "Vlanif1",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "192.168.1.118",
+      "mac_address": "a0:78:17:b2:7b:c0",
+      "interface": "Wlan-Bss7",
+      "age": 20,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.168.120.1",
+      "mac_address": "fc:73:fb:9e:60:1c",
+      "interface": "Vlanif2",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "100.95.15.241",
+      "mac_address": "fc:73:fb:9e:60:1c",
+      "interface": "Vlanif100",
+      "age": null,
+      "type": "interface"
+    }
+  ]
+}

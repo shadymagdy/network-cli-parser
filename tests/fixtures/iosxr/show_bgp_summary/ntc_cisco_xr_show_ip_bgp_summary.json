@@ -1,0 +1,132 @@
+{
+  "command": "show bgp summary",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor": "10.10.17.161",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "ipv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 64924,
+        "messages_received": 36190,
+        "messages_sent": 64731,
+        "table_version": 0,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "00:00:00",
+        "state": "Idle",
+        "prefixes_received": null
+      },
+      {
+        "neighbor": "10.10.128.240",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "ipv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 64727,
+        "messages_received": 68750,
+        "messages_sent": 70941,
+        "table_version": 0,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "2d14h",
+        "state": "Active",
+        "prefixes_received": null
+      },
+      {
+        "neighbor": "10.10.132.240",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "ipv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 64727,
+        "messages_received": 74112,
+        "messages_sent": 76220,
+        "table_version": 94623,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "7w2d",
+        "state": "Established",
+        "prefixes_received": 82
+      },
+      {
+        "neighbor": "10.10.140.240",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "ipv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 64727,
+        "messages_received": 72363,
+        "messages_sent": 74575,
+        "table_version": 94623,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "4d10h",
+        "state": "Established",
+        "prefixes_received": 82
+      }
+    ],
+    "router_id": "30.67.35.78",
+    "local_as": 64200,
+    "context": {
+      "instance": "default",
+      "vrf": "default",
+      "address_family": "ipv4 unicast",
+      "router_id": "30.67.35.78",
+      "local_as": 64200,
+      "nsr": true,
+      "table_state": "Active",
+      "table_version": 94623,
+      "mode": "standalone"
+    }
+  },
+  "normalized": [
+    {
+      "neighbor": "10.10.17.161",
+      "remote_as": 64924,
+      "state": "Idle",
+      "established": false,
+      "uptime": "00:00:00",
+      "uptime_seconds": 0,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "10.10.128.240",
+      "remote_as": 64727,
+      "state": "Active",
+      "established": false,
+      "uptime": "2d14h",
+      "uptime_seconds": 223200,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "10.10.132.240",
+      "remote_as": 64727,
+      "state": "Established",
+      "established": true,
+      "uptime": "7w2d",
+      "uptime_seconds": 4406400,
+      "prefixes_received": 82,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "10.10.140.240",
+      "remote_as": 64727,
+      "state": "Established",
+      "established": true,
+      "uptime": "4d10h",
+      "uptime_seconds": 381600,
+      "prefixes_received": 82,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+!Software Version V800R021C10SPC600
+!Last configuration was updated at 2024-05-14 09:41:10+00:00 by netops
+#
+sysname PE1
+#
+ip vpn-instance CUST-A
+ ipv4-family
+  route-distinguisher 65000:100
+  vpn-target 65000:100 export-extcommunity
+  vpn-target 65000:100 import-extcommunity
+#
+interface GigabitEthernet0/0/1
+ description to-PE2
+ undo shutdown
+ ip address 10.1.1.1 255.255.255.0
+ ospf network-type p2p
+#
+interface GigabitEthernet0/0/3
+ shutdown
+#
+interface LoopBack0
+ ip address 10.0.0.1 255.255.255.255
+#
+bgp 65000
+ router-id 10.0.0.1
+ peer 10.0.0.9 as-number 65000
+ peer 10.0.0.9 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  peer 10.0.0.9 enable
+#
+ospf 1 router-id 10.0.0.1
+ area 0.0.0.0
+  network 10.0.0.1 0.0.0.0
+  network 10.1.1.0 0.0.0.255
+#
+return

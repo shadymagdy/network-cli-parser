@@ -1,0 +1,11 @@
+{
+  "command": "display patch-information",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "patch_package_name": "flash:/RPG_PNFV600R021SPH001.PAT",
+    "patch_package_version": "V600R021SPH001",
+    "patch_package_state": "Running",
+    "patch_package_run_time": "2022-04-06 10:00:17"
+  }
+}

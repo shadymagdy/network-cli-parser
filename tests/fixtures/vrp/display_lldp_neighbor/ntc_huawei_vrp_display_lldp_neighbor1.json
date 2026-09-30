@@ -1,0 +1,58 @@
+{
+  "command": "display lldp neighbor",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "local_interface": "XGigabitEthernet0/0/1",
+      "index": 1,
+      "chassis_type": "MAC address",
+      "chassis_id": "b8d6-f6ff-7390",
+      "port_id_type": "Interface name",
+      "port_id": "XGigabitEthernet0/0/2",
+      "port_description": "XGigabitEthernet0/0/2",
+      "system_name": "ROUTER2",
+      "system_description": "Huawei Switch S6730-S24X6Q\nHuawei Versatile Routing Platform Software\nVRP (R) software, Version 5.170 (S6730 V200R022C00SPC500)\nCopyright (C) 2000-2022 HUAWEI TECH Co., Ltd.",
+      "system_capabilities_supported": [
+        "bridge",
+        "router"
+      ],
+      "system_capabilities_enabled": [
+        "bridge",
+        "router"
+      ],
+      "management_address_type": "ipv4",
+      "management_address_value": "169.254.1.2",
+      "oid": "0.6.15.43.6.1.4.1.2011.5.25.41.1.2.1.1.1.",
+      "expired_time": 95,
+      "port_vlan_id_pvid": 10,
+      "vlan_name_of_vlan_1": "VLAN 0001",
+      "auto_negotiation_supported": "Yes",
+      "auto_negotiation_enabled": "Yes",
+      "oper_mau": "speed(1000)/duplex(Full)",
+      "power_port_class": "PD",
+      "pse_power_supported": "No",
+      "pse_power_enabled": "No",
+      "pse_pairs_control_ability": "No",
+      "power_pairs": "Unknown",
+      "port_power_classification": "Unknown",
+      "link_aggregation_supported": "Yes",
+      "link_aggregation_enabled": "No",
+      "aggregation_port_id": 0,
+      "maximum_frame_size": 9216
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "XGigabitEthernet0/0/1",
+      "neighbor": "ROUTER2",
+      "neighbor_interface": "XGigabitEthernet0/0/2",
+      "chassis_id": "b8:d6:f6:ff:73:90",
+      "capabilities": [
+        "bridge",
+        "router"
+      ],
+      "ttl": 95
+    }
+  ]
+}

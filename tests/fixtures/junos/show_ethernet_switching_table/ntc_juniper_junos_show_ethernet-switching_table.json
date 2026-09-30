@@ -1,0 +1,58 @@
+{
+  "command": "show ethernet-switching table",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "vlan": "Vlan2",
+        "mac_address": "bc:ac:0a:ca:ca:30",
+        "flags": "DR",
+        "interface": "ae3.0",
+        "nh_index": 0,
+        "rtr_id": 0,
+        "routing_instance": "default-switch"
+      },
+      {
+        "vlan": "Vlan100",
+        "mac_address": "2c:5a:0f:bc:a3:cd",
+        "flags": "DL",
+        "interface": "xe-0/0/51:0.0",
+        "nh_index": 0,
+        "rtr_id": 0,
+        "routing_instance": "default-switch"
+      },
+      {
+        "vlan": "Vlan1011",
+        "mac_address": "ca:fe:ca:fe:00:07",
+        "flags": "DL",
+        "interface": "ae100.0",
+        "nh_index": 0,
+        "rtr_id": 0,
+        "routing_instance": "default-switch"
+      }
+    ],
+    "total": 3,
+    "learned": 3
+  },
+  "normalized": [
+    {
+      "mac_address": "bc:ac:0a:ca:ca:30",
+      "vlan": "Vlan2",
+      "interface": "ae3.0",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "2c:5a:0f:bc:a3:cd",
+      "vlan": "Vlan100",
+      "interface": "xe-0/0/51:0.0",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "ca:fe:ca:fe:00:07",
+      "vlan": "Vlan1011",
+      "interface": "ae100.0",
+      "type": "dynamic"
+    }
+  ]
+}

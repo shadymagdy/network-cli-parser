@@ -1,0 +1,87 @@
+{
+  "command": "show mpls forwarding",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "local_label": 24000,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.4.1.1/32",
+      "outgoing_interface": "Gi0/0/0/0.90",
+      "next_hop": "10.12.90.1",
+      "bytes_switched": 9321675
+    },
+    {
+      "local_label": 24002,
+      "outgoing_label": "Pop",
+      "prefix_or_id": "10.13.110.0/24",
+      "outgoing_interface": "Gi0/0/0/0.110",
+      "next_hop": "10.12.110.1",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24003,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.13.115.0/24",
+      "outgoing_interface": "Gi0/0/0/0.115",
+      "next_hop": "10.12.115.1",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24004,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.13.90.0/24",
+      "outgoing_interface": "Gi0/0/0/0.90",
+      "next_hop": "10.12.90.1",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24004,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.13.90.0/24",
+      "outgoing_interface": "Gi0/0/0/1.90",
+      "next_hop": "10.23.90.3",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24008,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.4.1.1/32[V]",
+      "outgoing_interface": "Gi0/0/0/0.390",
+      "next_hop": "10.12.90.1",
+      "bytes_switched": 6281421
+    },
+    {
+      "local_label": 24010,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.36.3.3/32[V]",
+      "outgoing_interface": "Gi0/0/0/1.390",
+      "next_hop": "10.23.90.3",
+      "bytes_switched": 7608898
+    },
+    {
+      "local_label": 24011,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.1.0.0/8",
+      "outgoing_interface": "Gi0/0/0/0.120",
+      "next_hop": "10.12.120.1",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24012,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.13.120.0/24",
+      "outgoing_interface": "Gi0/0/0/0.120",
+      "next_hop": "10.12.120.1",
+      "bytes_switched": 0
+    },
+    {
+      "local_label": 24012,
+      "outgoing_label": "Unlabelled",
+      "prefix_or_id": "10.13.120.0/24",
+      "outgoing_interface": "Gi0/0/0/1.120",
+      "next_hop": "10.23.120.3",
+      "bytes_switched": 0
+    }
+  ]
+}

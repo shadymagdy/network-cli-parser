@@ -1,0 +1,34 @@
+RP/0/RP0/CPU0:PE1#show version
+Mon May 13 10:00:00.123 UTC
+Cisco IOS XR Software, Version 7.9.2 LNT
+Copyright (c) 2013-2023 by Cisco Systems, Inc.
+
+cisco 8201-32FH (Intel(R) Xeon(R) CPU D-1530 @ 2.41GHz) processor with 32GB of memory
+PE1 uptime is 3 weeks, 2 days, 4 hours, 1 minute
+RP/0/RP0/CPU0:PE1#show ipv4 interface brief
+Mon May 13 10:00:01.456 UTC
+
+Interface                      IP-Address      Status          Protocol Vrf-Name
+Loopback0                      10.255.0.1      Up              Up       default
+FourHundredGigE0/0/0/0         10.0.0.1        Up              Up       default
+FourHundredGigE0/0/0/1         unassigned      Shutdown        Down     default
+RP/0/RP0/CPU0:PE1#show bgp summary
+Mon May 13 10:00:02.789 UTC
+BGP router identifier 10.255.0.1, local AS number 65000
+BGP generic scan interval 60 secs
+BGP table state: Active
+Table ID: 0xe0000000   RD version: 1024
+BGP main routing table version 1024
+
+BGP is operating in STANDALONE mode.
+
+
+Process       RcvTblVer   bRIB/RIB   LabelVer  ImportVer  SendTblVer  StandbyVer
+Speaker            1024       1024       1024       1024        1024           0
+
+Neighbor        Spk    AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down  St/PfxRcd
+10.255.0.2        0 65000   12011   12001     1024    0    0     1w2d        512
+10.255.0.3        0 65000       0       0        0    0    0 00:00:00 Idle (Admin)
+2001:db8:ffff::11
+                  0 65001     900     901     1024    0    0    3d04h         20
+RP/0/RP0/CPU0:PE1#

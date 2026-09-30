@@ -1,0 +1,371 @@
+{
+  "command": "display interface description",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "GE0/0/1",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/2",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/3",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/4",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/5",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/6",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/7",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/8",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/9",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/10",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/11",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/12",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/13",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/14",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/15",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/16",
+      "physical": "down",
+      "protocol": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/17",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/18",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/19",
+      "physical": "down",
+      "protocol": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/20",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/21",
+      "physical": "down",
+      "protocol": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/22",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/23",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/24",
+      "physical": "up",
+      "protocol": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "interface": "GE0/0/25",
+      "physical": "down",
+      "protocol": "down",
+      "description": null,
+      "admin_down": true
+    },
+    {
+      "interface": "GE0/0/26",
+      "physical": "down",
+      "protocol": "down",
+      "description": null,
+      "admin_down": true
+    },
+    {
+      "interface": "GE0/0/27",
+      "physical": "up",
+      "protocol": "up",
+      "description": "spine Uplink"
+    },
+    {
+      "interface": "GE0/0/28",
+      "physical": "up",
+      "protocol": "up",
+      "description": "spine Uplink 2"
+    },
+    {
+      "interface": "NULL0",
+      "physical": "up",
+      "protocol": "up",
+      "description": null
+    },
+    {
+      "interface": "Vlanif1",
+      "physical": "up",
+      "protocol": "up",
+      "description": null
+    }
+  ],
+  "normalized": [
+    {
+      "name": "GE0/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/4",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/5",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/6",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/7",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/8",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/9",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/11",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/12",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/13",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/14",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/15",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/16",
+      "admin_status": "up",
+      "oper_status": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/17",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/18",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/19",
+      "admin_status": "up",
+      "oper_status": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/21",
+      "admin_status": "up",
+      "oper_status": "down",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/22",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/23",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/24",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "<C4> work - station 1"
+    },
+    {
+      "name": "GE0/0/25",
+      "admin_status": "admin-down",
+      "oper_status": "down",
+      "description": null
+    },
+    {
+      "name": "GE0/0/26",
+      "admin_status": "admin-down",
+      "oper_status": "down",
+      "description": null
+    },
+    {
+      "name": "GE0/0/27",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "spine Uplink"
+    },
+    {
+      "name": "GE0/0/28",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "spine Uplink 2"
+    },
+    {
+      "name": "NULL0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null
+    },
+    {
+      "name": "Vlanif1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null
+    }
+  ]
+}

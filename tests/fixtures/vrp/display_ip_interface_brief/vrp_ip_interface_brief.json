@@ -1,0 +1,103 @@
+{
+  "command": "display ip interface brief",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "interfaces": [
+      {
+        "interface": "GigabitEthernet0/0/1",
+        "ip_address": "10.1.1.1/24",
+        "physical": "up",
+        "protocol": "up"
+      },
+      {
+        "interface": "GigabitEthernet0/0/2",
+        "ip_address": "10.1.2.1/24",
+        "physical": "up",
+        "protocol": "up"
+      },
+      {
+        "interface": "GigabitEthernet0/0/3",
+        "ip_address": null,
+        "physical": "down",
+        "protocol": "down",
+        "admin_down": true
+      },
+      {
+        "interface": "GigabitEthernet0/0/4.100",
+        "ip_address": "192.168.100.1/24",
+        "physical": "up",
+        "protocol": "up",
+        "vpn_instance": "CUST-A"
+      },
+      {
+        "interface": "LoopBack0",
+        "ip_address": "10.0.0.1/32",
+        "physical": "up",
+        "protocol": "up"
+      },
+      {
+        "interface": "NULL0",
+        "ip_address": null,
+        "physical": "up",
+        "protocol": "up"
+      }
+    ],
+    "summary": {
+      "up_physical": 4,
+      "down_physical": 2,
+      "up_protocol": 4,
+      "down_protocol": 2
+    }
+  },
+  "normalized": [
+    {
+      "name": "GigabitEthernet0/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.1.1.1/24",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet0/0/2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.1.2.1/24",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet0/0/3",
+      "admin_status": "admin-down",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet0/0/4.100",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.168.100.1/24",
+      "vrf": "CUST-A",
+      "description": null
+    },
+    {
+      "name": "LoopBack0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.0.0.1/32",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "NULL0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    }
+  ]
+}

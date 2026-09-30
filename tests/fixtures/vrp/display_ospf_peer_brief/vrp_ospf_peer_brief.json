@@ -1,0 +1,60 @@
+{
+  "command": "display ospf peer brief",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "neighbors": [
+      {
+        "process": 1,
+        "router_id": "10.0.0.1",
+        "area": "0.0.0.0",
+        "interface": "GigabitEthernet0/0/1",
+        "neighbor_id": "10.0.0.2",
+        "state": "Full"
+      },
+      {
+        "process": 1,
+        "router_id": "10.0.0.1",
+        "area": "0.0.0.0",
+        "interface": "GigabitEthernet0/0/2",
+        "neighbor_id": "10.0.0.3",
+        "state": "Full"
+      },
+      {
+        "process": 1,
+        "router_id": "10.0.0.1",
+        "area": "0.0.0.10",
+        "interface": "Vlanif100",
+        "neighbor_id": "10.0.0.9",
+        "state": "2-Way"
+      }
+    ],
+    "total": 3
+  },
+  "normalized": [
+    {
+      "neighbor_id": "10.0.0.2",
+      "priority": null,
+      "state": "full",
+      "address": null,
+      "interface": "GigabitEthernet0/0/1",
+      "dead_time": null
+    },
+    {
+      "neighbor_id": "10.0.0.3",
+      "priority": null,
+      "state": "full",
+      "address": null,
+      "interface": "GigabitEthernet0/0/2",
+      "dead_time": null
+    },
+    {
+      "neighbor_id": "10.0.0.9",
+      "priority": null,
+      "state": "2-way",
+      "address": null,
+      "interface": "Vlanif100",
+      "dead_time": null
+    }
+  ]
+}

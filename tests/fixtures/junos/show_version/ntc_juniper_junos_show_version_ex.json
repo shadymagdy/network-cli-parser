@@ -1,0 +1,76 @@
+{
+  "command": "show version",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "hostname": "lab",
+    "model": "ex4550-32f",
+    "version": "13.2X51-D35.3",
+    "members": {
+      "fpc0": {
+        "hostname": "lab",
+        "model": "ex4550-32f",
+        "version": "13.2X51-D35.3",
+        "packages": [
+          {
+            "name": "JUNOS EX  Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS FIPS mode utilities",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS EX 4500 Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Web Management",
+            "version": "13.2X51-D35.3"
+          }
+        ]
+      },
+      "fpc1": {
+        "hostname": "lab",
+        "model": "ex4550-32f",
+        "version": "13.2X51-D35.3",
+        "packages": [
+          {
+            "name": "JUNOS EX  Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS FIPS mode utilities",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS EX 4500 Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Web Management",
+            "version": "13.2X51-D35.3"
+          }
+        ]
+      }
+    }
+  },
+  "normalized": {
+    "hostname": "lab",
+    "vendor": "Juniper",
+    "os": "Junos",
+    "version": "13.2X51-D35.3",
+    "model": "ex4550-32f",
+    "serial_number": null,
+    "uptime": null,
+    "uptime_seconds": null
+  }
+}

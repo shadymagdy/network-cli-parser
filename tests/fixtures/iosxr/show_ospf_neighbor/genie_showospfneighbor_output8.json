@@ -1,0 +1,72 @@
+{
+  "command": "show ospf neighbor",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor_id": "10.0.0.13",
+        "priority": 1,
+        "state": "EXSTART",
+        "role": "BDR",
+        "dead_time": "00:00:39",
+        "address": "10.13.14.1",
+        "interface": "Bundle-Ether1314.511",
+        "process": "1",
+        "vrf": "default",
+        "uptime": "00:00:38"
+      },
+      {
+        "neighbor_id": "10.0.0.4",
+        "priority": 1,
+        "state": "FULL",
+        "role": "BDR",
+        "dead_time": "00:00:38",
+        "address": "10.4.14.1",
+        "interface": "Bundle-Ether414",
+        "process": "1",
+        "vrf": "default",
+        "uptime": "2d01h"
+      },
+      {
+        "neighbor_id": "10.0.0.13",
+        "priority": 1,
+        "state": "FULL",
+        "role": "BDR",
+        "dead_time": "00:00:34",
+        "address": "10.13.14.5",
+        "interface": "Bundle-Ether1314.510",
+        "process": "1",
+        "vrf": "default",
+        "uptime": "17w1d"
+      }
+    ],
+    "total": 3
+  },
+  "normalized": [
+    {
+      "neighbor_id": "10.0.0.13",
+      "priority": 1,
+      "state": "exstart",
+      "address": "10.13.14.1",
+      "interface": "Bundle-Ether1314.511",
+      "dead_time": "00:00:39"
+    },
+    {
+      "neighbor_id": "10.0.0.4",
+      "priority": 1,
+      "state": "full",
+      "address": "10.4.14.1",
+      "interface": "Bundle-Ether414",
+      "dead_time": "00:00:38"
+    },
+    {
+      "neighbor_id": "10.0.0.13",
+      "priority": 1,
+      "state": "full",
+      "address": "10.13.14.5",
+      "interface": "Bundle-Ether1314.510",
+      "dead_time": "00:00:34"
+    }
+  ]
+}

@@ -1,0 +1,502 @@
+{
+  "command": "show route",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "routes": [
+      {
+        "prefix": "fc00:c000:1001::/48",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uN (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uN (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c001:1001::/48",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uN (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c001:1001::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uN (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e000::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::ffff:0.0.0.0",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0,
+            "next_hop_vrf": "SRV6_L3VPN_BE"
+          }
+        ],
+        "description": "SRv6 Endpoint uDT4",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e001::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0,
+            "next_hop_vrf": "SRV6_L3VPN_BE"
+          }
+        ],
+        "description": "SRv6 Endpoint uDT6",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e004::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "::ffff:0.0.0.0",
+            "age": "1d21h",
+            "distance": 0,
+            "metric": 0,
+            "next_hop_vrf": "default"
+          }
+        ],
+        "description": "SRv6 Endpoint uDT4",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e002::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:9ba5",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e002::/80",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:9ba5",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e003::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:ac68",
+            "interface": "GigabitEthernet0/0/0/2",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:1001:e003::/80",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:ac68",
+            "interface": "GigabitEthernet0/0/0/2",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:e002::/48",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:9ba5",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:e002::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:9ba5",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:e003::/48",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:ac68",
+            "interface": "GigabitEthernet0/0/0/2",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (shift)",
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "fc00:c000:e003::/64",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::250:56ff:fe94:ac68",
+            "interface": "GigabitEthernet0/0/0/2",
+            "age": "1d20h",
+            "distance": 0,
+            "metric": 0
+          }
+        ],
+        "description": "SRv6 Endpoint uA (PSP/USD)",
+        "distance": 0,
+        "metric": 0
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "fc00:c000:1001::/48",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c000:1001::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c001:1001::/48",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c001:1001::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e000::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::ffff:0.0.0.0",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e001::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e004::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "::ffff:0.0.0.0",
+          "interface": null
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d21h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e002::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:9ba5",
+          "interface": "GigabitEthernet0/0/0/0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e002::/80",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:9ba5",
+          "interface": "GigabitEthernet0/0/0/0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e003::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:ac68",
+          "interface": "GigabitEthernet0/0/0/2"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:1001:e003::/80",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:ac68",
+          "interface": "GigabitEthernet0/0/0/2"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:e002::/48",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:9ba5",
+          "interface": "GigabitEthernet0/0/0/0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:e002::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:9ba5",
+          "interface": "GigabitEthernet0/0/0/0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:e003::/48",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:ac68",
+          "interface": "GigabitEthernet0/0/0/2"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    },
+    {
+      "prefix": "fc00:c000:e003::/64",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": "fe80::250:56ff:fe94:ac68",
+          "interface": "GigabitEthernet0/0/0/2"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d20h"
+    }
+  ]
+}

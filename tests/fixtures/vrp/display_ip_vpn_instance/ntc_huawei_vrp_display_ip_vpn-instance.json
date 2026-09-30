@@ -1,0 +1,26 @@
+{
+  "command": "display ip vpn-instance",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vpn_instances": {
+      "red": {
+        "rd": "1:2",
+        "address_families": [
+          "IPv4",
+          "IPv6"
+        ]
+      }
+    },
+    "total": 1,
+    "total_ipv4": 1,
+    "total_ipv6": 1
+  },
+  "normalized": [
+    {
+      "name": "red",
+      "rd": "1:2",
+      "interfaces": null
+    }
+  ]
+}

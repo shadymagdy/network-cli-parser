@@ -1,0 +1,49 @@
+{
+  "command": "display cpu-usage",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "current_percent": 12,
+    "max_percent": 81,
+    "five_seconds_percent": 11,
+    "one_minute_percent": 12,
+    "five_minutes_percent": 10,
+    "stat_cycle_seconds": 60,
+    "stat_time": "2024-05-14  10:15:43",
+    "max_stat_time": "2024-05-01 02:11:05",
+    "tasks": [
+      {
+        "task": "VIDL",
+        "cpu_percent": 88,
+        "runtime": "0/2e01a9a1",
+        "description": "DOPRA IDLE"
+      },
+      {
+        "task": "OS",
+        "cpu_percent": 4,
+        "runtime": "0/4f9f0b3",
+        "description": "Operation System"
+      },
+      {
+        "task": "bcmRX",
+        "cpu_percent": 2,
+        "runtime": "0/26b2c11",
+        "description": "bcmRX"
+      },
+      {
+        "task": "FTS",
+        "cpu_percent": 1,
+        "runtime": "0/1f0e1d3",
+        "description": "FTS"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "location": null,
+      "one_minute": 12,
+      "five_minute": 10,
+      "five_second": 11
+    }
+  ]
+}

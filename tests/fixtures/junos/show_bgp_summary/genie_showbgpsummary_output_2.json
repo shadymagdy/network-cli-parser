@@ -1,0 +1,100 @@
+{
+  "command": "show bgp summary",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "inet.0": {
+        "total_paths": 0,
+        "active_paths": 0,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      },
+      "inet6.0": {
+        "total_paths": 0,
+        "active_paths": 0,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      }
+    },
+    "neighbors": [
+      {
+        "neighbor": "10.145.0.2",
+        "remote_as": 3,
+        "input_messages": 2,
+        "output_messages": 3,
+        "output_queue": 0,
+        "flaps": 1,
+        "up_down": "9",
+        "state": "Established",
+        "tables": {
+          "inet.0": {
+            "active": 0,
+            "received": 0,
+            "accepted": 0,
+            "damped": 0
+          },
+          "inet6.0": {
+            "active": 0,
+            "received": 0,
+            "accepted": 0,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 0,
+        "uptime_seconds": 9
+      },
+      {
+        "neighbor": "2001:20::2",
+        "remote_as": 3,
+        "input_messages": 2,
+        "output_messages": 3,
+        "output_queue": 0,
+        "flaps": 1,
+        "up_down": "5",
+        "state": "Established",
+        "tables": {
+          "inet6.0": {
+            "active": 0,
+            "received": 0,
+            "accepted": 0,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 0,
+        "uptime_seconds": 5
+      }
+    ],
+    "groups": 2,
+    "peers": 2,
+    "down_peers": 0
+  },
+  "normalized": [
+    {
+      "neighbor": "10.145.0.2",
+      "remote_as": 3,
+      "state": "Established",
+      "established": true,
+      "uptime": "9",
+      "uptime_seconds": 9,
+      "prefixes_received": 0,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "2001:20::2",
+      "remote_as": 3,
+      "state": "Established",
+      "established": true,
+      "uptime": "5",
+      "uptime_seconds": 5,
+      "prefixes_received": 0,
+      "vrf": "default",
+      "address_family": "ipv6 unicast"
+    }
+  ]
+}

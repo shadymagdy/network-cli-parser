@@ -1,0 +1,55 @@
+{
+  "command": "display version",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vrp_version": "8.180",
+    "product_series": "ATN 910C-B",
+    "version": "V300R003C10SPC500",
+    "model": "ATN 910C-B",
+    "uptime": "358 days, 16 hours, 59 minutes",
+    "uptime_seconds": 30992340,
+    "boards": [
+      {
+        "board": "CXP",
+        "slot": 2,
+        "role": "master",
+        "uptime": "358 days, 16 hours, 58 minutes",
+        "startup_time": "2019/02/24 17:20:13",
+        "sdram_memory_mb": 4096,
+        "flash_memory_mb": 64,
+        "cfcard_memory_mb": 800,
+        "cfcard2_memory_mb": 800
+      },
+      {
+        "board": "ANGMHSTA",
+        "slot": "0211",
+        "versions": {
+          "pcb": "ANG1CXPH REV A",
+          "epld": "V120",
+          "fpga1": "V110",
+          "pe": "000",
+          "bootrom": "08.84",
+          "boot_load": "08.84",
+          "software": "Version 8.180 RELEASE 0001"
+        }
+      },
+      {
+        "board": "PWR",
+        "versions": {
+          "pcb": "ES5MPSD17 REV D"
+        }
+      }
+    ]
+  },
+  "normalized": {
+    "hostname": null,
+    "vendor": "Huawei",
+    "os": "VRP",
+    "version": "V300R003C10SPC500",
+    "model": "ATN 910C-B",
+    "serial_number": null,
+    "uptime": "358 days, 16 hours, 59 minutes",
+    "uptime_seconds": 30992340
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "command": "show inventory",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "name": "Rack 0",
+      "description": "Cisco 8200 2RU 32x400G QSFP56-DD w/IOS XR HBM MACsec",
+      "pid": "8202-32FH-M",
+      "vid": "V03",
+      "sn": "FLM27ABCDEF"
+    },
+    {
+      "name": "0/RP0/CPU0",
+      "description": "Cisco 8200 2RU 32x400G QSFP56-DD w/IOS XR HBM MACsec",
+      "pid": "8202-32FH-M",
+      "vid": "V03",
+      "sn": "FLM27ZBCDEF"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/0",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "pid": "QDD-400G-LR4-S",
+      "vid": "V01",
+      "sn": "INL26ABCAUG"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/28",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "pid": "QDD-400G-LR4-S",
+      "vid": "V01",
+      "sn": "INL2ABCDEFG"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/29",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "pid": "QDD-400G-LR4-S",
+      "vid": "V01",
+      "sn": "INL261ABCDE"
+    },
+    {
+      "name": "HundredGigE0/0/0/30",
+      "description": "Non-Cisco QSFP28 100G CWDM4 MSA WITH FEC Pluggable Optics Module",
+      "pid": "Q.161HG.2.C",
+      "vid": "01",
+      "sn": "F78AAB5"
+    },
+    {
+      "name": "HundredGigE0/0/0/31",
+      "description": "Non-Cisco QSFP28 100G CWDM4 MSA WITH FEC Pluggable Optics Module",
+      "pid": "Q.161HG.2.C",
+      "vid": "01",
+      "sn": "F78AAB6"
+    },
+    {
+      "name": "0/FB0",
+      "description": "Cisco 8000 Series Fan Controller Board on 8202-32FH-M",
+      "pid": "8202-32FH-M[FB]",
+      "vid": "N/A",
+      "sn": "FLM2ZABCDEF"
+    },
+    {
+      "name": "0/FT0",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "pid": "FAN-PI-V3",
+      "vid": "V01",
+      "sn": "DCH27ABCDEF"
+    },
+    {
+      "name": "0/FT1",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "pid": "FAN-PI-V3",
+      "vid": "V01",
+      "sn": "DCH27BBCDEF"
+    },
+    {
+      "name": "0/FT2",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "pid": "FAN-PI-V3",
+      "vid": "V01",
+      "sn": "DCH27CBCDEF"
+    },
+    {
+      "name": "0/FT3",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "pid": "FAN-PI-V3",
+      "vid": "V01",
+      "sn": "DCH27DBCDEF"
+    },
+    {
+      "name": "0/PM0",
+      "description": "2000W AC Power Module with Port-side Air Intake",
+      "pid": "PSU2KW-ACPI",
+      "vid": "V01",
+      "sn": "POG27DBCDEF"
+    },
+    {
+      "name": "0/PM1",
+      "description": "2000W AC Power Module with Port-side Air Intake",
+      "pid": "PSU2KW-ACPI",
+      "vid": "V01",
+      "sn": "POG27ABCDEF"
+    }
+  ],
+  "normalized": [
+    {
+      "name": "Rack 0",
+      "description": "Cisco 8200 2RU 32x400G QSFP56-DD w/IOS XR HBM MACsec",
+      "part_number": "8202-32FH-M",
+      "serial_number": "FLM27ABCDEF",
+      "version": "V03"
+    },
+    {
+      "name": "0/RP0/CPU0",
+      "description": "Cisco 8200 2RU 32x400G QSFP56-DD w/IOS XR HBM MACsec",
+      "part_number": "8202-32FH-M",
+      "serial_number": "FLM27ZBCDEF",
+      "version": "V03"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/0",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "part_number": "QDD-400G-LR4-S",
+      "serial_number": "INL26ABCAUG",
+      "version": "V01"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/28",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "part_number": "QDD-400G-LR4-S",
+      "serial_number": "INL2ABCDEFG",
+      "version": "V01"
+    },
+    {
+      "name": "FourHundredGigE0/0/0/29",
+      "description": "Cisco QSFPDD 400G LR4 Pluggable Optics Module",
+      "part_number": "QDD-400G-LR4-S",
+      "serial_number": "INL261ABCDE",
+      "version": "V01"
+    },
+    {
+      "name": "HundredGigE0/0/0/30",
+      "description": "Non-Cisco QSFP28 100G CWDM4 MSA WITH FEC Pluggable Optics Module",
+      "part_number": "Q.161HG.2.C",
+      "serial_number": "F78AAB5",
+      "version": "01"
+    },
+    {
+      "name": "HundredGigE0/0/0/31",
+      "description": "Non-Cisco QSFP28 100G CWDM4 MSA WITH FEC Pluggable Optics Module",
+      "part_number": "Q.161HG.2.C",
+      "serial_number": "F78AAB6",
+      "version": "01"
+    },
+    {
+      "name": "0/FB0",
+      "description": "Cisco 8000 Series Fan Controller Board on 8202-32FH-M",
+      "part_number": "8202-32FH-M[FB]",
+      "serial_number": "FLM2ZABCDEF",
+      "version": "N/A"
+    },
+    {
+      "name": "0/FT0",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "part_number": "FAN-PI-V3",
+      "serial_number": "DCH27ABCDEF",
+      "version": "V01"
+    },
+    {
+      "name": "0/FT1",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "part_number": "FAN-PI-V3",
+      "serial_number": "DCH27BBCDEF",
+      "version": "V01"
+    },
+    {
+      "name": "0/FT2",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "part_number": "FAN-PI-V3",
+      "serial_number": "DCH27CBCDEF",
+      "version": "V01"
+    },
+    {
+      "name": "0/FT3",
+      "description": "Cisco Fixed Routers V3 Fan with Port-side Air Intake",
+      "part_number": "FAN-PI-V3",
+      "serial_number": "DCH27DBCDEF",
+      "version": "V01"
+    },
+    {
+      "name": "0/PM0",
+      "description": "2000W AC Power Module with Port-side Air Intake",
+      "part_number": "PSU2KW-ACPI",
+      "serial_number": "POG27DBCDEF",
+      "version": "V01"
+    },
+    {
+      "name": "0/PM1",
+      "description": "2000W AC Power Module with Port-side Air Intake",
+      "part_number": "PSU2KW-ACPI",
+      "serial_number": "POG27ABCDEF",
+      "version": "V01"
+    }
+  ]
+}

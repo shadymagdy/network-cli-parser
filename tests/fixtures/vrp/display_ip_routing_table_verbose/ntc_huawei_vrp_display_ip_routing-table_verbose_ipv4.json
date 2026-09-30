@@ -1,0 +1,576 @@
+{
+  "command": "display ip routing-table verbose",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "tables": {
+      "_public_": {
+        "destinations": 13,
+        "routes": 14
+      }
+    },
+    "routes": [
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "192.214.198.156",
+            "interface": "Dialer1"
+          }
+        ],
+        "protocol": "Static",
+        "process_id": 0,
+        "preference": 60,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "1d01h58m07s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "23.90.232.243",
+            "interface": "Dialer1"
+          }
+        ],
+        "protocol": "EBGP",
+        "process_id": 0,
+        "preference": 255,
+        "cost": 0,
+        "neighbour": "23.90.232.243",
+        "state": "Inactive Adv",
+        "active": false,
+        "age": "1d01h57m50s",
+        "tag": 0,
+        "priority": "low",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x1",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0"
+      },
+      {
+        "prefix": "23.90.232.243/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "23.90.232.243",
+            "interface": "Dialer1"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "1d01h58m07s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "100.95.15.240/30",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "100.95.15.241",
+            "interface": "Vlanif100"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "1d01h58m15s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "100.95.15.241/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "Vlanif100"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h58m15s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "100.95.15.243/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "Vlanif100"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h58m19s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "127.0.0.0/8",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "InLoopBack0"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h59m26s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "127.0.0.1/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "InLoopBack0"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h59m26s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "127.255.255.255/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "InLoopBack0"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h59m26s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "192.168.1.0/24",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "192.168.1.1",
+            "interface": "Vlanif1"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "1d01h58m54s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "192.168.1.1/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "Vlanif1"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h58m55s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "192.168.1.255/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "Vlanif1"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h58m55s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "192.214.198.156/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "Dialer1"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "1d01h58m13s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "255.255.255.255/32",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "InLoopBack0"
+          }
+        ],
+        "protocol": "Direct",
+        "process_id": 0,
+        "preference": 0,
+        "cost": 0,
+        "neighbour": "0.0.0.0",
+        "state": "Active NoAdv",
+        "active": true,
+        "age": "1d01h59m27s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "192.214.198.156",
+          "interface": "Dialer1"
+        }
+      ],
+      "distance": 60,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m07s"
+    },
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "23.90.232.243",
+          "interface": "Dialer1"
+        }
+      ],
+      "distance": 255,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h57m50s"
+    },
+    {
+      "prefix": "23.90.232.243/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "23.90.232.243",
+          "interface": "Dialer1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m07s"
+    },
+    {
+      "prefix": "100.95.15.240/30",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "100.95.15.241",
+          "interface": "Vlanif100"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m15s"
+    },
+    {
+      "prefix": "100.95.15.241/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "Vlanif100"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m15s"
+    },
+    {
+      "prefix": "100.95.15.243/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "Vlanif100"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m19s"
+    },
+    {
+      "prefix": "127.0.0.0/8",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h59m26s"
+    },
+    {
+      "prefix": "127.0.0.1/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h59m26s"
+    },
+    {
+      "prefix": "127.255.255.255/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h59m26s"
+    },
+    {
+      "prefix": "192.168.1.0/24",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "192.168.1.1",
+          "interface": "Vlanif1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m54s"
+    },
+    {
+      "prefix": "192.168.1.1/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "Vlanif1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m55s"
+    },
+    {
+      "prefix": "192.168.1.255/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "Vlanif1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m55s"
+    },
+    {
+      "prefix": "192.214.198.156/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "Dialer1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h58m13s"
+    },
+    {
+      "prefix": "255.255.255.255/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1d01h59m27s"
+    }
+  ]
+}

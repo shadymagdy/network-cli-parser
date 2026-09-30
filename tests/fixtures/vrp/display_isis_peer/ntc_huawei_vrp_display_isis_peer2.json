@@ -1,0 +1,48 @@
+{
+  "command": "display isis peer",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "peers": [
+      {
+        "process": 1,
+        "system_id": "MA-JK4961-01H",
+        "interface": "Eth-Trunk2",
+        "circuit_id": "0000000087",
+        "state": "Up",
+        "hold_time": 25,
+        "type": "L2",
+        "priority": null
+      },
+      {
+        "process": 1,
+        "system_id": "PAG-JK1401-01H",
+        "interface": "Eth-Trunk0",
+        "circuit_id": "0000000146",
+        "state": "Up",
+        "hold_time": 29,
+        "type": "L2",
+        "priority": null
+      }
+    ],
+    "total": 2
+  },
+  "normalized": [
+    {
+      "system_id": "MA-JK4961-01H",
+      "interface": "Eth-Trunk2",
+      "state": "up",
+      "level": "L2",
+      "hold_time": 25,
+      "snpa": null
+    },
+    {
+      "system_id": "PAG-JK1401-01H",
+      "interface": "Eth-Trunk0",
+      "state": "up",
+      "level": "L2",
+      "hold_time": 29,
+      "snpa": null
+    }
+  ]
+}

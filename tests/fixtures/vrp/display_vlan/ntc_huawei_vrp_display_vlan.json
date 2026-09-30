@@ -1,0 +1,190 @@
+{
+  "command": "display vlan",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vlans": {
+      "1": {
+        "untagged": [
+          {
+            "interface": "XGE0/0/1",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/2",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/3",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/4",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/5",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/6",
+            "state": "down"
+          }
+        ],
+        "tagged": [
+          {
+            "interface": "40GE0/0/1",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/2",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/3",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/4",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/5",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/6",
+            "state": "down"
+          }
+        ],
+        "type": "common"
+      },
+      "10": {
+        "untagged": [
+          {
+            "interface": "XGE0/0/7",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/8",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/9",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/10",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/11",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/12",
+            "state": "down"
+          }
+        ],
+        "tagged": [],
+        "type": "common"
+      },
+      "20": {
+        "untagged": [],
+        "tagged": [
+          {
+            "interface": "40GE0/0/1",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/2",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/3",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/4",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/5",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/6",
+            "state": "down"
+          }
+        ],
+        "type": "common"
+      },
+      "30": {
+        "untagged": [
+          {
+            "interface": "XGE0/0/13",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/14",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/15",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/16",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/17",
+            "state": "down"
+          },
+          {
+            "interface": "XGE0/0/18",
+            "state": "down"
+          }
+        ],
+        "tagged": [
+          {
+            "interface": "40GE0/0/1",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/2",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/3",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/4",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/5",
+            "state": "down"
+          },
+          {
+            "interface": "40GE0/0/6",
+            "state": "down"
+          }
+        ],
+        "type": "common"
+      },
+      "1555": {
+        "untagged": [],
+        "tagged": [
+          {
+            "interface": "Eth-Trunk0",
+            "state": "up"
+          }
+        ],
+        "type": "common"
+      }
+    },
+    "total": 3
+  }
+}

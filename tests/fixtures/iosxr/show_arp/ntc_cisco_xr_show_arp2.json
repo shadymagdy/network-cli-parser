@@ -1,0 +1,151 @@
+{
+  "command": "show arp",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "ip_address": "192.0.2.1",
+      "age": "01:31:14",
+      "mac_address": "ca01.1d8b.0008",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.2",
+      "age": "01:46:18",
+      "mac_address": "ca02.1d99.0008",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.3",
+      "age": "01:46:16",
+      "mac_address": "ca03.1da7.0008",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.4",
+      "age": "01:46:15",
+      "mac_address": "ca04.1db5.0008",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.5",
+      "age": "01:46:13",
+      "mac_address": "ca05.1dc3.0008",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.10",
+      "mac_address": "0c99.6869.0003",
+      "state": "Interface",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.0.2.11",
+      "age": "01:43:41",
+      "mac_address": "0ca1.f3ee.0ba0",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "GigabitEthernet0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "192.168.57.1",
+      "age": "00:00:02",
+      "mac_address": "5254.004e.1156",
+      "state": "Dynamic",
+      "type": "ARPA",
+      "interface": "MgmtEth0/RP0/CPU0/0",
+      "location": "0/RP0/CPU0"
+    },
+    {
+      "ip_address": "192.168.57.10",
+      "mac_address": "0c99.6869.0000",
+      "state": "Interface",
+      "type": "ARPA",
+      "interface": "MgmtEth0/RP0/CPU0/0",
+      "location": "0/RP0/CPU0"
+    }
+  ],
+  "normalized": [
+    {
+      "ip_address": "192.0.2.1",
+      "mac_address": "ca:01:1d:8b:00:08",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:31:14",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.0.2.2",
+      "mac_address": "ca:02:1d:99:00:08",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:46:18",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.0.2.3",
+      "mac_address": "ca:03:1d:a7:00:08",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:46:16",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.0.2.4",
+      "mac_address": "ca:04:1d:b5:00:08",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:46:15",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.0.2.5",
+      "mac_address": "ca:05:1d:c3:00:08",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:46:13",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.0.2.10",
+      "mac_address": "0c:99:68:69:00:03",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "192.0.2.11",
+      "mac_address": "0c:a1:f3:ee:0b:a0",
+      "interface": "GigabitEthernet0/0/0/0",
+      "age": "01:43:41",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.168.57.1",
+      "mac_address": "52:54:00:4e:11:56",
+      "interface": "MgmtEth0/RP0/CPU0/0",
+      "age": "00:00:02",
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.168.57.10",
+      "mac_address": "0c:99:68:69:00:00",
+      "interface": "MgmtEth0/RP0/CPU0/0",
+      "age": null,
+      "type": "interface"
+    }
+  ]
+}

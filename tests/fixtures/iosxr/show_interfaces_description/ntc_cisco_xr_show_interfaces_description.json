@@ -1,0 +1,237 @@
+{
+  "command": "show interfaces description",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "BE100",
+      "status": "up",
+      "protocol": "up",
+      "description": "Ligacao -SAT01 | 10G | (satellite100)"
+    },
+    {
+      "interface": "Lo0",
+      "status": "up",
+      "protocol": "up",
+      "description": "Endereco de Acesso ao Roteador"
+    },
+    {
+      "interface": "Lo10",
+      "status": "up",
+      "protocol": "up",
+      "description": "SPB | BGP | ASN 123456"
+    },
+    {
+      "interface": "Lo20",
+      "status": "up",
+      "protocol": "up",
+      "description": "*** Management Loopback ***"
+    },
+    {
+      "interface": "Nu0",
+      "status": "up",
+      "protocol": "up",
+      "description": null
+    },
+    {
+      "interface": "Gi100/0/0/0",
+      "status": "up",
+      "protocol": "up",
+      "description": "LINK ETHERNET"
+    },
+    {
+      "interface": "Gi100/0/0/0.10",
+      "status": "up",
+      "protocol": "up",
+      "description": "MULTIPLANNING"
+    },
+    {
+      "interface": "Gi100/0/0/0.150012",
+      "status": "admin-down",
+      "protocol": "admin-down",
+      "description": "ADMIN DOWN"
+    },
+    {
+      "interface": "Gi100/0/0/2",
+      "status": "admin-down",
+      "protocol": "admin-down",
+      "description": null
+    },
+    {
+      "interface": "Gi100/0/0/9",
+      "status": "deleted",
+      "protocol": "deleted",
+      "description": "DELETED"
+    },
+    {
+      "interface": "nG100/0/0/42",
+      "status": "deleted",
+      "protocol": "deleted",
+      "description": null
+    },
+    {
+      "interface": "nG100/0/0/43",
+      "status": "down",
+      "protocol": "down",
+      "description": null
+    },
+    {
+      "interface": "nT100/0/0/47",
+      "status": "up",
+      "protocol": "up",
+      "description": null
+    },
+    {
+      "interface": "PT0/RSP0/CPU0/0",
+      "status": "admin-down",
+      "protocol": "admin-down",
+      "description": null
+    },
+    {
+      "interface": "Mg0/RSP1/CPU0/0",
+      "status": "admin-down",
+      "protocol": "admin-down",
+      "description": null
+    },
+    {
+      "interface": "Mg0/RSP1/CPU0/1",
+      "status": "admin-down",
+      "protocol": "admin-down",
+      "description": null
+    },
+    {
+      "interface": "Te0/3/0/0",
+      "status": "up",
+      "protocol": "up",
+      "description": "Ligacao | 10G | 10G/061 | (ten0/4/0/1/0)"
+    },
+    {
+      "interface": "Te0/4/0/0",
+      "status": "up",
+      "protocol": "up",
+      "description": "Ligacao | 10G | 10G/062 | (ten0/3/0/1/7)"
+    },
+    {
+      "interface": "Te0/5/0/3",
+      "status": "up",
+      "protocol": "up",
+      "description": "Ligacao -SAT04 | 10G | (satellite400)"
+    }
+  ],
+  "normalized": [
+    {
+      "name": "BE100",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Ligacao -SAT01 | 10G | (satellite100)"
+    },
+    {
+      "name": "Lo0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Endereco de Acesso ao Roteador"
+    },
+    {
+      "name": "Lo10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "SPB | BGP | ASN 123456"
+    },
+    {
+      "name": "Lo20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "*** Management Loopback ***"
+    },
+    {
+      "name": "Nu0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null
+    },
+    {
+      "name": "Gi100/0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "LINK ETHERNET"
+    },
+    {
+      "name": "Gi100/0/0/0.10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "MULTIPLANNING"
+    },
+    {
+      "name": "Gi100/0/0/0.150012",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": "ADMIN DOWN"
+    },
+    {
+      "name": "Gi100/0/0/2",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": null
+    },
+    {
+      "name": "Gi100/0/0/9",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": "DELETED"
+    },
+    {
+      "name": "nG100/0/0/42",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": null
+    },
+    {
+      "name": "nG100/0/0/43",
+      "admin_status": "up",
+      "oper_status": "down",
+      "description": null
+    },
+    {
+      "name": "nT100/0/0/47",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null
+    },
+    {
+      "name": "PT0/RSP0/CPU0/0",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP1/CPU0/0",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP1/CPU0/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Ligacao | 10G | 10G/061 | (ten0/4/0/1/0)"
+    },
+    {
+      "name": "Te0/4/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Ligacao | 10G | 10G/062 | (ten0/3/0/1/7)"
+    },
+    {
+      "name": "Te0/5/0/3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Ligacao -SAT04 | 10G | (satellite400)"
+    }
+  ]
+}

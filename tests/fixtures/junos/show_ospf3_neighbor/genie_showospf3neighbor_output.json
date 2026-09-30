@@ -1,0 +1,43 @@
+{
+  "command": "show ospf3 neighbor",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor_id": "10.189.5.253",
+        "interface": "ge-0/0/0.0",
+        "state": "Full",
+        "priority": 128,
+        "dead_time": 35,
+        "address": "fe80::250:56ff:fe8d:53c0"
+      },
+      {
+        "neighbor_id": "10.169.14.240",
+        "interface": "ge-0/0/1.0",
+        "state": "Full",
+        "priority": 128,
+        "dead_time": 33,
+        "address": "fe80::250:56ff:fe8d:72bd"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "neighbor_id": "10.189.5.253",
+      "priority": 128,
+      "state": "full",
+      "address": "fe80::250:56ff:fe8d:53c0",
+      "interface": "ge-0/0/0.0",
+      "dead_time": 35
+    },
+    {
+      "neighbor_id": "10.169.14.240",
+      "priority": 128,
+      "state": "full",
+      "address": "fe80::250:56ff:fe8d:72bd",
+      "interface": "ge-0/0/1.0",
+      "dead_time": 33
+    }
+  ]
+}

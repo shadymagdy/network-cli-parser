@@ -1,0 +1,116 @@
+{
+  "command": "show vlans",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "routing_instance": "default-switch",
+      "name": "v100-Control",
+      "tag": 100,
+      "interfaces": [
+        {
+          "interface": "ae0.0",
+          "active": true
+        },
+        {
+          "interface": "et-0/0/24.0",
+          "active": true
+        },
+        {
+          "interface": "ge-0/0/3.0",
+          "active": false
+        },
+        {
+          "interface": "xe-0/0/13.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/15.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/17.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/9.0",
+          "active": true
+        }
+      ]
+    },
+    {
+      "routing_instance": "default-switch",
+      "name": "v1005-HelpDesk",
+      "tag": 1005,
+      "interfaces": [
+        {
+          "interface": "ae0.0",
+          "active": true
+        },
+        {
+          "interface": "et-0/0/24.0",
+          "active": true
+        },
+        {
+          "interface": "ge-0/0/7.0",
+          "active": false
+        },
+        {
+          "interface": "xe-0/0/13.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/15.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/17.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/9.0",
+          "active": true
+        }
+      ]
+    },
+    {
+      "routing_instance": "default-switch",
+      "name": "v109-TEMP-Project-Data",
+      "tag": 109,
+      "interfaces": [
+        {
+          "interface": "ae0.0",
+          "active": true
+        },
+        {
+          "interface": "et-0/0/24.0",
+          "active": true
+        },
+        {
+          "interface": "ge-0/0/7.0",
+          "active": false
+        },
+        {
+          "interface": "xe-0/0/13.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/15.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/17.0",
+          "active": true
+        },
+        {
+          "interface": "xe-0/0/22.0",
+          "active": false
+        },
+        {
+          "interface": "xe-0/0/9.0",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

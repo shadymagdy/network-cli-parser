@@ -1,0 +1,36 @@
+{
+  "command": "show version",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "software": "Cisco IOS XR",
+    "version": "4.1.0",
+    "image_label": "Default",
+    "rom": "System Bootstrap, Version 2.100(20100129:213223) [CRS-1 ROMMON],",
+    "hostname": "router",
+    "uptime": "1 week, 6 days, 4 hours, 22 minutes",
+    "uptime_seconds": 1138920,
+    "system_image": "bootflash:disk0/hfr-os-mbi-4.1.0/mbihfr-rp.vm",
+    "chassis": "CRS-8/S",
+    "processor": "7457",
+    "memory": "4194304K bytes",
+    "interface_counts": {
+      "Management Ethernet": 2,
+      "GigabitEthernet": 8,
+      "SONET/SDH": 12,
+      "Packet over SONET/SDH": 12,
+      "WANPHY controller(s)": 1,
+      "TenGigE": 1
+    }
+  },
+  "normalized": {
+    "hostname": "router",
+    "vendor": "Cisco",
+    "os": "IOS XR",
+    "version": "4.1.0",
+    "model": "CRS-8/S",
+    "serial_number": null,
+    "uptime": "1 week, 6 days, 4 hours, 22 minutes",
+    "uptime_seconds": 1138920
+  }
+}

@@ -1,0 +1,13 @@
+ BGP local router ID : 10.0.0.1
+ Local AS number : 65000
+ Total number of peers : 3                 Peers in established state : 3
+
+  Peer            V          AS  MsgRcvd  MsgSent  OutQ  Up/Down       State  PrefRcv
+  10.0.0.9        4       65000    10231    10221     0 0071h10m Established      842
+
+  Peer of IPv4-family for vpn instance :
+
+ VPN-Instance CUST-A, Router ID 10.0.0.1:
+  Peer            V          AS  MsgRcvd  MsgSent  OutQ  Up/Down       State  PrefRcv
+  192.168.100.2   4       64512     2001     2010     0 0012h01m Established       12
+  192.168.100.6   4       64513        0        0     0 00:00:21 Active             0

@@ -1,0 +1,221 @@
+{
+  "command": "display ip routing-table",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "tables": {
+      "_public_": {
+        "destinations": 7,
+        "routes": 8
+      }
+    },
+    "routes": [
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "_public_",
+        "protocol": "Static",
+        "preference": 60,
+        "cost": 0,
+        "flags": "RD",
+        "next_hops": [
+          {
+            "next_hop": "10.1.1.2",
+            "interface": "GigabitEthernet0/0/1"
+          }
+        ]
+      },
+      {
+        "prefix": "10.0.0.1/32",
+        "vrf": "_public_",
+        "protocol": "Direct",
+        "preference": 0,
+        "cost": 0,
+        "flags": "D",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "LoopBack0"
+          }
+        ]
+      },
+      {
+        "prefix": "10.0.0.2/32",
+        "vrf": "_public_",
+        "protocol": "OSPF",
+        "preference": 10,
+        "cost": 1,
+        "flags": "D",
+        "next_hops": [
+          {
+            "next_hop": "10.1.1.2",
+            "interface": "GigabitEthernet0/0/1"
+          }
+        ]
+      },
+      {
+        "prefix": "10.0.0.9/32",
+        "vrf": "_public_",
+        "protocol": "OSPF",
+        "preference": 10,
+        "cost": 2,
+        "flags": "D",
+        "next_hops": [
+          {
+            "next_hop": "10.1.1.2",
+            "interface": "GigabitEthernet0/0/1"
+          },
+          {
+            "next_hop": "10.1.2.2",
+            "interface": "GigabitEthernet0/0/2"
+          }
+        ]
+      },
+      {
+        "prefix": "10.1.1.0/24",
+        "vrf": "_public_",
+        "protocol": "Direct",
+        "preference": 0,
+        "cost": 0,
+        "flags": "D",
+        "next_hops": [
+          {
+            "next_hop": "10.1.1.1",
+            "interface": "GigabitEthernet0/0/1"
+          }
+        ]
+      },
+      {
+        "prefix": "172.16.10.0/24",
+        "vrf": "_public_",
+        "protocol": "IBGP",
+        "preference": 255,
+        "cost": 0,
+        "flags": "RD",
+        "next_hops": [
+          {
+            "next_hop": "10.0.0.9",
+            "interface": "GigabitEthernet0/0/2"
+          }
+        ]
+      },
+      {
+        "prefix": "127.0.0.0/8",
+        "vrf": "_public_",
+        "protocol": "Direct",
+        "preference": 0,
+        "cost": 0,
+        "flags": "D",
+        "next_hops": [
+          {
+            "next_hop": "127.0.0.1",
+            "interface": "InLoopBack0"
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "10.1.1.2",
+          "interface": "GigabitEthernet0/0/1"
+        }
+      ],
+      "distance": 60,
+      "metric": 0,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "10.0.0.1/32",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "LoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "10.0.0.2/32",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.1.1.2",
+          "interface": "GigabitEthernet0/0/1"
+        }
+      ],
+      "distance": 10,
+      "metric": 1,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "10.0.0.9/32",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.1.1.2",
+          "interface": "GigabitEthernet0/0/1"
+        },
+        {
+          "next_hop": "10.1.2.2",
+          "interface": "GigabitEthernet0/0/2"
+        }
+      ],
+      "distance": 10,
+      "metric": 2,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "10.1.1.0/24",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "10.1.1.1",
+          "interface": "GigabitEthernet0/0/1"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "172.16.10.0/24",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "10.0.0.9",
+          "interface": "GigabitEthernet0/0/2"
+        }
+      ],
+      "distance": 255,
+      "metric": 0,
+      "vrf": "default",
+      "age": null
+    },
+    {
+      "prefix": "127.0.0.0/8",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "127.0.0.1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": null
+    }
+  ]
+}

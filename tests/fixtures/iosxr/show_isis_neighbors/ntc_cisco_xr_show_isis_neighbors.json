@@ -1,0 +1,84 @@
+{
+  "command": "show isis neighbors",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "neighbors": [
+      {
+        "instance": "1",
+        "system_id": "CSR2",
+        "interface": "Gi0/0/0/1",
+        "snpa": "5000.0002.0001",
+        "state": "Up",
+        "hold_time": 23,
+        "type": "L1L2",
+        "ietf_nsf": "Capable"
+      },
+      {
+        "instance": "1",
+        "system_id": "vMX1",
+        "interface": "Gi0/0/0/1",
+        "snpa": "0005.8671.9202",
+        "state": "Up",
+        "hold_time": 18,
+        "type": "L1L2",
+        "ietf_nsf": "Capable"
+      },
+      {
+        "instance": "1",
+        "system_id": "vMX1",
+        "interface": "Gi0/0/0/3",
+        "snpa": "*PtoP*",
+        "state": "Up",
+        "hold_time": 25,
+        "type": "L1L2",
+        "ietf_nsf": "Capable"
+      },
+      {
+        "instance": "1",
+        "system_id": "vEOS4",
+        "interface": "Gi0/0/0/2",
+        "snpa": "5000.0003.3766",
+        "state": "Up",
+        "hold_time": 8,
+        "type": "L2",
+        "ietf_nsf": "Unable"
+      }
+    ],
+    "total": 4
+  },
+  "normalized": [
+    {
+      "system_id": "CSR2",
+      "interface": "Gi0/0/0/1",
+      "state": "up",
+      "level": "L1L2",
+      "hold_time": 23,
+      "snpa": "5000.0002.0001"
+    },
+    {
+      "system_id": "vMX1",
+      "interface": "Gi0/0/0/1",
+      "state": "up",
+      "level": "L1L2",
+      "hold_time": 18,
+      "snpa": "0005.8671.9202"
+    },
+    {
+      "system_id": "vMX1",
+      "interface": "Gi0/0/0/3",
+      "state": "up",
+      "level": "L1L2",
+      "hold_time": 25,
+      "snpa": "*PtoP*"
+    },
+    {
+      "system_id": "vEOS4",
+      "interface": "Gi0/0/0/2",
+      "state": "up",
+      "level": "L2",
+      "hold_time": 8,
+      "snpa": "5000.0003.3766"
+    }
+  ]
+}

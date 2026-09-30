@@ -1,0 +1,36 @@
+{
+  "command": "display mac-address",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "aaaa-aaaa-aaaa",
+        "vlan": 1,
+        "interface": "GE0/0/25",
+        "type": "dynamic"
+      },
+      {
+        "mac_address": "bbbb-bbbb-bbbb",
+        "vlan": 1,
+        "interface": "GE0/0/25",
+        "type": "dynamic"
+      }
+    ],
+    "total": 2
+  },
+  "normalized": [
+    {
+      "mac_address": "aa:aa:aa:aa:aa:aa",
+      "vlan": 1,
+      "interface": "GE0/0/25",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "bb:bb:bb:bb:bb:bb",
+      "vlan": 1,
+      "interface": "GE0/0/25",
+      "type": "dynamic"
+    }
+  ]
+}

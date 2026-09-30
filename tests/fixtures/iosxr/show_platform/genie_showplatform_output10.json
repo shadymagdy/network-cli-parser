@@ -1,0 +1,62 @@
+{
+  "command": "show platform",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "node": "0/RP0/CPU0",
+      "type": "A99-RP-F",
+      "redundancy_state": "Active",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/RP1/CPU0",
+      "type": "A99-RP-F",
+      "redundancy_state": "Standby",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT0",
+      "type": "ASR-9903-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT1",
+      "type": "ASR-9903-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT2",
+      "type": "ASR-9903-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT3",
+      "type": "ASR-9903-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/0/CPU0",
+      "type": "ASR-9903-LC",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/0/1",
+      "type": "A9903-20HG-PEC",
+      "state": "OK"
+    },
+    {
+      "node": "0/PT0",
+      "type": "ASR-9900-DC-PEM",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    }
+  ]
+}

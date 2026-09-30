@@ -1,0 +1,143 @@
+{
+  "command": "display lldp neighbor",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "local_interface": "GigabitEthernet0/0/1",
+      "index": 1,
+      "chassis_type": "macAddress",
+      "chassis_id": "f55f-c2c5-e180",
+      "port_id_type": "interfaceName",
+      "port_id": "Gi1/0/1",
+      "port_description": "GigabitEthernet1/0/1",
+      "system_name": "tsa-2960-sw01",
+      "system_description": "Cisco IOS Software, C2960S Software (C2960S-UNIVERSALK9-M), Version 12.2(55)SE7, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2013 by Cisco Systems, Inc.\nCompiled Mon 28-Jan-13 10:28 by prod_rel_team",
+      "system_capabilities_supported": [
+        "bridge",
+        "router"
+      ],
+      "system_capabilities_enabled": [
+        "bridge"
+      ],
+      "management_address_type": "ipV4",
+      "management_addresses": [
+        "192.168.0.240"
+      ],
+      "expired_time": 102,
+      "port_vlan_id_pvid": 1,
+      "auto_negotiation_supported": "Yes",
+      "auto_negotiation_enabled": "Yes",
+      "oper_mau": "speed(1000)/duplex(Full)",
+      "power_port_class": "PD",
+      "pse_power_supported": "No",
+      "pse_power_enabled": "No",
+      "pse_pairs_control_ability": "No",
+      "power_pairs": "Unknown",
+      "port_power_classification": "Unknown",
+      "link_aggregation_supported": "No",
+      "link_aggregation_enabled": "No",
+      "aggregation_port_id": 0,
+      "maximum_frame_size": 0,
+      "device_class": "Network Connectivity",
+      "hardware_rev": "WS-C2960S-48LPS-L (PowerPC):F0",
+      "firmware_rev": "NA",
+      "software_rev": "12.2(55)SE7",
+      "serial_num": "NA",
+      "manufacturer_name": "Cisco Systems, Inc.",
+      "model_name": "WS-C2960S-48LPS-L",
+      "asset_tracking_identifier": "NA",
+      "media_policy_type": "Voice",
+      "unknown_policy": "Unknown",
+      "vlan_tagged": "No",
+      "media_policy_vlanid": 0,
+      "media_policy_l2_priority": 0,
+      "media_policy_dscp": 0,
+      "power_type": "PSE",
+      "poe_pse_power_source": "PSE",
+      "port_pse_priority": "Low",
+      "port_available_power_value": 0,
+      "location_format": "Civic Address LCI",
+      "location_information": "what(LLDP-MED Endpoint) country( )"
+    },
+    {
+      "local_interface": "GigabitEthernet0/0/8",
+      "index": 1,
+      "chassis_type": "macAddress",
+      "chassis_id": "f41f-c2c5-e180",
+      "port_id_type": "interfaceName",
+      "port_id": "Gi1/0/2",
+      "port_description": "GigabitEthernet1/0/2",
+      "system_name": "tsa-2960-sw01",
+      "system_description": "Cisco IOS Software, C2960S Software (C2960S-UNIVERSALK9-M), Version 12.2(55)SE7, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2013 by Cisco Systems, Inc.\nCompiled Mon 28-Jan-13 10:28 by prod_rel_team",
+      "system_capabilities_supported": [
+        "bridge",
+        "router"
+      ],
+      "system_capabilities_enabled": [
+        "bridge"
+      ],
+      "management_address_type": "ipV4",
+      "management_addresses": [
+        "192.168.0.241"
+      ],
+      "expired_time": 102,
+      "port_vlan_id_pvid": 1,
+      "auto_negotiation_supported": "Yes",
+      "auto_negotiation_enabled": "Yes",
+      "oper_mau": "speed(1000)/duplex(Full)",
+      "power_port_class": "PD",
+      "pse_power_supported": "No",
+      "pse_power_enabled": "No",
+      "pse_pairs_control_ability": "No",
+      "power_pairs": "Unknown",
+      "port_power_classification": "Unknown",
+      "link_aggregation_supported": "No",
+      "link_aggregation_enabled": "No",
+      "aggregation_port_id": 0,
+      "maximum_frame_size": 0,
+      "device_class": "Network Connectivity",
+      "hardware_rev": "WS-C2960S-48LPS-L (PowerPC):F0",
+      "firmware_rev": "NA",
+      "software_rev": "12.2(55)SE7",
+      "serial_num": "NA",
+      "manufacturer_name": "Cisco Systems, Inc.",
+      "model_name": "WS-C2960S-48LPS-L",
+      "asset_tracking_identifier": "NA",
+      "media_policy_type": "Voice",
+      "unknown_policy": "Unknown",
+      "vlan_tagged": "No",
+      "media_policy_vlanid": 0,
+      "media_policy_l2_priority": 0,
+      "media_policy_dscp": 0,
+      "power_type": "PSE",
+      "poe_pse_power_source": "PSE",
+      "port_pse_priority": "Low",
+      "port_available_power_value": 0,
+      "location_format": "Civic Address LCI",
+      "location_information": "what(LLDP-MED Endpoint) country( )"
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "GigabitEthernet0/0/1",
+      "neighbor": "tsa-2960-sw01",
+      "neighbor_interface": "Gi1/0/1",
+      "chassis_id": "f5:5f:c2:c5:e1:80",
+      "capabilities": [
+        "bridge"
+      ],
+      "ttl": 102
+    },
+    {
+      "local_interface": "GigabitEthernet0/0/8",
+      "neighbor": "tsa-2960-sw01",
+      "neighbor_interface": "Gi1/0/2",
+      "chassis_id": "f4:1f:c2:c5:e1:80",
+      "capabilities": [
+        "bridge"
+      ],
+      "ttl": 102
+    }
+  ]
+}

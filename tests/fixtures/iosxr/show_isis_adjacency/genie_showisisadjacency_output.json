@@ -1,0 +1,92 @@
+{
+  "command": "show isis adjacency",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "adjacencies": [
+      {
+        "instance": "p",
+        "level": "level-1",
+        "system_id": "12a4",
+        "interface": "PO0/1/0/1",
+        "snpa": "*PtoP*",
+        "state": "Up",
+        "hold_time": 23,
+        "changed": "00:00:06",
+        "nsf": "Capable",
+        "bfd": "Init"
+      },
+      {
+        "instance": "p",
+        "level": "level-1",
+        "system_id": "12a4",
+        "interface": "Gi0/6/0/2",
+        "snpa": "0004.28ff.868a",
+        "state": "Up",
+        "hold_time": 56,
+        "changed": "00:04:01",
+        "nsf": "Capable",
+        "bfd": "Up"
+      },
+      {
+        "instance": "p",
+        "level": "level-2",
+        "system_id": "12a4",
+        "interface": "PO0/1/0/1",
+        "snpa": "*PtoP*",
+        "state": "Up",
+        "hold_time": 23,
+        "changed": "00:00:06",
+        "nsf": "Capable",
+        "bfd": "None"
+      },
+      {
+        "instance": "p",
+        "level": "level-2",
+        "system_id": "12a4",
+        "interface": "Gi0/6/0/2",
+        "snpa": "0004.28ff.868a",
+        "state": "Up",
+        "hold_time": 26,
+        "changed": "00:00:13",
+        "nsf": "Capable",
+        "bfd": "Init"
+      }
+    ],
+    "total": 4
+  },
+  "normalized": [
+    {
+      "system_id": "12a4",
+      "interface": "PO0/1/0/1",
+      "state": "up",
+      "level": "level-1",
+      "hold_time": 23,
+      "snpa": "*PtoP*"
+    },
+    {
+      "system_id": "12a4",
+      "interface": "Gi0/6/0/2",
+      "state": "up",
+      "level": "level-1",
+      "hold_time": 56,
+      "snpa": "0004.28ff.868a"
+    },
+    {
+      "system_id": "12a4",
+      "interface": "PO0/1/0/1",
+      "state": "up",
+      "level": "level-2",
+      "hold_time": 23,
+      "snpa": "*PtoP*"
+    },
+    {
+      "system_id": "12a4",
+      "interface": "Gi0/6/0/2",
+      "state": "up",
+      "level": "level-2",
+      "hold_time": 26,
+      "snpa": "0004.28ff.868a"
+    }
+  ]
+}

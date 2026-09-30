@@ -1,0 +1,17 @@
+*down: administratively down
+^down: standby
+(l): loopback
+(s): spoofing
+(E): E-Trunk down
+The number of interface that is UP in Physical is 4
+The number of interface that is DOWN in Physical is 2
+The number of interface that is UP in Protocol is 4
+The number of interface that is DOWN in Protocol is 2
+
+Interface                         IP Address/Mask      Physical   Protocol  VPN
+GigabitEthernet0/0/1              10.1.1.1/24          up         up        --
+GigabitEthernet0/0/2              10.1.2.1/24          up         up        --
+GigabitEthernet0/0/3              unassigned           *down      down      --
+GigabitEthernet0/0/4.100          192.168.100.1/24     up         up        CUST-A
+LoopBack0                         10.0.0.1/32          up         up(s)     --
+NULL0                             unassigned           up         up(s)     --

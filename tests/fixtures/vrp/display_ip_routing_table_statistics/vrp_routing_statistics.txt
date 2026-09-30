@@ -1,0 +1,8 @@
+Summary Prefixes : 6
+Proto      total      active     added      deleted    freed
+           routes     routes     routes     routes     routes
+DIRECT     5          5          5          0          0
+STATIC     1          1          1          0          0
+BGP        120        118        300        180        180
+OSPF       14         12         20         6          6
+Total      140        136        326        186        186

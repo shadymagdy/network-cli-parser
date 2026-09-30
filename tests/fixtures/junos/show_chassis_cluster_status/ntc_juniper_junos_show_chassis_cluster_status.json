@@ -1,0 +1,73 @@
+{
+  "command": "show chassis cluster status",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "redundancy_groups": {
+      "0": {
+        "failover_count": 1,
+        "nodes": [
+          {
+            "node": "node0",
+            "priority": 100,
+            "status": "primary",
+            "preempt": "no",
+            "manual_failover": "no",
+            "monitor_failures": "None"
+          },
+          {
+            "node": "node1",
+            "priority": 0,
+            "status": "lost",
+            "preempt": "n/a",
+            "manual_failover": "n/a",
+            "monitor_failures": "n/a"
+          }
+        ]
+      },
+      "1": {
+        "failover_count": 1,
+        "nodes": [
+          {
+            "node": "node0",
+            "priority": 0,
+            "status": "primary",
+            "preempt": "no",
+            "manual_failover": "no",
+            "monitor_failures": "CS"
+          },
+          {
+            "node": "node1",
+            "priority": 0,
+            "status": "lost",
+            "preempt": "n/a",
+            "manual_failover": "n/a",
+            "monitor_failures": "n/a"
+          }
+        ]
+      },
+      "3": {
+        "failover_count": 1,
+        "nodes": [
+          {
+            "node": "node0",
+            "priority": 0,
+            "status": "primary",
+            "preempt": "no",
+            "manual_failover": "no",
+            "monitor_failures": "CS"
+          },
+          {
+            "node": "node1",
+            "priority": 0,
+            "status": "lost",
+            "preempt": "n/a",
+            "manual_failover": "n/a",
+            "monitor_failures": "n/a"
+          }
+        ]
+      }
+    },
+    "cluster_id": 1
+  }
+}

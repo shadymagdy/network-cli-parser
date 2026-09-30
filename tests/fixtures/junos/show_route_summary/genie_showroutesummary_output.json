@@ -1,0 +1,115 @@
+{
+  "command": "show route summary",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "inet.0": {
+        "destinations": 929,
+        "routes": 1615,
+        "active": 929,
+        "holddown": 0,
+        "hidden": 0,
+        "protocols": {
+          "Direct": {
+            "routes": 6,
+            "active": 6
+          },
+          "Local": {
+            "routes": 5,
+            "active": 5
+          },
+          "OSPF": {
+            "routes": 236,
+            "active": 234
+          },
+          "BGP": {
+            "routes": 1366,
+            "active": 682
+          },
+          "Static": {
+            "routes": 1,
+            "active": 1
+          },
+          "LDP": {
+            "routes": 1,
+            "active": 1
+          }
+        }
+      },
+      "inet.3": {
+        "destinations": 11,
+        "routes": 11,
+        "active": 11,
+        "holddown": 0,
+        "hidden": 0,
+        "protocols": {
+          "BGP": {
+            "routes": 2,
+            "active": 2
+          },
+          "LDP": {
+            "routes": 1,
+            "active": 1
+          },
+          "L-OSPF": {
+            "routes": 8,
+            "active": 8
+          }
+        }
+      },
+      "mpls.0": {
+        "destinations": 44,
+        "routes": 44,
+        "active": 44,
+        "holddown": 0,
+        "hidden": 0,
+        "protocols": {
+          "MPLS": {
+            "routes": 6,
+            "active": 6
+          },
+          "LDP": {
+            "routes": 15,
+            "active": 15
+          },
+          "L-OSPF": {
+            "routes": 23,
+            "active": 23
+          }
+        }
+      },
+      "inet6.0": {
+        "destinations": 22,
+        "routes": 23,
+        "active": 22,
+        "holddown": 0,
+        "hidden": 0,
+        "protocols": {
+          "Direct": {
+            "routes": 4,
+            "active": 4
+          },
+          "Local": {
+            "routes": 4,
+            "active": 4
+          },
+          "OSPF3": {
+            "routes": 13,
+            "active": 12
+          },
+          "Static": {
+            "routes": 1,
+            "active": 1
+          },
+          "INET6": {
+            "routes": 1,
+            "active": 1
+          }
+        }
+      }
+    },
+    "local_as": 65171,
+    "router_id": "10.189.5.252"
+  }
+}

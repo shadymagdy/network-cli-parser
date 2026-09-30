@@ -1,0 +1,1641 @@
+{
+  "command": "show interfaces brief",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "Lo5",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Loopback",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Lo10",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Loopback",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Lo20",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Loopback",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Lo21",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Loopback",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Lo30",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Loopback",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Nu0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "Null",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt300",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt301",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt302",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt303",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt304",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt305",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt306",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt307",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt404",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt405",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt406",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt407",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt408",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt409",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt410",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt411",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt412",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt413",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt414",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt415",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt416",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt417",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt418",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "tt419",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "TUNNEL",
+      "mtu": 1500,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Mg0/RSP0/CPU0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 1000000
+    },
+    {
+      "interface": "Mg0/RSP0/CPU0/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Mg0/RSP1/CPU0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 1000000
+    },
+    {
+      "interface": "Mg0/RSP1/CPU0/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 0
+    },
+    {
+      "interface": "Fo0/0/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/0/0/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/0/1/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/0/1/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/1/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/1/0/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/1/1/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/1/1/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/2/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/2/0/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/2/1/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/2/1/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Te0/3/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/2",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/3",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/4",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/5",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/6",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/7",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/8",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/9",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/10",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/11",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/12",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/13",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/14",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/15",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/16",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/17",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/18",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/19",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/20",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/21",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/22",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/3/0/23",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/1",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/2",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/3",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/4",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/5",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/6",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/7",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/8",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/9",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/10",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/11",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/12",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/13",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/14",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/15",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/16",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/17",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/18",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/19",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/20",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/21",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/22",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Te0/4/0/23",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 10000000
+    },
+    {
+      "interface": "Fo0/6/0/0",
+      "state": "up",
+      "line_protocol_state": "up",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/6/0/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/6/1/0",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/6/1/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/7/0/0",
+      "state": "down",
+      "line_protocol_state": "down",
+      "encapsulation": "ARPA",
+      "mtu": 9216,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/7/0/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/7/1/0",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    },
+    {
+      "interface": "Fo0/7/1/1",
+      "state": "admin-down",
+      "line_protocol_state": "admin-down",
+      "encapsulation": "ARPA",
+      "mtu": 1514,
+      "bandwidth_kbps": 40000000
+    }
+  ],
+  "normalized": [
+    {
+      "name": "Lo5",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Lo10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Lo20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Lo21",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Lo30",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Nu0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt300",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt301",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt302",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt303",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt304",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt305",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt306",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt307",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt404",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt405",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt406",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt407",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt408",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt409",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt410",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt411",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt412",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt413",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt414",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt415",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt416",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt417",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt418",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "tt419",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP0/CPU0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP0/CPU0/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP1/CPU0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Mg0/RSP1/CPU0/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/0/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/0/1/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/0/1/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/1/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/1/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/1/1/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/1/1/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/2/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/2/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/2/1/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/2/1/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/4",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/5",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/6",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/7",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/8",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/9",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/10",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/11",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/12",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/13",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/14",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/15",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/16",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/17",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/18",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/19",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/20",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/21",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/22",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/3/0/23",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/4",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/5",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/6",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/7",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/8",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/9",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/10",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/11",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/12",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/13",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/14",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/15",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/16",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/17",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/18",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/19",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/20",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/21",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/22",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Te0/4/0/23",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/6/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/6/0/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/6/1/0",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/6/1/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/7/0/0",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/7/0/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/7/1/0",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Fo0/7/1/1",
+      "admin_status": "admin-down",
+      "oper_status": "admin-down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    }
+  ]
+}

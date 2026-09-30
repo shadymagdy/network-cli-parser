@@ -1,0 +1,45 @@
+{
+  "command": "display ip routing-table statistics",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "protocols": {
+      "DIRECT": {
+        "total": 5,
+        "active": 5,
+        "added": 5,
+        "deleted": 0,
+        "freed": 0
+      },
+      "STATIC": {
+        "total": 1,
+        "active": 1,
+        "added": 1,
+        "deleted": 0,
+        "freed": 0
+      },
+      "BGP": {
+        "total": 120,
+        "active": 118,
+        "added": 300,
+        "deleted": 180,
+        "freed": 180
+      },
+      "OSPF": {
+        "total": 14,
+        "active": 12,
+        "added": 20,
+        "deleted": 6,
+        "freed": 6
+      }
+    },
+    "total": {
+      "total": 140,
+      "active": 136,
+      "added": 326,
+      "deleted": 186,
+      "freed": 186
+    },
+    "summary_prefixes": 6
+  }
+}

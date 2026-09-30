@@ -1,0 +1,21 @@
+{
+  "command": "show install active summary",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "packages": [
+      {
+        "name": "asr9k-mini-px-6.1.21.15I"
+      },
+      {
+        "name": "asr9k-mpls-px-6.1.21.15I"
+      },
+      {
+        "name": "asr9k-mcast-px-6.1.21.15I"
+      },
+      {
+        "name": "asr9k-mgbl-px-6.1.21.15I"
+      }
+    ]
+  }
+}

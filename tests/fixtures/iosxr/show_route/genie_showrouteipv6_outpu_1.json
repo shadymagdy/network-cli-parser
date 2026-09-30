@@ -1,0 +1,239 @@
+{
+  "command": "show route",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "routes": [
+      {
+        "prefix": "2001:1:1:1::1/128",
+        "vrf": "default",
+        "protocol": "static",
+        "code": "S",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "2001:20:1:2::1",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "01:52:23",
+            "distance": 1,
+            "metric": 0
+          },
+          {
+            "next_hop": "2001:10:1:2::1",
+            "interface": "GigabitEthernet0/0/0/3",
+            "age": "01:52:23",
+            "distance": 1,
+            "metric": 0
+          }
+        ],
+        "distance": 1,
+        "metric": 0
+      },
+      {
+        "prefix": "2001:2:2:2::2/128",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "interface": "Loopback0",
+            "age": "01:52:24",
+            "distance": 0,
+            "metric": 0,
+            "directly_connected": true
+          }
+        ],
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "2001:3:3:3::3/128",
+        "vrf": "default",
+        "protocol": "static",
+        "code": "S",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "2001:10:2:3::3",
+            "interface": "GigabitEthernet0/0/0/1",
+            "age": "01:52:23",
+            "distance": 1,
+            "metric": 0
+          },
+          {
+            "next_hop": "2001:20:2:3::3",
+            "interface": "GigabitEthernet0/0/0/2",
+            "age": "01:52:23",
+            "distance": 1,
+            "metric": 0
+          }
+        ],
+        "distance": 1,
+        "metric": 0
+      },
+      {
+        "prefix": "2001:21:21:21::21/128",
+        "vrf": "default",
+        "protocol": "isis",
+        "code": "i L1",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "fe80::5054:ff:fe54:6569",
+            "interface": "GigabitEthernet0/0/0/0",
+            "age": "00:56:34",
+            "distance": 115,
+            "metric": 20
+          },
+          {
+            "next_hop": "fe80::5054:ff:fea5:829",
+            "interface": "GigabitEthernet0/0/0/3",
+            "age": "00:56:34",
+            "distance": 115,
+            "metric": 20,
+            "next_hop_vrf": "default"
+          }
+        ],
+        "distance": 115,
+        "metric": 20
+      },
+      {
+        "prefix": "2001:32:32:32::32/128",
+        "vrf": "default",
+        "protocol": "local",
+        "code": "L",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "interface": "Loopback3",
+            "age": "01:52:24",
+            "distance": 0,
+            "metric": 0,
+            "directly_connected": true
+          }
+        ],
+        "distance": 0,
+        "metric": 0
+      },
+      {
+        "prefix": "2001:33:33:33::33/128",
+        "vrf": "default",
+        "protocol": "bgp",
+        "code": "B",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "2001:13:13:13::13",
+            "age": "00:53:22",
+            "distance": 200,
+            "metric": 0
+          }
+        ],
+        "distance": 200,
+        "metric": 0
+      }
+    ],
+    "gateway_of_last_resort": {
+      "default": null
+    }
+  },
+  "normalized": [
+    {
+      "prefix": "2001:1:1:1::1/128",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "2001:20:1:2::1",
+          "interface": "GigabitEthernet0/0/0/0"
+        },
+        {
+          "next_hop": "2001:10:1:2::1",
+          "interface": "GigabitEthernet0/0/0/3"
+        }
+      ],
+      "distance": 1,
+      "metric": 0,
+      "vrf": "default",
+      "age": "01:52:23"
+    },
+    {
+      "prefix": "2001:2:2:2::2/128",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": null,
+          "interface": "Loopback0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "01:52:24"
+    },
+    {
+      "prefix": "2001:3:3:3::3/128",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "2001:10:2:3::3",
+          "interface": "GigabitEthernet0/0/0/1"
+        },
+        {
+          "next_hop": "2001:20:2:3::3",
+          "interface": "GigabitEthernet0/0/0/2"
+        }
+      ],
+      "distance": 1,
+      "metric": 0,
+      "vrf": "default",
+      "age": "01:52:23"
+    },
+    {
+      "prefix": "2001:21:21:21::21/128",
+      "protocol": "isis",
+      "next_hops": [
+        {
+          "next_hop": "fe80::5054:ff:fe54:6569",
+          "interface": "GigabitEthernet0/0/0/0"
+        },
+        {
+          "next_hop": "fe80::5054:ff:fea5:829",
+          "interface": "GigabitEthernet0/0/0/3"
+        }
+      ],
+      "distance": 115,
+      "metric": 20,
+      "vrf": "default",
+      "age": "00:56:34"
+    },
+    {
+      "prefix": "2001:32:32:32::32/128",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": null,
+          "interface": "Loopback3"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "01:52:24"
+    },
+    {
+      "prefix": "2001:33:33:33::33/128",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "2001:13:13:13::13",
+          "interface": null
+        }
+      ],
+      "distance": 200,
+      "metric": 0,
+      "vrf": "default",
+      "age": "00:53:22"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "command": "show route instance detail",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "master": {
+      "interfaces": [],
+      "tables": {
+        "inet.0": {
+          "routes": 1615,
+          "active": 929,
+          "holddown": 0,
+          "hidden": 0
+        },
+        "inet.3": {
+          "routes": 11,
+          "active": 11,
+          "holddown": 0,
+          "hidden": 0
+        },
+        "mpls.0": {
+          "routes": 44,
+          "active": 44,
+          "holddown": 0,
+          "hidden": 0
+        },
+        "inet6.0": {
+          "routes": 23,
+          "active": 22,
+          "holddown": 0,
+          "hidden": 0
+        }
+      },
+      "router_id": "10.189.5.252",
+      "type": "forwarding",
+      "state": "Active"
+    },
+    "__juniper_private1__": {
+      "interfaces": [
+        "pfh-0/0/0.16383",
+        "pfe-0/0/0.16383",
+        "lo0.16385",
+        "em1.0"
+      ],
+      "tables": {
+        "__juniper_private1__.inet.0": {
+          "routes": 6,
+          "active": 5,
+          "holddown": 0,
+          "hidden": 0
+        },
+        "__juniper_private1__.inet6.0": {
+          "routes": 3,
+          "active": 3,
+          "holddown": 0,
+          "hidden": 0
+        }
+      },
+      "router_id": "0.0.0.0",
+      "type": "forwarding",
+      "state": "Active"
+    },
+    "__juniper_private2__": {
+      "interfaces": [
+        "pfh-0/0/0.16384",
+        "lo0.16384"
+      ],
+      "tables": {
+        "__juniper_private2__.inet.0": {
+          "routes": 1,
+          "active": 0,
+          "holddown": 0,
+          "hidden": 1
+        }
+      },
+      "router_id": "0.0.0.0",
+      "type": "forwarding",
+      "state": "Active"
+    },
+    "__juniper_private4__": {
+      "interfaces": [],
+      "tables": {},
+      "router_id": "0.0.0.0",
+      "type": "forwarding",
+      "state": "Active"
+    },
+    "__master.anon__": {
+      "interfaces": [],
+      "tables": {},
+      "router_id": "0.0.0.0",
+      "type": "forwarding",
+      "state": "Active"
+    },
+    "mgmt_junos": {
+      "interfaces": [],
+      "tables": {},
+      "router_id": "0.0.0.0",
+      "type": "forwarding",
+      "state": "Active"
+    }
+  },
+  "normalized": [
+    {
+      "name": "master",
+      "rd": null,
+      "interfaces": []
+    },
+    {
+      "name": "__juniper_private1__",
+      "rd": null,
+      "interfaces": [
+        "pfh-0/0/0.16383",
+        "pfe-0/0/0.16383",
+        "lo0.16385",
+        "em1.0"
+      ]
+    },
+    {
+      "name": "__juniper_private2__",
+      "rd": null,
+      "interfaces": [
+        "pfh-0/0/0.16384",
+        "lo0.16384"
+      ]
+    },
+    {
+      "name": "__juniper_private4__",
+      "rd": null,
+      "interfaces": []
+    },
+    {
+      "name": "__master.anon__",
+      "rd": null,
+      "interfaces": []
+    },
+    {
+      "name": "mgmt_junos",
+      "rd": null,
+      "interfaces": []
+    }
+  ]
+}

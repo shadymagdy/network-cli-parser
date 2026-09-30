@@ -1,0 +1,77 @@
+{
+  "command": "show ospf neighbor",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "address": "10.189.5.94",
+        "interface": "ge-0/0/0.0",
+        "state": "Full",
+        "neighbor_id": "10.189.5.253",
+        "priority": 128,
+        "dead_time": 39,
+        "area": "0.0.0.8",
+        "options": "0x52",
+        "dr": "0.0.0.0",
+        "bdr": "0.0.0.0",
+        "uptime": "3w0d 16:50:35",
+        "adjacent_time": "3w0d 16:50:35"
+      },
+      {
+        "address": "10.169.14.121",
+        "interface": "ge-0/0/1.0",
+        "state": "Full",
+        "neighbor_id": "10.169.14.240",
+        "priority": 128,
+        "dead_time": 31,
+        "area": "0.0.0.8",
+        "options": "0x52",
+        "dr": "0.0.0.0",
+        "bdr": "0.0.0.0",
+        "uptime": "3w2d 03:12:20",
+        "adjacent_time": "3w2d 03:12:15"
+      },
+      {
+        "address": "10.19.198.26",
+        "interface": "ge-0/0/2.0",
+        "state": "Full",
+        "neighbor_id": "10.19.198.239",
+        "priority": 1,
+        "dead_time": 39,
+        "area": "0.0.0.8",
+        "options": "0x52",
+        "dr": "0.0.0.0",
+        "bdr": "0.0.0.0",
+        "uptime": "1w5d 20:40:14",
+        "adjacent_time": "1w5d 20:40:14"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "neighbor_id": "10.189.5.253",
+      "priority": 128,
+      "state": "full",
+      "address": "10.189.5.94",
+      "interface": "ge-0/0/0.0",
+      "dead_time": 39
+    },
+    {
+      "neighbor_id": "10.169.14.240",
+      "priority": 128,
+      "state": "full",
+      "address": "10.169.14.121",
+      "interface": "ge-0/0/1.0",
+      "dead_time": 31
+    },
+    {
+      "neighbor_id": "10.19.198.239",
+      "priority": 1,
+      "state": "full",
+      "address": "10.19.198.26",
+      "interface": "ge-0/0/2.0",
+      "dead_time": 39
+    }
+  ]
+}
