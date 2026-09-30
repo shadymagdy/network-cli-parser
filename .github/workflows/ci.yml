@@ -2,50 +2,85 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: "1"
+  UV_LOCKED: "1"
 
 jobs:
   lint:
+    name: Lint & format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          python-version: "3.12"
-      - run: pip install ruff
-      - run: ruff check src tests scripts examples
+          enable-cache: true
+      - run: uv sync --only-group lint
+      - run: uv run --no-sync ruff check --output-format=github .
+      - run: uv run --no-sync ruff format --check .
 
   test:
+    name: Test (py${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         include:
           - os: windows-latest
-            python-version: "3.12"
+            python-version: "3.13"
           - os: macos-latest
-            python-version: "3.12"
+            python-version: "3.13"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -e ".[dev]"
-      - run: pytest --cov=clijson --cov-report=term-missing
-      - name: docs are up to date
-        if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
+          enable-cache: true
+      - run: uv sync --group test
+      - run: uv run --no-sync pytest --cov --cov-report=term --cov-report=xml
+      - name: Generated docs are up to date
+        if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
         run: |
-          python scripts/gen_docs.py
+          uv run --no-sync python scripts/gen_docs.py
           git diff --exit-code docs/
 
   optional-engines:
+    name: Test with optional engines
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          python-version: "3.12"
-      - run: pip install -e ".[dev,all]"
-      - run: pytest
+          python-version: "3.13"
+          enable-cache: true
+      - run: uv sync --group test --extra all
+      - run: uv run --no-sync pytest
+
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      - run: uv build
+      - name: Smoke-test the wheel
+        run: |
+          uv run --isolated --no-project --with dist/*.whl clijson version
+          uv run --isolated --no-project --with dist/*.whl python -c "import clijson; print(clijson.__version__)"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist
+          path: dist/

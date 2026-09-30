@@ -20,9 +20,36 @@ from typing import Any, List, Optional, Pattern, Sequence, Union
 from .result import ParseResult
 
 IDENTITY_KEYS: Sequence[str] = (
-    "neighbor", "neighbor_id", "peer", "system_id", "system", "prefix", "network", "interface", "name", "local_interface",
-    "ip_address", "mac_address", "address", "vrid", "group", "tunnel", "lsp_id", "node", "slot", "filesystem",
-    "prefix_or_id", "local_label", "destination", "remote", "source", "part", "item", "vlan", "index", "id",
+    "neighbor",
+    "neighbor_id",
+    "peer",
+    "system_id",
+    "system",
+    "prefix",
+    "network",
+    "interface",
+    "name",
+    "local_interface",
+    "ip_address",
+    "mac_address",
+    "address",
+    "vrid",
+    "group",
+    "tunnel",
+    "lsp_id",
+    "node",
+    "slot",
+    "filesystem",
+    "prefix_or_id",
+    "local_label",
+    "destination",
+    "remote",
+    "source",
+    "part",
+    "item",
+    "vlan",
+    "index",
+    "id",
 )
 
 #: Keys that change on every capture (counters, timers, ages, rates).
@@ -61,7 +88,9 @@ def _data(obj: Any, prefer_normalized: bool) -> Any:
 def _unique(sides: Sequence[List[dict]], fn: Any) -> bool:
     for items in sides:
         values = [fn(i) for i in items]
-        if any(v is None or (isinstance(v, tuple) and v[0] is None) for v in values) or len(set(map(str, values))) != len(values):
+        if any(v is None or (isinstance(v, tuple) and v[0] is None) for v in values) or len(
+            set(map(str, values))
+        ) != len(values):
             return False
     return True
 

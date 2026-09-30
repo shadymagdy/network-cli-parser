@@ -54,7 +54,15 @@ def parse(
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
-    result = _parse(output or "", command, platform, normalize=normalize, engines=engines, strict=strict, raise_on_error=raise_on_error)
+    result = _parse(
+        output or "",
+        command,
+        platform,
+        normalize=normalize,
+        engines=engines,
+        strict=strict,
+        raise_on_error=raise_on_error,
+    )
     result.raw = output
     return result
 
@@ -89,7 +97,16 @@ def _parse(
     device_error = _device_error(text)
     if device_error:
         plat_hint = get_platform(platform) if platform else prompt_platform
-        return ParseResult(None, _name(plat_hint), command, "device-error", None, 0.0, warnings=[f"device returned an error: {device_error}"], metadata={**metadata, "device_error": device_error})
+        return ParseResult(
+            None,
+            _name(plat_hint),
+            command,
+            "device-error",
+            None,
+            0.0,
+            warnings=[f"device returned an error: {device_error}"],
+            metadata={**metadata, "device_error": device_error},
+        )
     text = dedent(text)
     cmdline: Optional[CommandLine] = split_command(command) if command else None
     if cmdline and cmdline.filtered:
@@ -106,13 +123,17 @@ def _parse(
     fmt = cmdline.output_format if cmdline else None
     if fmt == "json" or (fmt is None and looks_like_json(text)):
         try:
-            return ParseResult(parse_json(text), _name(plat), command, "json", "json", 1.0, warnings=warnings, metadata=metadata)
+            return ParseResult(
+                parse_json(text), _name(plat), command, "json", "json", 1.0, warnings=warnings, metadata=metadata
+            )
         except ValueError:
             if fmt == "json":
                 warnings.append("output announced as JSON could not be decoded")
     if fmt == "xml" or (fmt is None and looks_like_xml(text)):
         try:
-            return ParseResult(parse_xml(text), _name(plat), command, "xml", "xml", 1.0, warnings=warnings, metadata=metadata)
+            return ParseResult(
+                parse_xml(text), _name(plat), command, "xml", "xml", 1.0, warnings=warnings, metadata=metadata
+            )
         except Exception:
             if fmt == "xml":
                 warnings.append("output announced as XML could not be decoded")
@@ -134,7 +155,7 @@ def _parse(
             parser = resolution.parser(resolution.params, command or "")
             try:
                 data = parser.parse(text)
-            except Exception as exc:  # noqa: BLE001 - fall back to the next engine
+            except Exception as exc:
                 if raise_on_error or strict:
                     raise ParseError(parser.name, f"{type(exc).__name__}: {exc}") from exc
                 warnings.append(f"{parser.name} failed ({type(exc).__name__}: {exc}); falling back")
@@ -162,7 +183,16 @@ def _parse(
             except external.EngineUnavailable:
                 continue
             if data:
-                return ParseResult(data, plat.name, command, engine, f"{engine}:{cmdline.base}", 0.9, warnings=warnings, metadata=metadata)
+                return ParseResult(
+                    data,
+                    plat.name,
+                    command,
+                    engine,
+                    f"{engine}:{cmdline.base}",
+                    0.9,
+                    warnings=warnings,
+                    metadata=metadata,
+                )
             continue
         if engine == "generic":
             data = parse_generic(text)
@@ -171,11 +201,22 @@ def _parse(
                 if hints:
                     warnings.append("no dedicated parser; closest supported commands: " + "; ".join(hints))
             confidence = 0.6 if data.get("tables") else 0.4
-            return ParseResult(data, _name(plat), command, "generic", "generic", confidence, warnings=warnings, metadata=metadata)
+            return ParseResult(
+                data, _name(plat), command, "generic", "generic", confidence, warnings=warnings, metadata=metadata
+            )
 
     if strict and cmdline is not None and plat is not None:
         raise ParserNotFound(plat.name, cmdline.base, REGISTRY.suggest(plat, cmdline.base))
-    return ParseResult(None, _name(plat), command, "none", None, 0.0, warnings=warnings + ["no engine produced a result"], metadata=metadata)
+    return ParseResult(
+        None,
+        _name(plat),
+        command,
+        "none",
+        None,
+        0.0,
+        warnings=[*warnings, "no engine produced a result"],
+        metadata=metadata,
+    )
 
 
 def _name(plat: Optional[Platform]) -> Optional[str]:
@@ -220,7 +261,7 @@ def _trial_platform(cmdline: CommandLine, text: str, metadata: Dict[str, Any]) -
             continue
         try:
             score = _richness(res.parser(res.params, cmdline.raw).parse(text))
-        except Exception:  # noqa: BLE001 - a failing trial simply loses
+        except Exception:
             continue
         if score and (best is None or score > best[0]):
             best = (score, plat)
@@ -237,7 +278,9 @@ def _strip_prompts(text: str) -> Tuple[str, Optional[str], Optional[Platform], O
     plat: Optional[Platform] = None
     host: Optional[str] = None
     # leading junk such as '{master}' or empty lines
-    while ls and (not ls[0].strip() or re.match(r"^\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*$", ls[0].strip())):
+    while ls and (
+        not ls[0].strip() or re.match(r"^\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*$", ls[0].strip())
+    ):
         ls.pop(0)
     if ls:
         hit = match_prompt(ls[0])
@@ -247,7 +290,9 @@ def _strip_prompts(text: str) -> Tuple[str, Optional[str], Optional[Platform], O
             host = m.groupdict().get("host")
             ls.pop(0)
     # trailing bare prompt(s)
-    while ls and (not ls[-1].strip() or re.match(r"^\{(?:master|backup|primary|secondary)(?::\d+)?\}\s*$", ls[-1].strip())):
+    while ls and (
+        not ls[-1].strip() or re.match(r"^\{(?:master|backup|primary|secondary)(?::\d+)?\}\s*$", ls[-1].strip())
+    ):
         ls.pop()
     while ls:
         hit = match_prompt(ls[-1])
@@ -289,7 +334,11 @@ def _strip_command_echo(text: str, command: str) -> str:
         first = " ".join(ls[idx].split()).lower()
         cmd = " ".join(command.split()).lower()
         base = split_command(command).base.lower()
-        if first == cmd or (first.startswith(base) and first[len(base) :].lstrip().startswith("|")) or _ECHO_ANY.match(first):
+        if (
+            first == cmd
+            or (first.startswith(base) and first[len(base) :].lstrip().startswith("|"))
+            or _ECHO_ANY.match(first)
+        ):
             return "\n".join(ls[idx + 1 :])
     return text
 
@@ -326,7 +375,7 @@ def _normalize(parser: Any, data: Any, result: ParseResult) -> Any:
         return None
     try:
         return fn(data)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         result.warnings.append(f"normalization failed: {type(exc).__name__}: {exc}")
         return None
 
@@ -384,7 +433,9 @@ def parse_session(text: str, platform: Union[str, Platform, None] = None, **kwar
     return results
 
 
-def parse_file(path: PathLike, command: Optional[str] = None, platform: Union[str, Platform, None] = None, **kwargs: Any) -> Union[ParseResult, List[ParseResult]]:
+def parse_file(
+    path: PathLike, command: Optional[str] = None, platform: Union[str, Platform, None] = None, **kwargs: Any
+) -> Union[ParseResult, List[ParseResult]]:
     """Parse a file. Session logs with several prompts yield a list of results."""
     with open(path, encoding="utf-8", errors="replace") as fh:
         text = fh.read()

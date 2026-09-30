@@ -16,19 +16,48 @@ class DisplayLldpNeighborBrief(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<local>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<exp>\d+)\s+(?P<nintf>\S+)\s+(?P<ndev>\S+)\s*$", text):
-            out.append({"local_interface": m["local"], "expire": int(m["exp"]), "neighbor_interface": m["nintf"], "neighbor": m["ndev"]})
+        for m in match_lines(
+            r"^(?P<local>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<exp>\d+)\s+(?P<nintf>\S+)\s+(?P<ndev>\S+)\s*$", text
+        ):
+            out.append(
+                {
+                    "local_interface": m["local"],
+                    "expire": int(m["exp"]),
+                    "neighbor_interface": m["nintf"],
+                    "neighbor": m["ndev"],
+                }
+            )
         if not out:
             # CE layout: Local Interface  Exptime(s)  Neighbor Interface  Neighbor Device
-            for m in match_lines(r"^(?P<local>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<ndev>\S+)\s+(?P<nintf>\S+)\s+(?P<exp>\d+)\s*$", text):
-                out.append({"local_interface": m["local"], "expire": int(m["exp"]), "neighbor_interface": m["nintf"], "neighbor": m["ndev"]})
+            for m in match_lines(
+                r"^(?P<local>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<ndev>\S+)\s+(?P<nintf>\S+)\s+(?P<exp>\d+)\s*$", text
+            ):
+                out.append(
+                    {
+                        "local_interface": m["local"],
+                        "expire": int(m["exp"]),
+                        "neighbor_interface": m["nintf"],
+                        "neighbor": m["ndev"],
+                    }
+                )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("lldp.neighbors", local_interface=n["local_interface"], neighbor=n["neighbor"], neighbor_interface=n["neighbor_interface"], ttl=n["expire"]) for n in data]
+        return [
+            record(
+                "lldp.neighbors",
+                local_interface=n["local_interface"],
+                neighbor=n["neighbor"],
+                neighbor_interface=n["neighbor_interface"],
+                ttl=n["expire"],
+            )
+            for n in data
+        ]
 
 
-@register("vrp", "display lldp neighbor [interface <interface>]", "display lldp neighbor <interface>", intent="lldp.neighbors")
+@register(
+    "vrp", "display lldp neighbor [interface <interface>]", "display lldp neighbor <interface>", intent="lldp.neighbors"
+)
 class DisplayLldpNeighbor(Parser):
     """LLDP neighbors in detail (chassis/port IDs, system name/description, capabilities, management address)."""
 
@@ -55,7 +84,10 @@ class DisplayLldpNeighbor(Parser):
             if cur is None:
                 continue
             m = re.match(r"^(?P<k>[A-Za-z][\w /()\-]*?)\s*:\s*(?P<v>.*)$", s)
-            if m and not (last_key == "system_description" and not re.match(r"^(System capabilities|Management address|Expired time)", s)):
+            if m and not (
+                last_key == "system_description"
+                and not re.match(r"^(System capabilities|Management address|Expired time)", s)
+            ):
                 k, v = snake(m["k"]), m["v"].strip()
                 if k == "management_address":
                     cur.setdefault("management_addresses", []).append(v)
@@ -86,17 +118,32 @@ class DisplayLldpNeighbor(Parser):
         ]
 
 
-@register("vrp", "display arp [(all|brief|dynamic|static|interface <interface>|vpn-instance <vrf>|slot <slot>)]", "display arp all [vpn-instance <vrf>]", intent="arp")
+@register(
+    "vrp",
+    "display arp [(all|brief|dynamic|static|interface <interface>|vpn-instance <vrf>|slot <slot>)]",
+    "display arp all [vpn-instance <vrf>]",
+    intent="arp",
+)
 class DisplayArp(Parser):
     """ARP table (with VLAN/CE-VLAN and VPN instance)."""
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"entries": []}
         for raw in text.splitlines():
-            m = re.match(r"^(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}|Incomplete)\s+(?P<exp>\d+)?\s*(?P<type>[IDS]\S*(?: -)?|\S+)\s+(?P<intf>\S+)(?:\s+(?P<extra>\S+))?\s*$", raw)
+            m = re.match(
+                r"^(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}|Incomplete)\s+(?P<exp>\d+)?\s*(?P<type>[IDS]\S*(?: -)?|\S+)\s+(?P<intf>\S+)(?:\s+(?P<extra>\S+))?\s*$",
+                raw,
+            )
             if m:
                 typ = m["type"].replace(" ", "")
-                e = {"ip_address": m["ip"], "mac_address": none_if(m["mac"], "incomplete"), "expire_minutes": int(m["exp"]) if m["exp"] else None, "type": {"I": "interface", "D": "dynamic", "S": "static"}.get(typ[:1], typ), "type_code": typ, "interface": m["intf"]}
+                e = {
+                    "ip_address": m["ip"],
+                    "mac_address": none_if(m["mac"], "incomplete"),
+                    "expire_minutes": int(m["exp"]) if m["exp"] else None,
+                    "type": {"I": "interface", "D": "dynamic", "S": "static"}.get(typ[:1], typ),
+                    "type_code": typ,
+                    "interface": m["intf"],
+                }
                 if m["extra"]:
                     if re.match(r"^\d+/", m["extra"]):
                         e["vlan"] = m["extra"]
@@ -109,11 +156,26 @@ class DisplayArp(Parser):
                 out["entries"][-1]["vlan"] = m["vlan"]
         m = re.search(r"Total:\s*(\d+)\s+Dynamic:\s*(\d+)\s+Static:\s*(\d+)\s+Interface:\s*(\d+)", text)
         if m:
-            out["summary"] = {"total": int(m.group(1)), "dynamic": int(m.group(2)), "static": int(m.group(3)), "interface": int(m.group(4))}
+            out["summary"] = {
+                "total": int(m.group(1)),
+                "dynamic": int(m.group(2)),
+                "static": int(m.group(3)),
+                "interface": int(m.group(4)),
+            }
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("arp", ip_address=e["ip_address"], mac_address=mac(e.get("mac_address")), interface=e["interface"], age=e.get("expire_minutes"), type=e["type"]) for e in data["entries"]]
+        return [
+            record(
+                "arp",
+                ip_address=e["ip_address"],
+                mac_address=mac(e.get("mac_address")),
+                interface=e["interface"],
+                age=e.get("expire_minutes"),
+                type=e["type"],
+            )
+            for e in data["entries"]
+        ]
 
 
 @register("vrp", "display ipv6 neighbors [(brief|<interface>|vpn-instance <vrf>)]", intent="ipv6.neighbors")
@@ -143,19 +205,41 @@ class DisplayIpv6Neighbors(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("ipv6.neighbors", ip_address=e["ip_address"], mac_address=mac(e.get("mac_address")), interface=e.get("interface"), state=str(e.get("state", "")).lower() or None, age=e.get("age")) for e in data["entries"]]
+        return [
+            record(
+                "ipv6.neighbors",
+                ip_address=e["ip_address"],
+                mac_address=mac(e.get("mac_address")),
+                interface=e.get("interface"),
+                state=str(e.get("state", "")).lower() or None,
+                age=e.get("age"),
+            )
+            for e in data["entries"]
+        ]
 
 
-@register("vrp", "display mac-address [(dynamic|static|black-hole|summary|vlan <vlan>|interface <interface>|<mac>)]", intent="mac.table")
+@register(
+    "vrp",
+    "display mac-address [(dynamic|static|black-hole|summary|vlan <vlan>|interface <interface>|<mac>)]",
+    intent="mac.table",
+)
 class DisplayMacAddress(Parser):
     """MAC address table."""
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"entries": []}
-        for m in match_lines(r"^\s*(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4})\s+(?P<vlan>\S+)\s+(?P<intf>\S+)\s+(?P<type>\S+)(?:\s+(?P<age>\S+))?\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4})\s+(?P<vlan>\S+)\s+(?P<intf>\S+)\s+(?P<type>\S+)(?:\s+(?P<age>\S+))?\s*$",
+            text,
+        ):
             vlan = m["vlan"]
             parts = vlan.split("/")
-            e: Dict[str, Any] = {"mac_address": m["mac"], "vlan": to_num(parts[0]) if parts[0] not in ("-", "") else None, "interface": m["intf"], "type": m["type"]}
+            e: Dict[str, Any] = {
+                "mac_address": m["mac"],
+                "vlan": to_num(parts[0]) if parts[0] not in ("-", "") else None,
+                "interface": m["intf"],
+                "type": m["type"],
+            }
             if len(parts) > 1 and parts[1] not in ("-", ""):
                 e["vsi"] = parts[1]
             if len(parts) > 2 and parts[2] not in ("-", ""):
@@ -169,7 +253,16 @@ class DisplayMacAddress(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("mac.table", mac_address=mac(e["mac_address"]), vlan=e.get("vlan"), interface=e["interface"], type=e["type"]) for e in data["entries"]]
+        return [
+            record(
+                "mac.table",
+                mac_address=mac(e["mac_address"]),
+                vlan=e.get("vlan"),
+                interface=e["interface"],
+                type=e["type"],
+            )
+            for e in data["entries"]
+        ]
 
 
 @register("vrp", "display ip vpn-instance [(verbose|<vrf>)]", intent="vrfs")
@@ -178,14 +271,22 @@ class DisplayIpVpnInstance(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"vpn_instances": {}}
-        for k, rx in (("total", r"Total VPN-Instances configured\s*:\s*(\d+)"), ("total_ipv4", r"Total IPv4 VPN-Instances configured\s*:\s*(\d+)"), ("total_ipv6", r"Total IPv6 VPN-Instances configured\s*:\s*(\d+)")):
+        for k, rx in (
+            ("total", r"Total VPN-Instances configured\s*:\s*(\d+)"),
+            ("total_ipv4", r"Total IPv4 VPN-Instances configured\s*:\s*(\d+)"),
+            ("total_ipv6", r"Total IPv6 VPN-Instances configured\s*:\s*(\d+)"),
+        ):
             m = re.search(rx, text)
             if m:
                 out[k] = int(m.group(1))
-        for m in match_lines(r"^\s*(?P<name>\S+)\s+(?P<rd>\d+[:.]\S+|<not set>|-)\s+(?P<af>IPv4|IPv6|IPv4&IPv6|\S+)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<name>\S+)\s+(?P<rd>\d+[:.]\S+|<not set>|-)\s+(?P<af>IPv4|IPv6|IPv4&IPv6|\S+)\s*$", text
+        ):
             if m["name"] in ("VPN-Instance",):
                 continue
-            v = out["vpn_instances"].setdefault(m["name"], {"rd": none_if(m["rd"], "<not set>", "-"), "address_families": []})
+            v = out["vpn_instances"].setdefault(
+                m["name"], {"rd": none_if(m["rd"], "<not set>", "-"), "address_families": []}
+            )
             v["address_families"].append(m["af"])
         return out
 

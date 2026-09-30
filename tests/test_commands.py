@@ -76,7 +76,7 @@ def test_slugify():
 
 
 @pytest.mark.parametrize(
-    "platform,command,parser",
+    ("platform", "command", "parser"),
     [
         ("iosxr", "sh ip int br", "iosxr.show_ipv4_interface_brief"),
         ("iosxr", "show interfaces brief", "iosxr.show_interfaces_brief"),

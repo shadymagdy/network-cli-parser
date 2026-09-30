@@ -85,7 +85,12 @@ def _find_table(block: List[str]) -> Tuple[List[str], Optional[Dict[str, Any]]]:
         if is_separator(ln) and i >= 1:
             hdr_start = i - 1
             # allow 2-line headers
-            if i >= 2 and _looks_like_header(block[i - 2]) and _looks_like_header(block[i - 1]) and _aligned_header(block[i - 2], block[i - 1]):
+            if (
+                i >= 2
+                and _looks_like_header(block[i - 2])
+                and _looks_like_header(block[i - 1])
+                and _aligned_header(block[i - 2], block[i - 1])
+            ):
                 hdr_start = i - 2
             header_lines = block[hdr_start:i]
             body = [b for b in block[i + 1 :] if not is_separator(b)]
@@ -95,7 +100,7 @@ def _find_table(block: List[str]) -> Tuple[List[str], Optional[Dict[str, Any]]]:
             if table:
                 return block[:hdr_start], table
     # 2) implicit, alignment based
-    for s in range(0, max(0, len(block) - 1)):
+    for s in range(max(0, len(block) - 1)):
         header = block[s]
         body = block[s + 1 :]
         if len(body) < 1 or not _looks_like_header(header):
@@ -113,7 +118,7 @@ def _is_kv_row(line: str) -> bool:
 
 def _looks_like_header(line: str) -> bool:
     s = line.strip()
-    if not s or _KV_SPLIT.match(s) and ":" in s and not re.search(r"\s{2,}", s.split(":", 1)[1] if ":" in s else ""):
+    if not s or (_KV_SPLIT.match(s) and ":" in s and not re.search(r"\s{2,}", s.split(":", 1)[1] if ":" in s else "")):
         return False
     words = s.split()
     if len(words) < 2:
@@ -276,7 +281,9 @@ def _split_kv(line: str) -> Dict[str, Any]:
 MAX_DEPTH = 32
 
 
-def _parse_tree(lines: List[str], loose: List[str], depth: int = 0, indents: Optional[List[int]] = None) -> Dict[str, Any]:
+def _parse_tree(
+    lines: List[str], loose: List[str], depth: int = 0, indents: Optional[List[int]] = None
+) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
     if depth >= MAX_DEPTH:
         loose.extend(ln.strip() for ln in lines)

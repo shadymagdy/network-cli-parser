@@ -29,7 +29,12 @@ import clijson  # noqa: E402
 from clijson.commands import slugify  # noqa: E402
 from clijson.live import collect  # noqa: E402
 
-SKIP_PREFIXES = ("show running-config", "show configuration", "display current-configuration", "display saved-configuration")
+SKIP_PREFIXES = (
+    "show running-config",
+    "show configuration",
+    "display current-configuration",
+    "display saved-configuration",
+)
 
 
 def load_inventory(path: Path) -> list:

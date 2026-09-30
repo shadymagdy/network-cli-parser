@@ -5,9 +5,7 @@ a common concept also implement ``normalize()`` which returns records with
 exactly the fields listed below, whatever the vendor. This is what makes
 multi-vendor automation pleasant::
 
-    for platform, cmd in [("iosxr", "show bgp summary"),
-                          ("junos", "show bgp summary"),
-                          ("vrp", "display bgp peer")]:
+    for platform, cmd in [("iosxr", "show bgp summary"), ("junos", "show bgp summary"), ("vrp", "display bgp peer")]:
         for peer in clijson.parse(out[platform], cmd, platform, normalize=True).normalized:
             print(peer["neighbor"], peer["state"])
 """
@@ -22,12 +20,33 @@ SCHEMAS: Dict[str, List[str]] = {
     "system.version": ["hostname", "vendor", "os", "version", "model", "serial_number", "uptime", "uptime_seconds"],
     "interfaces.brief": ["name", "admin_status", "oper_status", "ip_address", "vrf", "description"],
     "interfaces.detail": [
-        "name", "admin_status", "oper_status", "description", "mac_address", "mtu", "bandwidth_kbps",
-        "ipv4_addresses", "input_rate_bps", "output_rate_bps", "input_packets", "output_packets",
-        "input_errors", "output_errors",
+        "name",
+        "admin_status",
+        "oper_status",
+        "description",
+        "mac_address",
+        "mtu",
+        "bandwidth_kbps",
+        "ipv4_addresses",
+        "input_rate_bps",
+        "output_rate_bps",
+        "input_packets",
+        "output_packets",
+        "input_errors",
+        "output_errors",
     ],
     "interfaces.description": ["name", "admin_status", "oper_status", "description"],
-    "bgp.summary": ["neighbor", "remote_as", "state", "established", "uptime", "uptime_seconds", "prefixes_received", "vrf", "address_family"],
+    "bgp.summary": [
+        "neighbor",
+        "remote_as",
+        "state",
+        "established",
+        "uptime",
+        "uptime_seconds",
+        "prefixes_received",
+        "vrf",
+        "address_family",
+    ],
     "ospf.neighbors": ["neighbor_id", "priority", "state", "address", "interface", "dead_time"],
     "isis.adjacency": ["system_id", "interface", "state", "level", "hold_time", "snpa"],
     "lldp.neighbors": ["local_interface", "neighbor", "neighbor_interface", "chassis_id", "capabilities", "ttl"],
@@ -55,7 +74,16 @@ def record(intent: str, **fields: Any) -> Dict[str, Any]:
 
 _UP = {"up", "u", "connected", "enabled", "enable", "online", "active", "ok", "*up"}
 _DOWN = {"down", "d", "disabled", "disable", "notconnect", "not-connected", "offline", "inactive"}
-_ADMIN_DOWN = {"admin-down", "admin down", "administratively down", "*down", "shutdown", "adm-down", "admindown", "deleted"}
+_ADMIN_DOWN = {
+    "admin-down",
+    "admin down",
+    "administratively down",
+    "*down",
+    "shutdown",
+    "adm-down",
+    "admindown",
+    "deleted",
+}
 
 
 def status(value: Optional[str]) -> Optional[str]:

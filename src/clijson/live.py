@@ -45,7 +45,9 @@ def collect(
     if outputs is None:
         outputs = _run_netmiko(plat, host, cmds, username, password, port, connection_kwargs)
     if outputs is None:
-        raise DeviceError("live collection needs scrapli or netmiko: pip install 'clijson[scrapli]' or 'clijson[netmiko]'")
+        raise DeviceError(
+            "live collection needs scrapli or netmiko: pip install 'clijson[scrapli]' or 'clijson[netmiko]'"
+        )
     results = []
     for cmd, out in zip(cmds, outputs):
         res = parse(out, cmd, plat, normalize=normalize)
@@ -54,12 +56,22 @@ def collect(
     return results
 
 
-def _run_scrapli(plat, host, cmds, username, password, port, extra) -> Optional[List[str]]:  # pragma: no cover - needs a device
+def _run_scrapli(
+    plat, host, cmds, username, password, port, extra
+) -> Optional[List[str]]:  # pragma: no cover - needs a device
     try:
         from scrapli import Scrapli
     except ImportError:
         return None
-    params = {"host": host, "auth_username": username, "auth_password": password, "auth_strict_key": False, "port": port, "platform": plat.scrapli_name, **extra}
+    params = {
+        "host": host,
+        "auth_username": username,
+        "auth_password": password,
+        "auth_strict_key": False,
+        "port": port,
+        "platform": plat.scrapli_name,
+        **extra,
+    }
     try:
         with Scrapli(**params) as conn:
             return [r.result for r in conn.send_commands(cmds)]
@@ -67,12 +79,21 @@ def _run_scrapli(plat, host, cmds, username, password, port, extra) -> Optional[
         raise DeviceError(f"{host}: {exc}") from exc
 
 
-def _run_netmiko(plat, host, cmds, username, password, port, extra) -> Optional[List[str]]:  # pragma: no cover - needs a device
+def _run_netmiko(
+    plat, host, cmds, username, password, port, extra
+) -> Optional[List[str]]:  # pragma: no cover - needs a device
     try:
         from netmiko import ConnectHandler
     except ImportError:
         return None
-    params = {"device_type": plat.netmiko_name, "host": host, "username": username, "password": password, "port": port, **extra}
+    params = {
+        "device_type": plat.netmiko_name,
+        "host": host,
+        "username": username,
+        "password": password,
+        "port": port,
+        **extra,
+    }
     try:
         with ConnectHandler(**params) as conn:
             return [conn.send_command(c, read_timeout=120) for c in cmds]

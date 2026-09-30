@@ -13,10 +13,16 @@ from ...textutils import compact, match_lines, snake, to_num
 # Routes
 # --------------------------------------------------------------------------- #
 
-_TABLE_HDR = re.compile(r"^(?P<table>[\w.\-:]+): (?P<dest>\d+) destinations, (?P<routes>\d+) routes \((?P<active>\d+) active, (?P<hold>\d+) holddown, (?P<hidden>\d+) hidden\)")
-_PATH = re.compile(r"^(?P<flag>[*+\-]{0,2})\[(?P<proto>[\w\-]+)/(?P<pref>\d+)(?:/(?P<pref2>-?\d+))?\]\s+(?P<age>[^,]+?)(?:,\s*(?P<attrs>.*))?$")
+_TABLE_HDR = re.compile(
+    r"^(?P<table>[\w.\-:]+): (?P<dest>\d+) destinations, (?P<routes>\d+) routes \((?P<active>\d+) active, (?P<hold>\d+) holddown, (?P<hidden>\d+) hidden\)"
+)
+_PATH = re.compile(
+    r"^(?P<flag>[*+\-]{0,2})\[(?P<proto>[\w\-]+)/(?P<pref>\d+)(?:/(?P<pref2>-?\d+))?\]\s+(?P<age>[^,]+?)(?:,\s*(?P<attrs>.*))?$"
+)
 _NH = re.compile(r"^(?P<sel>>)?\s*(?:to (?P<nh>\S+)\s+)?via (?P<intf>[^,\s]+)(?:,\s*(?P<ops>.+))?$")
-_SPECIAL_NH = re.compile(r"^(?P<sel>>)?\s*(?P<what>Local via (?P<intf>\S+)|Discard|Reject|Receive|Multicast.*|Indirect.*|Table \S+)$")
+_SPECIAL_NH = re.compile(
+    r"^(?P<sel>>)?\s*(?P<what>Local via (?P<intf>\S+)|Discard|Reject|Receive|Multicast.*|Indirect.*|Table \S+)$"
+)
 
 
 @register("junos", "show route [<args...>]", intent="routes")
@@ -40,10 +46,16 @@ class ShowRoute(Parser):
             m = _TABLE_HDR.match(s)
             if m:
                 table = m["table"]
-                tables[table] = {"destinations": int(m["dest"]), "routes": int(m["routes"]), "active": int(m["active"]), "holddown": int(m["hold"]), "hidden": int(m["hidden"])}
+                tables[table] = {
+                    "destinations": int(m["dest"]),
+                    "routes": int(m["routes"]),
+                    "active": int(m["active"]),
+                    "holddown": int(m["hold"]),
+                    "hidden": int(m["hidden"]),
+                }
                 cur_route = cur_path = None
                 continue
-            if s.startswith("+ = Active Route") or s.startswith("Restart Complete"):
+            if s.startswith(("+ = Active Route", "Restart Complete")):
                 continue
             if not raw.startswith(" "):
                 # destination line (may carry the first path)
@@ -81,7 +93,9 @@ class ShowRoute(Parser):
                 continue
             m = _SPECIAL_NH.match(s)
             if m:
-                cur_path["next_hops"].append(compact({"type": m["what"].split()[0].lower(), "interface": m["intf"], "selected": bool(m["sel"])}))
+                cur_path["next_hops"].append(
+                    compact({"type": m["what"].split()[0].lower(), "interface": m["intf"], "selected": bool(m["sel"])})
+                )
                 continue
         out: Dict[str, Any] = {"tables": tables, "routes": routes}
         return out
@@ -95,7 +109,10 @@ class ShowRoute(Parser):
                     "routes",
                     prefix=r["prefix"],
                     protocol=(active.get("protocol") or "").lower() or None,
-                    next_hops=[{"next_hop": nh.get("next_hop"), "interface": nh.get("interface")} for nh in active.get("next_hops", [])],
+                    next_hops=[
+                        {"next_hop": nh.get("next_hop"), "interface": nh.get("interface")}
+                        for nh in active.get("next_hops", [])
+                    ],
                     distance=active.get("preference"),
                     metric=active.get("metric"),
                     vrf=r["table"].split(".")[0] if r["table"] not in ("inet.0", "inet6.0") else "default",
@@ -118,20 +135,39 @@ def _parse_route_detail(text: str, table: str) -> Dict[str, Any]:
         m = _TABLE_HDR.match(s)
         if m:
             table = m["table"]
-            tables[table] = {"destinations": int(m["dest"]), "routes": int(m["routes"]), "active": int(m["active"]), "holddown": int(m["hold"]), "hidden": int(m["hidden"])}
+            tables[table] = {
+                "destinations": int(m["dest"]),
+                "routes": int(m["routes"]),
+                "active": int(m["active"]),
+                "holddown": int(m["hold"]),
+                "hidden": int(m["hidden"]),
+            }
             continue
         m = re.match(r"^(?P<prefix>\S+) \((?P<n>\d+) entr(?:y|ies), (?P<ann>\d+) announced\)", s)
         if m:
-            cur = {"table": table, "prefix": m["prefix"], "entries": int(m["n"]), "announced": int(m["ann"]), "paths": []}
+            cur = {
+                "table": table,
+                "prefix": m["prefix"],
+                "entries": int(m["n"]),
+                "announced": int(m["ann"]),
+                "paths": [],
+            }
             routes.append(cur)
             path = None
             continue
         if cur is None:
             continue
-        m = re.match(r"^(?P<flag>[*+\-]{0,2})(?P<proto>[A-Za-z][\w\-]*)\s+Preference: (?P<pref>\d+)(?:/(?P<pref2>-?\d+))?", s)
+        m = re.match(
+            r"^(?P<flag>[*+\-]{0,2})(?P<proto>[A-Za-z][\w\-]*)\s+Preference: (?P<pref>\d+)(?:/(?P<pref2>-?\d+))?", s
+        )
         if m:
             flag = m["flag"] or ""
-            path = {"active": "*" in flag or "+" in flag, "protocol": m["proto"], "preference": int(m["pref"]), "next_hops": []}
+            path = {
+                "active": "*" in flag or "+" in flag,
+                "protocol": m["proto"],
+                "preference": int(m["pref"]),
+                "next_hops": [],
+            }
             if m["pref2"]:
                 path["preference2"] = int(m["pref2"])
             cur["paths"].append(path)
@@ -140,7 +176,9 @@ def _parse_route_detail(text: str, table: str) -> Dict[str, Any]:
             continue
         m = re.match(r"^Next hop: (?:(?P<nh>\S+) )?via (?P<intf>\S+)(?P<rest>.*)$", s)
         if m:
-            path["next_hops"].append(compact({"next_hop": m["nh"], "interface": m["intf"], "selected": "selected" in m["rest"]}))
+            path["next_hops"].append(
+                compact({"next_hop": m["nh"], "interface": m["intf"], "selected": "selected" in m["rest"]})
+            )
             continue
         m = re.match(r"^Age: (?P<age>.+?)(?:\s+Metric: (?P<metric>\d+))?(?:\s+Metric2: (?P<m2>\d+))?\s*$", s)
         if m:
@@ -154,7 +192,10 @@ def _parse_route_detail(text: str, table: str) -> Dict[str, Any]:
         if m:
             path["state"] = m["st"].split()
             continue
-        m = re.match(r"^(?P<k>Protocol next hop|Local AS|Peer AS|Area|Task|AS path|Communities|Localpref|Router ID|Source|Validation State|Label operation|Indirect next hop|Next hop type|Label TTL action|Cluster list|Originator ID|Accepted Multipath|Primary Routing Table|Secondary Tables|Tag):\s*(?P<v>.+)$", s)
+        m = re.match(
+            r"^(?P<k>Protocol next hop|Local AS|Peer AS|Area|Task|AS path|Communities|Localpref|Router ID|Source|Validation State|Label operation|Indirect next hop|Next hop type|Label TTL action|Cluster list|Originator ID|Accepted Multipath|Primary Routing Table|Secondary Tables|Tag):\s*(?P<v>.+)$",
+            s,
+        )
         if m:
             key = snake(m["k"])
             if key == "protocol_next_hop":
@@ -204,7 +245,14 @@ class ShowRouteSummary(Parser):
             s = raw.strip()
             m = _TABLE_HDR.match(s)
             if m:
-                cur = out["tables"][m["table"]] = {"destinations": int(m["dest"]), "routes": int(m["routes"]), "active": int(m["active"]), "holddown": int(m["hold"]), "hidden": int(m["hidden"]), "protocols": {}}
+                cur = out["tables"][m["table"]] = {
+                    "destinations": int(m["dest"]),
+                    "routes": int(m["routes"]),
+                    "active": int(m["active"]),
+                    "holddown": int(m["hold"]),
+                    "hidden": int(m["hidden"]),
+                    "protocols": {},
+                }
                 continue
             m = re.match(r"^(?P<proto>[\w\-]+):\s+(?P<routes>\d+) routes,\s+(?P<active>\d+) active", s)
             if m and cur is not None:
@@ -217,7 +265,12 @@ class ShowRouteSummary(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("junos", "show bgp summary [(instance <instance>|group <group>|logical-system <ls>)]", "show bgp summary (instance <instance>|group <group>)", intent="bgp.summary")
+@register(
+    "junos",
+    "show bgp summary [(instance <instance>|group <group>|logical-system <ls>)]",
+    "show bgp summary (instance <instance>|group <group>)",
+    intent="bgp.summary",
+)
 class ShowBgpSummary(Parser):
     """BGP peers with state, flaps, uptime and per-table prefix counters."""
 
@@ -345,12 +398,22 @@ def _table_af(table: Optional[str]) -> Optional[str]:
         return None
     name = table.split(".")[-2] if table.count(".") >= 1 else table
     return {
-        "inet": "ipv4 unicast", "inet6": "ipv6 unicast", "l3vpn": "vpnv4 unicast", "l3vpn-inet6": "vpnv6 unicast",
-        "evpn": "l2vpn evpn", "inet3": "ipv4 labeled-unicast", "l2vpn": "l2vpn vpls", "inetflow": "ipv4 flowspec",
+        "inet": "ipv4 unicast",
+        "inet6": "ipv6 unicast",
+        "l3vpn": "vpnv4 unicast",
+        "l3vpn-inet6": "vpnv6 unicast",
+        "evpn": "l2vpn evpn",
+        "inet3": "ipv4 labeled-unicast",
+        "l2vpn": "l2vpn vpls",
+        "inetflow": "ipv4 flowspec",
     }.get(name, table)
 
 
-@register("junos", "show bgp neighbor [<neighbor>] [(instance <instance>|exact-instance <instance>)]", "show bgp neighbor instance <instance> [<neighbor>]")
+@register(
+    "junos",
+    "show bgp neighbor [<neighbor>] [(instance <instance>|exact-instance <instance>)]",
+    "show bgp neighbor instance <instance> [<neighbor>]",
+)
 class ShowBgpNeighbor(Parser):
     """Detailed BGP peer information: group, state, options, NLRI, per-table prefix counts."""
 
@@ -362,9 +425,17 @@ class ShowBgpNeighbor(Parser):
             s = raw.strip()
             if not s:
                 continue
-            m = re.match(r"^Peer: (?P<peer>[0-9a-fA-F.:]+)(?:\+(?P<pport>\d+))?\s+AS (?P<pas>[\d.]+)\s+Local: (?P<local>[0-9a-fA-F.:]+)?(?:\+(?P<lport>\d+))?\s+AS (?P<las>[\d.]+)", s)
+            m = re.match(
+                r"^Peer: (?P<peer>[0-9a-fA-F.:]+)(?:\+(?P<pport>\d+))?\s+AS (?P<pas>[\d.]+)\s+Local: (?P<local>[0-9a-fA-F.:]+)?(?:\+(?P<lport>\d+))?\s+AS (?P<las>[\d.]+)",
+                s,
+            )
             if m:
-                cur = out[m["peer"]] = {"peer_as": to_num(m["pas"]), "local_address": m["local"], "local_as": to_num(m["las"]), "tables": {}}
+                cur = out[m["peer"]] = {
+                    "peer_as": to_num(m["pas"]),
+                    "local_address": m["local"],
+                    "local_as": to_num(m["las"]),
+                    "tables": {},
+                }
                 if m["pport"]:
                     cur["peer_port"] = int(m["pport"])
                 if m["lport"]:
@@ -378,16 +449,24 @@ class ShowBgpNeighbor(Parser):
                 table = cur["tables"][m["t"]] = {}
                 continue
             if table is not None:
-                m = re.match(r"^(?P<k>Active|Received|Accepted|Advertised|Suppressed due to damping) prefixes?:?\s*(?P<v>\d+)$|^(?P<k2>Suppressed due to damping):\s*(?P<v2>\d+)$", s)
+                m = re.match(
+                    r"^(?P<k>Active|Received|Accepted|Advertised|Suppressed due to damping) prefixes?:?\s*(?P<v>\d+)$|^(?P<k2>Suppressed due to damping):\s*(?P<v2>\d+)$",
+                    s,
+                )
                 if m:
                     k = m["k"] or m["k2"]
-                    table[snake(k) + ("_prefixes" if "prefix" not in snake(k) and "damping" not in k else "")] = int(m["v"] or m["v2"])
+                    table[snake(k) + ("_prefixes" if "prefix" not in snake(k) and "damping" not in k else "")] = int(
+                        m["v"] or m["v2"]
+                    )
                     continue
                 m = re.match(r"^(RIB State|Send state):\s*(?P<v>.+)$", s)
                 if m:
                     table[snake(m.group(1))] = m["v"]
                     continue
-            m = re.match(r"^Type: (?P<type>\S+)\s+State: (?P<state>\S+)(?:\s+\((?P<note>[^)]*)\))?\s*Flags: <(?P<flags>[^>]*)>", s)
+            m = re.match(
+                r"^Type: (?P<type>\S+)\s+State: (?P<state>\S+)(?:\s+\((?P<note>[^)]*)\))?\s*Flags: <(?P<flags>[^>]*)>",
+                s,
+            )
             if m:
                 cur["type"], cur["state"] = m["type"], m["state"]
                 if m["note"]:
@@ -448,7 +527,9 @@ class ShowBgpNeighbor(Parser):
             if m:
                 cur["bfd"] = m["b"]
                 continue
-            m = re.match(r"^(?P<k>NLRI for this session|NLRI advertised by peer|Address families configured): (?P<v>.+)$", s)
+            m = re.match(
+                r"^(?P<k>NLRI for this session|NLRI advertised by peer|Address families configured): (?P<v>.+)$", s
+            )
             if m:
                 cur[snake(m["k"])] = m["v"].split()
                 continue
@@ -471,7 +552,11 @@ class ShowBgpNeighbor(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("junos", "show (ospf|ospf3) neighbor [<neighbor>] [(instance <instance>|area <area>|interface <interface>)] [(brief|detail|extensive)]", intent="ospf.neighbors")
+@register(
+    "junos",
+    "show (ospf|ospf3) neighbor [<neighbor>] [(instance <instance>|area <area>|interface <interface>)] [(brief|detail|extensive)]",
+    intent="ospf.neighbors",
+)
 class ShowOspfNeighbor(Parser):
     """OSPF / OSPFv3 adjacencies."""
 
@@ -484,15 +569,33 @@ class ShowOspfNeighbor(Parser):
             if not s:
                 continue
             if not v3:
-                m = re.match(r"^(?P<addr>\d+\.\d+\.\d+\.\d+)\s+(?P<intf>\S+)\s+(?P<state>\S+)\s+(?P<id>\d+\.\d+\.\d+\.\d+)\s+(?P<pri>\d+)\s+(?P<dead>\d+)$", s)
+                m = re.match(
+                    r"^(?P<addr>\d+\.\d+\.\d+\.\d+)\s+(?P<intf>\S+)\s+(?P<state>\S+)\s+(?P<id>\d+\.\d+\.\d+\.\d+)\s+(?P<pri>\d+)\s+(?P<dead>\d+)$",
+                    s,
+                )
                 if m:
-                    last = {"address": m["addr"], "interface": m["intf"], "state": m["state"], "neighbor_id": m["id"], "priority": int(m["pri"]), "dead_time": int(m["dead"])}
+                    last = {
+                        "address": m["addr"],
+                        "interface": m["intf"],
+                        "state": m["state"],
+                        "neighbor_id": m["id"],
+                        "priority": int(m["pri"]),
+                        "dead_time": int(m["dead"]),
+                    }
                     out["neighbors"].append(last)
                     continue
             else:
-                m = re.match(r"^(?P<id>\d+\.\d+\.\d+\.\d+)\s+(?P<intf>\S+)\s+(?P<state>\S+)\s+(?P<pri>\d+)\s+(?P<dead>\d+)$", s)
+                m = re.match(
+                    r"^(?P<id>\d+\.\d+\.\d+\.\d+)\s+(?P<intf>\S+)\s+(?P<state>\S+)\s+(?P<pri>\d+)\s+(?P<dead>\d+)$", s
+                )
                 if m:
-                    last = {"neighbor_id": m["id"], "interface": m["intf"], "state": m["state"], "priority": int(m["pri"]), "dead_time": int(m["dead"])}
+                    last = {
+                        "neighbor_id": m["id"],
+                        "interface": m["intf"],
+                        "state": m["state"],
+                        "priority": int(m["pri"]),
+                        "dead_time": int(m["dead"]),
+                    }
                     out["neighbors"].append(last)
                     continue
                 m = re.match(r"^Neighbor-address (?P<a>\S+)", s)
@@ -511,10 +614,25 @@ class ShowOspfNeighbor(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("ospf.neighbors", neighbor_id=n["neighbor_id"], priority=n["priority"], state=n["state"].lower(), address=n.get("address"), interface=n["interface"], dead_time=n["dead_time"]) for n in data["neighbors"]]
+        return [
+            record(
+                "ospf.neighbors",
+                neighbor_id=n["neighbor_id"],
+                priority=n["priority"],
+                state=n["state"].lower(),
+                address=n.get("address"),
+                interface=n["interface"],
+                dead_time=n["dead_time"],
+            )
+            for n in data["neighbors"]
+        ]
 
 
-@register("junos", "show (ospf|ospf3) interface [<interface>] [(brief|detail|extensive)] [instance <instance>]", "show (ospf|ospf3) interface [instance <instance>] [<interface>] [(brief|detail|extensive)]")
+@register(
+    "junos",
+    "show (ospf|ospf3) interface [<interface>] [(brief|detail|extensive)] [instance <instance>]",
+    "show (ospf|ospf3) interface [instance <instance>] [<interface>] [(brief|detail|extensive)]",
+)
 class ShowOspfInterface(Parser):
     """OSPF interfaces: state, area, DR/BDR and neighbor count."""
 
@@ -523,16 +641,30 @@ class ShowOspfInterface(Parser):
         last: Optional[Dict[str, Any]] = None
         for raw in text.splitlines():
             s = raw.strip()
-            m = re.match(r"^(?P<intf>\S+)\s+(?P<state>PtToPt|DR|BDR|DRother|Down|Waiting|Loopback|DROther|PtToMPt)\s+(?P<area>\d+\.\d+\.\d+\.\d+)\s+(?P<dr>\S+)\s+(?P<bdr>\S+)\s+(?P<nbrs>\d+)$", s)
+            m = re.match(
+                r"^(?P<intf>\S+)\s+(?P<state>PtToPt|DR|BDR|DRother|Down|Waiting|Loopback|DROther|PtToMPt)\s+(?P<area>\d+\.\d+\.\d+\.\d+)\s+(?P<dr>\S+)\s+(?P<bdr>\S+)\s+(?P<nbrs>\d+)$",
+                s,
+            )
             if m:
-                last = {"interface": m["intf"], "state": m["state"], "area": m["area"], "dr_id": m["dr"], "bdr_id": m["bdr"], "neighbors": int(m["nbrs"])}
+                last = {
+                    "interface": m["intf"],
+                    "state": m["state"],
+                    "area": m["area"],
+                    "dr_id": m["dr"],
+                    "bdr_id": m["bdr"],
+                    "neighbors": int(m["nbrs"]),
+                }
                 out.append(last)
                 continue
             if last is None:
                 continue
-            m = re.match(r"^Type: (?P<t>\S+), Address: (?P<a>\S+), Mask: (?P<mask>\S+), MTU: (?P<mtu>\d+), Cost: (?P<c>\d+)", s)
+            m = re.match(
+                r"^Type: (?P<t>\S+), Address: (?P<a>\S+), Mask: (?P<mask>\S+), MTU: (?P<mtu>\d+), Cost: (?P<c>\d+)", s
+            )
             if m:
-                last.update({"type": m["t"], "address": m["a"], "mask": m["mask"], "mtu": int(m["mtu"]), "cost": int(m["c"])})
+                last.update(
+                    {"type": m["t"], "address": m["a"], "mask": m["mask"], "mtu": int(m["mtu"]), "cost": int(m["c"])}
+                )
                 continue
             m = re.match(r"^Hello: (?P<h>\d+), Dead: (?P<d>\d+), ReXmit: (?P<r>\d+)", s)
             if m:
@@ -545,19 +677,46 @@ class ShowOspfInterface(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("junos", "show isis adjacency [<system>] [(brief|detail|extensive)] [instance <instance>]", intent="isis.adjacency")
+@register(
+    "junos", "show isis adjacency [<system>] [(brief|detail|extensive)] [instance <instance>]", intent="isis.adjacency"
+)
 class ShowIsisAdjacency(Parser):
     """IS-IS adjacencies per interface and level."""
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<intf>\S+)\s+(?P<sys>\S+)\s+(?P<lvl>[123])\s+(?P<state>Up|Down|Initializing|New|One-way|Rejected)\s+(?P<hold>\d+)(?:\s+(?P<snpa>\S+))?\s*$", text):
-            out.append(compact({"interface": m["intf"], "system": m["sys"], "level": int(m["lvl"]), "state": m["state"], "hold_time": int(m["hold"]), "snpa": m["snpa"]}))
+        for m in match_lines(
+            r"^(?P<intf>\S+)\s+(?P<sys>\S+)\s+(?P<lvl>[123])\s+(?P<state>Up|Down|Initializing|New|One-way|Rejected)\s+(?P<hold>\d+)(?:\s+(?P<snpa>\S+))?\s*$",
+            text,
+        ):
+            out.append(
+                compact(
+                    {
+                        "interface": m["intf"],
+                        "system": m["sys"],
+                        "level": int(m["lvl"]),
+                        "state": m["state"],
+                        "hold_time": int(m["hold"]),
+                        "snpa": m["snpa"],
+                    }
+                )
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         lv = {1: "level-1", 2: "level-2", 3: "level-1-2"}
-        return [record("isis.adjacency", system_id=a["system"], interface=a["interface"], state=a["state"].lower(), level=lv.get(a["level"]), hold_time=a["hold_time"], snpa=a.get("snpa")) for a in data]
+        return [
+            record(
+                "isis.adjacency",
+                system_id=a["system"],
+                interface=a["interface"],
+                state=a["state"].lower(),
+                level=lv.get(a["level"]),
+                hold_time=a["hold_time"],
+                snpa=a.get("snpa"),
+            )
+            for a in data
+        ]
 
 
 # --------------------------------------------------------------------------- #
@@ -571,22 +730,47 @@ class ShowLdpNeighbor(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<intf>\S+)\s+(?P<ls>\S+:\d+)\s+(?P<hold>\d+)\s*$", text):
-            out.append({"address": m["addr"], "interface": m["intf"], "label_space_id": m["ls"], "hold_time": int(m["hold"])})
+        for m in match_lines(
+            r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<intf>\S+)\s+(?P<ls>\S+:\d+)\s+(?P<hold>\d+)\s*$", text
+        ):
+            out.append(
+                {"address": m["addr"], "interface": m["intf"], "label_space_id": m["ls"], "hold_time": int(m["hold"])}
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("ldp.neighbors", neighbor=n["label_space_id"].split(":")[0], state="discovered", discovery_sources=[n["interface"]]) for n in data]
+        return [
+            record(
+                "ldp.neighbors",
+                neighbor=n["label_space_id"].split(":")[0],
+                state="discovered",
+                discovery_sources=[n["interface"]],
+            )
+            for n in data
+        ]
 
 
-@register("junos", "show ldp session [<address>] [(brief|detail|extensive)] [instance <instance>]", intent="ldp.neighbors")
+@register(
+    "junos", "show ldp session [<address>] [(brief|detail|extensive)] [instance <instance>]", intent="ldp.neighbors"
+)
 class ShowLdpSession(Parser):
     """LDP sessions: state, connection, hold time, label advertisement mode."""
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Operational|Nonexistent|Initialized|OpenRec|OpenSent|Closing|\S+)\s+(?P<conn>Open|Closed|Connecting|\S+)\s+(?P<hold>\d+)\s+(?P<mode>DU|DoD|\S+)\s*$", text):
-            out.append({"address": m["addr"], "state": m["state"], "connection": m["conn"], "hold_time": int(m["hold"]), "advertisement_mode": m["mode"]})
+        for m in match_lines(
+            r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Operational|Nonexistent|Initialized|OpenRec|OpenSent|Closing|\S+)\s+(?P<conn>Open|Closed|Connecting|\S+)\s+(?P<hold>\d+)\s+(?P<mode>DU|DoD|\S+)\s*$",
+            text,
+        ):
+            out.append(
+                {
+                    "address": m["addr"],
+                    "state": m["state"],
+                    "connection": m["conn"],
+                    "hold_time": int(m["hold"]),
+                    "advertisement_mode": m["mode"],
+                }
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -609,17 +793,53 @@ def _lsp_sections(text: str) -> Dict[str, Any]:
             continue
         if not section or s.startswith(("To ", "Total")):
             continue
-        m = re.match(r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<style>\d+ \w+|\*|\S+)?\s*(?P<lin>\S+)?\s+(?P<lout>\S+)?\s+(?P<name>\S+)$", s)
+        m = re.match(
+            r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<style>\d+ \w+|\*|\S+)?\s*(?P<lin>\S+)?\s+(?P<lout>\S+)?\s+(?P<name>\S+)$",
+            s,
+        )
         if m and section in ("egress", "transit"):
-            out[section]["lsps"].append(compact({"to": m["to"], "from": m["frm"], "state": m["state"], "route_count": int(m["rt"]), "style": m["style"], "label_in": to_num(m["lin"]) if m["lin"] != "-" else None, "label_out": to_num(m["lout"]) if m["lout"] != "-" else None, "name": m["name"]}))
+            out[section]["lsps"].append(
+                compact(
+                    {
+                        "to": m["to"],
+                        "from": m["frm"],
+                        "state": m["state"],
+                        "route_count": int(m["rt"]),
+                        "style": m["style"],
+                        "label_in": to_num(m["lin"]) if m["lin"] != "-" else None,
+                        "label_out": to_num(m["lout"]) if m["lout"] != "-" else None,
+                        "name": m["name"],
+                    }
+                )
+            )
             continue
-        m = re.match(r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<p>\*)?\s*(?P<path>\S+)?\s+(?P<name>\S+)$", s)
+        m = re.match(
+            r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<p>\*)?\s*(?P<path>\S+)?\s+(?P<name>\S+)$",
+            s,
+        )
         if m:
-            out[section]["lsps"].append(compact({"to": m["to"], "from": m["frm"], "state": m["state"], "route_count": int(m["rt"]), "primary": bool(m["p"]), "active_path": m["path"], "name": m["name"]}))
+            out[section]["lsps"].append(
+                compact(
+                    {
+                        "to": m["to"],
+                        "from": m["frm"],
+                        "state": m["state"],
+                        "route_count": int(m["rt"]),
+                        "primary": bool(m["p"]),
+                        "active_path": m["path"],
+                        "name": m["name"],
+                    }
+                )
+            )
             continue
-        m = re.match(r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<name>\S+)$", s)
+        m = re.match(
+            r"^(?P<to>\d+\.\d+\.\d+\.\d+)\s+(?P<frm>\d+\.\d+\.\d+\.\d+)\s+(?P<state>Up|Dn|Down)\s+(?P<rt>\d+)\s+(?P<name>\S+)$",
+            s,
+        )
         if m:
-            out[section]["lsps"].append({"to": m["to"], "from": m["frm"], "state": m["state"], "route_count": int(m["rt"]), "name": m["name"]})
+            out[section]["lsps"].append(
+                {"to": m["to"], "from": m["frm"], "state": m["state"], "route_count": int(m["rt"]), "name": m["name"]}
+            )
     return out
 
 
@@ -631,7 +851,11 @@ class ShowRsvpSession(Parser):
         return _lsp_sections(text)
 
 
-@register("junos", "show mpls lsp [(ingress|egress|transit|up|down|brief|detail|extensive|terse|statistics)] [name <name>]", "show mpls lsp name <name> [(detail|extensive)]")
+@register(
+    "junos",
+    "show mpls lsp [(ingress|egress|transit|up|down|brief|detail|extensive|terse|statistics)] [name <name>]",
+    "show mpls lsp name <name> [(detail|extensive)]",
+)
 class ShowMplsLsp(Parser):
     """MPLS LSPs grouped by ingress / egress / transit."""
 
@@ -648,8 +872,22 @@ class ShowRsvpInterface(Parser):
         m = re.search(r"RSVP interface: (\d+) active", text)
         if m:
             out["active"] = int(m.group(1))
-        for m in match_lines(r"^(?P<intf>\S+)\s+(?P<state>Up|Down)\s+(?P<resv>\d+)\s+(?P<sub>\d+)%\s+(?P<static>\S+)\s+(?P<avail>\S+)\s+(?P<reserved>\S+)\s+(?P<hw>\S+)\s*$", text):
-            out["interfaces"].append({"interface": m["intf"], "state": m["state"], "active_reservations": int(m["resv"]), "subscription_percent": int(m["sub"]), "static_bw": m["static"], "available_bw": m["avail"], "reserved_bw": m["reserved"], "highwater_mark": m["hw"]})
+        for m in match_lines(
+            r"^(?P<intf>\S+)\s+(?P<state>Up|Down)\s+(?P<resv>\d+)\s+(?P<sub>\d+)%\s+(?P<static>\S+)\s+(?P<avail>\S+)\s+(?P<reserved>\S+)\s+(?P<hw>\S+)\s*$",
+            text,
+        ):
+            out["interfaces"].append(
+                {
+                    "interface": m["intf"],
+                    "state": m["state"],
+                    "active_reservations": int(m["resv"]),
+                    "subscription_percent": int(m["sub"]),
+                    "static_bw": m["static"],
+                    "available_bw": m["avail"],
+                    "reserved_bw": m["reserved"],
+                    "highwater_mark": m["hw"],
+                }
+            )
         return out
 
 
@@ -664,8 +902,22 @@ class ShowBfdSession(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"sessions": []}
-        for m in match_lines(r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Up|Down|Init|AdminDown|Failing)\s+(?P<intf>\S+)?\s+(?P<detect>[\d.]+)\s+(?P<tx>[\d.]+)\s+(?P<mult>\d+)\s*$", text):
-            out["sessions"].append(compact({"address": m["addr"], "state": m["state"], "interface": m["intf"], "detect_time": float(m["detect"]), "transmit_interval": float(m["tx"]), "multiplier": int(m["mult"])}))
+        for m in match_lines(
+            r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Up|Down|Init|AdminDown|Failing)\s+(?P<intf>\S+)?\s+(?P<detect>[\d.]+)\s+(?P<tx>[\d.]+)\s+(?P<mult>\d+)\s*$",
+            text,
+        ):
+            out["sessions"].append(
+                compact(
+                    {
+                        "address": m["addr"],
+                        "state": m["state"],
+                        "interface": m["intf"],
+                        "detect_time": float(m["detect"]),
+                        "transmit_interval": float(m["tx"]),
+                        "multiplier": int(m["mult"]),
+                    }
+                )
+            )
         m = re.search(r"(\d+) sessions?, (\d+) clients?", text)
         if m:
             out["total_sessions"], out["total_clients"] = int(m.group(1)), int(m.group(2))
@@ -675,4 +927,13 @@ class ShowBfdSession(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("bfd.sessions", neighbor=s["address"], interface=s.get("interface"), state=s["state"].lower(), detect_time_ms=int(s["detect_time"] * 1000)) for s in data["sessions"]]
+        return [
+            record(
+                "bfd.sessions",
+                neighbor=s["address"],
+                interface=s.get("interface"),
+                state=s["state"].lower(),
+                detect_time_ms=int(s["detect_time"] * 1000),
+            )
+            for s in data["sessions"]
+        ]

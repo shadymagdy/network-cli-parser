@@ -15,9 +15,20 @@ def test_cli_parse_file(capsys):
 
 def test_cli_shorthand_and_normalize(capsys, tmp_path):
     f = tmp_path / "o.txt"
-    f.write_text("Neighbor ID     Pri   State           Dead Time   Address         Interface\n1.1.1.1         1     FULL/DR         00:00:39    10.1.2.1        Gi0/0/0/1\n")
+    f.write_text(
+        "Neighbor ID     Pri   State           Dead Time   Address         Interface\n1.1.1.1         1     FULL/DR         00:00:39    10.1.2.1        Gi0/0/0/1\n"
+    )
     assert main([str(f), "-c", "show ospf neighbor", "-p", "xr", "-n", "-f", "json-compact"]) == 0
-    assert json.loads(capsys.readouterr().out) == [{"neighbor_id": "1.1.1.1", "priority": 1, "state": "full", "address": "10.1.2.1", "interface": "Gi0/0/0/1", "dead_time": "00:00:39"}]
+    assert json.loads(capsys.readouterr().out) == [
+        {
+            "neighbor_id": "1.1.1.1",
+            "priority": 1,
+            "state": "full",
+            "address": "10.1.2.1",
+            "interface": "Gi0/0/0/1",
+            "dead_time": "00:00:39",
+        }
+    ]
 
 
 def test_cli_meta_and_table(capsys, tmp_path):
@@ -52,7 +63,11 @@ def test_cli_unknown_platform_is_reported(capsys, tmp_path):
 def test_http_handler():
     code, body = handle("GET", "/health", b"")
     assert code == 200 and body["status"] == "ok"
-    code, body = handle("POST", "/parse", json.dumps({"output": "<R1>display clock\n2024-05-14 10:20:31+08:00\nTuesday\n", "normalize": True}).encode())
+    code, body = handle(
+        "POST",
+        "/parse",
+        json.dumps({"output": "<R1>display clock\n2024-05-14 10:20:31+08:00\nTuesday\n", "normalize": True}).encode(),
+    )
     assert code == 200 and body["platform"] == "vrp" and body["data"]["weekday"] == "Tuesday"
     assert handle("POST", "/parse", b"{bad json")[0] == 400
     assert handle("POST", "/parse", b'{"nope": 1}')[0] == 400

@@ -16,14 +16,34 @@ class ShowLldpNeighbors(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<local>\S+)\s+(?P<parent>\S+)\s+(?P<chassis>(?:[0-9a-fA-F]{2}[:\-]){5}[0-9a-fA-F]{2}|\S+)\s+(?P<port>\S+)\s+(?P<system>.*?)\s*$", text):
+        for m in match_lines(
+            r"^(?P<local>\S+)\s+(?P<parent>\S+)\s+(?P<chassis>(?:[0-9a-fA-F]{2}[:\-]){5}[0-9a-fA-F]{2}|\S+)\s+(?P<port>\S+)\s+(?P<system>.*?)\s*$",
+            text,
+        ):
             if m["local"] == "Local":
                 continue
-            out.append({"local_interface": m["local"], "parent_interface": none_if(m["parent"]), "chassis_id": m["chassis"], "port_info": m["port"], "system_name": m["system"] or None})
+            out.append(
+                {
+                    "local_interface": m["local"],
+                    "parent_interface": none_if(m["parent"]),
+                    "chassis_id": m["chassis"],
+                    "port_info": m["port"],
+                    "system_name": m["system"] or None,
+                }
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("lldp.neighbors", local_interface=n["local_interface"], neighbor=n["system_name"], neighbor_interface=n["port_info"], chassis_id=mac(n["chassis_id"])) for n in data]
+        return [
+            record(
+                "lldp.neighbors",
+                local_interface=n["local_interface"],
+                neighbor=n["system_name"],
+                neighbor_interface=n["port_info"],
+                chassis_id=mac(n["chassis_id"]),
+            )
+            for n in data
+        ]
 
 
 @register("junos", "show lldp neighbors interface <interface>", "show lldp neighbors detail", intent="lldp.neighbors")
@@ -47,10 +67,10 @@ class ShowLldpNeighborsInterface(Parser):
             if cur is None:
                 cur = {}
                 out.append(cur)
-            if s.startswith("Management Info") or s.startswith("Management Information"):
+            if s.startswith(("Management Info", "Management Information")):
                 section = "management"
                 continue
-            if s.startswith("Address Type") or s.startswith("Type "):
+            if s.startswith(("Address Type", "Type ")):
                 continue
             if section == "management":
                 m = re.match(r"^(?:IPv4|IPv6|Address)\s+(?P<a>\S+)", s)
@@ -82,13 +102,21 @@ class ShowLldpNeighborsInterface(Parser):
         ]
 
 
-@register("junos", "show arp [(no-resolve|expiration-time|hostname <host>|interface <interface>|vpn <vpn>)]", "show arp no-resolve [(interface <interface>|vpn <vpn>)]", intent="arp")
+@register(
+    "junos",
+    "show arp [(no-resolve|expiration-time|hostname <host>|interface <interface>|vpn <vpn>)]",
+    "show arp no-resolve [(interface <interface>|vpn <vpn>)]",
+    intent="arp",
+)
 class ShowArp(Parser):
     """ARP table."""
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"entries": []}
-        for m in match_lines(r"^(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?:(?P<name>\S+)\s+)?(?P<intf>[a-z]\S*)\s+(?P<flags>\S+(?: \S+)*)(?:\s+(?P<ttl>\d+))?\s*$", text):
+        for m in match_lines(
+            r"^(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?:(?P<name>\S+)\s+)?(?P<intf>[a-z]\S*)\s+(?P<flags>\S+(?: \S+)*)(?:\s+(?P<ttl>\d+))?\s*$",
+            text,
+        ):
             name = m["name"]
             entry = {"mac_address": m["mac"], "ip_address": m["ip"], "interface": m["intf"], "flags": m["flags"]}
             if name and name != m["ip"]:
@@ -102,7 +130,16 @@ class ShowArp(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("arp", ip_address=e["ip_address"], mac_address=mac(e["mac_address"]), interface=e["interface"], type="permanent" if "permanent" in e["flags"] else "dynamic") for e in data["entries"]]
+        return [
+            record(
+                "arp",
+                ip_address=e["ip_address"],
+                mac_address=mac(e["mac_address"]),
+                interface=e["interface"],
+                type="permanent" if "permanent" in e["flags"] else "dynamic",
+            )
+            for e in data["entries"]
+        ]
 
 
 @register("junos", "show ipv6 neighbors [<address>]", intent="ipv6.neighbors")
@@ -111,15 +148,38 @@ class ShowIpv6Neighbors(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"entries": []}
-        for m in match_lines(r"^(?P<ip>[0-9a-fA-F:]+:[0-9a-fA-F:.]*)\s+(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}|none)\s+(?P<state>\S+)\s+(?P<exp>\d+)\s+(?P<rtr>yes|no)\s+(?P<sec>yes|no)\s+(?P<intf>\S+)\s*$", text):
-            out["entries"].append({"ip_address": m["ip"], "mac_address": none_if(m["mac"], "none"), "state": m["state"], "expire": int(m["exp"]), "router": m["rtr"] == "yes", "secure": m["sec"] == "yes", "interface": m["intf"]})
+        for m in match_lines(
+            r"^(?P<ip>[0-9a-fA-F:]+:[0-9a-fA-F:.]*)\s+(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}|none)\s+(?P<state>\S+)\s+(?P<exp>\d+)\s+(?P<rtr>yes|no)\s+(?P<sec>yes|no)\s+(?P<intf>\S+)\s*$",
+            text,
+        ):
+            out["entries"].append(
+                {
+                    "ip_address": m["ip"],
+                    "mac_address": none_if(m["mac"], "none"),
+                    "state": m["state"],
+                    "expire": int(m["exp"]),
+                    "router": m["rtr"] == "yes",
+                    "secure": m["sec"] == "yes",
+                    "interface": m["intf"],
+                }
+            )
         m = re.search(r"Total entries:\s*(\d+)", text)
         if m:
             out["total"] = int(m.group(1))
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("ipv6.neighbors", ip_address=e["ip_address"], mac_address=mac(e["mac_address"]), interface=e["interface"], state=e["state"], age=e["expire"]) for e in data["entries"]]
+        return [
+            record(
+                "ipv6.neighbors",
+                ip_address=e["ip_address"],
+                mac_address=mac(e["mac_address"]),
+                interface=e["interface"],
+                state=e["state"],
+                age=e["expire"],
+            )
+            for e in data["entries"]
+        ]
 
 
 @register("junos", "show vlans [<vlan>] [(brief|detail|extensive)]")
@@ -149,7 +209,12 @@ def _vlan_member(cur: Dict[str, Any], intf: str) -> None:
     cur["interfaces"].append({"interface": intf.rstrip("*"), "active": intf.endswith("*")})
 
 
-@register("junos", "show ethernet-switching table [(brief|detail|extensive|vlan-name <vlan>|interface <interface>)]", "show ethernet-switching table vlan-id <vlan>", intent="mac.table")
+@register(
+    "junos",
+    "show ethernet-switching table [(brief|detail|extensive|vlan-name <vlan>|interface <interface>)]",
+    "show ethernet-switching table vlan-id <vlan>",
+    intent="mac.table",
+)
 class ShowEthernetSwitchingTable(Parser):
     """MAC address table (ELS style)."""
 
@@ -165,13 +230,38 @@ class ShowEthernetSwitchingTable(Parser):
             if mm:
                 ri = mm.group(1)
                 continue
-            mm = re.match(r"^(?P<vlan>\S+)\s+(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<flags>\S+)\s+(?P<age>\S+)\s+(?P<intf>\S+)(?:\s+(?P<nh>\d+))?(?:\s+(?P<rtr>\d+))?\s*$", s)
+            mm = re.match(
+                r"^(?P<vlan>\S+)\s+(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<flags>\S+)\s+(?P<age>\S+)\s+(?P<intf>\S+)(?:\s+(?P<nh>\d+))?(?:\s+(?P<rtr>\d+))?\s*$",
+                s,
+            )
             if mm:
-                out["entries"].append(compact({"vlan": mm["vlan"], "mac_address": mm["mac"], "flags": mm["flags"], "age": none_if(mm["age"]), "interface": mm["intf"], "nh_index": to_num(mm["nh"]) if mm["nh"] else None, "rtr_id": to_num(mm["rtr"]) if mm["rtr"] else None, "routing_instance": ri}))
+                out["entries"].append(
+                    compact(
+                        {
+                            "vlan": mm["vlan"],
+                            "mac_address": mm["mac"],
+                            "flags": mm["flags"],
+                            "age": none_if(mm["age"]),
+                            "interface": mm["intf"],
+                            "nh_index": to_num(mm["nh"]) if mm["nh"] else None,
+                            "rtr_id": to_num(mm["rtr"]) if mm["rtr"] else None,
+                            "routing_instance": ri,
+                        }
+                    )
+                )
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("mac.table", mac_address=mac(e["mac_address"]), vlan=e["vlan"], interface=e["interface"], type="static" if "S" in e["flags"] else "dynamic") for e in data["entries"]]
+        return [
+            record(
+                "mac.table",
+                mac_address=mac(e["mac_address"]),
+                vlan=e["vlan"],
+                interface=e["interface"],
+                type="static" if "S" in e["flags"] else "dynamic",
+            )
+            for e in data["entries"]
+        ]
 
 
 @register("junos", "show route instance [<instance>] [(detail|summary|extensive)]", intent="vrfs")
@@ -190,7 +280,11 @@ class ShowRouteInstance(Parser):
                     continue
                 m = re.match(r"^\s+(?P<table>\S+)\s+(?P<a>\d+)/(?P<h>\d+)/(?P<hid>\d+)", raw)
                 if m and cur is not None:
-                    cur["tables"][m["table"]] = {"active": int(m["a"]), "holddown": int(m["h"]), "hidden": int(m["hid"])}
+                    cur["tables"][m["table"]] = {
+                        "active": int(m["a"]),
+                        "holddown": int(m["h"]),
+                        "hidden": int(m["hid"]),
+                    }
             return out
         cur = None
         section = None
@@ -235,9 +329,17 @@ class ShowRouteInstance(Parser):
                 cur["interfaces"].append(s)
                 continue
             if section == "tables":
-                m = re.match(r"^(?P<t>\S+?)\s*: (?P<r>\d+) routes \((?P<a>\d+) active, (?P<h>\d+) holddown, (?P<hid>\d+) hidden\)", s)
+                m = re.match(
+                    r"^(?P<t>\S+?)\s*: (?P<r>\d+) routes \((?P<a>\d+) active, (?P<h>\d+) holddown, (?P<hid>\d+) hidden\)",
+                    s,
+                )
                 if m:
-                    cur["tables"][m["t"]] = {"routes": int(m["r"]), "active": int(m["a"]), "holddown": int(m["h"]), "hidden": int(m["hid"])}
+                    cur["tables"][m["t"]] = {
+                        "routes": int(m["r"]),
+                        "active": int(m["a"]),
+                        "holddown": int(m["h"]),
+                        "hidden": int(m["hid"]),
+                    }
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:

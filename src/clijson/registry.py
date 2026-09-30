@@ -4,10 +4,10 @@ Adding a parser is one decorator away::
 
     from clijson.registry import Parser, register
 
+
     @register("iosxr", "show clock", intent="system.clock")
     class ShowClock(Parser):
-        def parse(self, text):
-            ...
+        def parse(self, text): ...
 
 The registry indexes parsers per platform and resolves any typed command
 (abbreviations included) to the best parser plus its captured parameters.
@@ -18,6 +18,7 @@ from __future__ import annotations
 import difflib
 import importlib
 import pkgutil
+import warnings
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type
 
@@ -91,20 +92,10 @@ class Registry:
 
     def _load_plugins(self) -> None:
         """Third-party packages can ship parsers via the ``clijson.parsers`` entry point."""
-        try:
-            from importlib.metadata import entry_points
-        except ImportError:  # pragma: no cover
-            return
-        try:
-            eps = entry_points()
-            group = eps.select(group="clijson.parsers") if hasattr(eps, "select") else eps.get("clijson.parsers", [])
-        except Exception:  # pragma: no cover - defensive
-            return
-        for ep in group:
-            try:
-                ep.load()
-            except Exception:  # pragma: no cover - never break parsing because of a plugin
-                pass
+        from importlib.metadata import entry_points
+
+        for ep in entry_points(group="clijson.parsers"):
+            _load_plugin(ep)
 
     # -- lookup -------------------------------------------------------------
     def resolve(self, platform: "str | Platform", tokens: List[str]) -> Optional[Resolution]:
@@ -172,8 +163,16 @@ def _apply_verb_alias(plat: Platform, tokens: List[str]) -> List[str]:
         first = tokens[0].lower()
         for alias in plat.verb_aliases:
             if len(first) >= 2 and alias.startswith(first) and not plat.verb.startswith(first):
-                return [plat.verb] + list(tokens[1:])
+                return [plat.verb, *list(tokens[1:])]
     return list(tokens)
+
+
+def _load_plugin(ep: Any) -> None:
+    """Import one plugin; a broken plugin warns instead of breaking every parse."""
+    try:
+        ep.load()
+    except Exception as exc:  # pragma: no cover - depends on installed plugins
+        warnings.warn(f"clijson plugin {ep.name!r} failed to load: {exc}", RuntimeWarning, stacklevel=2)
 
 
 REGISTRY = Registry()

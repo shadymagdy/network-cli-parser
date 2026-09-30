@@ -8,7 +8,7 @@ from clijson.models import SCHEMAS
 from .conftest import fixture_cases, read_json
 
 
-@pytest.mark.parametrize("txt,js", list(fixture_cases()))
+@pytest.mark.parametrize(("txt", "js"), list(fixture_cases()))
 def test_fixture(txt, js):
     meta = read_json(js)
     res = clijson.parse(txt.read_text(encoding="utf-8"), meta["command"], meta["platform"], normalize=True)
@@ -19,7 +19,7 @@ def test_fixture(txt, js):
         assert res.normalized == meta["normalized"]
 
 
-@pytest.mark.parametrize("txt,js", list(fixture_cases()))
+@pytest.mark.parametrize(("txt", "js"), list(fixture_cases()))
 def test_fixture_autodetect(txt, js):
     """Without telling the library the platform, detection must not pick a wrong one."""
     meta = read_json(js)
@@ -27,7 +27,7 @@ def test_fixture_autodetect(txt, js):
     assert res.platform in (meta["platform"], None)
 
 
-@pytest.mark.parametrize("txt,js", [c for c in fixture_cases() if "normalized" in read_json(c.values[1])])
+@pytest.mark.parametrize(("txt", "js"), [c for c in fixture_cases() if "normalized" in read_json(c.values[1])])
 def test_normalized_schema(txt, js):
     meta = read_json(js)
     res = clijson.parse(txt.read_text(encoding="utf-8"), meta["command"], meta["platform"], normalize=True)

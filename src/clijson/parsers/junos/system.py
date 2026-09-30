@@ -11,7 +11,12 @@ from ...textutils import compact, match_lines, split_columns, to_num
 from .common import split_re_sections
 
 
-@register("junos", "show version [(detail|brief)] [invoke-on (all-routing-engines|other-routing-engine)]", "show version (all-members|local|member <member>)", intent="system.version")
+@register(
+    "junos",
+    "show version [(detail|brief)] [invoke-on (all-routing-engines|other-routing-engine)]",
+    "show version (all-members|local|member <member>)",
+    intent="system.version",
+)
 class ShowVersion(Parser):
     """Hostname, model, Junos release and installed packages (per member/RE)."""
 
@@ -24,13 +29,23 @@ class ShowVersion(Parser):
                 s = ln.strip()
                 m = re.match(r"^(Hostname|Model|Junos|Family|JUNOS OS Kernel|Junos Version):\s*(.+)$", s)
                 if m:
-                    key = {"Hostname": "hostname", "Model": "model", "Junos": "version", "Family": "family", "Junos Version": "version"}.get(m.group(1), m.group(1).lower().replace(" ", "_"))
+                    key = {
+                        "Hostname": "hostname",
+                        "Model": "model",
+                        "Junos": "version",
+                        "Family": "family",
+                        "Junos Version": "version",
+                    }.get(m.group(1), m.group(1).lower().replace(" ", "_"))
                     info[key] = m.group(2).strip()
                     continue
                 m = re.match(r"^(?P<name>(?:JUNOS|Junos|junos|JUNOS OS)[^\[]*?)\s*\[(?P<ver>[^\]]+)\]\s*$", s)
                 if m:
                     packages.append({"name": m["name"].strip(), "version": m["ver"]})
-                    if "version" not in info and re.match(r"^\d+\.\d+[A-Z]", m["ver"]) and re.search(r"Base OS|Software Suite|Software Release|Kernel|telemetry", m["name"]):
+                    if (
+                        "version" not in info
+                        and re.match(r"^\d+\.\d+[A-Z]", m["ver"])
+                        and re.search(r"Base OS|Software Suite|Software Release|Kernel|telemetry", m["name"])
+                    ):
                         info["version"] = m["ver"]
                     continue
                 m = re.match(r"^(?P<name>[A-Za-z][^\[]*?)\s*\[(?P<ver>[^\]]+)\]\s*$", s)
@@ -43,10 +58,22 @@ class ShowVersion(Parser):
         if len(members) == 1:
             return next(iter(members.values()))
         first = next(iter(members.values()), {})
-        return {"hostname": first.get("hostname"), "model": first.get("model"), "version": first.get("version"), "members": members}
+        return {
+            "hostname": first.get("hostname"),
+            "model": first.get("model"),
+            "version": first.get("version"),
+            "members": members,
+        }
 
     def normalize(self, d: Dict[str, Any]) -> Dict[str, Any]:
-        return record("system.version", hostname=d.get("hostname"), vendor="Juniper", os="Junos", version=d.get("version"), model=d.get("model"))
+        return record(
+            "system.version",
+            hostname=d.get("hostname"),
+            vendor="Juniper",
+            os="Junos",
+            version=d.get("version"),
+            model=d.get("model"),
+        )
 
 
 @register("junos", "show system uptime [(all-members|invoke-on all-routing-engines|no-forwarding)]")
@@ -67,7 +94,10 @@ class ShowSystemUptime(Parser):
                 if m:
                     d["time_source"] = m["t"].strip()
                     continue
-                m = re.match(r"^(?P<what>System booted|Protocols started|Last configured):\s*(?P<t>.+?)(?:\s+\((?P<ago>[^)]+) ago\))?(?:\s+by\s+(?P<by>\S+))?$", s)
+                m = re.match(
+                    r"^(?P<what>System booted|Protocols started|Last configured):\s*(?P<t>.+?)(?:\s+\((?P<ago>[^)]+) ago\))?(?:\s+by\s+(?P<by>\S+))?$",
+                    s,
+                )
                 if m:
                     key = m["what"].lower().replace(" ", "_")
                     d[key] = m["t"]
@@ -77,7 +107,10 @@ class ShowSystemUptime(Parser):
                     if m["by"]:
                         d["last_configured_by"] = m["by"]
                     continue
-                m = re.match(r"^(?P<time>\d+:\d+[AP]M)\s+up\s+(?P<up>.+?),\s+(?P<users>\d+) users?,\s+load averages?:\s*(?P<l1>[\d.]+),\s*(?P<l5>[\d.]+),\s*(?P<l15>[\d.]+)", s)
+                m = re.match(
+                    r"^(?P<time>\d+:\d+[AP]M)\s+up\s+(?P<up>.+?),\s+(?P<users>\d+) users?,\s+load averages?:\s*(?P<l1>[\d.]+),\s*(?P<l5>[\d.]+),\s*(?P<l15>[\d.]+)",
+                    s,
+                )
                 if m:
                     d["uptime"] = m["up"]
                     d["uptime_seconds"] = _uptime_seconds(m["up"])
@@ -170,7 +203,16 @@ class ShowChassisHardware(Parser):
         def walk(items: List[Dict[str, Any]], prefix: str = "") -> None:
             for it in items:
                 full = f"{prefix}{it['name']}"
-                out.append(record("inventory", name=full, description=it.get("description"), part_number=it.get("part_number"), serial_number=it.get("serial_number"), version=it.get("version")))
+                out.append(
+                    record(
+                        "inventory",
+                        name=full,
+                        description=it.get("description"),
+                        part_number=it.get("part_number"),
+                        serial_number=it.get("serial_number"),
+                        version=it.get("version"),
+                    )
+                )
                 walk(it.get("components", []), full + " / ")
 
         if "chassis" in data:
@@ -196,7 +238,10 @@ class ShowChassisAlarms(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         alarms = []
-        for m in match_lines(r"^\s*(?P<time>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+)\s+(?P<cls>Major|Minor|Critical|Warning|Info)\s+(?P<desc>.+?)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<time>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+)\s+(?P<cls>Major|Minor|Critical|Warning|Info)\s+(?P<desc>.+?)\s*$",
+            text,
+        ):
             alarms.append({"time": m["time"], "class": m["cls"], "description": m["desc"]})
         m = re.search(r"(\d+) alarms? currently active", text)
         return {"active_count": int(m.group(1)) if m else len(alarms), "alarms": alarms}
@@ -271,7 +316,14 @@ class ShowChassisRoutingEngine(Parser):
         for v in data.values():
             cpu = v.get("cpu_utilization_1min") or v.get("cpu_utilization") or {}
             cpu5 = v.get("cpu_utilization_5min") or {}
-            res.append(record("cpu", location=f"re{v.get('slot', 0)}", one_minute=(100 - cpu["idle"]) if "idle" in cpu else None, five_minute=(100 - cpu5["idle"]) if "idle" in cpu5 else None))
+            res.append(
+                record(
+                    "cpu",
+                    location=f"re{v.get('slot', 0)}",
+                    one_minute=(100 - cpu["idle"]) if "idle" in cpu else None,
+                    five_minute=(100 - cpu5["idle"]) if "idle" in cpu5 else None,
+                )
+            )
         return res
 
 
@@ -280,11 +332,17 @@ class ShowChassisFpc(Parser):
     """FPC state, temperature, CPU and memory utilisation (or PIC status)."""
 
     def parse(self, text: str) -> Any:
-        if re.search(r"^[ \t]*Slot \d+\s+(Online|Offline|Empty)\s+\S", text, re.M) and "PIC" in text and "Temp" not in text:
+        if (
+            re.search(r"^[ \t]*Slot \d+\s+(Online|Offline|Empty)\s+\S", text, re.M)
+            and "PIC" in text
+            and "Temp" not in text
+        ):
             return self._pic_status(text)
         out = []
         for m in match_lines(
-            r"^\s*(?P<slot>\d+)\s+(?P<state>Online|Offline|Empty|Present|Testing|Diag|Dead|Announce online|Spare|Fault|Resync)(?:\s+(?P<temp>\d+|Testing))?(?:\s+(?P<cpu_total>\d+)\s+(?P<cpu_int>\d+))?(?:\s+(?P<l1>\d+)\s+(?P<l5>\d+)\s+(?P<l15>\d+))?(?:\s+(?P<dram>\d+)\s+(?P<heap>\d+)\s+(?P<buf>\d+))?\s*(?P<comment>.*)$", text):
+            r"^\s*(?P<slot>\d+)\s+(?P<state>Online|Offline|Empty|Present|Testing|Diag|Dead|Announce online|Spare|Fault|Resync)(?:\s+(?P<temp>\d+|Testing))?(?:\s+(?P<cpu_total>\d+)\s+(?P<cpu_int>\d+))?(?:\s+(?P<l1>\d+)\s+(?P<l5>\d+)\s+(?P<l15>\d+))?(?:\s+(?P<dram>\d+)\s+(?P<heap>\d+)\s+(?P<buf>\d+))?\s*(?P<comment>.*)$",
+            text,
+        ):
             e: Dict[str, Any] = {"slot": int(m["slot"]), "state": m["state"]}
             if m["temp"]:
                 e["temperature_c"] = to_num(m["temp"])
@@ -324,7 +382,10 @@ class ShowChassisEnvironment(Parser):
         for raw in text.splitlines():
             if re.match(r"^\s*Class\s+Item\s+Status", raw) or not raw.strip():
                 continue
-            m = re.match(r"^(?P<cls>\S+)?\s+(?P<item>\S.*?)\s{2,}(?P<status>OK|Check|Failed|Absent|Present|Testing|Offline|Online|Empty|Warning|Critical|\S+)(?:\s+(?P<meas>.+?))?\s*$", raw)
+            m = re.match(
+                r"^(?P<cls>\S+)?\s+(?P<item>\S.*?)\s{2,}(?P<status>OK|Check|Failed|Absent|Present|Testing|Offline|Online|Empty|Warning|Critical|\S+)(?:\s+(?P<meas>.+?))?\s*$",
+                raw,
+            )
             if m:
                 if m["cls"] and not raw.startswith(" "):
                     cls = m["cls"]
@@ -346,15 +407,30 @@ class ShowSystemUsers(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"users": []}
-        m = re.search(r"up\s+(?P<up>.+?),\s+(?P<n>\d+) users?,\s+load averages?:\s*(?P<l1>[\d.]+),\s*(?P<l5>[\d.]+),\s*(?P<l15>[\d.]+)", text)
+        m = re.search(
+            r"up\s+(?P<up>.+?),\s+(?P<n>\d+) users?,\s+load averages?:\s*(?P<l1>[\d.]+),\s*(?P<l5>[\d.]+),\s*(?P<l15>[\d.]+)",
+            text,
+        )
         if m:
             out["uptime"] = m["up"]
             out["user_count"] = int(m["n"])
             out["load_average"] = {"1min": float(m["l1"]), "5min": float(m["l5"]), "15min": float(m["l15"])}
-        for m in match_lines(r"^\s*(?P<user>\S+)\s+(?P<tty>(?:pts|tty|console|vty|d\d|p\d|u\d)\S*)\s+(?P<from>\S+)\s+(?P<login>\S+)\s+(?P<idle>\S+)\s+(?P<what>.*?)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<user>\S+)\s+(?P<tty>(?:pts|tty|console|vty|d\d|p\d|u\d)\S*)\s+(?P<from>\S+)\s+(?P<login>\S+)\s+(?P<idle>\S+)\s+(?P<what>.*?)\s*$",
+            text,
+        ):
             if m["user"] == "USER":
                 continue
-            out["users"].append({"user": m["user"], "tty": m["tty"], "from": m["from"], "login": m["login"], "idle": None if m["idle"] == "-" else m["idle"], "what": m["what"]})
+            out["users"].append(
+                {
+                    "user": m["user"],
+                    "tty": m["tty"],
+                    "from": m["from"],
+                    "login": m["login"],
+                    "idle": None if m["idle"] == "-" else m["idle"],
+                    "what": m["what"],
+                }
+            )
         return out
 
 
@@ -366,8 +442,20 @@ class ShowSystemStorage(Parser):
         members: Dict[str, Any] = {}
         for name, body in split_re_sections(text):
             rows = []
-            for m in match_lines(r"^\s*(?P<fs>\S+)\s+(?P<size>[\d.]+[KMGTPB]?)\s+(?P<used>[\d.]+[KMGTPB]?)\s+(?P<avail>-?[\d.]+[KMGTPB]?)\s+(?P<cap>\d+)%\s+(?P<mount>\S.*?)\s*$", body):
-                rows.append({"filesystem": m["fs"], "size": m["size"], "used": m["used"], "available": m["avail"], "capacity_percent": int(m["cap"]), "mounted_on": m["mount"]})
+            for m in match_lines(
+                r"^\s*(?P<fs>\S+)\s+(?P<size>[\d.]+[KMGTPB]?)\s+(?P<used>[\d.]+[KMGTPB]?)\s+(?P<avail>-?[\d.]+[KMGTPB]?)\s+(?P<cap>\d+)%\s+(?P<mount>\S.*?)\s*$",
+                body,
+            ):
+                rows.append(
+                    {
+                        "filesystem": m["fs"],
+                        "size": m["size"],
+                        "used": m["used"],
+                        "available": m["avail"],
+                        "capacity_percent": int(m["cap"]),
+                        "mounted_on": m["mount"],
+                    }
+                )
             members[name or "local"] = rows
         return next(iter(members.values())) if len(members) == 1 else members
 
@@ -379,7 +467,9 @@ class ShowNtpAssociations(Parser):
     def parse(self, text: str) -> Dict[str, Any]:
         peers = []
         for m in match_lines(
-            r"^(?P<tally>[ x.\-+#*o])(?P<remote>\S+)\s+(?P<refid>\S+)\s+(?P<st>\d+)\s+(?P<t>\S)\s+(?P<when>\S+)\s+(?P<poll>\d+)\s+(?P<reach>\d+)\s+(?P<delay>[-\d.]+)\s+(?P<offset>[-+\d.]+)\s+(?P<jitter>[-\d.]+)\s*$", text):
+            r"^(?P<tally>[ x.\-+#*o])(?P<remote>\S+)\s+(?P<refid>\S+)\s+(?P<st>\d+)\s+(?P<t>\S)\s+(?P<when>\S+)\s+(?P<poll>\d+)\s+(?P<reach>\d+)\s+(?P<delay>[-\d.]+)\s+(?P<offset>[-+\d.]+)\s+(?P<jitter>[-\d.]+)\s*$",
+            text,
+        ):
             tally = m["tally"].strip()
             peers.append(
                 {
@@ -406,7 +496,10 @@ class ShowSystemCommit(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<idx>\d+)\s+(?P<ts>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+) by (?P<user>\S+) via (?P<client>\S+)(?:\s+(?P<comment>.+?))?\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<idx>\d+)\s+(?P<ts>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+) by (?P<user>\S+) via (?P<client>\S+)(?:\s+(?P<comment>.+?))?\s*$",
+            text,
+        ):
             e = {"index": int(m["idx"]), "timestamp": m["ts"], "user": m["user"], "client": m["client"]}
             if m["comment"]:
                 e["comment"] = m["comment"]
@@ -430,9 +523,21 @@ class ShowChassisClusterStatus(Parser):
             if m:
                 rg = out["redundancy_groups"][m.group(1)] = {"failover_count": int(m.group(2)), "nodes": []}
                 continue
-            m = re.match(r"^(?P<node>node\d+)\s+(?P<prio>\d+)\s+(?P<status>\S+)\s+(?P<preempt>\S+)\s+(?P<manual>\S+)(?:\s+(?P<monitor>\S+))?", s)
+            m = re.match(
+                r"^(?P<node>node\d+)\s+(?P<prio>\d+)\s+(?P<status>\S+)\s+(?P<preempt>\S+)\s+(?P<manual>\S+)(?:\s+(?P<monitor>\S+))?",
+                s,
+            )
             if m and rg is not None:
-                rg["nodes"].append({"node": m["node"], "priority": int(m["prio"]), "status": m["status"], "preempt": m["preempt"], "manual_failover": m["manual"], "monitor_failures": m["monitor"]})
+                rg["nodes"].append(
+                    {
+                        "node": m["node"],
+                        "priority": int(m["prio"]),
+                        "status": m["status"],
+                        "preempt": m["preempt"],
+                        "manual_failover": m["manual"],
+                        "monitor_failures": m["monitor"],
+                    }
+                )
         return out
 
 
@@ -448,12 +553,31 @@ class ShowSystemProcessesSummary(Parser):
             out["load_average"] = {"1min": float(m.group(2)), "5min": float(m.group(3)), "15min": float(m.group(4))}
         m = re.search(r"CPU:\s*(.+)$", text, re.M)
         if m:
-            out["cpu"] = {k.strip().replace(" ", "_"): float(v) for v, k in re.findall(r"([\d.]+)% (\w+(?: \w+)?)", m.group(1))}
+            out["cpu"] = {
+                k.strip().replace(" ", "_"): float(v) for v, k in re.findall(r"([\d.]+)% (\w+(?: \w+)?)", m.group(1))
+            }
         m = re.search(r"^Mem:\s*(.+)$", text, re.M)
         if m:
             out["memory"] = {k.lower(): v for v, k in re.findall(r"(\S+) (\w+)", m.group(1))}
         procs = []
-        for pm in match_lines(r"^\s*(?P<pid>\d+)\s+(?P<user>\S+)\s+(?:(?P<thr>\d+)\s+)?(?P<pri>-?\d+)\s+(?P<nice>-?\w+)\s+(?P<size>\S+)\s+(?P<res>\S+)\s+(?P<state>\S+)\s+(?:(?P<c>\d+)\s+)?(?P<time>\S+)\s+(?P<wcpu>[\d.]+)%\s+(?P<cmd>.+?)\s*$", text):
-            procs.append({"pid": int(pm["pid"]), "user": pm["user"], "threads": int(pm["thr"]) if pm["thr"] else None, "priority": int(pm["pri"]), "nice": to_num(pm["nice"]), "size": pm["size"], "resident": pm["res"], "state": pm["state"], "time": pm["time"], "cpu_percent": float(pm["wcpu"]), "command": pm["cmd"]})
+        for pm in match_lines(
+            r"^\s*(?P<pid>\d+)\s+(?P<user>\S+)\s+(?:(?P<thr>\d+)\s+)?(?P<pri>-?\d+)\s+(?P<nice>-?\w+)\s+(?P<size>\S+)\s+(?P<res>\S+)\s+(?P<state>\S+)\s+(?:(?P<c>\d+)\s+)?(?P<time>\S+)\s+(?P<wcpu>[\d.]+)%\s+(?P<cmd>.+?)\s*$",
+            text,
+        ):
+            procs.append(
+                {
+                    "pid": int(pm["pid"]),
+                    "user": pm["user"],
+                    "threads": int(pm["thr"]) if pm["thr"] else None,
+                    "priority": int(pm["pri"]),
+                    "nice": to_num(pm["nice"]),
+                    "size": pm["size"],
+                    "resident": pm["res"],
+                    "state": pm["state"],
+                    "time": pm["time"],
+                    "cpu_percent": float(pm["wcpu"]),
+                    "command": pm["cmd"],
+                }
+            )
         out["processes"] = procs
         return out

@@ -15,7 +15,10 @@ port1         up        10G
 port2         down      1G
 """
     out = parse_generic(text)
-    assert out["tables"][0]["rows"] == [{"name": "port1", "status": "up", "speed": "10G"}, {"name": "port2", "status": "down", "speed": "1G"}]
+    assert out["tables"][0]["rows"] == [
+        {"name": "port1", "status": "up", "speed": "10G"},
+        {"name": "port2", "status": "down", "speed": "1G"},
+    ]
 
 
 def test_generic_key_values_and_sections():
@@ -34,7 +37,9 @@ free text line
 
 def test_generic_multi_kv_per_line():
     out = parse_generic("BGP state = Established, up for 1d02h\n")
-    assert out["fields"] == {"bgp_state": "Established", "up_for": "1d02h"} or out["fields"]["bgp_state"].startswith("Established")
+    assert out["fields"] == {"bgp_state": "Established", "up_for": "1d02h"} or out["fields"]["bgp_state"].startswith(
+        "Established"
+    )
 
 
 def test_generic_implicit_aligned_table():

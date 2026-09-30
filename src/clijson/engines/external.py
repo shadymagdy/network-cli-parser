@@ -20,7 +20,7 @@ class EngineUnavailable(Exception):
     pass
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def ntc_available() -> bool:
     try:
         import ntc_templates.parse  # noqa: F401
@@ -29,7 +29,7 @@ def ntc_available() -> bool:
     return True
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def genie_available() -> bool:
     try:
         import genie.libs.parser  # noqa: F401

@@ -24,12 +24,25 @@ def test_prompt_command_and_timestamp_are_extracted():
     assert res.parser == "iosxr.show_ipv4_interface_brief"
     assert res.metadata["hostname"] == "PE1"
     assert res.metadata["timestamp"].startswith("Wed Mar 14")
-    assert res.data[1] == {"interface": "TenGigE0/0/0/0", "ip_address": None, "status": "Shutdown", "protocol": "Down", "vrf": "default"}
+    assert res.data[1] == {
+        "interface": "TenGigE0/0/0/0",
+        "ip_address": None,
+        "status": "Shutdown",
+        "protocol": "Down",
+        "vrf": "default",
+    }
 
 
 def test_normalized_view():
     res = clijson.parse(XR_BRIEF, normalize=True)
-    assert res.normalized[1] == {"name": "TenGigE0/0/0/0", "admin_status": "admin-down", "oper_status": "down", "ip_address": None, "vrf": "default", "description": None}
+    assert res.normalized[1] == {
+        "name": "TenGigE0/0/0/0",
+        "admin_status": "admin-down",
+        "oper_status": "down",
+        "ip_address": None,
+        "vrf": "default",
+        "description": None,
+    }
 
 
 def test_result_helpers():
@@ -84,7 +97,11 @@ def test_session_log():
     chunks = split_session(text)
     assert [c.command for c in chunks] == ["show version", "show ipv4 interface brief", "show bgp summary"]
     results = clijson.parse_session(text, normalize=True)
-    assert [r.parser for r in results] == ["iosxr.show_version", "iosxr.show_ipv4_interface_brief", "iosxr.show_bgp_summary"]
+    assert [r.parser for r in results] == [
+        "iosxr.show_version",
+        "iosxr.show_ipv4_interface_brief",
+        "iosxr.show_bgp_summary",
+    ]
     bgp = results[2]
     assert [n["neighbor"] for n in bgp.data["neighbors"]] == ["10.255.0.2", "10.255.0.3", "2001:db8:ffff::11"]
     assert bgp.data["neighbors"][1]["state"] == "Idle (Admin)"

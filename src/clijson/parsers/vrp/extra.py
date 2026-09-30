@@ -15,7 +15,10 @@ class DisplayMplsTeTunnel(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<detour>\*)?(?P<ing>\d+\.\d+\.\d+\.\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<lsp>\d+)\s+(?P<inl>\S+)/(?P<outl>\S+)\s+(?P<role>[ITE])\s+(?P<name>\S+)\s*$", text):
+        for m in match_lines(
+            r"^(?P<detour>\*)?(?P<ing>\d+\.\d+\.\d+\.\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<lsp>\d+)\s+(?P<inl>\S+)/(?P<outl>\S+)\s+(?P<role>[ITE])\s+(?P<name>\S+)\s*$",
+            text,
+        ):
             out.append(
                 {
                     "ingress_lsr_id": m["ing"],
@@ -43,7 +46,10 @@ class DisplayAcl(Parser):
         cur: Optional[Dict[str, Any]] = None
         for raw in text.splitlines():
             s = raw.strip()
-            m = re.match(r"^(?P<type>Basic|Advanced|Layer 2|User|Ethernet frame header|Interface-based|Mpls)\s+(?:IPv6 )?ACL\s+(?:(?P<name>\S+)\s+)?(?P<num>\d+),\s*(?P<n>\d+) rules?", s)
+            m = re.match(
+                r"^(?P<type>Basic|Advanced|Layer 2|User|Ethernet frame header|Interface-based|Mpls)\s+(?:IPv6 )?ACL\s+(?:(?P<name>\S+)\s+)?(?P<num>\d+),\s*(?P<n>\d+) rules?",
+                s,
+            )
             if m:
                 key = m["name"] or m["num"]
                 cur = out["acls"][key] = {"number": int(m["num"]), "type": m["type"].lower(), "rules": []}
@@ -62,9 +68,17 @@ class DisplayAcl(Parser):
                     if r["id"] == int(m["id"]):
                         r["description"] = m["d"]
                 continue
-            m = re.match(r"^rule (?P<id>\d+) (?P<action>permit|deny)\s*(?P<match>.*?)\s*(?:\((?P<hits>\d+) (?:matches|times matched)\))?\s*(?P<inactive>\(inactive\))?$", s)
+            m = re.match(
+                r"^rule (?P<id>\d+) (?P<action>permit|deny)\s*(?P<match>.*?)\s*(?:\((?P<hits>\d+) (?:matches|times matched)\))?\s*(?P<inactive>\(inactive\))?$",
+                s,
+            )
             if m:
-                rule: Dict[str, Any] = {"id": int(m["id"]), "action": m["action"], "match": m["match"] or None, "matches": int(m["hits"]) if m["hits"] else 0}
+                rule: Dict[str, Any] = {
+                    "id": int(m["id"]),
+                    "action": m["action"],
+                    "match": m["match"] or None,
+                    "matches": int(m["hits"]) if m["hits"] else 0,
+                }
                 if m["inactive"]:
                     rule["inactive"] = True
                 cur["rules"].append(rule)
@@ -103,10 +117,26 @@ class DisplayModuleInformation(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"modules": [], "boards": []}
-        for m in match_lines(r"^(?P<mod>\S+)\s+(?P<ver>\S+)\s+(?P<t>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+(?P<pkg>\S+)\s*$", text):
-            out["modules"].append({"module": m["mod"], "version": m["ver"], "install_time": m["t"], "package": m["pkg"]})
-        for m in match_lines(r"^(?P<slot>\d+/\d+)\s+(?P<proc>\S+)\s+(?P<type>\S+)\s+(?P<file>\S+)\s+(?P<t>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d(?:\.\d+)?)\s+(?P<mod>\S+)\s*$", text):
-            out["boards"].append({"slot_cpu": m["slot"], "process": m["proc"], "type": m["type"], "file": m["file"], "effective_time": m["t"], "module": m["mod"]})
+        for m in match_lines(
+            r"^(?P<mod>\S+)\s+(?P<ver>\S+)\s+(?P<t>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+(?P<pkg>\S+)\s*$", text
+        ):
+            out["modules"].append(
+                {"module": m["mod"], "version": m["ver"], "install_time": m["t"], "package": m["pkg"]}
+            )
+        for m in match_lines(
+            r"^(?P<slot>\d+/\d+)\s+(?P<proc>\S+)\s+(?P<type>\S+)\s+(?P<file>\S+)\s+(?P<t>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d(?:\.\d+)?)\s+(?P<mod>\S+)\s*$",
+            text,
+        ):
+            out["boards"].append(
+                {
+                    "slot_cpu": m["slot"],
+                    "process": m["proc"],
+                    "type": m["type"],
+                    "file": m["file"],
+                    "effective_time": m["t"],
+                    "module": m["mod"],
+                }
+            )
         return out
 
 
@@ -119,22 +149,47 @@ class Dir(Parser):
         m = re.search(r"Directory of (\S+)", text)
         if m:
             out["directory"] = m.group(1)
-        for m in match_lines(r"^\s*(?P<idx>\d+)\s+(?P<attr>[-drwx]{4})\s+(?P<size>[\d,]+|-)\s+(?P<date>\w{3} \d\d \d{4})\s+(?P<time>\d\d:\d\d:\d\d)\s+(?P<name>.+?)\s*$", text):
-            out["files"].append({"index": int(m["idx"]), "name": m["name"], "attributes": m["attr"], "directory": m["attr"].startswith("d"), "size": int(m["size"].replace(",", "")) if m["size"] != "-" else None, "date": f"{m['date']} {m['time']}"})
+        for m in match_lines(
+            r"^\s*(?P<idx>\d+)\s+(?P<attr>[-drwx]{4})\s+(?P<size>[\d,]+|-)\s+(?P<date>\w{3} \d\d \d{4})\s+(?P<time>\d\d:\d\d:\d\d)\s+(?P<name>.+?)\s*$",
+            text,
+        ):
+            out["files"].append(
+                {
+                    "index": int(m["idx"]),
+                    "name": m["name"],
+                    "attributes": m["attr"],
+                    "directory": m["attr"].startswith("d"),
+                    "size": int(m["size"].replace(",", "")) if m["size"] != "-" else None,
+                    "date": f"{m['date']} {m['time']}",
+                }
+            )
         m = re.search(r"([\d,]+) KB total(?: available)? \(([\d,]+) KB free\)", text)
         if m:
             out["total_kb"], out["free_kb"] = int(m.group(1).replace(",", "")), int(m.group(2).replace(",", ""))
         return out
 
 
-@register("vrp", "display vrrp [(brief|verbose|<interface>|statistics)]", "display vrrp <interface> <vrid> [(brief|verbose)]")
+@register(
+    "vrp", "display vrrp [(brief|verbose|<interface>|statistics)]", "display vrrp <interface> <vrid> [(brief|verbose)]"
+)
 class DisplayVrrp(Parser):
     """VRRP groups: VRID, state, interface, type and virtual IP (brief or verbose)."""
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out: List[Dict[str, Any]] = []
-        for m in match_lines(r"^\s*(?P<vrid>\d+)\s+(?P<state>Master|Backup|Initialize|Init)\s+(?P<intf>\S+)\s+(?P<type>Normal|Vgmp|Admin-vrrp|Member|\S+)\s+(?P<vip>[\d.:a-fA-F]+)\s*$", text):
-            out.append({"vrid": int(m["vrid"]), "state": m["state"], "interface": m["intf"], "type": m["type"], "virtual_ip": m["vip"]})
+        for m in match_lines(
+            r"^\s*(?P<vrid>\d+)\s+(?P<state>Master|Backup|Initialize|Init)\s+(?P<intf>\S+)\s+(?P<type>Normal|Vgmp|Admin-vrrp|Member|\S+)\s+(?P<vip>[\d.:a-fA-F]+)\s*$",
+            text,
+        ):
+            out.append(
+                {
+                    "vrid": int(m["vrid"]),
+                    "state": m["state"],
+                    "interface": m["intf"],
+                    "type": m["type"],
+                    "virtual_ip": m["vip"],
+                }
+            )
         if out:
             return out
         cur: Optional[Dict[str, Any]] = None
@@ -180,7 +235,10 @@ class DisplayBgpRoutingTable(Parser):
             if mm:
                 vrf = mm.group(1)
                 continue
-            mm = re.match(r"^(?P<codes>[*>disahSxVIN ]+?)\s*(?P<net>[0-9a-fA-F.:]+(?:/\d+)?)\s+(?:(?P<nh>[0-9a-fA-F]*[.:][0-9a-fA-F.:]+)\s+)?(?P<rest>.*)$", s)
+            mm = re.match(
+                r"^(?P<codes>[*>disahSxVIN ]+?)\s*(?P<net>[0-9a-fA-F.:]+(?:/\d+)?)\s+(?:(?P<nh>[0-9a-fA-F]*[.:][0-9a-fA-F.:]+)\s+)?(?P<rest>.*)$",
+                s,
+            )
             if not mm or not re.search(r"[*>]", mm["codes"]):
                 continue
             network, next_hop = mm["net"], mm["nh"]
@@ -190,7 +248,13 @@ class DisplayBgpRoutingTable(Parser):
                     continue
                 network, next_hop = out["routes"][-1]["network"], mm["net"]
             nums = mm["rest"].split()
-            route: Dict[str, Any] = {"network": network, "next_hop": next_hop, "valid": "*" in mm["codes"], "best": ">" in mm["codes"], "internal": "i" in mm["codes"].replace(" ", "")[1:]}
+            route: Dict[str, Any] = {
+                "network": network,
+                "next_hop": next_hop,
+                "valid": "*" in mm["codes"],
+                "best": ">" in mm["codes"],
+                "internal": "i" in mm["codes"].replace(" ", "")[1:],
+            }
             vals: List[Any] = []
             i = 0
             while i < len(nums) and re.fullmatch(r"\d+", nums[i]):
@@ -222,8 +286,16 @@ class DisplayPower(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<slot>PWR\d+|\d+(?:/\d+)?|PM\d+)\s+(?P<present>YES|NO|Present|Absent)\s+(?P<mode>AC|DC|HVDC|\S+)\s+(?P<state>Supply|NotSupply|Normal|Abnormal|Sleep|\S+)(?P<rest>.*)$", text):
-            e: Dict[str, Any] = {"slot": m["slot"], "present": m["present"].upper() in ("YES", "PRESENT"), "mode": m["mode"], "state": m["state"]}
+        for m in match_lines(
+            r"^\s*(?P<slot>PWR\d+|\d+(?:/\d+)?|PM\d+)\s+(?P<present>YES|NO|Present|Absent)\s+(?P<mode>AC|DC|HVDC|\S+)\s+(?P<state>Supply|NotSupply|Normal|Abnormal|Sleep|\S+)(?P<rest>.*)$",
+            text,
+        ):
+            e: Dict[str, Any] = {
+                "slot": m["slot"],
+                "present": m["present"].upper() in ("YES", "PRESENT"),
+                "mode": m["mode"],
+                "state": m["state"],
+            }
             nums = re.findall(r"-?[\d.]+", m["rest"])
             if len(nums) >= 3:
                 e["current_a"], e["voltage_v"], e["power_w"] = (to_num(n) for n in nums[:3])

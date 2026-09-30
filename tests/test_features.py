@@ -39,7 +39,7 @@ def test_cli_diff(capsys):
 
 
 @pytest.mark.parametrize(
-    "text,platform",
+    ("text", "platform"),
     [
         ("RP/0/RP0/CPU0:r1#show bgp sumary\n                ^\n% Invalid input detected at '^' marker.\n", "iosxr"),
         ("lab@mx1> show bgp summry\n              ^\nsyntax error, expecting <command>.\n", "junos"),
@@ -57,7 +57,9 @@ def test_device_errors_are_reported(text, platform):
 
 def test_bytes_input_and_records():
     res = clijson.parse(b"Loopback0  10.0.0.1  Up  Up  default\n", "show ipv4 interface brief", "xr")
-    assert res.records() == [{"interface": "Loopback0", "ip_address": "10.0.0.1", "status": "Up", "protocol": "Up", "vrf": "default"}]
+    assert res.records() == [
+        {"interface": "Loopback0", "ip_address": "10.0.0.1", "status": "Up", "protocol": "Up", "vrf": "default"}
+    ]
 
 
 def test_records_flattens_dict_of_dicts():
@@ -65,4 +67,6 @@ def test_records_flattens_dict_of_dicts():
         "Bundle-Ether1\n  Status:  Up\n  Local links <active/standby/configured>:   2 / 0 / 2\n", "show bundle", "iosxr"
     )
     rows = bundle.records()
-    assert rows == [{"name": "Bundle-Ether1", "status": "Up", "links.active": 2, "links.standby": 0, "links.configured": 2}]
+    assert rows == [
+        {"name": "Bundle-Ether1", "status": "Up", "links.active": 2, "links.standby": 0, "links.configured": 2}
+    ]

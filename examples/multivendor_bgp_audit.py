@@ -1,6 +1,6 @@
 """Audit BGP sessions across Cisco IOS XR, Juniper and Huawei with one code path.
 
-    python examples/multivendor_bgp_audit.py
+python examples/multivendor_bgp_audit.py
 """
 
 from pathlib import Path

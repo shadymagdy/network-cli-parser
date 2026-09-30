@@ -79,7 +79,14 @@ pip install "clijson[all]"          # + YAML output, pretty tables, ntc-template
 pip install "clijson[netmiko]"      # + collect from live devices (or [scrapli])
 ```
 
-From source: `pip install -e ".[dev]"`. Requires Python 3.8 or newer.
+With [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv add clijson                      # add to your project
+uvx clijson parse show_bgp.txt      # run the CLI without installing anything
+```
+
+Requires Python 3.10 or newer.
 
 ## Quick start
 
@@ -261,12 +268,15 @@ and reports how much of it parsed natively. This is how new OS releases get chec
 
 ## Development
 
+The project is managed with [uv](https://docs.astral.sh/uv/) (`uv.lock` pins every tool):
+
 ```bash
-pip install -e ".[dev]"
-pytest                          # ~1050 tests incl. 238 fixtures
-ruff check src tests scripts
-python scripts/fixture.py check # or `update` after an intentional parser change
-python scripts/gen_docs.py      # refresh docs/commands.md
+uv sync                                 # create .venv with the dev dependency group
+uv run pre-commit install               # ruff lint + format on every commit
+uv run pytest                           # ~1050 tests incl. 238 fixtures
+uv run ruff check . && uv run ruff format .
+uv run scripts/fixture.py check         # or `update` after an intentional parser change
+uv run scripts/gen_docs.py              # refresh docs/commands.md and docs/models.md
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
