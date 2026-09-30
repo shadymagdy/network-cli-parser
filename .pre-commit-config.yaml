@@ -20,6 +20,16 @@ repos:
         args: ["--fix"]
       - id: ruff-format
 
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy --strict
+        entry: uv run --group lint mypy
+        language: system
+        types: [python]
+        files: ^src/
+        pass_filenames: false
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.12.21
     hooks:

@@ -3,7 +3,8 @@
 A parser is a class with a `parse(text)` method, registered for one or more command patterns.
 
 ```python
-import re
+from typing import Any
+
 from clijson import Parser, register
 from clijson.models import record, status
 from clijson.textutils import match_lines, none_if
@@ -12,12 +13,15 @@ from clijson.textutils import match_lines, none_if
 class DisplayVrrpBrief(Parser):
     """VRRP groups: state, interface, virtual IP."""
 
-    def parse(self, text):
-        out = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         for m in match_lines(r"^\s*(?P<vrid>\d+)\s+(?P<state>Master|Backup|Initialize)\s+(?P<intf>\S+)\s+(?P<type>\S+)\s+(?P<vip>\S+)", text):
             out.append({"vrid": int(m["vrid"]), "state": m["state"], "interface": m["intf"], "type": m["type"], "virtual_ip": m["vip"]})
         return out
 ```
+
+The codebase is type-checked with `mypy --strict`, so annotate `parse()` (and `normalize()`) the same way.
+`uv run mypy` checks everything under `src/`.
 
 ## Command patterns
 

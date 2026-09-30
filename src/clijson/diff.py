@@ -14,8 +14,10 @@ ignored by default. Pass ``ignore=None`` to compare everything.
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Any, List, Optional, Pattern, Sequence, Union
+from re import Pattern
+from typing import Any
 
 from .result import ParseResult
 
@@ -85,7 +87,7 @@ def _data(obj: Any, prefer_normalized: bool) -> Any:
     return obj
 
 
-def _unique(sides: Sequence[List[dict]], fn: Any) -> bool:
+def _unique(sides: Sequence[list[dict[str, Any]]], fn: Any) -> bool:
     for items in sides:
         values = [fn(i) for i in items]
         if any(v is None or (isinstance(v, tuple) and v[0] is None) for v in values) or len(
@@ -95,7 +97,7 @@ def _unique(sides: Sequence[List[dict]], fn: Any) -> bool:
     return True
 
 
-def _identity(a: List[Any], b: List[Any]) -> Optional[str]:
+def _identity(a: list[Any], b: list[Any]) -> str | None:
     """Natural key that is present and unique on *each* side."""
     items = a + b
     if not items or not all(isinstance(i, dict) for i in items):
@@ -111,7 +113,7 @@ def _identity(a: List[Any], b: List[Any]) -> Optional[str]:
     return None
 
 
-def _key_of(item: dict, ident: str) -> str:
+def _key_of(item: dict[str, Any], ident: str) -> str:
     if "+" in ident:
         a, b = ident.split("+")
         return f"{a}={item.get(a)},{b}={item.get(b)}"
@@ -119,19 +121,19 @@ def _key_of(item: dict, ident: str) -> str:
 
 
 def diff(
-    before: Union[ParseResult, Any],
-    after: Union[ParseResult, Any],
-    ignore: Union[str, Pattern[str], None] = VOLATILE,
+    before: ParseResult | Any,
+    after: ParseResult | Any,
+    ignore: str | Pattern[str] | None = VOLATILE,
     normalized: bool = True,
-) -> List[Change]:
+) -> list[Change]:
     """Compare two parse results (or plain data) and list what changed."""
     rx = re.compile(ignore) if isinstance(ignore, str) else ignore
-    changes: List[Change] = []
+    changes: list[Change] = []
     _walk(_data(before, normalized), _data(after, normalized), "", changes, rx)
     return changes
 
 
-def _walk(a: Any, b: Any, path: str, out: List[Change], rx: Optional[Pattern[str]]) -> None:
+def _walk(a: Any, b: Any, path: str, out: list[Change], rx: Pattern[str] | None) -> None:
     if isinstance(a, dict) and isinstance(b, dict):
         for k in list(a) + [k for k in b if k not in a]:
             if rx is not None and rx.search(str(k)):

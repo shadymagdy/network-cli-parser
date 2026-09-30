@@ -21,6 +21,7 @@ Plain pip also works: `pip install -e . pytest pytest-cov PyYAML ruff`.
 | --- | --- |
 | Run tests | `uv run pytest` (coverage: `uv run pytest --cov`) |
 | Lint / format | `uv run ruff check --fix .` / `uv run ruff format .` |
+| Type check | `uv run mypy` (strict) |
 | All hooks | `uv run pre-commit run -a` |
 | Build wheel + sdist | `uv build` |
 | Add a dependency | `uv add <pkg>` (runtime) or `uv add --group test <pkg>` |

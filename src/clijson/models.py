@@ -12,11 +12,11 @@ multi-vendor automation pleasant::
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .textutils import normalize_mac, parse_duration
 
-SCHEMAS: Dict[str, List[str]] = {
+SCHEMAS: dict[str, list[str]] = {
     "system.version": ["hostname", "vendor", "os", "version", "model", "serial_number", "uptime", "uptime_seconds"],
     "interfaces.brief": ["name", "admin_status", "oper_status", "ip_address", "vrf", "description"],
     "interfaces.detail": [
@@ -63,7 +63,7 @@ SCHEMAS: Dict[str, List[str]] = {
 }
 
 
-def record(intent: str, **fields: Any) -> Dict[str, Any]:
+def record(intent: str, **fields: Any) -> dict[str, Any]:
     """Build a record for *intent* with all schema keys present, in order."""
     keys = SCHEMAS[intent]
     unknown = set(fields) - set(keys)
@@ -86,7 +86,7 @@ _ADMIN_DOWN = {
 }
 
 
-def status(value: Optional[str]) -> Optional[str]:
+def status(value: str | None) -> str | None:
     """Map vendor state words to ``up`` / ``down`` / ``admin-down``."""
     if value is None:
         return None
@@ -106,11 +106,11 @@ def status(value: Optional[str]) -> Optional[str]:
     return v
 
 
-def mac(value: Optional[str]) -> Optional[str]:
+def mac(value: str | None) -> str | None:
     return normalize_mac(value) if value else value
 
 
-def seconds(value: Any) -> Optional[int]:
+def seconds(value: Any) -> int | None:
     if value is None:
         return None
     if isinstance(value, int):

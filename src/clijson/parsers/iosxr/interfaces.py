@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List
+from typing import Any
 
 from ...models import mac, record, status
 from ...registry import Parser, register
@@ -15,7 +15,7 @@ _IFACE_HDR = re.compile(
 )
 
 
-def _counter_line(line: str, d: Dict[str, Any]) -> None:
+def _counter_line(line: str, d: dict[str, Any]) -> None:
     """Parse comma separated ``<number> <label>`` counters into *d*."""
     for num, label in re.findall(r"(\d+)\s+([A-Za-z][\w\- ]*?)(?=,|$)", line.strip()):
         key = re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")
@@ -31,9 +31,9 @@ def _counter_line(line: str, d: Dict[str, Any]) -> None:
 class ShowInterfaces(Parser):
     """Detailed interface state, addressing, rates and counters."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
         in_members = False
         for raw in text.splitlines():
             ln = raw.strip()
@@ -200,7 +200,7 @@ class ShowInterfaces(Parser):
                 c["unknown_protocol_drops"] = c.pop("drops_for_unrecognized_upper_level_protocol")
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         out = []
         for name, d in data.items():
             c = d.get("counters", {})
@@ -232,7 +232,7 @@ def _xr_state(s: str) -> str:
     return {"administratively down": "admin-down"}.get(s, s)
 
 
-def _match(pattern: str, line: str, d: Dict[str, Any], **names: str) -> bool:
+def _match(pattern: str, line: str, d: dict[str, Any], **names: str) -> bool:
     m = re.match(pattern, line)
     if not m:
         return False
@@ -251,7 +251,7 @@ def _match(pattern: str, line: str, d: Dict[str, Any], **names: str) -> bool:
 class ShowIpv4InterfaceBrief(Parser):
     """IPv4 address, status and VRF of every interface."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<ip>\S+)\s+(?P<status>Up|Down|Shutdown|Deleted|Unknown|\w+)\s+(?P<proto>Up|Down|Shutdown|Deleted|Unknown|\w+)(?:\s+(?P<vrf>\S+))?\s*$",
@@ -270,7 +270,7 @@ class ShowIpv4InterfaceBrief(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.brief",
@@ -290,8 +290,8 @@ class ShowIpv4InterfaceBrief(Parser):
 class ShowIpv6InterfaceBrief(Parser):
     """IPv6 addresses per interface (``show ipv6 interface brief``)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         cur = None
         for ln in text.splitlines():
             m = re.match(r"^(?P<intf>\S+)\s+\[(?P<status>[\w\-]+)/(?P<proto>[\w\-]+)\](?:\s+(?P<vrf>\S+))?", ln)
@@ -312,7 +312,7 @@ class ShowIpv6InterfaceBrief(Parser):
 class ShowInterfacesBrief(Parser):
     """One line per interface: state, encapsulation, MTU, bandwidth."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<intf>\S+)\s+(?P<state>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<linep>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<encap>\S+(?: \S+)?)\s+(?P<mtu>\d+)\s+(?P<bw>\d+)\s*$",
@@ -330,7 +330,7 @@ class ShowInterfacesBrief(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.brief",
@@ -346,7 +346,7 @@ class ShowInterfacesBrief(Parser):
 class ShowInterfacesDescription(Parser):
     """Interface status and description."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for ln in text.splitlines():
             m = re.match(
@@ -365,7 +365,7 @@ class ShowInterfacesDescription(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.description",
@@ -382,8 +382,8 @@ class ShowInterfacesDescription(Parser):
 class ShowInterfacesSummary(Parser):
     """Interface counts per type (total/up/down/admin-down)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for m in match_lines(
             r"^\s*(?P<type>[A-Z][A-Z_ ]*?[A-Z])\s+(?P<total>\d+)\s+(?P<up>\d+)\s+(?P<down>\d+)\s+(?P<admin>\d+)\s*$",
             text,
@@ -407,9 +407,9 @@ class ShowInterfacesSummary(Parser):
 class ShowIpv4Interface(Parser):
     """Per-interface IPv4 configuration (addresses, MTU, ACLs, ICMP settings)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
         for raw in text.splitlines():
             ln = raw.strip()
             m = re.match(

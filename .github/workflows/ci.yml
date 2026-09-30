@@ -30,6 +30,17 @@ jobs:
       - run: uv run --no-sync ruff check --output-format=github .
       - run: uv run --no-sync ruff format --check .
 
+  typecheck:
+    name: Type check (mypy --strict)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+      - run: uv sync --group lint
+      - run: uv run --no-sync mypy
+
   test:
     name: Test (py${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}

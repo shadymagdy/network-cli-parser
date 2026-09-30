@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, none_if, parse_table, snake, to_num
@@ -13,7 +13,7 @@ from ...textutils import compact, match_lines, none_if, parse_table, snake, to_n
 class DisplayMplsTeTunnel(Parser):
     """TE LSPs: ingress LSR, destination, LSP ID, labels, role and tunnel name."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<detour>\*)?(?P<ing>\d+\.\d+\.\d+\.\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<lsp>\d+)\s+(?P<inl>\S+)/(?P<outl>\S+)\s+(?P<role>[ITE])\s+(?P<name>\S+)\s*$",
@@ -38,12 +38,12 @@ class DisplayMplsTeTunnel(Parser):
 class DisplayAcl(Parser):
     """ACLs with type, step and rules (action, match text, hit counter, description)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"acls": {}}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"acls": {}}
         m = re.search(r"Total quantity of nonempty ACL number is (\d+)", text)
         if m:
             out["nonempty_count"] = int(m.group(1))
-        cur: Optional[Dict[str, Any]] = None
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(
@@ -73,7 +73,7 @@ class DisplayAcl(Parser):
                 s,
             )
             if m:
-                rule: Dict[str, Any] = {
+                rule: dict[str, Any] = {
                     "id": int(m["id"]),
                     "action": m["action"],
                     "match": m["match"] or None,
@@ -89,10 +89,10 @@ class DisplayAcl(Parser):
 class DisplayLicense(Parser):
     """License file details, features and control items."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"features": []}
-        feature: Optional[Dict[str, Any]] = None
-        item: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"features": []}
+        feature: dict[str, Any] | None = None
+        item: dict[str, Any] | None = None
         for m in match_lines(r"^\s*(?P<k>[A-Za-z][\w .]*?)\s*:\s*(?P<v>.*?)\s*$", text):
             k, v = snake(m["k"]), none_if(m["v"])
             if k == "feature_name":
@@ -115,8 +115,8 @@ class DisplayLicense(Parser):
 class DisplayModuleInformation(Parser):
     """Installed modules (plug-ins) and per-board module processes."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"modules": [], "boards": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"modules": [], "boards": []}
         for m in match_lines(
             r"^(?P<mod>\S+)\s+(?P<ver>\S+)\s+(?P<t>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)\s+(?P<pkg>\S+)\s*$", text
         ):
@@ -144,8 +144,8 @@ class DisplayModuleInformation(Parser):
 class Dir(Parser):
     """Directory listing with totals."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"files": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"files": []}
         m = re.search(r"Directory of (\S+)", text)
         if m:
             out["directory"] = m.group(1)
@@ -175,24 +175,24 @@ class Dir(Parser):
 class DisplayVrrp(Parser):
     """VRRP groups: VRID, state, interface, type and virtual IP (brief or verbose)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        for m in match_lines(
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        for row in match_lines(
             r"^\s*(?P<vrid>\d+)\s+(?P<state>Master|Backup|Initialize|Init)\s+(?P<intf>\S+)\s+(?P<type>Normal|Vgmp|Admin-vrrp|Member|\S+)\s+(?P<vip>[\d.:a-fA-F]+)\s*$",
             text,
         ):
             out.append(
                 {
-                    "vrid": int(m["vrid"]),
-                    "state": m["state"],
-                    "interface": m["intf"],
-                    "type": m["type"],
-                    "virtual_ip": m["vip"],
+                    "vrid": int(row["vrid"]),
+                    "state": row["state"],
+                    "interface": row["intf"],
+                    "type": row["type"],
+                    "virtual_ip": row["vip"],
                 }
             )
         if out:
             return out
-        cur: Optional[Dict[str, Any]] = None
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^(?P<intf>\S+)\s*\|\s*Virtual Router (?P<vrid>\d+)$", s)
@@ -216,8 +216,8 @@ class DisplayVrrp(Parser):
 class DisplayBgpRoutingTable(Parser):
     """BGP RIB: status codes, network, next hop, MED, local-pref, preferred value and AS path."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"routes": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"routes": []}
         m = re.search(r"BGP Local router ID is (\S+)", text)
         if m:
             out["router_id"] = m.group(1)
@@ -248,14 +248,14 @@ class DisplayBgpRoutingTable(Parser):
                     continue
                 network, next_hop = out["routes"][-1]["network"], mm["net"]
             nums = mm["rest"].split()
-            route: Dict[str, Any] = {
+            route: dict[str, Any] = {
                 "network": network,
                 "next_hop": next_hop,
                 "valid": "*" in mm["codes"],
                 "best": ">" in mm["codes"],
                 "internal": "i" in mm["codes"].replace(" ", "")[1:],
             }
-            vals: List[Any] = []
+            vals: list[Any] = []
             i = 0
             while i < len(nums) and re.fullmatch(r"\d+", nums[i]):
                 vals.append(int(nums[i]))
@@ -284,13 +284,13 @@ class DisplayBgpRoutingTable(Parser):
 class DisplayPower(Parser):
     """Power modules: state, mode, voltage/current/power where printed."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<slot>PWR\d+|\d+(?:/\d+)?|PM\d+)\s+(?P<present>YES|NO|Present|Absent)\s+(?P<mode>AC|DC|HVDC|\S+)\s+(?P<state>Supply|NotSupply|Normal|Abnormal|Sleep|\S+)(?P<rest>.*)$",
             text,
         ):
-            e: Dict[str, Any] = {
+            e: dict[str, Any] = {
                 "slot": m["slot"],
                 "present": m["present"].upper() in ("YES", "PRESENT"),
                 "mode": m["mode"],
@@ -307,6 +307,6 @@ class DisplayPower(Parser):
 class DisplayFan(Parser):
     """Fan modules: presence, status, speed, mode and air flow (header-driven, any product layout)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         rows = parse_table(text, header=r"^\s*(Slot|FanID|FAN)\s+", skip=r"^\s*-+\s*$")
         return [compact(r) for r in rows if any(v is not None for v in r.values())]

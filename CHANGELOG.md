@@ -21,6 +21,9 @@ All notable changes to this project are documented here. The format follows
 * GitHub Actions are pinned to commit SHAs. Dependabot keeps them and `uv.lock` up to date.
 * A plugin that fails to load now raises a `RuntimeWarning` instead of failing silently.
 
+* The codebase uses modern Python 3.10 syntax (`list[str]`, `X | None`, PEP 613 aliases). It is checked with
+  `mypy --strict` in CI and pre-commit, and ships `py.typed` so your editor and type checker see full types.
+
 ### Removed
 
 * The `dev` extra. Use `uv sync` (the `dev` dependency group) instead.

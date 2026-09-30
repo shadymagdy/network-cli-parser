@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import re
 import xml.etree.ElementTree as ET
-from typing import Any, Dict
+from typing import Any
 
 from ..textutils import to_num
 
@@ -45,7 +45,7 @@ def _xml_to_obj(el: ET.Element) -> Any:
     if not children:
         value: Any = to_num(text) if text else (True if not attrs else None)
         if attrs:
-            obj: Dict[str, Any] = {"value": value} if text else {}
+            obj: dict[str, Any] = {"value": value} if text else {}
             for k, v in attrs.items():
                 obj[_key(k)] = to_num(v)
             return obj if len(obj) > 1 or "value" not in obj else obj["value"]
@@ -65,7 +65,7 @@ def _xml_to_obj(el: ET.Element) -> Any:
     return {k: (list(v) if isinstance(v, _Multi) else v) for k, v in obj.items()}
 
 
-class _Multi(list):
+class _Multi(list[Any]):
     _multi = True
 
 
@@ -104,7 +104,7 @@ def simplify_junos_json(obj: Any) -> Any:
             if secs is not None:
                 return {"value": val, "seconds": to_num(secs)}
             return val
-        out: Dict[str, Any] = {}
+        out: dict[str, Any] = {}
         for k, v in obj.items():
             if k == "attributes":
                 for ak, av in (v or {}).items():

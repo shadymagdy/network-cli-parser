@@ -11,7 +11,8 @@ always tried first and the heuristic generic engine last.
 from __future__ import annotations
 
 import functools
-from typing import Any, Callable, Dict, List, Optional
+from collections.abc import Callable
+from typing import Any
 
 from ..platforms import Platform
 
@@ -39,7 +40,7 @@ def genie_available() -> bool:
     return True
 
 
-def parse_ntc(platform: Platform, command: str, text: str) -> Optional[List[Dict[str, Any]]]:
+def parse_ntc(platform: Platform, command: str, text: str) -> list[dict[str, Any]] | None:
     """Parse with ntc-templates (TextFSM). Returns ``None`` if no template matches."""
     if not platform.ntc_name or not ntc_available():
         raise EngineUnavailable("ntc-templates")
@@ -52,7 +53,7 @@ def parse_ntc(platform: Platform, command: str, text: str) -> Optional[List[Dict
     return rows or None
 
 
-def parse_genie(platform: Platform, command: str, text: str) -> Optional[Dict[str, Any]]:
+def parse_genie(platform: Platform, command: str, text: str) -> dict[str, Any] | None:
     """Parse with Cisco Genie. Returns ``None`` if Genie has no parser for the command."""
     if not platform.genie_name or not genie_available():
         raise EngineUnavailable("genie")
@@ -66,11 +67,11 @@ def parse_genie(platform: Platform, command: str, text: str) -> Optional[Dict[st
         return None
 
 
-ENGINES: Dict[str, Callable[[Platform, str, str], Any]] = {
+ENGINES: dict[str, Callable[[Platform, str, str], Any]] = {
     "ntc": parse_ntc,
     "genie": parse_genie,
 }
 
 
-def available_engines() -> Dict[str, bool]:
+def available_engines() -> dict[str, bool]:
     return {"ntc": ntc_available(), "genie": genie_available()}

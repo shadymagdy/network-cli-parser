@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import mac, record, status
 from ...registry import Parser, register
@@ -23,9 +23,9 @@ _FLAGS = {
 }
 
 
-def _vrp_state(value: str) -> Dict[str, Any]:
+def _vrp_state(value: str) -> dict[str, Any]:
     """``*down`` -> admin down, ``^down`` -> standby, ``up(s)`` -> up + spoofing flag."""
-    out: Dict[str, Any] = {}
+    out: dict[str, Any] = {}
     v = value
     flags = re.findall(r"\([a-zA-Z]+\)", v)
     for f in flags:
@@ -49,8 +49,8 @@ def _vrp_state(value: str) -> Dict[str, Any]:
     return out
 
 
-def _split_intf_flags(name: str) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
+def _split_intf_flags(name: str) -> dict[str, Any]:
+    out: dict[str, Any] = {}
     m = re.match(r"^(?P<n>.+?)(?P<extra>(?:\([^)]*\))+)?$", name)
     out["interface"] = m["n"] if m else name
     if m and m["extra"]:
@@ -66,9 +66,9 @@ def _split_intf_flags(name: str) -> Dict[str, Any]:
 class DisplayInterfaceBrief(Parser):
     """Physical/protocol state, utilisation and error counters (Eth-Trunk members nested)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        trunk: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        trunk: dict[str, Any] | None = None
         for raw in text.splitlines():
             m = re.match(
                 r"^(?P<indent>\s*)(?P<intf>[A-Za-z][\w\-/.:]*\d(?:\([^)]*\))*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<inu>[\d.]+%|--)\s+(?P<outu>[\d.]+%|--)\s+(?P<inerr>\d+)\s+(?P<outerr>\d+)\s*$",
@@ -77,7 +77,7 @@ class DisplayInterfaceBrief(Parser):
             if not m:
                 continue
             phy, proto = _vrp_state(m["phy"]), _vrp_state(m["proto"])
-            entry: Dict[str, Any] = {
+            entry: dict[str, Any] = {
                 **_split_intf_flags(m["intf"]),
                 "physical": phy["state"],
                 "protocol": proto["state"],
@@ -100,7 +100,7 @@ class DisplayInterfaceBrief(Parser):
             trunk = entry if re.match(r"^(Eth-Trunk|Ip-Trunk|Trunk)\d+$", entry["interface"]) else None
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         res = []
         for r in data:
             for e in [r, *r.get("members", [])]:
@@ -115,7 +115,7 @@ class DisplayInterfaceBrief(Parser):
         return res
 
 
-def _pct(v: str) -> Optional[float]:
+def _pct(v: str) -> float | None:
     return None if v == "--" else float(v.rstrip("%"))
 
 
@@ -123,8 +123,8 @@ def _pct(v: str) -> Optional[float]:
 class DisplayIpInterfaceBrief(Parser):
     """IPv4 address, mask and state per interface."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"interfaces": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"interfaces": []}
         for key, rx in (
             ("up_physical", r"The number of interface that is UP in Physical is (\d+)"),
             ("down_physical", r"The number of interface that is DOWN in Physical is (\d+)"),
@@ -152,7 +152,7 @@ class DisplayIpInterfaceBrief(Parser):
             out["interfaces"].append(e)
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.brief",
@@ -170,7 +170,7 @@ class DisplayIpInterfaceBrief(Parser):
 class DisplayInterfaceDescription(Parser):
     """Interface state and description."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<intf>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))?)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))?)(?:\s+(?P<desc>.*?))?\s*$",
@@ -190,7 +190,7 @@ class DisplayInterfaceDescription(Parser):
             out.append(e)
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.description",
@@ -203,9 +203,9 @@ class DisplayInterfaceDescription(Parser):
         ]
 
 
-def _pairs(line: str) -> Dict[str, Any]:
+def _pairs(line: str) -> dict[str, Any]:
     """``Unicast:  0,  Multicast:  0`` -> {'unicast': 0, 'multicast': 0}."""
-    out: Dict[str, Any] = {}
+    out: dict[str, Any] = {}
     for k, v in re.findall(r"([A-Za-z][\w ]*?)\s*:\s*([\d]+)", line):
         out[snake(k)] = int(v)
     return out
@@ -215,10 +215,10 @@ def _pairs(line: str) -> Dict[str, Any]:
 class DisplayInterface(Parser):
     """Detailed interface state, addressing, rates, counters and errors."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
-        direction: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
+        direction: str | None = None
         in_trunk = False
         for raw in text.splitlines():
             s = raw.strip()
@@ -363,7 +363,7 @@ class DisplayInterface(Parser):
                         c[f"{direction}_{snake(k)}"] = int(v)
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for name, d in data.items():
             c = d.get("counters", {})
@@ -392,9 +392,9 @@ class DisplayInterface(Parser):
 class DisplayEthTrunk(Parser):
     """Eth-Trunk (LAG) mode, status, hashing and member/partner ports."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
         section = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -452,7 +452,7 @@ class DisplayEthTrunk(Parser):
                 cur[snake(k)] = to_num(v.strip())
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record("lag", name=k, status=status(str(v.get("operate_status", ""))), members=list(v["members"]))
             for k, v in data.items()
@@ -463,8 +463,8 @@ class DisplayEthTrunk(Parser):
 class DisplayPortVlan(Parser):
     """Port link-type, PVID and allowed VLANs."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         for raw in text.splitlines():
             m = re.match(
                 r"^(?P<p>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<lt>access|trunk|hybrid|dot1q-tunnel|desirable|auto|--)\s+(?P<pvid>\d+|-)\s*(?P<vl>.*?)\s*$",
@@ -486,8 +486,8 @@ class DisplayPortVlan(Parser):
         return out
 
 
-def _vlan_list(v: str) -> List[Any]:
-    items: List[Any] = []
+def _vlan_list(v: str) -> list[Any]:
+    items: list[Any] = []
     for tok in v.split():
         if tok in ("-", "--"):
             continue
@@ -499,14 +499,14 @@ def _vlan_list(v: str) -> List[Any]:
 class DisplayVlan(Parser):
     """VLANs with type/status and tagged/untagged member ports (and their state)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"vlans": {}}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"vlans": {}}
         m = re.search(r"The total number of vlans is\s*:\s*(\d+)", text, re.I)
         if m:
             out["total"] = int(m.group(1))
-        cur: Optional[Dict[str, Any]] = None
-        mode: Optional[str] = None
-        table: Optional[str] = None
+        cur: dict[str, Any] | None = None
+        mode: str | None = None
+        table: str | None = None
         for raw in text.splitlines():
             if re.match(r"^\s*VID\s+(Type\s+Ports|Ports|Name\s+Status\s+Ports|Type\s+Status\s+Ports)", raw) or re.match(
                 r"^\s*VID\s+Type\s+Ports", raw
@@ -554,7 +554,7 @@ class DisplayVlan(Parser):
         return out
 
 
-def _vlan_ports(cur: Dict[str, Any], s: str, mode: Optional[str]) -> Optional[str]:
+def _vlan_ports(cur: dict[str, Any], s: str, mode: str | None) -> str | None:
     for tok in re.findall(r"(?:UT|TG|MP|ST):|\S+", s):
         if tok.endswith(":") and tok[:-1] in ("UT", "TG", "MP", "ST"):
             mode = {"UT": "untagged", "TG": "tagged", "MP": "mapping", "ST": "stacking"}[tok[:-1]]

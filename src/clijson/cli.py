@@ -17,7 +17,8 @@ import argparse
 import json
 import os
 import sys
-from typing import Any, List, Optional, Sequence
+from collections.abc import Sequence
+from typing import Any, TextIO
 
 from . import __version__
 from .api import parse, parse_session, split_session, supported_commands
@@ -29,7 +30,7 @@ from .result import ParseResult, _rows
 SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "serve", "run", "version"}
 
 
-def _rich_console():  # pragma: no cover - cosmetic
+def _rich_console() -> Any:  # pragma: no cover - cosmetic
     try:
         from rich.console import Console
 
@@ -38,7 +39,7 @@ def _rich_console():  # pragma: no cover - cosmetic
         return None
 
 
-def _read_input(path: Optional[str]) -> str:
+def _read_input(path: str | None) -> str:
     if not path or path == "-":
         if sys.stdin.isatty():
             raise SystemExit(
@@ -49,7 +50,7 @@ def _read_input(path: Optional[str]) -> str:
         return fh.read()
 
 
-def _emit(obj: Any, fmt: str, stream=None) -> None:
+def _emit(obj: Any, fmt: str, stream: TextIO | None = None) -> None:
     stream = stream or sys.stdout
     if fmt == "yaml":
         try:
@@ -76,7 +77,7 @@ def _print_table(obj: Any) -> bool:
     rows = _rows(obj)
     if not rows:
         return False
-    cols: List[str] = []
+    cols: list[str] = []
     for r in rows:
         for k, v in r.items():
             if k not in cols and not isinstance(v, (dict, list)):
@@ -112,7 +113,7 @@ def cmd_parse(args: argparse.Namespace) -> int:
     text = _read_input(args.file)
     engines = args.engine.split(",") if args.engine else None
     kwargs = {"normalize": args.normalize, "engines": engines, "strict": args.strict}
-    results: List[ParseResult]
+    results: list[ParseResult]
     if args.command is None and len(split_session(text)) > 1:
         results = parse_session(text, args.platform, **kwargs)
         payload: Any = [
@@ -136,7 +137,7 @@ def cmd_parse(args: argparse.Namespace) -> int:
 
 
 def cmd_diff(args: argparse.Namespace) -> int:
-    from .diff import diff
+    from .diff import VOLATILE, diff
 
     before = parse(_read_input(args.before), args.command, args.platform, normalize=not args.native)
     after = parse(
@@ -145,7 +146,7 @@ def cmd_diff(args: argparse.Namespace) -> int:
         args.platform or before.platform,
         normalize=not args.native,
     )
-    changes = diff(before, after, ignore=None if args.all else diff.__defaults__[0], normalized=not args.native)
+    changes = diff(before, after, ignore=None if args.all else VOLATILE, normalized=not args.native)
     if args.format == "text":
         if not changes:
             print("no differences")
@@ -250,7 +251,7 @@ def cmd_run(args: argparse.Namespace) -> int:  # pragma: no cover - needs a devi
 
 
 def cmd_version(args: argparse.Namespace) -> int:
-    info = {
+    info: dict[str, Any] = {
         "clijson": __version__,
         "python": sys.version.split()[0],
         "engines": {"native": True, "generic": True, **available_engines()},
@@ -333,7 +334,7 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     # `clijson FILE -c ...` is shorthand for `clijson parse FILE -c ...`
     if argv and argv[0] not in SUBCOMMANDS and argv[0] not in ("-h", "--help", "--version"):

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Pattern, Tuple
+from re import Pattern
 
 from .exceptions import UnknownPlatformError
 
@@ -23,19 +23,19 @@ class Platform:
     vendor: str
     display_name: str
     verb: str
-    aliases: Tuple[str, ...] = ()
+    aliases: tuple[str, ...] = ()
     #: Names used by other ecosystems, handy for engine adapters.
-    ntc_name: Optional[str] = None
-    genie_name: Optional[str] = None
-    netmiko_name: Optional[str] = None
-    scrapli_name: Optional[str] = None
+    ntc_name: str | None = None
+    genie_name: str | None = None
+    netmiko_name: str | None = None
+    scrapli_name: str | None = None
     #: Regexes that identify a CLI prompt; group ``host`` is the hostname and
     #: group ``cmd`` is whatever was typed after the prompt.
-    prompts: Tuple[Pattern[str], ...] = field(default_factory=tuple)
+    prompts: tuple[Pattern[str], ...] = field(default_factory=tuple)
     #: Weighted output fingerprints used for auto detection.
-    fingerprints: Tuple[Tuple[Pattern[str], int], ...] = field(default_factory=tuple)
+    fingerprints: tuple[tuple[Pattern[str], int], ...] = field(default_factory=tuple)
     #: Verb-level aliases, e.g. users may type ``show`` on a Huawei box.
-    verb_aliases: Tuple[str, ...] = ()
+    verb_aliases: tuple[str, ...] = ()
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return self.name
@@ -187,16 +187,16 @@ VRP = Platform(
 )
 
 
-PLATFORMS: Dict[str, Platform] = {p.name: p for p in (IOSXR, JUNOS, VRP)}
+PLATFORMS: dict[str, Platform] = {p.name: p for p in (IOSXR, JUNOS, VRP)}
 
-_ALIASES: Dict[str, str] = {}
+_ALIASES: dict[str, str] = {}
 for _p in PLATFORMS.values():
     _ALIASES[_p.name] = _p.name
     for _a in _p.aliases:
         _ALIASES[_a.lower()] = _p.name
 
 
-def get_platform(name: "str | Platform") -> Platform:
+def get_platform(name: str | Platform) -> Platform:
     """Return the :class:`Platform` for *name* (any alias, case insensitive)."""
     if isinstance(name, Platform):
         return name
@@ -207,7 +207,7 @@ def get_platform(name: "str | Platform") -> Platform:
         raise UnknownPlatformError(name, sorted(_ALIASES)) from None
 
 
-def list_platforms() -> List[Platform]:
+def list_platforms() -> list[Platform]:
     return list(PLATFORMS.values())
 
 
@@ -215,16 +215,16 @@ def list_platforms() -> List[Platform]:
 class Detection:
     """Outcome of :func:`detect_platform`."""
 
-    platform: Optional[Platform]
+    platform: Platform | None
     confidence: float
-    scores: Dict[str, int]
-    reasons: List[str]
+    scores: dict[str, int]
+    reasons: list[str]
 
     def __bool__(self) -> bool:
         return self.platform is not None
 
 
-def match_prompt(line: str) -> Optional[Tuple[Platform, "re.Match[str]"]]:
+def match_prompt(line: str) -> tuple[Platform, re.Match[str]] | None:
     """Return ``(platform, match)`` if *line* looks like a CLI prompt."""
     stripped = line.rstrip()
     for platform in PLATFORMS.values():
@@ -235,7 +235,7 @@ def match_prompt(line: str) -> Optional[Tuple[Platform, "re.Match[str]"]]:
     return None
 
 
-def detect_platform(output: str = "", command: Optional[str] = None) -> Detection:
+def detect_platform(output: str = "", command: str | None = None) -> Detection:
     """Guess the platform that produced *output* (and/or accepts *command*).
 
     Scoring combines prompt recognition, the command verb (``display`` is a
@@ -243,8 +243,8 @@ def detect_platform(output: str = "", command: Optional[str] = None) -> Detectio
     conventions. The winner must beat the runner-up by a margin, otherwise
     ``platform`` is ``None`` and the caller should ask the user.
     """
-    scores: Dict[str, int] = dict.fromkeys(PLATFORMS, 0)
-    reasons: List[str] = []
+    scores: dict[str, int] = dict.fromkeys(PLATFORMS, 0)
+    reasons: list[str] = []
 
     if command:
         first = command.strip().split(" ", 1)[0].lower()

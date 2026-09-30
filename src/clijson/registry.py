@@ -19,8 +19,9 @@ import difflib
 import importlib
 import pkgutil
 import warnings
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type
+from typing import Any
 
 from .commands import Seq, canonical, compile_pattern, match_tokens, render
 from .platforms import Platform, get_platform
@@ -36,13 +37,13 @@ class Parser:
 
     #: Filled in by :func:`register`
     platform: str = ""
-    commands: Tuple[str, ...] = ()
-    intent: Optional[str] = None
+    commands: tuple[str, ...] = ()
+    intent: str | None = None
     name: str = ""
     description: str = ""
 
-    def __init__(self, params: Optional[Dict[str, str]] = None, command: str = "") -> None:
-        self.params: Dict[str, str] = params or {}
+    def __init__(self, params: dict[str, str] | None = None, command: str = "") -> None:
+        self.params: dict[str, str] = params or {}
         self.command = command
 
     def parse(self, text: str) -> Any:  # pragma: no cover - abstract
@@ -54,26 +55,26 @@ class Parser:
 
 @dataclass
 class Entry:
-    parser: Type[Parser]
+    parser: type[Parser]
     pattern: str
     compiled: Seq
 
 
 @dataclass
 class Resolution:
-    parser: Type[Parser]
+    parser: type[Parser]
     pattern: str
-    params: Dict[str, str]
+    params: dict[str, str]
     score: int
 
 
 class Registry:
     def __init__(self) -> None:
-        self._entries: Dict[str, List[Entry]] = {}
+        self._entries: dict[str, list[Entry]] = {}
         self._loaded = False
 
     # -- registration -------------------------------------------------------
-    def add(self, platform: str, patterns: Iterable[str], parser: Type[Parser]) -> None:
+    def add(self, platform: str, patterns: Iterable[str], parser: type[Parser]) -> None:
         plat = get_platform(platform).name
         for pattern in patterns:
             self._entries.setdefault(plat, []).append(Entry(parser, pattern, compile_pattern(pattern)))
@@ -98,11 +99,11 @@ class Registry:
             _load_plugin(ep)
 
     # -- lookup -------------------------------------------------------------
-    def resolve(self, platform: "str | Platform", tokens: List[str]) -> Optional[Resolution]:
+    def resolve(self, platform: str | Platform, tokens: list[str]) -> Resolution | None:
         self.load_builtin()
         plat = get_platform(platform)
         tokens = _apply_verb_alias(plat, tokens)
-        best: Optional[Tuple[Tuple[int, int], Entry, Dict[str, str], int]] = None
+        best: tuple[tuple[int, int], Entry, dict[str, str], int] | None = None
         for entry in self._entries.get(plat.name, []):
             m = match_tokens(entry.compiled, tokens)
             if m is None:
@@ -115,22 +116,22 @@ class Registry:
         _, entry, params, score = best
         return Resolution(entry.parser, entry.pattern, params, score)
 
-    def suggest(self, platform: "str | Platform", command: str, n: int = 3) -> List[str]:
+    def suggest(self, platform: str | Platform, command: str, n: int = 3) -> list[str]:
         self.load_builtin()
         plat = get_platform(platform)
         choices = sorted({canonical(e.compiled) for e in self._entries.get(plat.name, [])})
         return difflib.get_close_matches(command.lower(), choices, n=n, cutoff=0.5)
 
-    def entries(self, platform: Optional[str] = None) -> List[Entry]:
+    def entries(self, platform: str | None = None) -> list[Entry]:
         self.load_builtin()
         if platform:
             return list(self._entries.get(get_platform(platform).name, []))
         return [e for es in self._entries.values() for e in es]
 
-    def catalog(self, platform: Optional[str] = None) -> List[Dict[str, Any]]:
+    def catalog(self, platform: str | None = None) -> list[dict[str, Any]]:
         """Human friendly list of supported commands (used by docs and the CLI)."""
         seen = set()
-        out: List[Dict[str, Any]] = []
+        out: list[dict[str, Any]] = []
         for plat, entries in sorted(self._iter_platform_entries(platform)):
             for e in entries:
                 key = (plat, e.pattern)
@@ -149,7 +150,7 @@ class Registry:
                 )
         return out
 
-    def _iter_platform_entries(self, platform: Optional[str]):
+    def _iter_platform_entries(self, platform: str | None) -> Iterator[tuple[str, list[Entry]]]:
         self.load_builtin()
         if platform:
             name = get_platform(platform).name
@@ -158,7 +159,7 @@ class Registry:
             yield from self._entries.items()
 
 
-def _apply_verb_alias(plat: Platform, tokens: List[str]) -> List[str]:
+def _apply_verb_alias(plat: Platform, tokens: list[str]) -> list[str]:
     if tokens and plat.verb_aliases:
         first = tokens[0].lower()
         for alias in plat.verb_aliases:
@@ -178,12 +179,12 @@ def _load_plugin(ep: Any) -> None:
 REGISTRY = Registry()
 
 
-def register(platform: str, *patterns: str, intent: Optional[str] = None) -> Callable[[Type[Parser]], Type[Parser]]:
+def register(platform: str, *patterns: str, intent: str | None = None) -> Callable[[type[Parser]], type[Parser]]:
     """Class decorator registering a :class:`Parser` for one or more command patterns."""
     if not patterns:
         raise ValueError("register() needs at least one command pattern")
 
-    def deco(cls: Type[Parser]) -> Type[Parser]:
+    def deco(cls: type[Parser]) -> type[Parser]:
         plat = get_platform(platform).name
         cls.platform = plat
         cls.commands = tuple(patterns)

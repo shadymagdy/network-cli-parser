@@ -22,8 +22,9 @@ specific match wins, so ``show interfaces brief`` beats
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
-from typing import Dict, Iterator, List, Optional, Sequence, Tuple, Union
+from typing import TypeAlias
 
 # --------------------------------------------------------------------------- #
 # Grammar AST
@@ -43,16 +44,16 @@ class Param:
 
 @dataclass(frozen=True)
 class Optional_:
-    body: "Seq"
+    body: Seq
 
 
 @dataclass(frozen=True)
 class Choice:
-    options: Tuple["Seq", ...]
+    options: tuple[Seq, ...]
 
 
-Node = Union[Literal, Param, Optional_, Choice]
-Seq = Tuple[Node, ...]
+Node: TypeAlias = Literal | Param | Optional_ | Choice
+Seq: TypeAlias = tuple[Node, ...]
 
 _TOKEN_RE = re.compile(r"\s*(<[\w\-]+(?:\.\.\.)?>|[\[\]()|]|[^\s\[\]()|<>]+)")
 
@@ -61,7 +62,7 @@ class GrammarError(ValueError):
     pass
 
 
-def _tokenize(pattern: str) -> List[str]:
+def _tokenize(pattern: str) -> list[str]:
     pos, out = 0, []
     pattern = pattern.strip()
     while pos < len(pattern):
@@ -83,8 +84,8 @@ def compile_pattern(pattern: str) -> Seq:
     return seq
 
 
-def _parse_seq(tokens: List[str], idx: int, stop: Tuple[str, ...]) -> Tuple[Seq, int]:
-    out: List[Node] = []
+def _parse_seq(tokens: list[str], idx: int, stop: tuple[str, ...]) -> tuple[Seq, int]:
+    out: list[Node] = []
     while idx < len(tokens) and tokens[idx] not in stop:
         tok = tokens[idx]
         if tok == "[":
@@ -93,7 +94,7 @@ def _parse_seq(tokens: List[str], idx: int, stop: Tuple[str, ...]) -> Tuple[Seq,
             out.append(Optional_(body))
             idx += 1
         elif tok == "(":
-            options: List[Seq] = []
+            options: list[Seq] = []
             idx += 1
             while True:
                 body, idx = _parse_seq(tokens, idx, stop=("|", ")"))
@@ -118,7 +119,7 @@ def _parse_seq(tokens: List[str], idx: int, stop: Tuple[str, ...]) -> Tuple[Seq,
     return tuple(out), idx
 
 
-def _expect(tokens: List[str], idx: int, what: str) -> None:
+def _expect(tokens: list[str], idx: int, what: str) -> None:
     if idx >= len(tokens) or tokens[idx] != what:
         raise GrammarError(f"Expected {what!r}")
 
@@ -158,7 +159,7 @@ def _param_ok(name: str, token: str) -> bool:
 class Match:
     score: int
     literals: int = 0
-    params: Dict[str, str] = field(default_factory=dict, compare=False)
+    params: dict[str, str] = field(default_factory=dict, compare=False)
 
 
 def _literal_score(word: str, token: str) -> int:
@@ -173,7 +174,7 @@ def _literal_score(word: str, token: str) -> int:
     return 0
 
 
-def _match(seq: Seq, i: int, tokens: Sequence[str], acc: Match) -> Iterator[Tuple[int, Match]]:
+def _match(seq: Seq, i: int, tokens: Sequence[str], acc: Match) -> Iterator[tuple[int, Match]]:
     if not seq:
         yield i, acc
         return
@@ -203,9 +204,9 @@ def _match(seq: Seq, i: int, tokens: Sequence[str], acc: Match) -> Iterator[Tupl
                 yield from _match(rest, j, tokens, m)
 
 
-def match_tokens(seq: Seq, tokens: Sequence[str]) -> Optional[Match]:
+def match_tokens(seq: Seq, tokens: Sequence[str]) -> Match | None:
     """Best full match of *tokens* against a compiled pattern, or ``None``."""
-    best: Optional[Match] = None
+    best: Match | None = None
     for end, m in _match(seq, 0, tokens, Match(0)):
         if end == len(tokens) and (best is None or m > best):
             best = m
@@ -214,7 +215,7 @@ def match_tokens(seq: Seq, tokens: Sequence[str]) -> Optional[Match]:
 
 def render(seq: Seq) -> str:
     """Pretty-print a compiled pattern (used by docs and ``clijson commands``)."""
-    parts: List[str] = []
+    parts: list[str] = []
     for node in seq:
         if isinstance(node, Literal):
             parts.append(node.word)
@@ -227,8 +228,8 @@ def render(seq: Seq) -> str:
     return " ".join(parts)
 
 
-def literal_words(seq: Seq) -> List[str]:
-    out: List[str] = []
+def literal_words(seq: Seq) -> list[str]:
+    out: list[str] = []
     for node in seq:
         if isinstance(node, Literal):
             out.append(node.word)
@@ -242,7 +243,7 @@ def literal_words(seq: Seq) -> List[str]:
 
 def canonical(seq: Seq) -> str:
     """Shortest concrete command for a pattern: mandatory literals only."""
-    parts: List[str] = []
+    parts: list[str] = []
     for node in seq:
         if isinstance(node, Literal):
             parts.append(node.word)
@@ -278,11 +279,11 @@ class CommandLine:
 
     raw: str
     base: str
-    tokens: List[str]
-    pipes: List[str]
+    tokens: list[str]
+    pipes: list[str]
 
     @property
-    def output_format(self) -> Optional[str]:
+    def output_format(self) -> str | None:
         for p in self.pipes:
             for fmt, rx in FORMAT_PIPES.items():
                 if rx.search(p.strip()):

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import record, seconds
 from ...registry import Parser, register
@@ -61,11 +61,11 @@ _CODE_SPLIT = re.compile(r"[\s*+%>]+")
 _CONNECTED = re.compile(r"^is directly connected,\s*(?P<age>[^,\s]+)?(?:,\s*(?P<intf>\S+))?")
 
 
-def parse_cisco_routes(text: str) -> Dict[str, Any]:
+def parse_cisco_routes(text: str) -> dict[str, Any]:
     """Shared RIB parser for Cisco style ``show route`` output."""
-    out: Dict[str, Any] = {"routes": []}
+    out: dict[str, Any] = {"routes": []}
     vrf = "default"
-    cur: Optional[Dict[str, Any]] = None
+    cur: dict[str, Any] | None = None
     pending_connected = False
     for raw in text.splitlines():
         if not raw.strip():
@@ -133,10 +133,10 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
     return out
 
 
-def _route_rest(cur: Dict[str, Any], rest: str) -> None:
+def _route_rest(cur: dict[str, Any], rest: str) -> None:
     m = _NH.match(rest)
     if m:
-        nh: Dict[str, Any] = {
+        nh: dict[str, Any] = {
             "next_hop": m["nh"],
             "interface": m["intf"],
             "age": m["age"],
@@ -161,10 +161,10 @@ def _route_rest(cur: Dict[str, Any], rest: str) -> None:
         cur["description"] = rest.strip()
 
 
-def _parse_route_detail(text: str) -> Dict[str, Any]:
+def _parse_route_detail(text: str) -> dict[str, Any]:
     """``show route <prefix>`` detail view (``Routing entry for``)."""
     entries = []
-    cur: Dict[str, Any] = {}
+    cur: dict[str, Any] = {}
     in_rdb = False
     vrf = "default"
     for raw in text.splitlines():
@@ -249,7 +249,7 @@ def _parse_route_detail(text: str) -> Dict[str, Any]:
 class ShowRoute(Parser):
     """Routing table (RIB) with next-hops, distance/metric and flags."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         if re.search(r"^[ \t]*Routing entry for ", text, re.M):
             return _parse_route_detail(text)
         data = parse_cisco_routes(text)
@@ -260,7 +260,7 @@ class ShowRoute(Parser):
                     r["vrf"] = vrf
         return data
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "routes",
@@ -282,8 +282,8 @@ class ShowRoute(Parser):
 class ShowRouteSummary(Parser):
     """Route counts per source (connected, static, bgp, ...)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         vrf = self.params.get("vrf") or "default"
         for raw in text.splitlines():
             m = re.match(r"^\s*VRF:\s*(\S+)", raw)
@@ -326,16 +326,16 @@ _AFI_RE = re.compile(r"^\s*Address Family:\s*(?P<af>.+?)\s*$")
 class ShowBgpSummary(Parser):
     """BGP peers per instance / VRF / address family, flattened to one list."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbors": [], "contexts": []}
-        ctx: Dict[str, Any] = {
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbors": [], "contexts": []}
+        ctx: dict[str, Any] = {
             "instance": self.params.get("instance") if self.params.get("instance") not in (None, "all") else "default",
             "vrf": self.params.get("vrf") if self.params.get("vrf") not in (None, "all") else "default",
             "address_family": af_from_command(self.command),
         }
-        info: Dict[str, Any] = {}
+        info: dict[str, Any] = {}
         in_table = False
-        pending: Optional[str] = None
+        pending: str | None = None
 
         def flush_ctx() -> None:
             nonlocal info
@@ -440,7 +440,7 @@ class ShowBgpSummary(Parser):
             out["context"] = c
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "bgp.summary",
@@ -489,10 +489,10 @@ def _asn(v: str) -> Any:
 class ShowBgpNeighbors(Parser):
     """Detailed BGP session information per neighbor."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
-        af: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
+        af: dict[str, Any] | None = None
         section = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -671,8 +671,8 @@ class ShowBgpNeighbors(Parser):
 class ShowOspfNeighbor(Parser):
     """OSPF adjacencies with state, DR role, dead timer and uptime."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbors": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbors": []}
         process = vrf = None
         last = None
         for raw in text.splitlines():
@@ -708,7 +708,7 @@ class ShowOspfNeighbor(Parser):
                 out["total"] = out.get("total", 0) + int(m["n"])
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "ospf.neighbors",
@@ -731,7 +731,7 @@ class ShowOspfNeighbor(Parser):
 class ShowOspfInterfaceBrief(Parser):
     """OSPF enabled interfaces with area, cost and state."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         vrf = None
         for raw in text.splitlines():
@@ -771,8 +771,8 @@ class ShowOspfInterfaceBrief(Parser):
 class ShowIsisAdjacency(Parser):
     """IS-IS adjacencies per level."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"adjacencies": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"adjacencies": []}
         inst = level = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -806,7 +806,7 @@ class ShowIsisAdjacency(Parser):
                 out["total"] = out.get("total", 0) + int(m["n"])
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "isis.adjacency",
@@ -825,8 +825,8 @@ class ShowIsisAdjacency(Parser):
 class ShowIsisNeighbors(Parser):
     """IS-IS neighbors with SNPA, hold time and circuit type."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbors": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbors": []}
         inst = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -857,7 +857,7 @@ class ShowIsisNeighbors(Parser):
                 out["total"] = out.get("total", 0) + int(m["n"])
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "isis.adjacency",

@@ -15,7 +15,7 @@ from __future__ import annotations
 import contextlib
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Any, Dict, Tuple
+from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from . import __version__
@@ -25,7 +25,7 @@ from .exceptions import CliJsonError
 MAX_BODY = 20 * 1024 * 1024
 
 
-def handle(method: str, path: str, body: bytes) -> Tuple[int, Dict[str, Any]]:
+def handle(method: str, path: str, body: bytes) -> tuple[int, dict[str, Any]]:
     """Pure request handler (easy to test without sockets)."""
     url = urlparse(path)
     if method == "GET" and url.path == "/health":
@@ -33,7 +33,7 @@ def handle(method: str, path: str, body: bytes) -> Tuple[int, Dict[str, Any]]:
     if method == "GET" and url.path == "/commands":
         qs = parse_qs(url.query)
         try:
-            return 200, {"commands": supported_commands((qs.get("platform") or [None])[0])}
+            return 200, {"commands": supported_commands(qs.get("platform", [None])[0])}
         except CliJsonError as exc:
             return 400, {"error": str(exc)}
     if method == "POST" and url.path == "/parse":
@@ -60,7 +60,7 @@ def handle(method: str, path: str, body: bytes) -> Tuple[int, Dict[str, Any]]:
 class _Handler(BaseHTTPRequestHandler):  # pragma: no cover - exercised manually
     server_version = f"clijson/{__version__}"
 
-    def _send(self, code: int, payload: Dict[str, Any]) -> None:
+    def _send(self, code: int, payload: dict[str, Any]) -> None:
         data = json.dumps(payload, default=str).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")

@@ -16,28 +16,29 @@ cRPD/vJunos and Huawei VRP images locally - a perfect sandbox for this.
 
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Optional, Union
+from collections.abc import Iterable
+from typing import Any
 
 from .api import parse
 from .exceptions import DeviceError
-from .platforms import get_platform
+from .platforms import Platform, get_platform
 from .result import ParseResult
 
 
-def _as_list(commands: Union[str, Iterable[str]]) -> List[str]:
+def _as_list(commands: str | Iterable[str]) -> list[str]:
     return [commands] if isinstance(commands, str) else list(commands)
 
 
 def collect(
     host: str,
     platform: str,
-    commands: Union[str, Iterable[str]],
-    username: Optional[str] = None,
-    password: Optional[str] = None,
+    commands: str | Iterable[str],
+    username: str | None = None,
+    password: str | None = None,
     port: int = 22,
     normalize: bool = False,
     **connection_kwargs: Any,
-) -> List[ParseResult]:
+) -> list[ParseResult]:
     """SSH to *host*, run *commands* and return one :class:`ParseResult` each."""
     plat = get_platform(platform)
     cmds = _as_list(commands)
@@ -57,8 +58,14 @@ def collect(
 
 
 def _run_scrapli(
-    plat, host, cmds, username, password, port, extra
-) -> Optional[List[str]]:  # pragma: no cover - needs a device
+    plat: Platform,
+    host: str,
+    cmds: list[str],
+    username: str | None,
+    password: str | None,
+    port: int | None,
+    extra: dict[str, Any],
+) -> list[str] | None:  # pragma: no cover - needs a device
     try:
         from scrapli import Scrapli
     except ImportError:
@@ -80,8 +87,14 @@ def _run_scrapli(
 
 
 def _run_netmiko(
-    plat, host, cmds, username, password, port, extra
-) -> Optional[List[str]]:  # pragma: no cover - needs a device
+    plat: Platform,
+    host: str,
+    cmds: list[str],
+    username: str | None,
+    password: str | None,
+    port: int | None,
+    extra: dict[str, Any],
+) -> list[str] | None:  # pragma: no cover - needs a device
     try:
         from netmiko import ConnectHandler
     except ImportError:

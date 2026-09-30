@@ -3,20 +3,19 @@
 from __future__ import annotations
 
 import re
-from typing import List, Optional, Tuple
 
 _RE_HDR = re.compile(r"^(?P<name>(?:fpc|node|re|member|lcc|sfc|psd|rsd)\d+|localre|re0|re1|primary|backup):\s*$")
 
 
-def split_re_sections(text: str) -> List[Tuple[Optional[str], str]]:
+def split_re_sections(text: str) -> list[tuple[str | None, str]]:
     """Split multi-RE / virtual-chassis / cluster output.
 
     Junos prefixes per-member output with ``fpc0:`` / ``node1:`` / ``re0:``
     followed by a dashed line. Returns ``[(member, body), ...]``; a single
     ``(None, text)`` item when there are no member headers.
     """
-    sections: List[Tuple[Optional[str], List[str]]] = []
-    cur: Optional[Tuple[Optional[str], List[str]]] = None
+    sections: list[tuple[str | None, list[str]]] = []
+    cur: tuple[str | None, list[str]] | None = None
     for ln in text.splitlines():
         m = _RE_HDR.match(ln.strip())
         if m:

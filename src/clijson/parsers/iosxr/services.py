@@ -5,7 +5,7 @@ from __future__ import annotations
 import functools
 import operator
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import mac, record, status
 from ...registry import Parser, register
@@ -20,7 +20,7 @@ from ...textutils import blocks, compact, match_lines, none_if, to_num
 class ShowMplsLdpNeighborBrief(Parser):
     """LDP sessions: GR/NSR, uptime and discovery/address/label counts."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<peer>\d+\.\d+\.\d+\.\d+:\d+)\s+(?P<gr>\S+)\s+(?:(?P<nsr>\S+)\s+)?(?P<up>\S+)\s+(?P<d4>\d+)\s+(?P<d6>\d+)\s+(?P<a4>\d+)\s+(?P<a6>\d+)\s+(?P<l4>\d+)\s+(?P<l6>\d+)\s*$",
@@ -54,7 +54,7 @@ class ShowMplsLdpNeighborBrief(Parser):
                 )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record("ldp.neighbors", neighbor=n["peer"].split(":")[0], state="operational", uptime=n["uptime"])
             for n in data
@@ -65,11 +65,11 @@ class ShowMplsLdpNeighborBrief(Parser):
 class ShowMplsLdpNeighbor(Parser):
     """LDP sessions in detail: TCP endpoints, state, discovery sources, bound addresses."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
-        section: Optional[str] = None
-        af: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
+        section: str | None = None
+        af: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -121,7 +121,7 @@ class ShowMplsLdpNeighbor(Parser):
                 cur[section][af].extend(s.split())
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "ldp.neighbors",
@@ -141,8 +141,8 @@ class ShowMplsLdpNeighbor(Parser):
 class ShowMplsForwarding(Parser):
     """Label forwarding table (LFIB)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         last_local: Any = None
         rx = re.compile(
             r"^(?P<local>\d+)?[ \t]+(?P<out>\S+(?: \S+)?)[ \t]+(?P<prefix>\S.*?)[ \t]{2,}(?P<intf>\S+)[ \t]+(?P<nh>\S+)[ \t]+(?P<bytes>\d+)(?:[ \t]+(?P<flag>\([^)]*\)|\S))?[ \t]*$"
@@ -193,7 +193,7 @@ class ShowMplsForwarding(Parser):
 class ShowMplsInterfaces(Parser):
     """Interfaces enabled for LDP / TE / static MPLS."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<intf>[A-Za-z]\S+)\s+(?P<ldp>Yes|No)(?:\s+\((?P<sync>[^)]*)\))?\s+(?P<te>Yes|No)\s+(?P<static>Yes|No)\s+(?P<enabled>Yes|No)\s*$",
@@ -220,9 +220,9 @@ class ShowMplsInterfaces(Parser):
 class ShowLldpNeighbors(Parser):
     """LLDP neighbor table."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbors": []}
-        pending_dev: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbors": []}
+        pending_dev: str | None = None
         for raw in text.splitlines():
             s = raw.rstrip()
             if not s.strip() or s.lstrip().startswith(("Capability codes", "(R)", "(W)", "Device ID")):
@@ -253,7 +253,7 @@ class ShowLldpNeighbors(Parser):
                 pending_dev = s  # long device id printed on its own line
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "lldp.neighbors",
@@ -267,12 +267,12 @@ class ShowLldpNeighbors(Parser):
         ]
 
 
-def _lldp_detail_blocks(text: str) -> List[Dict[str, Any]]:
+def _lldp_detail_blocks(text: str) -> list[dict[str, Any]]:
     out = []
     for b in re.split(r"^[ \t]*-{10,}\s*$", text, flags=re.M):
         if "Local Interface" not in b and "Local Intf" not in b:
             continue
-        item: Dict[str, Any] = {}
+        item: dict[str, Any] = {}
         lines = b.splitlines()
         i = 0
         while i < len(lines):
@@ -317,10 +317,10 @@ def _lldp_detail_blocks(text: str) -> List[Dict[str, Any]]:
 class ShowLldpNeighborsDetail(Parser):
     """LLDP neighbors with chassis/port IDs, system description and management addresses."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         return _lldp_detail_blocks(text)
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "lldp.neighbors",
@@ -339,9 +339,9 @@ class ShowLldpNeighborsDetail(Parser):
 class ShowCdpNeighbors(Parser):
     """CDP neighbor table."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
-        pending: Optional[str] = None
+        pending: str | None = None
         for raw in text.splitlines():
             s = raw.rstrip()
             if (
@@ -372,7 +372,7 @@ class ShowCdpNeighbors(Parser):
                 pending = s
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "lldp.neighbors",
@@ -390,10 +390,10 @@ class ShowCdpNeighbors(Parser):
 class ShowCdpNeighborsDetail(Parser):
     """CDP neighbors with platform, addresses and software version."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for b in blocks(text, start=r"^\s*Device ID\s*:"):
-            item: Dict[str, Any] = {}
+            item: dict[str, Any] = {}
             lines = b.splitlines()
             i = 0
             while i < len(lines):
@@ -446,7 +446,7 @@ class ShowCdpNeighborsDetail(Parser):
 class ShowArp(Parser):
     """ARP table per node/VRF."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         location = None
         vrf = self.params.get("vrf") if self.params.get("vrf") not in (None, "all") else None
@@ -482,7 +482,7 @@ class ShowArp(Parser):
                 )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "arp",
@@ -504,7 +504,7 @@ class ShowArp(Parser):
 class ShowIpv6Neighbors(Parser):
     """IPv6 neighbor discovery cache."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<ip>[0-9a-fA-F:]+:[0-9a-fA-F:.]*)\s+(?P<age>\S+)\s+(?P<mac>[0-9a-fA-F.]{14})\s+(?P<state>\S+)\s+(?P<intf>\S+)(?:\s+(?P<loc>\S+))?\s*$",
@@ -524,7 +524,7 @@ class ShowIpv6Neighbors(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "ipv6.neighbors",
@@ -547,11 +547,11 @@ class ShowIpv6Neighbors(Parser):
 class ShowBundle(Parser):
     """Link bundles (LAG): status, bandwidth, LACP and member links."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
         in_ports = False
-        last_port: Optional[Dict[str, Any]] = None
+        last_port: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -607,7 +607,7 @@ class ShowBundle(Parser):
                     cur[key] = to_num(v) if v else None
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record("lag", name=k, status=status(v.get("status")), members=list(v.get("members", {})))
             for k, v in data.items()
@@ -618,7 +618,7 @@ class ShowBundle(Parser):
 class ShowBundleBrief(Parser):
     """One line per bundle: state, LACP, BFD, link counts and bandwidth."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<name>BE\d+|Bundle-\S+|BP\d+)\s+(?P<ig>\S+)\s+(?P<state>\S+(?: \S+)?)\s+(?P<lacp>On|Off)\s+(?P<bfd>On|Off)\s+(?P<act>\d+)\s*/\s*(?P<stb>\d+)\s*/\s*(?P<cfg>\d+)\s+(?P<bw>\d+)\s*$",
@@ -647,11 +647,11 @@ class ShowBundleBrief(Parser):
 class ShowVrfDetail(Parser):
     """VRFs with RD, interfaces and import/export route-targets per address family."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
-        af: Optional[Dict[str, Any]] = None
-        section: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
+        af: dict[str, Any] | None = None
+        section: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -704,7 +704,7 @@ class ShowVrfDetail(Parser):
                 af[section].append(s.replace("RT:", ""))
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [record("vrfs", name=k, rd=v["rd"], interfaces=v["interfaces"]) for k, v in data.items()]
 
 
@@ -712,9 +712,9 @@ class ShowVrfDetail(Parser):
 class ShowVrf(Parser):
     """VRF list with RD and route-targets."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             if not raw.strip() or re.match(r"^\s*VRF\s+RD\s+RT", raw):
                 continue
@@ -734,7 +734,7 @@ class ShowVrf(Parser):
                 cur["route_targets"].append({"direction": m["dir"], "rt": m["rt"], "afi": m["afi"], "safi": m["safi"]})
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [record("vrfs", name=k, rd=v["rd"], interfaces=None) for k, v in data.items()]
 
 
@@ -749,11 +749,11 @@ _XC_STATES = {"UP", "DN", "AD", "UR", "SB", "SR", "(PP)"}
 class ShowL2vpnXconnect(Parser):
     """Point-to-point cross-connects with segment states."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         started = False
-        buf: List[str] = []
-        group = None
+        buf: list[str] = []
+        group: str | None = None
 
         def flush() -> None:
             nonlocal buf, group
@@ -769,6 +769,7 @@ class ShowL2vpnXconnect(Parser):
                 return
             i_st, i_st1, i_st2 = states[0], states[1], states[-1]
             head = tokens[:i_st]
+            name: str | None
             if len(head) >= 2:
                 group, name = head[0], " ".join(head[1:])
             else:
@@ -801,8 +802,8 @@ class ShowL2vpnXconnect(Parser):
 class ShowL2vpnXconnectSummary(Parser):
     """Cross-connect counters (up/down/unresolved)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         section = "xconnects"
         for raw in text.splitlines():
             s = raw.strip()
@@ -830,8 +831,8 @@ class ShowL2vpnXconnectSummary(Parser):
 class ShowBfdSession(Parser):
     """BFD sessions: echo/async timers, state and hardware offload."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         for raw in text.splitlines():
             s = raw.rstrip()
             m = re.match(
@@ -860,7 +861,7 @@ class ShowBfdSession(Parser):
                     out[-1]["npu"] = m["npu"]
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         res = []
         for s in data:
             ms = re.match(r"(\d+)(ms|s)", s.get("async_detect_time", ""))
