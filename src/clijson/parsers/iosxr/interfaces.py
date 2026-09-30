@@ -22,7 +22,12 @@ def _counter_line(line: str, d: Dict[str, Any]) -> None:
         d[key] = int(num)
 
 
-@register("iosxr", "show interfaces [<interface>] [(detail|accounting)]", "show interface [<interface>] [detail]", intent="interfaces.detail")
+@register(
+    "iosxr",
+    "show interfaces [<interface>] [(detail|accounting)]",
+    "show interface [<interface>] [detail]",
+    intent="interfaces.detail",
+)
 class ShowInterfaces(Parser):
     """Detailed interface state, addressing, rates and counters."""
 
@@ -45,7 +50,11 @@ class ShowInterfaces(Parser):
             if in_members:
                 mm = re.match(r"^(?P<name>\S+)\s+(?P<duplex>\S+-duplex|\S+)\s+(?P<speed>\S+)\s+(?P<state>\S+)\s*$", ln)
                 if mm and "/" in mm["name"]:
-                    cur["bundle_members"][mm["name"]] = {"duplex": mm["duplex"], "speed": mm["speed"], "state": mm["state"]}
+                    cur["bundle_members"][mm["name"]] = {
+                        "duplex": mm["duplex"],
+                        "speed": mm["speed"],
+                        "state": mm["state"],
+                    }
                     continue
                 in_members = False
             if _match(r"^Interface state transitions: (?P<n>\d+)", ln, cur, n="state_transitions"):
@@ -81,7 +90,10 @@ class ShowInterfaces(Parser):
             if m:
                 cur["reliability"], cur["txload"], cur["rxload"] = m["r"], m["tx"], m["rx"]
                 continue
-            m = re.match(r"^Encapsulation (?P<enc>[^,]+),?(?:\s*VLAN Id (?P<vlan>\d+),?)?(?:.*?loopback (?P<lb>not set|set))?", ln)
+            m = re.match(
+                r"^Encapsulation (?P<enc>[^,]+),?(?:\s*VLAN Id (?P<vlan>\d+),?)?(?:.*?loopback (?P<lb>not set|set))?",
+                ln,
+            )
             if m:
                 cur["encapsulation"] = m["enc"].strip()
                 if m["vlan"]:
@@ -93,7 +105,10 @@ class ShowInterfaces(Parser):
             if m:
                 cur["vlan_id"] = to_num(m["v"])
                 continue
-            m = re.match(r"^(?P<duplex>Full-duplex|Half-duplex|Duplex unknown), (?P<speed>[^,]+)(?:, (?P<media>[^,]+))?(?:, link type is (?P<lt>\S+))?", ln)
+            m = re.match(
+                r"^(?P<duplex>Full-duplex|Half-duplex|Duplex unknown), (?P<speed>[^,]+)(?:, (?P<media>[^,]+))?(?:, link type is (?P<lt>\S+))?",
+                ln,
+            )
             if m:
                 cur["duplex"] = m["duplex"].replace("Duplex unknown", "unknown").replace("-duplex", "").lower()
                 cur["speed"] = m["speed"]
@@ -120,7 +135,9 @@ class ShowInterfaces(Parser):
             if m:
                 cur["arp_type"], cur["arp_timeout"] = m["t"], m["to"]
                 continue
-            m = re.match(r"^Carrier delay \(up\) is (?P<up>\d+) msec(?:, Carrier delay \(down\) is (?P<down>\d+) msec)?", ln)
+            m = re.match(
+                r"^Carrier delay \(up\) is (?P<up>\d+) msec(?:, Carrier delay \(down\) is (?P<down>\d+) msec)?", ln
+            )
             if m:
                 cur["carrier_delay_up_ms"] = int(m["up"])
                 if m["down"]:
@@ -143,13 +160,19 @@ class ShowInterfaces(Parser):
             if ln.startswith("Input/output data rate is disabled"):
                 cur["data_rate_disabled"] = True
                 continue
-            m = re.match(r"^(?P<n>\d+) (?P<unit>minute|second)s? (?P<dir>input|output) rate (?P<bps>\d+) bits/sec, (?P<pps>\d+) packets/sec", ln)
+            m = re.match(
+                r"^(?P<n>\d+) (?P<unit>minute|second)s? (?P<dir>input|output) rate (?P<bps>\d+) bits/sec, (?P<pps>\d+) packets/sec",
+                ln,
+            )
             if m:
                 cur["rate_interval_seconds"] = int(m["n"]) * (60 if m["unit"] == "minute" else 1)
                 cur[f"{m['dir']}_rate_bps"] = int(m["bps"])
                 cur[f"{m['dir']}_rate_pps"] = int(m["pps"])
                 continue
-            m = re.match(r"^(?P<p>\d+) packets (?P<dir>input|output), (?P<b>\d+) bytes(?:, (?P<d>\d+) total (?:input|output) drops)?", ln)
+            m = re.match(
+                r"^(?P<p>\d+) packets (?P<dir>input|output), (?P<b>\d+) bytes(?:, (?P<d>\d+) total (?:input|output) drops)?",
+                ln,
+            )
             if m:
                 c = cur.setdefault("counters", {})
                 c[f"{m['dir']}_packets"] = int(m["p"])
@@ -164,7 +187,10 @@ class ShowInterfaces(Parser):
                 c[f"{d}_broadcast"] = int(m["b"])
                 c[f"{d}_multicast"] = int(m["mc"])
                 continue
-            if re.match(r"^\d+ ", ln) and "counters" in cur or re.match(r"^\d+ (?:runts|input errors|output errors|drops for|output buffer|carrier|input drops|output drops)", ln):
+            if (re.match(r"^\d+ ", ln) and "counters" in cur) or re.match(
+                r"^\d+ (?:runts|input errors|output errors|drops for|output buffer|carrier|input drops|output drops)",
+                ln,
+            ):
                 c = cur.setdefault("counters", {})
                 _counter_line(ln, c)
                 continue
@@ -227,7 +253,10 @@ class ShowIpv4InterfaceBrief(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<ip>\S+)\s+(?P<status>Up|Down|Shutdown|Deleted|Unknown|\w+)\s+(?P<proto>Up|Down|Shutdown|Deleted|Unknown|\w+)(?:\s+(?P<vrf>\S+))?\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<ip>\S+)\s+(?P<status>Up|Down|Shutdown|Deleted|Unknown|\w+)\s+(?P<proto>Up|Down|Shutdown|Deleted|Unknown|\w+)(?:\s+(?P<vrf>\S+))?\s*$",
+            text,
+        ):
             if m["intf"].lower() == "interface":
                 continue
             out.append(
@@ -246,7 +275,9 @@ class ShowIpv4InterfaceBrief(Parser):
             record(
                 "interfaces.brief",
                 name=r["interface"],
-                admin_status="admin-down" if r["status"].lower() == "shutdown" else ("up" if r["status"].lower() != "deleted" else "down"),
+                admin_status="admin-down"
+                if r["status"].lower() == "shutdown"
+                else ("up" if r["status"].lower() != "deleted" else "down"),
                 oper_status=status(r["protocol"]) if r["protocol"].lower() != "shutdown" else "down",
                 ip_address=r["ip_address"],
                 vrf=r["vrf"],
@@ -275,13 +306,18 @@ class ShowIpv6InterfaceBrief(Parser):
         return out
 
 
-@register("iosxr", "show interfaces brief", "show interface brief", "show interfaces summary brief", intent="interfaces.brief")
+@register(
+    "iosxr", "show interfaces brief", "show interface brief", "show interfaces summary brief", intent="interfaces.brief"
+)
 class ShowInterfacesBrief(Parser):
     """One line per interface: state, encapsulation, MTU, bandwidth."""
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<intf>\S+)\s+(?P<state>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<linep>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<encap>\S+(?: \S+)?)\s+(?P<mtu>\d+)\s+(?P<bw>\d+)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<intf>\S+)\s+(?P<state>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<linep>up|down|admin-down|not-ready|deleted|\S+)\s+(?P<encap>\S+(?: \S+)?)\s+(?P<mtu>\d+)\s+(?P<bw>\d+)\s*$",
+            text,
+        ):
             out.append(
                 {
                     "interface": m["intf"],
@@ -295,7 +331,15 @@ class ShowInterfacesBrief(Parser):
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("interfaces.brief", name=r["interface"], admin_status="admin-down" if r["state"] == "admin-down" else "up", oper_status=status(r["line_protocol_state"])) for r in data]
+        return [
+            record(
+                "interfaces.brief",
+                name=r["interface"],
+                admin_status="admin-down" if r["state"] == "admin-down" else "up",
+                oper_status=status(r["line_protocol_state"]),
+            )
+            for r in data
+        ]
 
 
 @register("iosxr", "show interfaces description", "show interface description", intent="interfaces.description")
@@ -305,14 +349,33 @@ class ShowInterfacesDescription(Parser):
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
         for ln in text.splitlines():
-            m = re.match(r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<status>up|down|admin-down|deleted|not-ready|\S+)\s+(?P<proto>up|down|admin-down|deleted|not-ready|\S+)(?:\s+(?P<desc>.*?))?\s*$", ln.strip())
+            m = re.match(
+                r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<status>up|down|admin-down|deleted|not-ready|\S+)\s+(?P<proto>up|down|admin-down|deleted|not-ready|\S+)(?:\s+(?P<desc>.*?))?\s*$",
+                ln.strip(),
+            )
             if not m or m["intf"] == "Interface":
                 continue
-            out.append({"interface": m["intf"], "status": m["status"], "protocol": m["proto"], "description": m["desc"] or None})
+            out.append(
+                {
+                    "interface": m["intf"],
+                    "status": m["status"],
+                    "protocol": m["proto"],
+                    "description": m["desc"] or None,
+                }
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("interfaces.description", name=r["interface"], admin_status="admin-down" if r["status"] in ("admin-down", "deleted") else "up", oper_status=status(r["protocol"]), description=r["description"]) for r in data]
+        return [
+            record(
+                "interfaces.description",
+                name=r["interface"],
+                admin_status="admin-down" if r["status"] in ("admin-down", "deleted") else "up",
+                oper_status=status(r["protocol"]),
+                description=r["description"],
+            )
+            for r in data
+        ]
 
 
 @register("iosxr", "show interfaces summary", "show interface summary")
@@ -321,13 +384,26 @@ class ShowInterfacesSummary(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {}
-        for m in match_lines(r"^\s*(?P<type>[A-Z][A-Z_ ]*?[A-Z])\s+(?P<total>\d+)\s+(?P<up>\d+)\s+(?P<down>\d+)\s+(?P<admin>\d+)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<type>[A-Z][A-Z_ ]*?[A-Z])\s+(?P<total>\d+)\s+(?P<up>\d+)\s+(?P<down>\d+)\s+(?P<admin>\d+)\s*$",
+            text,
+        ):
             key = "all" if m["type"] == "ALL TYPES" else m["type"]
-            out[key] = {"total": int(m["total"]), "up": int(m["up"]), "down": int(m["down"]), "admin_down": int(m["admin"])}
+            out[key] = {
+                "total": int(m["total"]),
+                "up": int(m["up"]),
+                "down": int(m["down"]),
+                "admin_down": int(m["admin"]),
+            }
         return out
 
 
-@register("iosxr", "show ipv4 interface [<interface>]", "show ipv4 vrf (all|<vrf>) interface [<interface>]", "show ip interface [<interface>]")
+@register(
+    "iosxr",
+    "show ipv4 interface [<interface>]",
+    "show ipv4 vrf (all|<vrf>) interface [<interface>]",
+    "show ip interface [<interface>]",
+)
 class ShowIpv4Interface(Parser):
     """Per-interface IPv4 configuration (addresses, MTU, ACLs, ICMP settings)."""
 
@@ -336,7 +412,9 @@ class ShowIpv4Interface(Parser):
         cur: Dict[str, Any] = {}
         for raw in text.splitlines():
             ln = raw.strip()
-            m = re.match(r"^(?P<name>\S+) is (?P<admin>[\w ]+?), (?:ipv4 protocol|line protocol) is (?P<oper>[\w ]+?)\s*$", ln)
+            m = re.match(
+                r"^(?P<name>\S+) is (?P<admin>[\w ]+?), (?:ipv4 protocol|line protocol) is (?P<oper>[\w ]+?)\s*$", ln
+            )
             if m:
                 cur = out[m["name"]] = {"status": m["admin"], "protocol": m["oper"]}
                 continue
@@ -360,7 +438,10 @@ class ShowIpv4Interface(Parser):
             if m:
                 cur["mtu"], cur["ip_mtu"] = int(m["mtu"]), int(m["ip"])
                 continue
-            m = re.match(r"^(Helper address|Directed broadcast forwarding|Outgoing access list|Inbound\s+access list|Inbound common access list|Outgoing Common access list|Proxy ARP|ICMP redirects|ICMP unreachables|ICMP mask replies|Table Id) is (?P<v>.+)$", ln)
+            m = re.match(
+                r"^(Helper address|Directed broadcast forwarding|Outgoing access list|Inbound\s+access list|Inbound common access list|Outgoing Common access list|Proxy ARP|ICMP redirects|ICMP unreachables|ICMP mask replies|Table Id) is (?P<v>.+)$",
+                ln,
+            )
             if m:
                 key = re.sub(r"\s+", "_", m.group(1).strip().lower())
                 cur[key] = m["v"]

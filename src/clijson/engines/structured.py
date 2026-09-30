@@ -18,7 +18,9 @@ from ..textutils import to_num
 
 def looks_like_xml(text: str) -> bool:
     s = text.lstrip()
-    return s.startswith("<?xml") or s.startswith("<rpc-reply") or bool(re.match(r"<[\w\-:]+[ >][\s\S]*</[\w\-:]+>\s*$", s[:200000]) and s.count("<") > 2)
+    return s.startswith(("<?xml", "<rpc-reply")) or bool(
+        re.match(r"<[\w\-:]+[ >][\s\S]*</[\w\-:]+>\s*$", s[:200000]) and s.count("<") > 2
+    )
 
 
 def looks_like_json(text: str) -> bool:

@@ -64,7 +64,6 @@ def dedent(text: str) -> str:
     return "\n".join(ln[indent:] for ln in lines)
 
 
-
 def blocks(text: str, start: Union[str, Pattern[str], None] = None) -> List[str]:
     """Split *text* into blocks.
 
@@ -110,10 +109,20 @@ def to_num(value: Any) -> Any:
     return v
 
 
-
 def none_if(value: Any, *empty: str) -> Any:
     """Return ``None`` for placeholder values like ``--``, ``N/A`` or ``unassigned``."""
-    placeholders = set(e.lower() for e in empty) or {"", "-", "--", "---", "n/a", "na", "none", "unassigned", "unknown", "*"}
+    placeholders = {e.lower() for e in empty} or {
+        "",
+        "-",
+        "--",
+        "---",
+        "n/a",
+        "na",
+        "none",
+        "unassigned",
+        "unknown",
+        "*",
+    }
     if isinstance(value, str) and value.strip().lower() in placeholders:
         return None
     return value
@@ -146,7 +155,9 @@ def normalize_mac(mac: Optional[str]) -> Optional[str]:
     return ":".join(h[i : i + 2] for i in range(0, 12, 2))
 
 
-_DURATION_PARTS = re.compile(r"(\d+)\s*(years?|y|weeks?|w|days?|d|hours?|h|minutes?|mins?|m|seconds?|secs?|s)(?![a-z])", re.I)
+_DURATION_PARTS = re.compile(
+    r"(\d+)\s*(years?|y|weeks?|w|days?|d|hours?|h|minutes?|mins?|m|seconds?|secs?|s)(?![a-z])", re.I
+)
 _UNIT_SECONDS = {"y": 31536000, "w": 604800, "d": 86400, "h": 3600, "m": 60, "s": 1}
 
 
@@ -220,7 +231,7 @@ def header_columns(header: str, names: Optional[Sequence[str]] = None) -> List[T
 def slice_row(line: str, starts: Sequence[int]) -> List[str]:
     """Cut *line* at column *starts*, nudging cuts so words are never split."""
     cells: List[str] = []
-    bounds = list(starts[1:]) + [None]
+    bounds = [*list(starts[1:]), None]
     begin = 0
     for end in bounds:
         if end is None:
@@ -294,7 +305,9 @@ def parse_table(
             for k, c in zip(out_keys, cells):
                 if c:
                     prev = rows[-1].get(k)
-                    rows[-1][k] = f"{prev} {c}".strip() if isinstance(prev, str) and prev else (to_num(c) if convert else c)
+                    rows[-1][k] = (
+                        f"{prev} {c}".strip() if isinstance(prev, str) and prev else (to_num(c) if convert else c)
+                    )
             continue
         if sum(1 for c in cells if c) < min_cells:
             continue
@@ -349,11 +362,8 @@ def match_lines(pattern: Union[str, Pattern[str]], text: str, flags: int = 0) ->
             yield m
 
 
-
-
 def indent_of(line: str) -> int:
     return len(line) - len(line.lstrip(" "))
-
 
 
 def compact(obj: Any) -> Any:

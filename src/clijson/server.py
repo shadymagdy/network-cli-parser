@@ -12,6 +12,7 @@ Endpoints
 
 from __future__ import annotations
 
+import contextlib
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Tuple
@@ -43,7 +44,13 @@ def handle(method: str, path: str, body: bytes) -> Tuple[int, Dict[str, Any]]:
         if not isinstance(req, dict) or not isinstance(req.get("output"), str):
             return 400, {"error": "body must be an object with a string 'output' field"}
         try:
-            res = parse(req["output"], req.get("command"), req.get("platform"), normalize=bool(req.get("normalize")), strict=bool(req.get("strict")))
+            res = parse(
+                req["output"],
+                req.get("command"),
+                req.get("platform"),
+                normalize=bool(req.get("normalize")),
+                strict=bool(req.get("strict")),
+            )
         except CliJsonError as exc:
             return 422, {"error": str(exc)}
         return 200, res.to_dict(meta=True)
@@ -77,8 +84,5 @@ class _Handler(BaseHTTPRequestHandler):  # pragma: no cover - exercised manually
 
 def serve(host: str = "127.0.0.1", port: int = 8080) -> None:  # pragma: no cover
     httpd = ThreadingHTTPServer((host, port), _Handler)
-    print(f"clijson API listening on http://{host}:{port}  (POST /parse, GET /commands, GET /health)")
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass

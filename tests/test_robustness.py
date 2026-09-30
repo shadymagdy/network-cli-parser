@@ -16,7 +16,7 @@ PARSERS = sorted({e.parser for e in REGISTRY.entries()}, key=lambda c: c.name)
 @pytest.mark.parametrize("parser", PARSERS, ids=[p.name for p in PARSERS])
 def test_parser_never_crashes_and_emits_json(parser):
     start = time.perf_counter()
-    for text in TEXTS + ["", "\n\n", "% Invalid input detected at '^' marker."]:
+    for text in [*TEXTS, "", "\n\n", "% Invalid input detected at '^' marker."]:
         data = parser({}, "").parse(text)
         json.dumps(data)
     assert time.perf_counter() - start < 5, "parser is too slow on the corpus"
@@ -42,7 +42,12 @@ def test_every_parser_has_a_description_and_platform():
 def test_pathological_inputs_do_not_crash(text):
     import clijson
 
-    for command, platform in [("show configuration", "junos"), ("show running-config", "iosxr"), ("show something", "iosxr"), (None, None)]:
+    for command, platform in [
+        ("show configuration", "junos"),
+        ("show running-config", "iosxr"),
+        ("show something", "iosxr"),
+        (None, None),
+    ]:
         res = clijson.parse(text, command, platform)
         json.dumps(res.to_dict())
 

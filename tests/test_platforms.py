@@ -4,7 +4,18 @@ from clijson import UnknownPlatformError, detect_platform, get_platform
 from clijson.platforms import match_prompt
 
 
-@pytest.mark.parametrize("alias,name", [("xr", "iosxr"), ("Cisco_XR", "iosxr"), ("juniper", "junos"), ("crpd", "junos"), ("huawei", "vrp"), ("ne40e", "vrp"), ("vrpv8", "vrp")])
+@pytest.mark.parametrize(
+    ("alias", "name"),
+    [
+        ("xr", "iosxr"),
+        ("Cisco_XR", "iosxr"),
+        ("juniper", "junos"),
+        ("crpd", "junos"),
+        ("huawei", "vrp"),
+        ("ne40e", "vrp"),
+        ("vrpv8", "vrp"),
+    ],
+)
 def test_aliases(alias, name):
     assert get_platform(alias).name == name
 
@@ -16,7 +27,7 @@ def test_unknown_platform():
 
 
 @pytest.mark.parametrize(
-    "line,platform,cmd",
+    ("line", "platform", "cmd"),
     [
         ("RP/0/RSP0/CPU0:PE1#show version", "iosxr", "show version"),
         ("RP/0/RP0/CPU0:ncs-5501(config)#show run", "iosxr", "show run"),
@@ -43,7 +54,10 @@ def test_detect_by_command_verb():
 def test_detect_by_fingerprints():
     assert detect_platform("Cisco IOS XR Software, Version 7.9.2").platform.name == "iosxr"
     assert detect_platform("Physical interface: ge-0/0/0, Enabled, Physical link is Up").platform.name == "junos"
-    assert detect_platform("Huawei Versatile Routing Platform Software\nVRP (R) software, Version 8.180").platform.name == "vrp"
+    assert (
+        detect_platform("Huawei Versatile Routing Platform Software\nVRP (R) software, Version 8.180").platform.name
+        == "vrp"
+    )
 
 
 def test_detect_ambiguous():

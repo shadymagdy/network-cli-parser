@@ -14,11 +14,37 @@ from ...textutils import compact, to_num
 # --------------------------------------------------------------------------- #
 
 CISCO_ROUTE_CODES = {
-    "C": "connected", "L": "local", "S": "static", "R": "rip", "B": "bgp", "D": "eigrp", "EX": "eigrp",
-    "O": "ospf", "IA": "ospf", "N1": "ospf", "N2": "ospf", "E1": "ospf", "E2": "ospf", "E": "egp",
-    "i": "isis", "L1": "isis", "L2": "isis", "ia": "isis", "su": "isis", "U": "static", "o": "odr",
-    "G": "dagr", "l": "lisp", "A": "subscriber", "a": "application", "M": "mobile", "r": "rpl",
-    "t": "te-client", "m": "mobile", "d": "dagr", "I": "igrp",
+    "C": "connected",
+    "L": "local",
+    "S": "static",
+    "R": "rip",
+    "B": "bgp",
+    "D": "eigrp",
+    "EX": "eigrp",
+    "O": "ospf",
+    "IA": "ospf",
+    "N1": "ospf",
+    "N2": "ospf",
+    "E1": "ospf",
+    "E2": "ospf",
+    "E": "egp",
+    "i": "isis",
+    "L1": "isis",
+    "L2": "isis",
+    "ia": "isis",
+    "su": "isis",
+    "U": "static",
+    "o": "odr",
+    "G": "dagr",
+    "l": "lisp",
+    "A": "subscriber",
+    "a": "application",
+    "M": "mobile",
+    "r": "rpl",
+    "t": "te-client",
+    "m": "mobile",
+    "d": "dagr",
+    "I": "igrp",
 }
 
 _ROUTE_LINE = re.compile(
@@ -52,7 +78,9 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
         if m:
             g = m["gw"]
             gm = re.match(r"(?P<nh>\S+) to network (?P<net>\S+)", g)
-            out.setdefault("gateway_of_last_resort", {})[vrf] = {"next_hop": gm["nh"], "network": gm["net"]} if gm else None
+            out.setdefault("gateway_of_last_resort", {})[vrf] = (
+                {"next_hop": gm["nh"], "network": gm["net"]} if gm else None
+            )
             continue
         if " - " in raw and "via" not in raw and _CODES_LINE.match(raw):
             continue
@@ -74,7 +102,11 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
             pending_connected = False
             if rest:
                 _route_rest(cur, rest)
-                pending_connected = bool(cur["next_hops"]) and rest.startswith("is directly connected") and not cur["next_hops"][-1].get("interface")
+                pending_connected = (
+                    bool(cur["next_hops"])
+                    and rest.startswith("is directly connected")
+                    and not cur["next_hops"][-1].get("interface")
+                )
             continue
         if cur is None:
             continue
@@ -89,7 +121,7 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
                 nh["interface"] = parts[0]
             pending_connected = False
             continue
-        if s.startswith("[") or s.startswith("is directly connected"):
+        if s.startswith(("[", "is directly connected")):
             _route_rest(cur, s)
             if s.startswith("is directly connected") and not cur["next_hops"][-1].get("interface"):
                 pending_connected = True
@@ -121,7 +153,9 @@ def _route_rest(cur: Dict[str, Any], rest: str) -> None:
         return
     m = _CONNECTED.match(rest)
     if m:
-        cur["next_hops"].append({"interface": m["intf"], "age": m["age"], "distance": 0, "metric": 0, "directly_connected": True})
+        cur["next_hops"].append(
+            {"interface": m["intf"], "age": m["age"], "distance": 0, "metric": 0, "directly_connected": True}
+        )
         return
     if not rest.startswith("["):
         cur["description"] = rest.strip()
@@ -149,7 +183,9 @@ def _parse_route_detail(text: str) -> Dict[str, Any]:
             continue
         if not cur:
             continue
-        m = re.match(r'^Known via "(?P<src>[^"]+)", distance (?P<ad>\d+), metric (?P<metric>\d+)(?:,?\s*(?P<rest>.*))?', s)
+        m = re.match(
+            r'^Known via "(?P<src>[^"]+)", distance (?P<ad>\d+), metric (?P<metric>\d+)(?:,?\s*(?P<rest>.*))?', s
+        )
         if m:
             src = m["src"].split()
             cur["protocol"] = src[0]
@@ -179,8 +215,13 @@ def _parse_route_detail(text: str) -> Dict[str, Any]:
             in_rdb = True
             continue
         if in_rdb:
-            m = re.match(r"^(?P<nh>[\w.:]+|directly connected)(?:, from (?P<frm>[\w.:]+))?(?:, via (?P<intf>\S+?))?(?:,\s*(?P<flags>.+))?$", s)
-            if m and not s.startswith(("Route metric", "No advertising", "Label", "Tunnel", "Binding", "Extended", "NHID", "Path")):
+            m = re.match(
+                r"^(?P<nh>[\w.:]+|directly connected)(?:, from (?P<frm>[\w.:]+))?(?:, via (?P<intf>\S+?))?(?:,\s*(?P<flags>.+))?$",
+                s,
+            )
+            if m and not s.startswith(
+                ("Route metric", "No advertising", "Label", "Tunnel", "Binding", "Extended", "NHID", "Path")
+            ):
                 nh = {"next_hop": m["nh"], "from": m["frm"], "interface": m["intf"]}
                 if m["flags"]:
                     nh["flags"] = m["flags"]
@@ -225,7 +266,9 @@ class ShowRoute(Parser):
                 "routes",
                 prefix=r["prefix"],
                 protocol=r.get("protocol"),
-                next_hops=[{"next_hop": nh.get("next_hop"), "interface": nh.get("interface")} for nh in r.get("next_hops", [])],
+                next_hops=[
+                    {"next_hop": nh.get("next_hop"), "interface": nh.get("interface")} for nh in r.get("next_hops", [])
+                ],
                 distance=r.get("distance"),
                 metric=r.get("metric"),
                 vrf=r.get("vrf", "default"),
@@ -247,9 +290,17 @@ class ShowRouteSummary(Parser):
             if m:
                 vrf = m.group(1)
                 continue
-            m = re.match(r"^\s*(?P<src>[A-Za-z][\w\-]*(?: [\w\-]+)?)\s+(?P<routes>\d+)\s+(?P<backup>\d+)\s+(?P<deleted>\d+)\s+(?P<mem>\d+)\s*$", raw)
+            m = re.match(
+                r"^\s*(?P<src>[A-Za-z][\w\-]*(?: [\w\-]+)?)\s+(?P<routes>\d+)\s+(?P<backup>\d+)\s+(?P<deleted>\d+)\s+(?P<mem>\d+)\s*$",
+                raw,
+            )
             if m:
-                entry = {"routes": int(m["routes"]), "backup": int(m["backup"]), "deleted": int(m["deleted"]), "memory_bytes": int(m["mem"])}
+                entry = {
+                    "routes": int(m["routes"]),
+                    "backup": int(m["backup"]),
+                    "deleted": int(m["deleted"]),
+                    "memory_bytes": int(m["mem"]),
+                }
                 v = out.setdefault(vrf, {"sources": {}})
                 if m["src"] == "Total":
                     v["total"] = entry
@@ -277,9 +328,11 @@ class ShowBgpSummary(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"neighbors": [], "contexts": []}
-        ctx: Dict[str, Any] = {"instance": self.params.get("instance") if self.params.get("instance") not in (None, "all") else "default",
-                               "vrf": self.params.get("vrf") if self.params.get("vrf") not in (None, "all") else "default",
-                               "address_family": af_from_command(self.command)}
+        ctx: Dict[str, Any] = {
+            "instance": self.params.get("instance") if self.params.get("instance") not in (None, "all") else "default",
+            "vrf": self.params.get("vrf") if self.params.get("vrf") not in (None, "all") else "default",
+            "address_family": af_from_command(self.command),
+        }
         info: Dict[str, Any] = {}
         in_table = False
         pending: Optional[str] = None
@@ -455,7 +508,10 @@ class ShowBgpNeighbors(Parser):
                 continue
             if not cur:
                 continue
-            m = re.match(r"^Remote AS (?P<ras>[\d.]+), local AS (?P<las>[\d.]+)(?:\s+(?P<flags>no-prepend|replace-as|dual-as)[^,]*)?,\s*(?P<link>\S+) link", s)
+            m = re.match(
+                r"^Remote AS (?P<ras>[\d.]+), local AS (?P<las>[\d.]+)(?:\s+(?P<flags>no-prepend|replace-as|dual-as)[^,]*)?,\s*(?P<link>\S+) link",
+                s,
+            )
             if m:
                 cur["remote_as"], cur["local_as"], cur["link"] = _asn(m["ras"]), _asn(m["las"]), m["link"]
                 continue
@@ -487,11 +543,19 @@ class ShowBgpNeighbors(Parser):
             if m:
                 cur["hold_time"], cur["keepalive_interval"] = int(m["h"]), int(m["k"])
                 continue
-            m = re.match(r"^Configured hold time: (?P<h>\d+), keepalive: (?P<k>\d+), min acceptable hold time: (?P<mh>\d+)", s)
+            m = re.match(
+                r"^Configured hold time: (?P<h>\d+), keepalive: (?P<k>\d+), min acceptable hold time: (?P<mh>\d+)", s
+            )
             if m:
-                cur["configured_hold_time"], cur["configured_keepalive"], cur["min_hold_time"] = int(m["h"]), int(m["k"]), int(m["mh"])
+                cur["configured_hold_time"], cur["configured_keepalive"], cur["min_hold_time"] = (
+                    int(m["h"]),
+                    int(m["k"]),
+                    int(m["mh"]),
+                )
                 continue
-            m = re.match(r"^(?P<dir>Received|Sent) (?P<msgs>\d+) messages, (?P<notif>\d+) notifications, (?P<q>\d+) in queue", s)
+            m = re.match(
+                r"^(?P<dir>Received|Sent) (?P<msgs>\d+) messages, (?P<notif>\d+) notifications, (?P<q>\d+) in queue", s
+            )
             if m:
                 d = "received" if m["dir"] == "Received" else "sent"
                 cur[f"messages_{d}"] = int(m["msgs"])
@@ -549,7 +613,11 @@ class ShowBgpNeighbors(Parser):
                     continue
                 m = re.match(r"^Prefix advertised (?P<a>\d+), suppressed (?P<s>\d+), withdrawn (?P<w>\d+)", s)
                 if m:
-                    af["prefixes_advertised"], af["prefixes_suppressed"], af["prefixes_withdrawn"] = int(m["a"]), int(m["s"]), int(m["w"])
+                    af["prefixes_advertised"], af["prefixes_suppressed"], af["prefixes_withdrawn"] = (
+                        int(m["a"]),
+                        int(m["s"]),
+                        int(m["w"]),
+                    )
                     continue
                 m = re.match(r"^Maximum prefixes allowed (?P<n>\d+)", s)
                 if m:
@@ -573,7 +641,12 @@ class ShowBgpNeighbors(Parser):
                 if m:
                     af["route_refresh_received"], af["route_refresh_sent"] = int(m["r"]), int(m["s"])
                     continue
-                if s in ("NEXT_HOP is always this router", "Route-Reflector Client", "Community attribute sent to this neighbor", "Extended community attribute sent to this neighbor"):
+                if s in (
+                    "NEXT_HOP is always this router",
+                    "Route-Reflector Client",
+                    "Community attribute sent to this neighbor",
+                    "Extended community attribute sent to this neighbor",
+                ):
                     af.setdefault("flags", []).append(s)
                     continue
                 m = re.match(r"^Cumulative no\. of prefixes denied: (?P<n>\d+)", s)
@@ -588,7 +661,13 @@ class ShowBgpNeighbors(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("iosxr", "show [(ospf|ospfv3)] [<process>] [vrf (all|<vrf>)] neighbor [<interface>] [<neighbor>]", "show (ospf|ospfv3) [<process>] [vrf (all|<vrf>)] neighbor", "show ospf [vrf (all|<vrf>)] neighbor", intent="ospf.neighbors")
+@register(
+    "iosxr",
+    "show [(ospf|ospfv3)] [<process>] [vrf (all|<vrf>)] neighbor [<interface>] [<neighbor>]",
+    "show (ospf|ospfv3) [<process>] [vrf (all|<vrf>)] neighbor",
+    "show ospf [vrf (all|<vrf>)] neighbor",
+    intent="ospf.neighbors",
+)
 class ShowOspfNeighbor(Parser):
     """OSPF adjacencies with state, DR role, dead timer and uptime."""
 
@@ -631,12 +710,24 @@ class ShowOspfNeighbor(Parser):
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         return [
-            record("ospf.neighbors", neighbor_id=n["neighbor_id"], priority=n["priority"], state=n["state"].lower(), address=n["address"], interface=n["interface"], dead_time=n["dead_time"])
+            record(
+                "ospf.neighbors",
+                neighbor_id=n["neighbor_id"],
+                priority=n["priority"],
+                state=n["state"].lower(),
+                address=n["address"],
+                interface=n["interface"],
+                dead_time=n["dead_time"],
+            )
             for n in data["neighbors"]
         ]
 
 
-@register("iosxr", "show (ospf|ospfv3) [<process>] [vrf (all|<vrf>)] interface brief", "show ospf [vrf (all|<vrf>)] interface brief")
+@register(
+    "iosxr",
+    "show (ospf|ospfv3) [<process>] [vrf (all|<vrf>)] interface brief",
+    "show ospf [vrf (all|<vrf>)] interface brief",
+)
 class ShowOspfInterfaceBrief(Parser):
     """OSPF enabled interfaces with area, cost and state."""
 
@@ -648,7 +739,10 @@ class ShowOspfInterfaceBrief(Parser):
             m = re.match(r"^\* Indicates|^Interfaces for OSPF (?P<p>\S+?)(?:, VRF (?P<vrf>\S+))?$", s)
             if m and m.groupdict().get("vrf"):
                 vrf = m["vrf"]
-            m = re.match(r"^(?P<intf>\S+)\s+(?P<pid>\S+)\s+(?P<area>\S+)\s+(?P<ip>\d+\.\d+\.\d+\.\d+/\d+)\s+(?P<cost>\d+)\s+(?P<state>\S+)\s+(?P<nbrs>\d+)/(?P<full>\d+)$", s)
+            m = re.match(
+                r"^(?P<intf>\S+)\s+(?P<pid>\S+)\s+(?P<area>\S+)\s+(?P<ip>\d+\.\d+\.\d+\.\d+/\d+)\s+(?P<cost>\d+)\s+(?P<state>\S+)\s+(?P<nbrs>\d+)/(?P<full>\d+)$",
+                s,
+            )
             if m:
                 out.append(
                     {
@@ -671,7 +765,9 @@ class ShowOspfInterfaceBrief(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("iosxr", "show isis [instance <instance>] adjacency [(detail|level-1|level-2|<interface>)]", intent="isis.adjacency")
+@register(
+    "iosxr", "show isis [instance <instance>] adjacency [(detail|level-1|level-2|<interface>)]", intent="isis.adjacency"
+)
 class ShowIsisAdjacency(Parser):
     """IS-IS adjacencies per level."""
 
@@ -711,7 +807,18 @@ class ShowIsisAdjacency(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("isis.adjacency", system_id=a["system_id"], interface=a["interface"], state=a["state"].lower(), level=a.get("level"), hold_time=a.get("hold_time"), snpa=a.get("snpa")) for a in data["adjacencies"]]
+        return [
+            record(
+                "isis.adjacency",
+                system_id=a["system_id"],
+                interface=a["interface"],
+                state=a["state"].lower(),
+                level=a.get("level"),
+                hold_time=a.get("hold_time"),
+                snpa=a.get("snpa"),
+            )
+            for a in data["adjacencies"]
+        ]
 
 
 @register("iosxr", "show isis [instance <instance>] neighbors [(detail|summary|<interface>)]", intent="isis.adjacency")
@@ -727,10 +834,22 @@ class ShowIsisNeighbors(Parser):
             if m:
                 inst = m["inst"]
                 continue
-            m = re.match(r"^(?P<sys>\S+)\s+(?P<intf>\S+)\s+(?P<snpa>\S+)\s+(?P<state>Up|Down|Init|Failed)\s+(?P<hold>\d+)\s+(?P<type>L1L2|L1|L2)\s+(?P<nsf>\S+)$", s)
+            m = re.match(
+                r"^(?P<sys>\S+)\s+(?P<intf>\S+)\s+(?P<snpa>\S+)\s+(?P<state>Up|Down|Init|Failed)\s+(?P<hold>\d+)\s+(?P<type>L1L2|L1|L2)\s+(?P<nsf>\S+)$",
+                s,
+            )
             if m:
                 out["neighbors"].append(
-                    {"instance": inst, "system_id": m["sys"], "interface": m["intf"], "snpa": m["snpa"], "state": m["state"], "hold_time": int(m["hold"]), "type": m["type"], "ietf_nsf": m["nsf"]}
+                    {
+                        "instance": inst,
+                        "system_id": m["sys"],
+                        "interface": m["intf"],
+                        "snpa": m["snpa"],
+                        "state": m["state"],
+                        "hold_time": int(m["hold"]),
+                        "type": m["type"],
+                        "ietf_nsf": m["nsf"],
+                    }
                 )
                 continue
             m = re.match(r"^Total neighbor count: (?P<n>\d+)", s)
@@ -739,4 +858,15 @@ class ShowIsisNeighbors(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("isis.adjacency", system_id=a["system_id"], interface=a["interface"], state=a["state"].lower(), level=a["type"], hold_time=a["hold_time"], snpa=a["snpa"]) for a in data["neighbors"]]
+        return [
+            record(
+                "isis.adjacency",
+                system_id=a["system_id"],
+                interface=a["interface"],
+                state=a["state"].lower(),
+                level=a["type"],
+                hold_time=a["hold_time"],
+                snpa=a["snpa"],
+            )
+            for a in data["neighbors"]
+        ]

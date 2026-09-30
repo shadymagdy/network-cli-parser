@@ -8,7 +8,9 @@ from typing import Any, Dict, List, Optional
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, snake, to_num
 
-_TABLE_HDR = re.compile(r"^(?P<table>[\w.\-:]+): (?P<dest>\d+) destinations, (?P<routes>\d+) routes \((?P<active>\d+) active, (?P<hold>\d+) holddown, (?P<hidden>\d+) hidden\)")
+_TABLE_HDR = re.compile(
+    r"^(?P<table>[\w.\-:]+): (?P<dest>\d+) destinations, (?P<routes>\d+) routes \((?P<active>\d+) active, (?P<hold>\d+) holddown, (?P<hidden>\d+) hidden\)"
+)
 
 
 @register("junos", "show route (advertising-protocol|receive-protocol) bgp <neighbor> [<args...>]")
@@ -16,7 +18,12 @@ class ShowRouteAdvertisedReceived(Parser):
     """Routes advertised to / received from a BGP neighbor (prefix, next hop, MED, local-pref, AS path)."""
 
     def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbor": self.params.get("neighbor"), "direction": "received" if "receive-protocol" in self.command.lower() else "advertised", "tables": {}, "routes": []}
+        out: Dict[str, Any] = {
+            "neighbor": self.params.get("neighbor"),
+            "direction": "received" if "receive-protocol" in self.command.lower() else "advertised",
+            "tables": {},
+            "routes": [],
+        }
         table = "inet.0"
         med_end = lp_end = None
         pending_prefix: Optional[str] = None
@@ -27,7 +34,11 @@ class ShowRouteAdvertisedReceived(Parser):
             m = _TABLE_HDR.match(s)
             if m:
                 table = m["table"]
-                out["tables"][table] = {"destinations": int(m["dest"]), "routes": int(m["routes"]), "active": int(m["active"])}
+                out["tables"][table] = {
+                    "destinations": int(m["dest"]),
+                    "routes": int(m["routes"]),
+                    "active": int(m["active"]),
+                }
                 continue
             if s.startswith("Prefix") and "Nexthop" in s:
                 med_end = raw.index("MED") + 3 if "MED" in raw else None
@@ -62,7 +73,12 @@ class ShowRouteAdvertisedReceived(Parser):
                 route["med"], route["local_preference"] = int(numeric[0].group(1)), int(numeric[1].group(1))
             elif len(numeric) == 1:
                 col = raw.index(rest) + numeric[0].end() if rest in raw else None
-                if col is not None and med_end is not None and lp_end is not None and abs(col - lp_end) < abs(col - med_end):
+                if (
+                    col is not None
+                    and med_end is not None
+                    and lp_end is not None
+                    and abs(col - lp_end) < abs(col - med_end)
+                ):
                     route["local_preference"] = int(numeric[0].group(1))
                 else:
                     route["med"] = int(numeric[0].group(1))
@@ -134,7 +150,9 @@ class ShowSystemInformation(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {}
-        for m in match_lines(r"^\s*(?P<k>Model|Family|Junos|Hostname|Serial Number|Junos Release):\s*(?P<v>.+?)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<k>Model|Family|Junos|Hostname|Serial Number|Junos Release):\s*(?P<v>.+?)\s*$", text
+        ):
             key = {"junos": "version", "junos_release": "version"}.get(snake(m["k"]), snake(m["k"]))
             out[key] = m["v"]
         return out
@@ -150,7 +168,9 @@ class ShowChassisFirmware(Parser):
         for raw in text.splitlines():
             if re.match(r"^\s*Part\s+Type\s+Version", raw) or not raw.strip():
                 continue
-            m = re.match(r"^(?P<part>\S.*?)\s{2,}(?P<type>ROM|O/S|FPGA|PLD|BIOS|CPLD|U-Boot|\S+)\s{2,}(?P<ver>.+?)\s*$", raw)
+            m = re.match(
+                r"^(?P<part>\S.*?)\s{2,}(?P<type>ROM|O/S|FPGA|PLD|BIOS|CPLD|U-Boot|\S+)\s{2,}(?P<ver>.+?)\s*$", raw
+            )
             if m and not raw.startswith(" "):
                 part = m["part"].strip()
                 out.append({"part": part, "type": m["type"], "version": m["ver"]})
@@ -212,21 +232,42 @@ class ShowChassisClusterInterfaces(Parser):
             if s.startswith("Redundant-ethernet Information"):
                 section = "reth"
                 continue
-            if s.startswith("Redundant-pseudo-interface") or s.startswith("Interface Monitoring"):
+            if s.startswith(("Redundant-pseudo-interface", "Interface Monitoring")):
                 section = None
                 continue
             if section == "control":
                 m = re.match(r"^(?P<idx>\d+)\s+(?P<intf>\S+)\s+(?P<st>\S+)\s+(?P<extra>\S+)$", s)
                 if m:
-                    out["control_interfaces"].append({"index": int(m["idx"]), "interface": m["intf"], "status": m["st"], "security": m["extra"]})
+                    out["control_interfaces"].append(
+                        {"index": int(m["idx"]), "interface": m["intf"], "status": m["st"], "security": m["extra"]}
+                    )
             elif section == "fabric":
-                m = re.match(r"^(?P<name>fab\d+)\s+(?P<child>\S+)\s+(?P<phy>Up|Down)\s*(?:/\s*(?P<mon>Up|Down))?(?:\s+(?P<sec>\S+))?$", s)
+                m = re.match(
+                    r"^(?P<name>fab\d+)\s+(?P<child>\S+)\s+(?P<phy>Up|Down)\s*(?:/\s*(?P<mon>Up|Down))?(?:\s+(?P<sec>\S+))?$",
+                    s,
+                )
                 if m:
-                    out["fabric_interfaces"].append(compact({"name": m["name"], "child_interface": m["child"], "physical": m["phy"], "monitored": m["mon"], "security": m["sec"]}))
+                    out["fabric_interfaces"].append(
+                        compact(
+                            {
+                                "name": m["name"],
+                                "child_interface": m["child"],
+                                "physical": m["phy"],
+                                "monitored": m["mon"],
+                                "security": m["sec"],
+                            }
+                        )
+                    )
             elif section == "reth":
                 m = re.match(r"^(?P<name>reth\d+)\s+(?P<st>Up|Down)\s+(?P<rg>\d+|Not configured)$", s)
                 if m:
-                    out["redundant_ethernet"].append({"name": m["name"], "status": m["st"], "redundancy_group": to_num(m["rg"]) if m["rg"].isdigit() else None})
+                    out["redundant_ethernet"].append(
+                        {
+                            "name": m["name"],
+                            "status": m["st"],
+                            "redundancy_group": to_num(m["rg"]) if m["rg"].isdigit() else None,
+                        }
+                    )
         return out
 
 
@@ -279,5 +320,14 @@ class ShowSecurityPoliciesHitCount(Parser):
                 continue
             m = re.match(r"^\s*(?P<idx>\d+)\s+(?P<frm>\S+)\s+(?P<to>\S+)\s+(?P<name>\S+)\s+(?P<count>\d+)\s*$", raw)
             if m:
-                out.append({"index": int(m["idx"]), "from_zone": m["frm"], "to_zone": m["to"], "policy": m["name"], "hit_count": int(m["count"]), "logical_system": ls})
+                out.append(
+                    {
+                        "index": int(m["idx"]),
+                        "from_zone": m["frm"],
+                        "to_zone": m["to"],
+                        "policy": m["name"],
+                        "hit_count": int(m["count"]),
+                        "logical_system": ls,
+                    }
+                )
         return out

@@ -1,25 +1,30 @@
 [build-system]
-requires = ["setuptools>=64", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
 
 [project]
 name = "clijson"
 description = "Turn show/display command output from Cisco IOS XR, Juniper Junos and Huawei VRP routers into JSON."
 readme = "README.md"
-license = { text = "MIT" }
+version = "0.1.0"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Shady Magdy" }]
-requires-python = ">=3.8"
-dynamic = ["version"]
+requires-python = ">=3.10"
 keywords = ["network", "automation", "parser", "cli", "json", "cisco", "iosxr", "juniper", "junos", "huawei", "vrp", "netdevops"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Telecommunications Industry",
   "Intended Audience :: System Administrators",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: System :: Networking",
   "Topic :: Text Processing",
   "Typing :: Typed",
@@ -34,33 +39,75 @@ genie = ["pyats.topology", "genie.libs.parser"]
 netmiko = ["netmiko>=4"]
 scrapli = ["scrapli>=2023.7.30"]
 all = ["PyYAML>=5.4", "rich>=12", "ntc-templates>=4"]
-dev = ["pytest>=7", "pytest-cov", "PyYAML>=5.4", "ruff"]
 
 [project.scripts]
 clijson = "clijson.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/shadymagdy/network-cli-parser"
+Source = "https://github.com/shadymagdy/network-cli-parser"
 Issues = "https://github.com/shadymagdy/network-cli-parser/issues"
+Changelog = "https://github.com/shadymagdy/network-cli-parser/blob/main/CHANGELOG.md"
 
-[tool.setuptools.dynamic]
-version = { attr = "clijson.__version__" }
+# PEP 735 dependency groups: `uv sync` installs `dev` by default.
+[dependency-groups]
+test = ["pytest>=8", "pytest-cov>=5", "PyYAML>=6"]
+lint = ["ruff>=0.16", "pre-commit>=4"]
+dev = [{ include-group = "test" }, { include-group = "lint" }]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-clijson = ["py.typed"]
+[tool.uv.build-backend]
+module-name = "clijson"
 
 [tool.pytest.ini_options]
+minversion = "8.0"
 testpaths = ["tests"]
-addopts = "-q"
+addopts = ["-q", "--strict-markers", "--strict-config", "-ra"]
+xfail_strict = true
+filterwarnings = ["error::DeprecationWarning:clijson.*"]
+
+[tool.coverage.run]
+source = ["clijson"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError", "@overload"]
 
 [tool.ruff]
-line-length = 200
-target-version = "py38"
+line-length = 120
+target-version = "py310"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP"]
-ignore = ["E501", "B905", "UP006", "UP007", "UP035", "UP037", "UP045", "UP009"]
+select = [
+  "E", "W", "F",  # pycodestyle, pyflakes
+  "I",            # isort
+  "B",            # bugbear
+  "UP",           # pyupgrade
+  "C4",           # comprehensions
+  "SIM",          # simplify
+  "PIE",          # misc. lints
+  "PERF",         # performance anti-patterns
+  "RUF",          # ruff-specific
+  "PT",           # pytest style
+  "ISC",          # implicit string concatenation
+  "T20",          # stray print()
+]
+ignore = [
+  "E501",     # long regexes and sample lines are clearer unwrapped
+  "B905",     # zip(strict=) is not needed for our fixed-width parsing
+  "PERF401",  # explicit loops read better in parsers
+  "PT018",    # composite assertions are fine in tests
+  "RUF001", "RUF002", "RUF003",  # device output contains unicode lookalikes
+  "UP006", "UP007", "UP035", "UP037", "UP045", "UP009",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/clijson/cli.py" = ["T20"]
+"scripts/*" = ["T20"]
+"examples/*" = ["T20"]
+
+[tool.ruff.format]
+docstring-code-format = true
+exclude = ["*.md"]  # README/docs snippets are hand-aligned for reading

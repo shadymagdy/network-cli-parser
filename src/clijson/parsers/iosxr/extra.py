@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional
 
 from ...models import record
 from ...registry import Parser, register
@@ -21,7 +21,10 @@ class ShowControllersOptics(Parser):
             s = raw.strip()
             if not s:
                 continue
-            m = re.match(r"^(Controller State|Transport Admin State|Laser State|LED State|FEC State|Power Mode|Dom Data Status|Host Squelch Status|Last link flapped|Optics Status|Performance Monitoring)\s*:?\s*(?P<v>.*)$", s)
+            m = re.match(
+                r"^(Controller State|Transport Admin State|Laser State|LED State|FEC State|Power Mode|Dom Data Status|Host Squelch Status|Last link flapped|Optics Status|Performance Monitoring)\s*:?\s*(?P<v>.*)$",
+                s,
+            )
             if m and m.group(1) != "Optics Status":
                 out[snake(m.group(1))] = m["v"].strip() or None
                 section = None
@@ -43,10 +46,18 @@ class ShowControllersOptics(Parser):
                 out["thresholds"] = {}
                 continue
             if section == "thresholds":
-                m = re.match(r"^(?P<p>[A-Za-z][\w. ]*?)\s*Threshold\((?P<u>[^)]+)\)\s+(?P<ha>-?[\d.]+)\s+(?P<la>-?[\d.]+)\s+(?P<hw>-?[\d.]+)\s+(?P<lw>-?[\d.]+)$", s)
+                m = re.match(
+                    r"^(?P<p>[A-Za-z][\w. ]*?)\s*Threshold\((?P<u>[^)]+)\)\s+(?P<ha>-?[\d.]+)\s+(?P<la>-?[\d.]+)\s+(?P<hw>-?[\d.]+)\s+(?P<lw>-?[\d.]+)$",
+                    s,
+                )
                 if m:
                     key = f"{snake(m['p'])}_{m['u'].lower().replace('.', '')}"
-                    out["thresholds"][key] = {"high_alarm": float(m["ha"]), "low_alarm": float(m["la"]), "high_warning": float(m["hw"]), "low_warning": float(m["lw"])}
+                    out["thresholds"][key] = {
+                        "high_alarm": float(m["ha"]),
+                        "low_alarm": float(m["la"]),
+                        "high_warning": float(m["hw"]),
+                        "low_warning": float(m["lw"]),
+                    }
                     continue
                 if set(s) <= set("- "):
                     continue
@@ -56,14 +67,30 @@ class ShowControllersOptics(Parser):
                 out["lanes"] = []
                 continue
             if section == "lanes":
-                m = re.match(r"^(?P<lane>\d+)\s+(?P<bias>-?[\d.]+) mA\s+(?P<tx>-?[\d.]+) dBm\s+(?P<rx>-?[\d.]+) dBm(?:\s+(?P<freq>\S+))?", s)
+                m = re.match(
+                    r"^(?P<lane>\d+)\s+(?P<bias>-?[\d.]+) mA\s+(?P<tx>-?[\d.]+) dBm\s+(?P<rx>-?[\d.]+) dBm(?:\s+(?P<freq>\S+))?",
+                    s,
+                )
                 if m:
-                    out["lanes"].append(compact({"lane": int(m["lane"]), "laser_bias_ma": float(m["bias"]), "tx_power_dbm": float(m["tx"]), "rx_power_dbm": float(m["rx"]), "output_frequency": none_if(m["freq"], "N/A") if m["freq"] else None}))
+                    out["lanes"].append(
+                        compact(
+                            {
+                                "lane": int(m["lane"]),
+                                "laser_bias_ma": float(m["bias"]),
+                                "tx_power_dbm": float(m["tx"]),
+                                "rx_power_dbm": float(m["rx"]),
+                                "output_frequency": none_if(m["freq"], "N/A") if m["freq"] else None,
+                            }
+                        )
+                    )
                     continue
                 if set(s) <= set("- "):
                     continue
                 section = None
-            m = re.match(r"^(?P<k>Optics Type|Wavelength|TX Power|RX Power|Temperature|Voltage|Laser Bias Current|Actual TX Power|RX Signal Power|Frequency)\s*[:=]\s*(?P<v>.+?)\s*$", s)
+            m = re.match(
+                r"^(?P<k>Optics Type|Wavelength|TX Power|RX Power|Temperature|Voltage|Laser Bias Current|Actual TX Power|RX Signal Power|Frequency)\s*[:=]\s*(?P<v>.+?)\s*$",
+                s,
+            )
             if m:
                 k, v = snake(m["k"]), m["v"]
                 vm = re.match(r"^(-?[\d.]+)\s*(nm|dBm|mW|mA|Celsius|V|GHz|THz)\b", v)
@@ -94,9 +121,22 @@ def _fhrp_rows(text: str) -> List[Dict[str, Any]]:
         if m:
             family = f"ipv{m.group(1)}"
             continue
-        m = re.match(r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<grp>\d+)\s+(?P<pri>\d+)\s+(?P<p>P)?\s*(?P<state>Active|Standby|Speak|Listen|Learn|Init|Master|Backup|Initial)\s+(?P<a>\S+)?\s*(?P<b>\S+)?\s*(?P<c>\S+)?\s*$", s)
+        m = re.match(
+            r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<grp>\d+)\s+(?P<pri>\d+)\s+(?P<p>P)?\s*(?P<state>Active|Standby|Speak|Listen|Learn|Init|Master|Backup|Initial)\s+(?P<a>\S+)?\s*(?P<b>\S+)?\s*(?P<c>\S+)?\s*$",
+            s,
+        )
         if m:
-            out.append({"interface": m["intf"], "group": int(m["grp"]), "priority": int(m["pri"]), "preempt": bool(m["p"]), "state": m["state"], "family": family, "_addrs": [x for x in (m["a"], m["b"], m["c"]) if x]})
+            out.append(
+                {
+                    "interface": m["intf"],
+                    "group": int(m["grp"]),
+                    "priority": int(m["pri"]),
+                    "preempt": bool(m["p"]),
+                    "state": m["state"],
+                    "family": family,
+                    "_addrs": [x for x in (m["a"], m["b"], m["c"]) if x],
+                }
+            )
             continue
         m = re.match(r"^\s{20,}(?P<a>\S+)(?:\s+(?P<b>\S+))?\s*$", s)
         if m and out:
@@ -112,7 +152,7 @@ class ShowHsrp(Parser):
         rows = _fhrp_rows(text)
         for r in rows:
             a = r.pop("_addrs")
-            r["active_address"], r["standby_address"], r["virtual_address"] = (a + [None, None, None])[:3]
+            r["active_address"], r["standby_address"], r["virtual_address"] = ([*a, None, None, None])[:3]
         return rows
 
 
@@ -124,7 +164,7 @@ class ShowVrrp(Parser):
         rows = _fhrp_rows(text)
         for r in rows:
             a = r.pop("_addrs")
-            r["master_address"], r["virtual_address"] = (a + [None, None])[:2]
+            r["master_address"], r["virtual_address"] = ([*a, None, None])[:2]
         return rows
 
 
@@ -134,8 +174,18 @@ class ShowL2vpnBridgeDomainBrief(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<name>\S+?)(?::|/)(?P<bd>\S+)\s+(?P<id>\d+)\s+(?P<state>up|down|admin down)\s+(?P<acs>\d+)/(?P<acsu>\d+)\s+(?P<pws>\d+)/(?P<pwsu>\d+)(?:\s+(?P<pbb>\d+)/(?P<pbbu>\d+))?(?:\s+(?P<vni>\d+)/(?P<vniu>\d+))?\s*$", text):
-            e: Dict[str, Any] = {"group": m["name"], "bridge_domain": m["bd"], "id": int(m["id"]), "state": m["state"], "acs": {"total": int(m["acs"]), "up": int(m["acsu"])}, "pws": {"total": int(m["pws"]), "up": int(m["pwsu"])}}
+        for m in match_lines(
+            r"^(?P<name>\S+?)(?::|/)(?P<bd>\S+)\s+(?P<id>\d+)\s+(?P<state>up|down|admin down)\s+(?P<acs>\d+)/(?P<acsu>\d+)\s+(?P<pws>\d+)/(?P<pwsu>\d+)(?:\s+(?P<pbb>\d+)/(?P<pbbu>\d+))?(?:\s+(?P<vni>\d+)/(?P<vniu>\d+))?\s*$",
+            text,
+        ):
+            e: Dict[str, Any] = {
+                "group": m["name"],
+                "bridge_domain": m["bd"],
+                "id": int(m["id"]),
+                "state": m["state"],
+                "acs": {"total": int(m["acs"]), "up": int(m["acsu"])},
+                "pws": {"total": int(m["pws"]), "up": int(m["pwsu"])},
+            }
             if m["pbb"]:
                 e["pbbs"] = {"total": int(m["pbb"]), "up": int(m["pbbu"])}
             if m["vni"]:
@@ -184,7 +234,10 @@ class ShowEvpnEthernetSegment(Parser):
         out: List[Dict[str, Any]] = []
         cur: Optional[Dict[str, Any]] = None
         for raw in text.splitlines():
-            m = re.match(r"^(?P<esi>[0-9a-fA-F]{4}\.[0-9a-fA-F.]+|N/A|\S+\.\S+\.\S+)\s+(?P<intf>\S+)\s+(?P<nh>[\d.:a-fA-F]+)\s*$", raw)
+            m = re.match(
+                r"^(?P<esi>[0-9a-fA-F]{4}\.[0-9a-fA-F.]+|N/A|\S+\.\S+\.\S+)\s+(?P<intf>\S+)\s+(?P<nh>[\d.:a-fA-F]+)\s*$",
+                raw,
+            )
             if m and not raw.startswith(" "):
                 cur = {"esi": m["esi"], "interface": m["intf"], "next_hops": [m["nh"]]}
                 out.append(cur)
@@ -199,7 +252,16 @@ class ShowEvpnEthernetSegment(Parser):
 class ShowLacp(Parser):
     """LACP actor/partner state flags, port IDs, keys, system IDs and mux state per bundle member."""
 
-    _FLAGS = {"a": "aggregatable", "s": "synchronized", "c": "collecting", "d": "distributing", "A": "active", "F": "fast", "D": "defaulted", "E": "expired"}
+    _FLAGS: ClassVar[Dict[str, str]] = {
+        "a": "aggregatable",
+        "s": "synchronized",
+        "c": "collecting",
+        "d": "distributing",
+        "A": "active",
+        "F": "fast",
+        "D": "defaulted",
+        "E": "expired",
+    }
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {}
@@ -213,18 +275,40 @@ class ShowLacp(Parser):
                 continue
             if bundle is None:
                 continue
-            m = re.match(r"^(?P<port>\S+)\s+(?P<rate>\d+s)\s+(?P<state>[a-zA-Z\-]{8})\s+(?P<pid>0x[0-9a-f]+,\s*0x[0-9a-f]+)\s+(?P<key>0x[0-9a-f]+)\s+(?P<sys>0x[0-9a-f]+,\s*[0-9a-f\-]+)$", s)
+            m = re.match(
+                r"^(?P<port>\S+)\s+(?P<rate>\d+s)\s+(?P<state>[a-zA-Z\-]{8})\s+(?P<pid>0x[0-9a-f]+,\s*0x[0-9a-f]+)\s+(?P<key>0x[0-9a-f]+)\s+(?P<sys>0x[0-9a-f]+,\s*[0-9a-f\-]+)$",
+                s,
+            )
             if m:
-                info = {"rate": m["rate"], "state": m["state"], "flags": [v for k, v in self._FLAGS.items() if k in m["state"]], "port_id": m["pid"], "key": m["key"], "system_id": m["sys"]}
+                info = {
+                    "rate": m["rate"],
+                    "state": m["state"],
+                    "flags": [v for k, v in self._FLAGS.items() if k in m["state"]],
+                    "port_id": m["pid"],
+                    "key": m["key"],
+                    "system_id": m["sys"],
+                }
                 if m["port"] == "Partner" and last_port:
                     bundle["members"][last_port]["partner"] = info
                 else:
                     last_port = m["port"]
                     bundle["members"].setdefault(last_port, {})["actor"] = info
                 continue
-            m = re.match(r"^(?P<port>\S+)\s+(?P<rx>Current|Expired|Defaulted|Init|Disabled|\S+)\s+(?P<period>Fast|Slow|None)\s+(?P<sel>Selected|Unselected|Standby)\s+(?P<mux>\S+)\s+(?P<ac>\S+)\s+(?P<pc>\S+)$", s)
+            m = re.match(
+                r"^(?P<port>\S+)\s+(?P<rx>Current|Expired|Defaulted|Init|Disabled|\S+)\s+(?P<period>Fast|Slow|None)\s+(?P<sel>Selected|Unselected|Standby)\s+(?P<mux>\S+)\s+(?P<ac>\S+)\s+(?P<pc>\S+)$",
+                s,
+            )
             if m and m["port"] in bundle["members"]:
-                bundle["members"][m["port"]].update({"receive": m["rx"], "period": m["period"], "selection": m["sel"], "mux": m["mux"], "actor_churn": m["ac"], "partner_churn": m["pc"]})
+                bundle["members"][m["port"]].update(
+                    {
+                        "receive": m["rx"],
+                        "period": m["period"],
+                        "selection": m["sel"],
+                        "mux": m["mux"],
+                        "actor_churn": m["ac"],
+                        "partner_churn": m["pc"],
+                    }
+                )
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -281,18 +365,27 @@ class ShowIsisInterfaceBrief(Parser):
             if m:
                 inst = m.group(1)
                 continue
-            m = re.match(r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<ok>Yes|No)(?:\s+(?P<l1>\S+)\s+(?P<l2>\S+)\s+(?P<adj>\d+/\d+)\s+(?P<adv>\d+/\d+)\s+(?P<clns>Up|Down)\s+(?P<mtu>\d+)\s+(?P<p1>\S+)\s+(?P<p2>\S+))?\s*$", raw)
+            m = re.match(
+                r"^(?P<intf>[A-Za-z]\S*\d\S*)\s+(?P<ok>Yes|No)(?:\s+(?P<l1>\S+)\s+(?P<l2>\S+)\s+(?P<adj>\d+/\d+)\s+(?P<adv>\d+/\d+)\s+(?P<clns>Up|Down)\s+(?P<mtu>\d+)\s+(?P<p1>\S+)\s+(?P<p2>\S+))?\s*$",
+                raw,
+            )
             if m:
                 e: Dict[str, Any] = {"instance": inst, "interface": m["intf"], "all_ok": m["ok"] == "Yes"}
                 if m["l1"]:
                     e.update(
                         {
-                            "adjacencies": {"level_1": to_num(none_if(m["l1"]) or 0) if m["l1"] != "-" else None, "level_2": to_num(m["l2"].rstrip("*")) if m["l2"] != "-" else None},
+                            "adjacencies": {
+                                "level_1": to_num(none_if(m["l1"]) or 0) if m["l1"] != "-" else None,
+                                "level_2": to_num(m["l2"].rstrip("*")) if m["l2"] != "-" else None,
+                            },
                             "adjacency_topologies": m["adj"],
                             "advertised_topologies": m["adv"],
                             "clns": m["clns"],
                             "mtu": int(m["mtu"]),
-                            "priority": {"level_1": to_num(m["p1"]) if m["p1"] != "-" else None, "level_2": to_num(m["p2"]) if m["p2"] != "-" else None},
+                            "priority": {
+                                "level_1": to_num(m["p1"]) if m["p1"] != "-" else None,
+                                "level_2": to_num(m["p2"]) if m["p2"] != "-" else None,
+                            },
                         }
                     )
                 out.append(e)
@@ -331,9 +424,24 @@ class ShowPimNeighbor(Parser):
             if m:
                 vrf = m.group(1)
                 continue
-            m = re.match(r"^(?P<addr>[\d.:a-fA-F]+)(?P<self>\*)?\s+(?P<intf>\S+)\s+(?P<up>\S+)\s+(?P<exp>\S+)\s+(?P<pri>\d+)\s*(?P<dr>\(DR\))?\s*(?P<flags>.*?)\s*$", raw)
+            m = re.match(
+                r"^(?P<addr>[\d.:a-fA-F]+)(?P<self>\*)?\s+(?P<intf>\S+)\s+(?P<up>\S+)\s+(?P<exp>\S+)\s+(?P<pri>\d+)\s*(?P<dr>\(DR\))?\s*(?P<flags>.*?)\s*$",
+                raw,
+            )
             if m:
-                out.append({"address": m["addr"], "interface": m["intf"], "uptime": m["up"], "expires": m["exp"], "dr_priority": int(m["pri"]), "dr": bool(m["dr"]), "self": bool(m["self"]), "flags": m["flags"].split(), "vrf": vrf})
+                out.append(
+                    {
+                        "address": m["addr"],
+                        "interface": m["intf"],
+                        "uptime": m["up"],
+                        "expires": m["exp"],
+                        "dr_priority": int(m["pri"]),
+                        "dr": bool(m["dr"]),
+                        "self": bool(m["self"]),
+                        "flags": m["flags"].split(),
+                        "vrf": vrf,
+                    }
+                )
         return out
 
 
@@ -343,8 +451,24 @@ class ShowMplsTrafficEngTunnelsTabular(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<name>\S+)\s+(?P<lsp>\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<src>\d+\.\d+\.\d+\.\d+)\s+(?P<state>up|down|admin-down|\S+)\s+(?P<frr>\S+)\s+(?P<role>Head|Mid|Tail)(?:\s+(?P<prot>\S+))?\s*$", text):
-            out.append(compact({"tunnel": m["name"], "lsp_id": int(m["lsp"]), "destination": m["dst"], "source": m["src"], "state": m["state"], "frr_state": m["frr"], "role": m["role"].lower(), "path_protection": m["prot"]}))
+        for m in match_lines(
+            r"^\s*(?P<name>\S+)\s+(?P<lsp>\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<src>\d+\.\d+\.\d+\.\d+)\s+(?P<state>up|down|admin-down|\S+)\s+(?P<frr>\S+)\s+(?P<role>Head|Mid|Tail)(?:\s+(?P<prot>\S+))?\s*$",
+            text,
+        ):
+            out.append(
+                compact(
+                    {
+                        "tunnel": m["name"],
+                        "lsp_id": int(m["lsp"]),
+                        "destination": m["dst"],
+                        "source": m["src"],
+                        "state": m["state"],
+                        "frr_state": m["frr"],
+                        "role": m["role"].lower(),
+                        "path_protection": m["prot"],
+                    }
+                )
+            )
         return out
 
 
@@ -383,7 +507,15 @@ class ShowFilesystem(Parser):
                 continue
             m = re.match(r"^(?P<size>\d+)\s+(?P<free>\d+)\s+(?P<type>\S+)\s+(?P<flags>\S+)\s+(?P<prefix>\S+)$", s)
             if m:
-                out.setdefault(node, []).append({"prefix": m["prefix"], "size_bytes": int(m["size"]), "free_bytes": int(m["free"]), "type": m["type"], "flags": m["flags"]})
+                out.setdefault(node, []).append(
+                    {
+                        "prefix": m["prefix"],
+                        "size_bytes": int(m["size"]),
+                        "free_bytes": int(m["free"]),
+                        "type": m["type"],
+                        "flags": m["flags"],
+                    }
+                )
         return out.get("local", out) if list(out) == ["local"] else out
 
 
@@ -396,8 +528,19 @@ class Dir(Parser):
         m = re.search(r"Directory of (\S+)", text)
         if m:
             out["directory"] = m.group(1)
-        for m in match_lines(r"^\s*(?P<inode>\d+)\s+(?P<perm>[-dlrwxstST]{10}\.?|[-drwx]{4})\s+(?P<links>\d+\s+)?(?P<size>\d+)\s+(?P<date>\w{3}\s+\d+\s+(?:\d{4}|\d\d:\d\d)(?:\s+\d{4})?)\s+(?P<name>.+?)\s*$", text):
-            out["files"].append({"name": m["name"], "size": int(m["size"]), "permissions": m["perm"], "date": re.sub(r"\s+", " ", m["date"]), "inode": int(m["inode"])})
+        for m in match_lines(
+            r"^\s*(?P<inode>\d+)\s+(?P<perm>[-dlrwxstST]{10}\.?|[-drwx]{4})\s+(?P<links>\d+\s+)?(?P<size>\d+)\s+(?P<date>\w{3}\s+\d+\s+(?:\d{4}|\d\d:\d\d)(?:\s+\d{4})?)\s+(?P<name>.+?)\s*$",
+            text,
+        ):
+            out["files"].append(
+                {
+                    "name": m["name"],
+                    "size": int(m["size"]),
+                    "permissions": m["perm"],
+                    "date": re.sub(r"\s+", " ", m["date"]),
+                    "inode": int(m["inode"]),
+                }
+            )
         m = re.search(r"(\d+) kbytes total \((\d+) kbytes free\)", text)
         if m:
             out["total_kbytes"], out["free_kbytes"] = int(m.group(1)), int(m.group(2))

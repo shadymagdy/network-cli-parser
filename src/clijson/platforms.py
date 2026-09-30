@@ -50,7 +50,22 @@ IOSXR = Platform(
     vendor="Cisco",
     display_name="Cisco IOS XR",
     verb="show",
-    aliases=("iosxr", "xr", "ios-xr", "ios_xr", "cisco_xr", "cisco-xr", "cisco_iosxr", "iosxrv", "xrd", "asr9k", "ncs", "ncs5500", "crs", "8000"),
+    aliases=(
+        "iosxr",
+        "xr",
+        "ios-xr",
+        "ios_xr",
+        "cisco_xr",
+        "cisco-xr",
+        "cisco_iosxr",
+        "iosxrv",
+        "xrd",
+        "asr9k",
+        "ncs",
+        "ncs5500",
+        "crs",
+        "8000",
+    ),
     ntc_name="cisco_xr",
     genie_name="iosxr",
     netmiko_name="cisco_xr",
@@ -64,7 +79,12 @@ IOSXR = Platform(
         (_rx(r"Cisco IOS XR Software"), 50),
         (_rx(r"IOS XR"), 25),
         (_rx(r"^(?:RP|LC)/\d+/(?:RS?P)?\d*/?CPU\d+:"), 40),
-        (_rx(r"\b(?:Gi|Te|Hu|Fo|TenGigE|HundredGigE|FortyGigE|FourHundredGigE|GigabitEthernet|TwentyFiveGigE)\d+/\d+/\d+/\d+"), 15),
+        (
+            _rx(
+                r"\b(?:Gi|Te|Hu|Fo|TenGigE|HundredGigE|FortyGigE|FourHundredGigE|GigabitEthernet|TwentyFiveGigE)\d+/\d+/\d+/\d+"
+            ),
+            15,
+        ),
         (_rx(r"\bBundle-Ether\d+"), 15),
         (_rx(r"\bMgmtEth\d+/"), 20),
         (_rx(r"\b0/(?:RS?P)?\d+/CPU0\b"), 15),
@@ -78,13 +98,32 @@ JUNOS = Platform(
     vendor="Juniper",
     display_name="Juniper Junos OS / Junos OS Evolved",
     verb="show",
-    aliases=("junos", "juniper", "juniper_junos", "junos-evo", "junos_evo", "junosevo", "evo", "vmx", "vjunos", "crpd", "vsrx", "mx", "ptx", "qfx", "srx", "ex"),
+    aliases=(
+        "junos",
+        "juniper",
+        "juniper_junos",
+        "junos-evo",
+        "junos_evo",
+        "junosevo",
+        "evo",
+        "vmx",
+        "vjunos",
+        "crpd",
+        "vsrx",
+        "mx",
+        "ptx",
+        "qfx",
+        "srx",
+        "ex",
+    ),
     ntc_name="juniper_junos",
     genie_name="junos",
     netmiko_name="juniper_junos",
     scrapli_name="juniper_junos",
     prompts=(
-        _rx(r"^(?:\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*)?(?P<prompt>(?P<user>[\w.\-]+)@(?P<host>[\w.\-]+)[>#%])\s*(?P<cmd>.*)$"),
+        _rx(
+            r"^(?:\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*)?(?P<prompt>(?P<user>[\w.\-]+)@(?P<host>[\w.\-]+)[>#%])\s*(?P<cmd>.*)$"
+        ),
     ),
     fingerprints=(
         (_rx(r"^JUNOS |^Junos: |Junos OS|JUNOS Software Release|junos-evo|Junos OS Evolved", re.M | re.I), 50),
@@ -104,7 +143,22 @@ VRP = Platform(
     vendor="Huawei",
     display_name="Huawei VRP (NE/CX/AR/CE/S series)",
     verb="display",
-    aliases=("vrp", "huawei", "huawei_vrp", "huawei_vrpv8", "vrpv8", "vrp8", "vrp5", "ne40e", "ne8000", "ne", "ce", "cloudengine", "huawei_ce", "huawei_ne"),
+    aliases=(
+        "vrp",
+        "huawei",
+        "huawei_vrp",
+        "huawei_vrpv8",
+        "vrpv8",
+        "vrp8",
+        "vrp5",
+        "ne40e",
+        "ne8000",
+        "ne",
+        "ce",
+        "cloudengine",
+        "huawei_ce",
+        "huawei_ne",
+    ),
     ntc_name="huawei_vrp",
     genie_name=None,
     netmiko_name="huawei",
@@ -189,7 +243,7 @@ def detect_platform(output: str = "", command: Optional[str] = None) -> Detectio
     conventions. The winner must beat the runner-up by a margin, otherwise
     ``platform`` is ``None`` and the caller should ask the user.
     """
-    scores: Dict[str, int] = {p: 0 for p in PLATFORMS}
+    scores: Dict[str, int] = dict.fromkeys(PLATFORMS, 0)
     reasons: List[str] = []
 
     if command:

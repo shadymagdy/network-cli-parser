@@ -15,15 +15,24 @@ from clijson.textutils import (
 
 
 @pytest.mark.parametrize(
-    "value,expected",
-    [("42", 42), ("-3", -3), ("1.5", 1.5), ("1,024", 1024), ("0010", "0010"), ("abc", "abc"), (7, 7), ("10.0.0.1", "10.0.0.1")],
+    ("value", "expected"),
+    [
+        ("42", 42),
+        ("-3", -3),
+        ("1.5", 1.5),
+        ("1,024", 1024),
+        ("0010", "0010"),
+        ("abc", "abc"),
+        (7, 7),
+        ("10.0.0.1", "10.0.0.1"),
+    ],
 )
 def test_to_num(value, expected):
     assert to_num(value) == expected
 
 
 @pytest.mark.parametrize(
-    "value,expected",
+    ("value", "expected"),
     [
         ("01:02:03", 3723),
         ("1d02h", 93600),

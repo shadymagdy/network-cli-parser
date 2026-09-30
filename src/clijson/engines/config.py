@@ -75,7 +75,11 @@ def parse_indented(text: str, comment: str = "!", noise: "re.Pattern[str] | None
     for ln in text.splitlines():
         s = ln.rstrip()
         st = s.strip()
-        if not st or st in (comment, "#", "!", "exit", "quit") or st.startswith(("!", "#")) and len(st.strip("!# ")) == 0:
+        if (
+            not st
+            or st in (comment, "#", "!", "exit", "quit")
+            or (st.startswith(("!", "#")) and len(st.strip("!# ")) == 0)
+        ):
             continue
         if noise and noise.match(st):
             continue
@@ -103,7 +107,13 @@ def _build(lines: List[str], indents: List[int], start: int, end: int, node: Dic
         elif j > i + 1:
             j = i + 1  # too deep: treat the remaining lines as siblings
         words = _split_words(lines[i].strip())
-        if lines[i].strip().endswith("-exit") or lines[i].strip() in ("exit", "quit", "end-policy", "end-set", "end-group"):
+        if lines[i].strip().endswith("-exit") or lines[i].strip() in (
+            "exit",
+            "quit",
+            "end-policy",
+            "end-set",
+            "end-group",
+        ):
             i = j
             continue
         key, value = _statement(words, children)

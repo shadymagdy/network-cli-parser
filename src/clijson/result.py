@@ -119,7 +119,9 @@ def _rows(obj: Any) -> Optional[List[Dict[str, Any]]]:
     if isinstance(obj, list) and obj and all(isinstance(r, dict) for r in obj):
         return [_flat(r) for r in obj]
     if isinstance(obj, dict):
-        if obj and all(isinstance(v, dict) and any(not isinstance(x, (dict, list)) for x in v.values()) for v in obj.values()):
+        if obj and all(
+            isinstance(v, dict) and any(not isinstance(x, (dict, list)) for x in v.values()) for v in obj.values()
+        ):
             return [{"name": k, **_flat(v)} for k, v in obj.items()]
         best: Optional[List[Dict[str, Any]]] = None
         for v in obj.values():

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import functools
+import operator
 import re
 from typing import Any, Dict, List, Optional
 
@@ -21,7 +23,9 @@ class ShowMplsLdpNeighborBrief(Parser):
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
         for m in match_lines(
-            r"^\s*(?P<peer>\d+\.\d+\.\d+\.\d+:\d+)\s+(?P<gr>\S+)\s+(?:(?P<nsr>\S+)\s+)?(?P<up>\S+)\s+(?P<d4>\d+)\s+(?P<d6>\d+)\s+(?P<a4>\d+)\s+(?P<a6>\d+)\s+(?P<l4>\d+)\s+(?P<l6>\d+)\s*$", text):
+            r"^\s*(?P<peer>\d+\.\d+\.\d+\.\d+:\d+)\s+(?P<gr>\S+)\s+(?:(?P<nsr>\S+)\s+)?(?P<up>\S+)\s+(?P<d4>\d+)\s+(?P<d6>\d+)\s+(?P<a4>\d+)\s+(?P<a6>\d+)\s+(?P<l4>\d+)\s+(?P<l6>\d+)\s*$",
+            text,
+        ):
             out.append(
                 {
                     "peer": m["peer"],
@@ -35,12 +39,26 @@ class ShowMplsLdpNeighborBrief(Parser):
             )
         if not out:
             # pre-IPv6 layout: Peer GR Up Time Discovery Address
-            for m in match_lines(r"^\s*(?P<peer>\d+\.\d+\.\d+\.\d+:\d+)\s+(?P<gr>[YN])\s+(?P<up>\S+)\s+(?P<disc>\d+)\s+(?P<addr>\d+)\s*$", text):
-                out.append({"peer": m["peer"], "graceful_restart": m["gr"] == "Y", "uptime": m["up"], "discovery": int(m["disc"]), "addresses": int(m["addr"])})
+            for m in match_lines(
+                r"^\s*(?P<peer>\d+\.\d+\.\d+\.\d+:\d+)\s+(?P<gr>[YN])\s+(?P<up>\S+)\s+(?P<disc>\d+)\s+(?P<addr>\d+)\s*$",
+                text,
+            ):
+                out.append(
+                    {
+                        "peer": m["peer"],
+                        "graceful_restart": m["gr"] == "Y",
+                        "uptime": m["up"],
+                        "discovery": int(m["disc"]),
+                        "addresses": int(m["addr"]),
+                    }
+                )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("ldp.neighbors", neighbor=n["peer"].split(":")[0], state="operational", uptime=n["uptime"]) for n in data]
+        return [
+            record("ldp.neighbors", neighbor=n["peer"].split(":")[0], state="operational", uptime=n["uptime"])
+            for n in data
+        ]
 
 
 @register("iosxr", "show mpls ldp [vrf <vrf>] neighbor [<neighbor>] [detail]", intent="ldp.neighbors")
@@ -77,7 +95,12 @@ class ShowMplsLdpNeighbor(Parser):
                 continue
             m = re.match(r"^State: (?P<st>\w+); Msgs sent/rcvd: (?P<sent>\d+)/(?P<rcvd>\d+);\s*(?P<mode>.+)$", s)
             if m:
-                cur["state"], cur["messages_sent"], cur["messages_received"], cur["label_advertisement"] = m["st"], int(m["sent"]), int(m["rcvd"]), m["mode"].strip()
+                cur["state"], cur["messages_sent"], cur["messages_received"], cur["label_advertisement"] = (
+                    m["st"],
+                    int(m["sent"]),
+                    int(m["rcvd"]),
+                    m["mode"].strip(),
+                )
                 continue
             m = re.match(r"^Up time: (?P<up>\S+)", s)
             if m:
@@ -100,12 +123,21 @@ class ShowMplsLdpNeighbor(Parser):
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         return [
-            record("ldp.neighbors", neighbor=k.split(":")[0], state=(v.get("state") or "").lower() or None, uptime=v.get("uptime"), discovery_sources=sum(v["discovery_sources"].values(), []))
+            record(
+                "ldp.neighbors",
+                neighbor=k.split(":")[0],
+                state=(v.get("state") or "").lower() or None,
+                uptime=v.get("uptime"),
+                discovery_sources=functools.reduce(operator.iadd, v["discovery_sources"].values(), []),
+            )
             for k, v in data.items()
         ]
 
 
-@register("iosxr", "show mpls forwarding [(labels <labels...>|prefix <prefix>|interface <interface>|vrf <vrf>|summary|detail|tunnels)]")
+@register(
+    "iosxr",
+    "show mpls forwarding [(labels <labels...>|prefix <prefix>|interface <interface>|vrf <vrf>|summary|detail|tunnels)]",
+)
 class ShowMplsForwarding(Parser):
     """Label forwarding table (LFIB)."""
 
@@ -121,10 +153,22 @@ class ShowMplsForwarding(Parser):
             m = rx.match(raw)
             if not m:
                 # rows without next hop (e.g. Aggregate / exp-null)
-                m2 = re.match(r"^(?P<local>\d+)\s+(?P<out>\S+)\s+(?P<prefix>.+?)\s{2,}(?P<intf>\S+)?\s*(?P<bytes>\d+)\s*$", raw)
+                m2 = re.match(
+                    r"^(?P<local>\d+)\s+(?P<out>\S+)\s+(?P<prefix>.+?)\s{2,}(?P<intf>\S+)?\s*(?P<bytes>\d+)\s*$", raw
+                )
                 if m2:
                     last_local = int(m2["local"])
-                    out.append(compact({"local_label": last_local, "outgoing_label": to_num(m2["out"]), "prefix_or_id": m2["prefix"].strip(), "outgoing_interface": m2["intf"], "bytes_switched": int(m2["bytes"])}))
+                    out.append(
+                        compact(
+                            {
+                                "local_label": last_local,
+                                "outgoing_label": to_num(m2["out"]),
+                                "prefix_or_id": m2["prefix"].strip(),
+                                "outgoing_interface": m2["intf"],
+                                "bytes_switched": int(m2["bytes"]),
+                            }
+                        )
+                    )
                 continue
             local = (m["local"] or "").strip()
             if local:
@@ -151,8 +195,19 @@ class ShowMplsInterfaces(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<intf>[A-Za-z]\S+)\s+(?P<ldp>Yes|No)(?:\s+\((?P<sync>[^)]*)\))?\s+(?P<te>Yes|No)\s+(?P<static>Yes|No)\s+(?P<enabled>Yes|No)\s*$", text):
-            out.append({"interface": m["intf"], "ldp": m["ldp"] == "Yes", "tunnel": m["te"] == "Yes", "static": m["static"] == "Yes", "enabled": m["enabled"] == "Yes"})
+        for m in match_lines(
+            r"^\s*(?P<intf>[A-Za-z]\S+)\s+(?P<ldp>Yes|No)(?:\s+\((?P<sync>[^)]*)\))?\s+(?P<te>Yes|No)\s+(?P<static>Yes|No)\s+(?P<enabled>Yes|No)\s*$",
+            text,
+        ):
+            out.append(
+                {
+                    "interface": m["intf"],
+                    "ldp": m["ldp"] == "Yes",
+                    "tunnel": m["te"] == "Yes",
+                    "static": m["static"] == "Yes",
+                    "enabled": m["enabled"] == "Yes",
+                }
+            )
         return out
 
 
@@ -176,13 +231,22 @@ class ShowLldpNeighbors(Parser):
             if m:
                 out["total"] = int(m["n"])
                 continue
-            m = re.match(r"^(?P<dev>\S.*?)\s+(?P<local>[A-Za-z][\w\-]*\d\S*)\s+(?P<hold>\d+)\s+(?P<cap>[A-Z](?:,[A-Z])*|\[[A-Z,]*\])?\s+(?P<port>\S.*?)\s*$", s)
+            m = re.match(
+                r"^(?P<dev>\S.*?)\s+(?P<local>[A-Za-z][\w\-]*\d\S*)\s+(?P<hold>\d+)\s+(?P<cap>[A-Z](?:,[A-Z])*|\[[A-Z,]*\])?\s+(?P<port>\S.*?)\s*$",
+                s,
+            )
             if m:
                 dev = m["dev"]
                 if pending_dev:
                     dev, pending_dev = pending_dev, None
                 out["neighbors"].append(
-                    {"device_id": dev, "local_interface": m["local"], "hold_time": int(m["hold"]), "capabilities": (m["cap"] or "").strip("[]").split(",") if m["cap"] else [], "port_id": m["port"]}
+                    {
+                        "device_id": dev,
+                        "local_interface": m["local"],
+                        "hold_time": int(m["hold"]),
+                        "capabilities": (m["cap"] or "").strip("[]").split(",") if m["cap"] else [],
+                        "port_id": m["port"],
+                    }
                 )
                 continue
             if re.match(r"^\S+$", s):
@@ -190,7 +254,17 @@ class ShowLldpNeighbors(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("lldp.neighbors", local_interface=n["local_interface"], neighbor=n["device_id"], neighbor_interface=n["port_id"], capabilities=n["capabilities"], ttl=n["hold_time"]) for n in data["neighbors"]]
+        return [
+            record(
+                "lldp.neighbors",
+                local_interface=n["local_interface"],
+                neighbor=n["device_id"],
+                neighbor_interface=n["port_id"],
+                capabilities=n["capabilities"],
+                ttl=n["hold_time"],
+            )
+            for n in data["neighbors"]
+        ]
 
 
 def _lldp_detail_blocks(text: str) -> List[Dict[str, Any]]:
@@ -212,7 +286,11 @@ def _lldp_detail_blocks(text: str) -> List[Dict[str, Any]]:
             k, v = m["k"].strip().lower().replace(" ", "_").replace("/", "_"), m["v"].strip()
             if k == "system_description" and not v:
                 desc = []
-                while i < len(lines) and lines[i].strip() and not re.match(r"^\s*(Time remaining|Hold Time|System Capabilities):", lines[i]):
+                while (
+                    i < len(lines)
+                    and lines[i].strip()
+                    and not re.match(r"^\s*(Time remaining|Hold Time|System Capabilities):", lines[i])
+                ):
                     desc.append(lines[i].strip())
                     i += 1
                 v = "\n".join(desc)
@@ -266,20 +344,46 @@ class ShowCdpNeighbors(Parser):
         pending: Optional[str] = None
         for raw in text.splitlines():
             s = raw.rstrip()
-            if not s.strip() or s.lstrip().startswith(("Capability Codes", "S - Switch", "Device ID")) or re.match(r"^\s+[a-zA-Z] - ", s):
+            if (
+                not s.strip()
+                or s.lstrip().startswith(("Capability Codes", "S - Switch", "Device ID"))
+                or re.match(r"^\s+[a-zA-Z] - ", s)
+            ):
                 continue
-            m = re.match(r"^(?P<dev>\S+)?\s+(?P<local>[A-Za-z][\w\-]*\d\S*)\s+(?P<hold>\d+)\s+(?P<cap>(?:[RTBSHIrPDCM] ?)+)\s+(?P<plat>\S+(?: \S+)?)\s+(?P<port>\S+(?: \S+)?)\s*$", s)
+            m = re.match(
+                r"^(?P<dev>\S+)?\s+(?P<local>[A-Za-z][\w\-]*\d\S*)\s+(?P<hold>\d+)\s+(?P<cap>(?:[RTBSHIrPDCM] ?)+)\s+(?P<plat>\S+(?: \S+)?)\s+(?P<port>\S+(?: \S+)?)\s*$",
+                s,
+            )
             if m:
                 dev = m["dev"] or pending
                 pending = None
-                out.append({"device_id": dev, "local_interface": m["local"], "hold_time": int(m["hold"]), "capabilities": m["cap"].split(), "platform": m["plat"], "port_id": m["port"]})
+                out.append(
+                    {
+                        "device_id": dev,
+                        "local_interface": m["local"],
+                        "hold_time": int(m["hold"]),
+                        "capabilities": m["cap"].split(),
+                        "platform": m["plat"],
+                        "port_id": m["port"],
+                    }
+                )
                 continue
             if re.match(r"^\S+$", s):
                 pending = s
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("lldp.neighbors", local_interface=n["local_interface"], neighbor=n["device_id"], neighbor_interface=n["port_id"], capabilities=n["capabilities"], ttl=n["hold_time"]) for n in data]
+        return [
+            record(
+                "lldp.neighbors",
+                local_interface=n["local_interface"],
+                neighbor=n["device_id"],
+                neighbor_interface=n["port_id"],
+                capabilities=n["capabilities"],
+                ttl=n["hold_time"],
+            )
+            for n in data
+        ]
 
 
 @register("iosxr", "show cdp neighbors [<interface>] detail", "show cdp entry <entry>")
@@ -356,7 +460,10 @@ class ShowArp(Parser):
             if m:
                 vrf = m.group(1)
                 continue
-            m = re.match(r"^(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<age>\S+)\s+(?P<mac>[0-9a-fA-F.]{14})\s+(?P<state>\S+)\s+(?:(?P<flag>\S+)\s+)?(?P<type>ARPA|SNAP|SAP|IEEE|Dot1Q|\S+)\s+(?P<intf>[A-Za-z]\S*\d\S*)$", s)
+            m = re.match(
+                r"^(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<age>\S+)\s+(?P<mac>[0-9a-fA-F.]{14})\s+(?P<state>\S+)\s+(?:(?P<flag>\S+)\s+)?(?P<type>ARPA|SNAP|SAP|IEEE|Dot1Q|\S+)\s+(?P<intf>[A-Za-z]\S*\d\S*)$",
+                s,
+            )
             if m:
                 out.append(
                     compact(
@@ -376,21 +483,59 @@ class ShowArp(Parser):
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("arp", ip_address=r["ip_address"], mac_address=mac(r["mac_address"]), interface=r["interface"], age=r.get("age"), type=r["state"].lower()) for r in data]
+        return [
+            record(
+                "arp",
+                ip_address=r["ip_address"],
+                mac_address=mac(r["mac_address"]),
+                interface=r["interface"],
+                age=r.get("age"),
+                type=r["state"].lower(),
+            )
+            for r in data
+        ]
 
 
-@register("iosxr", "show ipv6 neighbors [vrf (all|<vrf>)] [<interface>] [(detail|location <location>)]", intent="ipv6.neighbors")
+@register(
+    "iosxr",
+    "show ipv6 neighbors [vrf (all|<vrf>)] [<interface>] [(detail|location <location>)]",
+    intent="ipv6.neighbors",
+)
 class ShowIpv6Neighbors(Parser):
     """IPv6 neighbor discovery cache."""
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<ip>[0-9a-fA-F:]+:[0-9a-fA-F:.]*)\s+(?P<age>\S+)\s+(?P<mac>[0-9a-fA-F.]{14})\s+(?P<state>\S+)\s+(?P<intf>\S+)(?:\s+(?P<loc>\S+))?\s*$", text):
-            out.append(compact({"ip_address": m["ip"], "age": none_if(to_num(m["age"])), "mac_address": m["mac"], "state": m["state"], "interface": m["intf"], "location": m["loc"]}))
+        for m in match_lines(
+            r"^(?P<ip>[0-9a-fA-F:]+:[0-9a-fA-F:.]*)\s+(?P<age>\S+)\s+(?P<mac>[0-9a-fA-F.]{14})\s+(?P<state>\S+)\s+(?P<intf>\S+)(?:\s+(?P<loc>\S+))?\s*$",
+            text,
+        ):
+            out.append(
+                compact(
+                    {
+                        "ip_address": m["ip"],
+                        "age": none_if(to_num(m["age"])),
+                        "mac_address": m["mac"],
+                        "state": m["state"],
+                        "interface": m["intf"],
+                        "location": m["loc"],
+                    }
+                )
+            )
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("ipv6.neighbors", ip_address=r["ip_address"], mac_address=mac(r["mac_address"]), interface=r["interface"], state=r["state"].lower(), age=r.get("age")) for r in data]
+        return [
+            record(
+                "ipv6.neighbors",
+                ip_address=r["ip_address"],
+                mac_address=mac(r["mac_address"]),
+                interface=r["interface"],
+                state=r["state"].lower(),
+                age=r.get("age"),
+            )
+            for r in data
+        ]
 
 
 # --------------------------------------------------------------------------- #
@@ -424,9 +569,17 @@ class ShowBundle(Parser):
             if in_ports:
                 if set(s) <= set("- "):
                     continue
-                m = re.match(r"^(?P<port>\S+)\s+(?P<dev>\S+)\s+(?P<state>\S+)\s+(?P<pid>0x[0-9a-f]+, 0x[0-9a-f]+)\s+(?P<bw>\d+)$", s)
+                m = re.match(
+                    r"^(?P<port>\S+)\s+(?P<dev>\S+)\s+(?P<state>\S+)\s+(?P<pid>0x[0-9a-f]+, 0x[0-9a-f]+)\s+(?P<bw>\d+)$",
+                    s,
+                )
                 if m:
-                    last_port = cur["members"][m["port"]] = {"device": m["dev"], "state": m["state"], "port_id": m["pid"], "bandwidth_kbps": int(m["bw"])}
+                    last_port = cur["members"][m["port"]] = {
+                        "device": m["dev"],
+                        "state": m["state"],
+                        "port_id": m["pid"],
+                        "bandwidth_kbps": int(m["bw"]),
+                    }
                     continue
                 if last_port is not None and s.startswith("Link is"):
                     last_port["reason"] = s
@@ -455,7 +608,10 @@ class ShowBundle(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("lag", name=k, status=status(v.get("status")), members=list(v.get("members", {}))) for k, v in data.items()]
+        return [
+            record("lag", name=k, status=status(v.get("status")), members=list(v.get("members", {})))
+            for k, v in data.items()
+        ]
 
 
 @register("iosxr", "show bundle brief")
@@ -464,7 +620,10 @@ class ShowBundleBrief(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<name>BE\d+|Bundle-\S+|BP\d+)\s+(?P<ig>\S+)\s+(?P<state>\S+(?: \S+)?)\s+(?P<lacp>On|Off)\s+(?P<bfd>On|Off)\s+(?P<act>\d+)\s*/\s*(?P<stb>\d+)\s*/\s*(?P<cfg>\d+)\s+(?P<bw>\d+)\s*$", text):
+        for m in match_lines(
+            r"^\s*(?P<name>BE\d+|Bundle-\S+|BP\d+)\s+(?P<ig>\S+)\s+(?P<state>\S+(?: \S+)?)\s+(?P<lacp>On|Off)\s+(?P<bfd>On|Off)\s+(?P<act>\d+)\s*/\s*(?P<stb>\d+)\s*/\s*(?P<cfg>\d+)\s+(?P<bw>\d+)\s*$",
+            text,
+        ):
             out.append(
                 {
                     "name": m["name"],
@@ -499,7 +658,12 @@ class ShowVrfDetail(Parser):
                 continue
             m = re.match(r"^VRF (?P<name>\S+); RD (?P<rd>[^;]+); VPN ID (?P<vpn>.+)$", s)
             if m:
-                cur = out[m["name"]] = {"rd": none_if(m["rd"], "not set"), "vpn_id": none_if(m["vpn"], "not set"), "interfaces": [], "address_families": {}}
+                cur = out[m["name"]] = {
+                    "rd": none_if(m["rd"], "not set"),
+                    "vpn_id": none_if(m["vpn"], "not set"),
+                    "interfaces": [],
+                    "address_families": {},
+                }
                 af, section = None, None
                 continue
             if not cur:
@@ -517,7 +681,9 @@ class ShowVrfDetail(Parser):
                 continue
             m = re.match(r"^Address family (?P<af>.+)$", s)
             if m:
-                af = cur["address_families"].setdefault(m["af"].lower(), {"import_route_targets": [], "export_route_targets": []})
+                af = cur["address_families"].setdefault(
+                    m["af"].lower(), {"import_route_targets": [], "export_route_targets": []}
+                )
                 section = None
                 continue
             m = re.match(r"^(?P<dir>Import|Export) VPN route-target communities:", s)
@@ -552,11 +718,16 @@ class ShowVrf(Parser):
         for raw in text.splitlines():
             if not raw.strip() or re.match(r"^\s*VRF\s+RD\s+RT", raw):
                 continue
-            m = re.match(r"^(?P<name>\S+)\s+(?P<rd>\S+(?: set)?)\s*(?:(?P<dir>import|export)\s+(?P<rt>\S+)\s+(?P<afi>\S+)\s+(?P<safi>\S+))?\s*$", raw)
+            m = re.match(
+                r"^(?P<name>\S+)\s+(?P<rd>\S+(?: set)?)\s*(?:(?P<dir>import|export)\s+(?P<rt>\S+)\s+(?P<afi>\S+)\s+(?P<safi>\S+))?\s*$",
+                raw,
+            )
             if m and not raw.startswith(" "):
                 cur = out.setdefault(m["name"], {"rd": none_if(m["rd"], "not set"), "route_targets": []})
                 if m["dir"]:
-                    cur["route_targets"].append({"direction": m["dir"], "rt": m["rt"], "afi": m["afi"], "safi": m["safi"]})
+                    cur["route_targets"].append(
+                        {"direction": m["dir"], "rt": m["rt"], "afi": m["afi"], "safi": m["safi"]}
+                    )
                 continue
             m = re.match(r"^\s+(?P<dir>import|export)\s+(?P<rt>\S+)\s+(?P<afi>\S+)\s+(?P<safi>\S+)\s*$", raw)
             if m and cur is not None:
@@ -650,7 +821,12 @@ class ShowL2vpnXconnectSummary(Parser):
 # --------------------------------------------------------------------------- #
 
 
-@register("iosxr", "show bfd [(ipv4|ipv6|all)] session [(interface <interface>|destination <dest>)] [(detail|location <location>)]", "show bfd [(ipv4|ipv6|all)] sessions", intent="bfd.sessions")
+@register(
+    "iosxr",
+    "show bfd [(ipv4|ipv6|all)] session [(interface <interface>|destination <dest>)] [(detail|location <location>)]",
+    "show bfd [(ipv4|ipv6|all)] sessions",
+    intent="bfd.sessions",
+)
 class ShowBfdSession(Parser):
     """BFD sessions: echo/async timers, state and hardware offload."""
 
@@ -658,7 +834,10 @@ class ShowBfdSession(Parser):
         out: List[Dict[str, Any]] = []
         for raw in text.splitlines():
             s = raw.rstrip()
-            m = re.match(r"^(?P<intf>\S+)\s+(?P<dest>[\d.:a-fA-F]+)\s+(?P<echo>\S+)\s+(?P<async>\S+)\s+(?P<state>UP|DOWN|INIT|ADMIN_DOWN|ADMINDOWN|Up|Down|Init|AdminDown)\s*(?P<hw>Yes|No)?\s*(?P<npu>\S+)?\s*$", s)
+            m = re.match(
+                r"^(?P<intf>\S+)\s+(?P<dest>[\d.:a-fA-F]+)\s+(?P<echo>\S+)\s+(?P<async>\S+)\s+(?P<state>UP|DOWN|INIT|ADMIN_DOWN|ADMINDOWN|Up|Down|Init|AdminDown)\s*(?P<hw>Yes|No)?\s*(?P<npu>\S+)?\s*$",
+                s,
+            )
             if m:
                 out.append(
                     compact(
@@ -686,5 +865,13 @@ class ShowBfdSession(Parser):
         for s in data:
             ms = re.match(r"(\d+)(ms|s)", s.get("async_detect_time", ""))
             detect = (int(ms.group(1)) * (1000 if ms.group(2) == "s" else 1)) if ms else None
-            res.append(record("bfd.sessions", neighbor=s["destination"], interface=s["interface"], state=s["state"].lower(), detect_time_ms=detect))
+            res.append(
+                record(
+                    "bfd.sessions",
+                    neighbor=s["destination"],
+                    interface=s["interface"],
+                    state=s["state"].lower(),
+                    detect_time_ms=detect,
+                )
+            )
         return res

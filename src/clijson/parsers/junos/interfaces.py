@@ -10,7 +10,13 @@ from ...registry import Parser, register
 from ...textutils import match_lines, none_if, snake, to_num
 
 
-@register("junos", "show interfaces [<interface>] terse", "show interfaces terse [<interface>]", "show interfaces terse routing-instance (all|<instance>)", intent="interfaces.brief")
+@register(
+    "junos",
+    "show interfaces [<interface>] terse",
+    "show interfaces terse [<interface>]",
+    "show interfaces terse routing-instance (all|<instance>)",
+    intent="interfaces.brief",
+)
 class ShowInterfacesTerse(Parser):
     """Admin/link state and addresses per family for physical and logical interfaces."""
 
@@ -21,7 +27,10 @@ class ShowInterfacesTerse(Parser):
         for raw in text.splitlines():
             if not raw.strip() or re.match(r"^\s*Interface\s+Admin\s+Link", raw):
                 continue
-            m = re.match(r"^(?P<name>\S+)\s+(?P<admin>up|down)\s+(?P<link>up|down)(?:\s+(?P<proto>\S+))?(?:\s+(?P<local>\S+))?(?:\s+(?:-->\s*)?(?P<remote>\S+))?\s*$", raw)
+            m = re.match(
+                r"^(?P<name>\S+)\s+(?P<admin>up|down)\s+(?P<link>up|down)(?:\s+(?P<proto>\S+))?(?:\s+(?P<local>\S+))?(?:\s+(?:-->\s*)?(?P<remote>\S+))?\s*$",
+                raw,
+            )
             if m and not raw.startswith(" "):
                 cur = {"interface": m["name"], "admin": m["admin"], "link": m["link"], "families": []}
                 out.append(cur)
@@ -33,7 +42,9 @@ class ShowInterfacesTerse(Parser):
                 continue
             if cur is None:
                 continue
-            m = re.match(r"^\s{20,}(?P<proto>[a-z][\w\-]*)(?:\s+(?P<local>\S+))?(?:\s+(?:-->\s*)?(?P<remote>\S+))?\s*$", raw)
+            m = re.match(
+                r"^\s{20,}(?P<proto>[a-z][\w\-]*)(?:\s+(?P<local>\S+))?(?:\s+(?:-->\s*)?(?P<remote>\S+))?\s*$", raw
+            )
             if m and len(raw) - len(raw.lstrip()) < 45 and not re.match(r"^[\d.:a-f/]+$", m["proto"]):
                 fam = {"family": m["proto"], "addresses": []}
                 cur["families"].append(fam)
@@ -48,7 +59,15 @@ class ShowInterfacesTerse(Parser):
         res = []
         for r in data:
             ip = next((a["local"] for f in r["families"] if f["family"] == "inet" for a in f["addresses"]), None)
-            res.append(record("interfaces.brief", name=r["interface"], admin_status=status(r["admin"]) if r["admin"] == "up" else "admin-down", oper_status=status(r["link"]), ip_address=ip))
+            res.append(
+                record(
+                    "interfaces.brief",
+                    name=r["interface"],
+                    admin_status=status(r["admin"]) if r["admin"] == "up" else "admin-down",
+                    oper_status=status(r["link"]),
+                    ip_address=ip,
+                )
+            )
         return res
 
 
@@ -71,7 +90,16 @@ class ShowInterfacesDescriptions(Parser):
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("interfaces.description", name=r["interface"], admin_status="up" if r["admin"] == "up" else "admin-down", oper_status=status(r["link"]), description=r["description"]) for r in data]
+        return [
+            record(
+                "interfaces.description",
+                name=r["interface"],
+                admin_status="up" if r["admin"] == "up" else "admin-down",
+                oper_status=status(r["link"]),
+                description=r["description"],
+            )
+            for r in data
+        ]
 
 
 _KV_SPLIT = re.compile(r",\s+")
@@ -91,7 +119,12 @@ def _kv_line(line: str) -> Dict[str, Any]:
     return out
 
 
-@register("junos", "show interfaces [<interface>] [(detail|extensive|statistics|brief|media)]", "show interfaces (detail|extensive|statistics) [<interface>]", intent="interfaces.detail")
+@register(
+    "junos",
+    "show interfaces [<interface>] [(detail|extensive|statistics|brief|media)]",
+    "show interfaces (detail|extensive|statistics) [<interface>]",
+    intent="interfaces.detail",
+)
 class ShowInterfaces(Parser):
     """Physical and logical interfaces: state, speed, MAC, counters, errors, families and addresses."""
 
@@ -105,7 +138,10 @@ class ShowInterfaces(Parser):
             s = raw.strip()
             if not s:
                 continue
-            m = re.match(r"^Physical interface: (?P<name>[^,\s]+),\s*(?P<admin>Enabled|Administratively down|Disabled),\s*Physical link is (?P<link>\w+)", s)
+            m = re.match(
+                r"^Physical interface: (?P<name>[^,\s]+),\s*(?P<admin>Enabled|Administratively down|Disabled),\s*Physical link is (?P<link>\w+)",
+                s,
+            )
             if m:
                 phy = out[m["name"]] = {
                     "admin_status": "up" if m["admin"] == "Enabled" else "down",
@@ -115,7 +151,10 @@ class ShowInterfaces(Parser):
                 logical = proto = None
                 section = None
                 continue
-            m = re.match(r"^Logical interface (?P<name>\S+) \(Index (?P<idx>\d+)\)(?: \(SNMP ifIndex (?P<snmp>\d+)\))?(?: \(Generation (?P<gen>\d+)\))?", s)
+            m = re.match(
+                r"^Logical interface (?P<name>\S+) \(Index (?P<idx>\d+)\)(?: \(SNMP ifIndex (?P<snmp>\d+)\))?(?: \(Generation (?P<gen>\d+)\))?",
+                s,
+            )
             if m:
                 parent_name = m["name"].rsplit(".", 1)[0]
                 if not phy:
@@ -132,9 +171,15 @@ class ShowInterfaces(Parser):
             if not phy:
                 continue
             target = logical if logical is not None else phy
-            if logical is not None and re.match(r"^(Protocol [\w\-]+|Flags: |Addresses, Flags|Destination: |Local: )", s):
+            if logical is not None and re.match(
+                r"^(Protocol [\w\-]+|Flags: |Addresses, Flags|Destination: |Local: )", s
+            ):
                 section = None
-            if logical is not None and section not in ("traffic_statistics", "ipv6_transit_statistics", "label_switched_interface_lsi_traffic_statistics"):
+            if logical is not None and section not in (
+                "traffic_statistics",
+                "ipv6_transit_statistics",
+                "label_switched_interface_lsi_traffic_statistics",
+            ):
                 m = re.match(r"^Protocol (?P<p>[\w\-]+)(?:, MTU: (?P<mtu>\w+))?(?:, (?P<rest>.+))?$", s)
                 if m:
                     proto = logical["protocols"][m["p"]] = {"addresses": []}
@@ -143,9 +188,17 @@ class ShowInterfaces(Parser):
                     if m["rest"]:
                         proto.update(_kv_line(m["rest"]))
                     continue
-                m = re.match(r"^Destination: (?P<dst>[^,]+)(?:, Local: (?P<local>[^,]+))?(?:, Broadcast: (?P<bcast>\S+))?", s)
+                m = re.match(
+                    r"^Destination: (?P<dst>[^,]+)(?:, Local: (?P<local>[^,]+))?(?:, Broadcast: (?P<bcast>\S+))?", s
+                )
                 if m and proto is not None:
-                    proto["addresses"].append({k: v.strip(",") for k, v in {"destination": m["dst"], "local": m["local"], "broadcast": m["bcast"]}.items() if v})
+                    proto["addresses"].append(
+                        {
+                            k: v.strip(",")
+                            for k, v in {"destination": m["dst"], "local": m["local"], "broadcast": m["bcast"]}.items()
+                            if v
+                        }
+                    )
                     continue
                 m = re.match(r"^Local: (?P<local>\S+)", s)
                 if m and proto is not None:
@@ -192,16 +245,29 @@ class ShowInterfaces(Parser):
             if m:
                 phy[f"{m['dir'].lower()}_rate_bps"], phy[f"{m['dir'].lower()}_rate_pps"] = int(m["bps"]), int(m["pps"])
                 continue
-            m = re.match(r"^(?P<k>Device flags|Interface flags|Link flags|Active alarms|Active defects|CoS queues)\s*: (?P<v>.+)$", s)
+            m = re.match(
+                r"^(?P<k>Device flags|Interface flags|Link flags|Active alarms|Active defects|CoS queues)\s*: (?P<v>.+)$",
+                s,
+            )
             if m:
                 v = m["v"].strip()
                 phy[snake(m["k"])] = None if v == "None" else (v.split() if "flags" in m["k"] else v)
                 continue
-            if re.match(r"^(Traffic statistics|Input errors|Output errors|IPv6 transit statistics|Label-switched interface \(LSI\) traffic statistics|Dropped traffic statistics.*|MAC statistics|Filter statistics|PCS statistics)", s):
+            if re.match(
+                r"^(Traffic statistics|Input errors|Output errors|IPv6 transit statistics|Label-switched interface \(LSI\) traffic statistics|Dropped traffic statistics.*|MAC statistics|Filter statistics|PCS statistics)",
+                s,
+            ):
                 section = snake(s.split(":")[0].split("  ")[0])
                 continue
-            if section in ("traffic_statistics", "ipv6_transit_statistics", "label_switched_interface_lsi_traffic_statistics"):
-                m = re.match(r"^(?P<dir>Input|Output)\s+(?P<what>bytes|packets)\s*:\s*(?P<n>\d+)(?:\s+(?P<rate>\d+) (?:bps|pps))?", s)
+            if section in (
+                "traffic_statistics",
+                "ipv6_transit_statistics",
+                "label_switched_interface_lsi_traffic_statistics",
+            ):
+                m = re.match(
+                    r"^(?P<dir>Input|Output)\s+(?P<what>bytes|packets)\s*:\s*(?P<n>\d+)(?:\s+(?P<rate>\d+) (?:bps|pps))?",
+                    s,
+                )
                 if m:
                     st = target.setdefault(section, {})
                     st[f"{m['dir'].lower()}_{m['what']}"] = int(m["n"])
@@ -222,7 +288,13 @@ class ShowInterfaces(Parser):
                 if m:
                     phy.setdefault("pcs_statistics", {})[snake(m["k"])] = int(m["v"])
                     continue
-            if re.match(r"^(Link-level type|Speed|Loop Detect|Source filtering|Pad to minimum|Link-mode|Bandwidth|Type|MTU|Auto-negotiation|Remote fault|Local resolution|Generation)", s) and ":" in s:
+            if (
+                re.match(
+                    r"^(Link-level type|Speed|Loop Detect|Source filtering|Pad to minimum|Link-mode|Bandwidth|Type|MTU|Auto-negotiation|Remote fault|Local resolution|Generation)",
+                    s,
+                )
+                and ":" in s
+            ):
                 section = None
                 kv = _kv_line(s)
                 if logical is not None and "bandwidth" in kv:
@@ -239,7 +311,14 @@ class ShowInterfaces(Parser):
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         res = []
         for name, d in data.items():
-            ips = [a["local"] + ("/" + a["destination"].split("/")[1] if "/" in a.get("destination", "") else "") for li in d.get("logical_interfaces", {}).values() for p, pv in li.get("protocols", {}).items() if p == "inet" for a in pv.get("addresses", []) if a.get("local")]
+            ips = [
+                a["local"] + ("/" + a["destination"].split("/")[1] if "/" in a.get("destination", "") else "")
+                for li in d.get("logical_interfaces", {}).values()
+                for p, pv in li.get("protocols", {}).items()
+                if p == "inet"
+                for a in pv.get("addresses", [])
+                if a.get("local")
+            ]
             ts = d.get("traffic_statistics", {})
             ie, oe = d.get("input_errors", {}), d.get("output_errors", {})
             speed = d.get("speed")
@@ -310,7 +389,10 @@ class ShowLacpInterfaces(Parser):
                     }
                     continue
             if section == "protocol":
-                m = re.match(r"^(?P<intf>\S+)\s+(?P<rx>Current|Expired|Defaulted|Initialize|Port disabled|LACP disabled|\S+)\s+(?P<tx>(?:Fast|Slow|No) periodic|\S+)\s+(?P<mux>\S.*?)\s*$", s)
+                m = re.match(
+                    r"^(?P<intf>\S+)\s+(?P<rx>Current|Expired|Defaulted|Initialize|Port disabled|LACP disabled|\S+)\s+(?P<tx>(?:Fast|Slow|No) periodic|\S+)\s+(?P<mux>\S.*?)\s*$",
+                    s,
+                )
                 if m and m["intf"] != "Member":
                     mem = cur["members"].setdefault(m["intf"], {})
                     mem["receive_state"], mem["transmit_state"], mem["mux_state"] = m["rx"], m["tx"], m["mux"]
@@ -319,7 +401,9 @@ class ShowLacpInterfaces(Parser):
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
         res = []
         for k, v in data.items():
-            up = any(m.get("mux_state", "").lower().startswith("collecting distributing") for m in v["members"].values())
+            up = any(
+                m.get("mux_state", "").lower().startswith("collecting distributing") for m in v["members"].values()
+            )
             res.append(record("lag", name=k, status="up" if up else "down", members=list(v["members"])))
         return res
 
@@ -353,7 +437,9 @@ class ShowInterfacesDiagnosticsOptics(Parser):
                 tgt = lane if lane is not None else cur
                 if nm:
                     unit = nm.group(2)
-                    tgt[f"{k}_{ {'mA': 'ma', 'mW': 'mw', 'dBm': 'dbm', 'V': 'v', 'degrees C': 'c'}[unit] }"] = float(nm.group(1))
+                    tgt[f"{k}_{ {'mA': 'ma', 'mW': 'mw', 'dBm': 'dbm', 'V': 'v', 'degrees C': 'c'}[unit] }"] = float(
+                        nm.group(1)
+                    )
                     if nm.group(3) and nm.group(4) == "dBm":
                         tgt[f"{k}_dbm"] = float(nm.group(3)) if nm.group(3) not in ("-Inf",) else None
                 else:

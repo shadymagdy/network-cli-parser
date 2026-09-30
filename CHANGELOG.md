@@ -1,5 +1,29 @@
 # Changelog
 
+All notable changes to this project are documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
+[Semantic Versioning](https://semver.org/).
+
+## Unreleased
+
+### Changed
+
+* Build and packaging moved to [uv](https://docs.astral.sh/uv/). The `uv_build` backend replaces setuptools,
+  development tools are PEP 735 dependency groups, and `uv.lock` pins every tool version.
+* Python 3.10 or newer is required (3.8 and 3.9 are end-of-life). Python 3.14 is supported and tested.
+* License metadata uses a PEP 639 SPDX expression.
+* `clijson.__version__` is read from the installed package metadata.
+* Code is formatted with `ruff format` (120 columns), and more ruff rule families are enabled
+  (bugbear, comprehensions, simplify, perf, pytest style).
+* pre-commit hooks for ruff, the lockfile and basic file hygiene.
+* CI runs on `astral-sh/setup-uv` with a locked environment and dependency caching. It also cancels superseded
+  runs and builds and smoke-tests the wheel.
+* A plugin that fails to load now raises a `RuntimeWarning` instead of failing silently.
+
+### Removed
+
+* The `dev` extra. Use `uv sync` (the `dev` dependency group) instead.
+
 ## 0.1.0
 
 First release.

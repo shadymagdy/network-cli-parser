@@ -9,7 +9,18 @@ from ...models import mac, record, status
 from ...registry import Parser, register
 from ...textutils import match_lines, none_if, snake, to_num
 
-_FLAGS = {"(l)": "loopback", "(s)": "spoofing", "(E)": "e_trunk_down", "(b)": "bfd_down", "(B)": "bit_error_down", "(e)": "ethoam_down", "(d)": "dampening_suppressed", "(dl)": "dldp_down", "(lb)": "lbdt_block", "(v)": "virtual_port"}
+_FLAGS = {
+    "(l)": "loopback",
+    "(s)": "spoofing",
+    "(E)": "e_trunk_down",
+    "(b)": "bfd_down",
+    "(B)": "bit_error_down",
+    "(e)": "ethoam_down",
+    "(d)": "dampening_suppressed",
+    "(dl)": "dldp_down",
+    "(lb)": "lbdt_block",
+    "(v)": "virtual_port",
+}
 
 
 def _vrp_state(value: str) -> Dict[str, Any]:
@@ -25,7 +36,7 @@ def _vrp_state(value: str) -> Dict[str, Any]:
     elif v.startswith("^"):
         out["state"], out["standby"] = "down", True
         v = v[1:]
-    elif v.startswith("#") or v.startswith("-"):
+    elif v.startswith(("#", "-")):
         out["state"] = "down"
         out["reason"] = {"#": "lbdt", "-": "link_flap"}[v[0]]
         v = v[1:]
@@ -59,7 +70,10 @@ class DisplayInterfaceBrief(Parser):
         out: List[Dict[str, Any]] = []
         trunk: Optional[Dict[str, Any]] = None
         for raw in text.splitlines():
-            m = re.match(r"^(?P<indent>\s*)(?P<intf>[A-Za-z][\w\-/.:]*\d(?:\([^)]*\))*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<inu>[\d.]+%|--)\s+(?P<outu>[\d.]+%|--)\s+(?P<inerr>\d+)\s+(?P<outerr>\d+)\s*$", raw)
+            m = re.match(
+                r"^(?P<indent>\s*)(?P<intf>[A-Za-z][\w\-/.:]*\d(?:\([^)]*\))*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))*)\s+(?P<inu>[\d.]+%|--)\s+(?P<outu>[\d.]+%|--)\s+(?P<inerr>\d+)\s+(?P<outerr>\d+)\s*$",
+                raw,
+            )
             if not m:
                 continue
             phy, proto = _vrp_state(m["phy"]), _vrp_state(m["proto"])
@@ -89,8 +103,15 @@ class DisplayInterfaceBrief(Parser):
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         res = []
         for r in data:
-            for e in [r] + r.get("members", []):
-                res.append(record("interfaces.brief", name=e["interface"], admin_status="admin-down" if e.get("admin_down") else "up", oper_status=status(e["protocol"]) if e["physical"] == "up" else "down"))
+            for e in [r, *r.get("members", [])]:
+                res.append(
+                    record(
+                        "interfaces.brief",
+                        name=e["interface"],
+                        admin_status="admin-down" if e.get("admin_down") else "up",
+                        oper_status=status(e["protocol"]) if e["physical"] == "up" else "down",
+                    )
+                )
         return res
 
 
@@ -104,13 +125,26 @@ class DisplayIpInterfaceBrief(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {"interfaces": []}
-        for key, rx in (("up_physical", r"The number of interface that is UP in Physical is (\d+)"), ("down_physical", r"The number of interface that is DOWN in Physical is (\d+)"), ("up_protocol", r"The number of interface that is UP in Protocol is (\d+)"), ("down_protocol", r"The number of interface that is DOWN in Protocol is (\d+)")):
+        for key, rx in (
+            ("up_physical", r"The number of interface that is UP in Physical is (\d+)"),
+            ("down_physical", r"The number of interface that is DOWN in Physical is (\d+)"),
+            ("up_protocol", r"The number of interface that is UP in Protocol is (\d+)"),
+            ("down_protocol", r"The number of interface that is DOWN in Protocol is (\d+)"),
+        ):
             m = re.search(rx, text)
             if m:
                 out.setdefault("summary", {})[key] = int(m.group(1))
-        for m in match_lines(r"^(?P<intf>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<ip>\d+\.\d+\.\d+\.\d+/\d+|unassigned)\s+(?P<phy>[*^]?\w+(?:\([a-zA-Z]+\))?)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))?)(?:\s+(?P<vrf>\S+))?\s*$", text):
+        for m in match_lines(
+            r"^(?P<intf>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<ip>\d+\.\d+\.\d+\.\d+/\d+|unassigned)\s+(?P<phy>[*^]?\w+(?:\([a-zA-Z]+\))?)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))?)(?:\s+(?P<vrf>\S+))?\s*$",
+            text,
+        ):
             phy, proto = _vrp_state(m["phy"]), _vrp_state(m["proto"])
-            e = {"interface": m["intf"], "ip_address": none_if(m["ip"], "unassigned"), "physical": phy["state"], "protocol": proto["state"]}
+            e = {
+                "interface": m["intf"],
+                "ip_address": none_if(m["ip"], "unassigned"),
+                "physical": phy["state"],
+                "protocol": proto["state"],
+            }
             if phy.get("admin_down"):
                 e["admin_down"] = True
             if none_if(m["vrf"]):
@@ -119,7 +153,17 @@ class DisplayIpInterfaceBrief(Parser):
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("interfaces.brief", name=e["interface"], admin_status="admin-down" if e.get("admin_down") else "up", oper_status=status(e["protocol"]), ip_address=e["ip_address"], vrf=e.get("vpn_instance")) for e in data["interfaces"]]
+        return [
+            record(
+                "interfaces.brief",
+                name=e["interface"],
+                admin_status="admin-down" if e.get("admin_down") else "up",
+                oper_status=status(e["protocol"]),
+                ip_address=e["ip_address"],
+                vrf=e.get("vpn_instance"),
+            )
+            for e in data["interfaces"]
+        ]
 
 
 @register("vrp", "display interface description [<interface>]", intent="interfaces.description")
@@ -128,18 +172,35 @@ class DisplayInterfaceDescription(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^(?P<intf>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))?)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))?)(?:\s+(?P<desc>.*?))?\s*$", text):
+        for m in match_lines(
+            r"^(?P<intf>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<phy>[*^#\-]?\w+(?:\([a-zA-Z]+\))?)\s+(?P<proto>[*^]?\w+(?:\([a-zA-Z]+\))?)(?:\s+(?P<desc>.*?))?\s*$",
+            text,
+        ):
             if m["intf"] in ("Interface",):
                 continue
             phy, proto = _vrp_state(m["phy"]), _vrp_state(m["proto"])
-            e = {"interface": m["intf"], "physical": phy["state"], "protocol": proto["state"], "description": m["desc"] or None}
+            e = {
+                "interface": m["intf"],
+                "physical": phy["state"],
+                "protocol": proto["state"],
+                "description": m["desc"] or None,
+            }
             if phy.get("admin_down"):
                 e["admin_down"] = True
             out.append(e)
         return out
 
     def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [record("interfaces.description", name=e["interface"], admin_status="admin-down" if e.get("admin_down") else "up", oper_status=status(e["protocol"]), description=e["description"]) for e in data]
+        return [
+            record(
+                "interfaces.description",
+                name=e["interface"],
+                admin_status="admin-down" if e.get("admin_down") else "up",
+                oper_status=status(e["protocol"]),
+                description=e["description"],
+            )
+            for e in data
+        ]
 
 
 def _pairs(line: str) -> Dict[str, Any]:
@@ -165,7 +226,9 @@ class DisplayInterface(Parser):
                 continue
             m = re.match(r"^(?P<name>\S+) current state\s*:\s*(?P<st>[\w ]+?)\s*(?:\((?P<extra>[^)]*)\))?\s*,?$", s)
             if m and not raw.startswith(" "):
-                cur = out[m["name"]] = {"physical_state": m["st"].strip().lower().replace("administratively down", "admin-down")}
+                cur = out[m["name"]] = {
+                    "physical_state": m["st"].strip().lower().replace("administratively down", "admin-down")
+                }
                 if m["extra"]:
                     em = re.search(r"ifindex:\s*(\d+)", m["extra"])
                     if em:
@@ -205,7 +268,10 @@ class DisplayInterface(Parser):
                 if mm:
                     cur["current_bandwidth"] = mm.group(1)
                 continue
-            m = re.match(r"^Internet Address is (?:(?P<how>negotiated|allocated by \w+|unnumbered), )?(?P<ip>\d+\.\d+\.\d+\.\d+/\d+)(?P<sub> Sub)?", s)
+            m = re.match(
+                r"^Internet Address is (?:(?P<how>negotiated|allocated by \w+|unnumbered), )?(?P<ip>\d+\.\d+\.\d+\.\d+/\d+)(?P<sub> Sub)?",
+                s,
+            )
             if m:
                 cur.setdefault("ipv4_addresses", []).append(m["ip"])
                 if m["how"]:
@@ -227,7 +293,10 @@ class DisplayInterface(Parser):
             if m:
                 cur[f"last_protocol_{m.group(1)}"] = none_if(m["t"].strip())
                 continue
-            m = re.match(r"^Port BW\s*:\s*(?P<bw>[^,]+)(?:, Transceiver max BW\s*:\s*(?P<tbw>[^,]+))?(?:, Transceiver Mode\s*:\s*(?P<tm>\S+))?", s)
+            m = re.match(
+                r"^Port BW\s*:\s*(?P<bw>[^,]+)(?:, Transceiver max BW\s*:\s*(?P<tbw>[^,]+))?(?:, Transceiver Mode\s*:\s*(?P<tm>\S+))?",
+                s,
+            )
             if m:
                 cur["port_bandwidth"] = m["bw"].strip()
                 if m["tbw"]:
@@ -243,7 +312,10 @@ class DisplayInterface(Parser):
             if m:
                 cur["duplex"], cur["negotiation"] = m["d"].lower(), m["n"].lower()
                 continue
-            m = re.match(r"^(?:Last (?P<n>\d+) seconds|Realtime (?P<rt>\d+) seconds) (?P<dir>input|output) rate:?\s*(?:(?P<Bps>\d+) bytes/sec,?\s*)?(?P<bps>\d+) bits/sec,\s*(?P<pps>\d+) packets/sec", s)
+            m = re.match(
+                r"^(?:Last (?P<n>\d+) seconds|Realtime (?P<rt>\d+) seconds) (?P<dir>input|output) rate:?\s*(?:(?P<Bps>\d+) bytes/sec,?\s*)?(?P<bps>\d+) bits/sec,\s*(?P<pps>\d+) packets/sec",
+                s,
+            )
             if m:
                 if m["n"]:
                     cur["rate_interval_seconds"] = int(m["n"])
@@ -347,20 +419,44 @@ class DisplayEthTrunk(Parser):
             if m:
                 cur["members"][m["p"]] = {"status": m["st"].lower(), "weight": int(m["w"])}
                 continue
-            m = re.match(r"^(?P<p>\S+)\s+(?P<st>Selected|Unselect|Indep)\s+(?P<type>\S+)\s+(?P<pri>\d+)\s+(?P<no>\d+)\s+(?P<key>\d+)\s+(?P<state>[01]+)\s+(?P<w>\d+)$", s)
+            m = re.match(
+                r"^(?P<p>\S+)\s+(?P<st>Selected|Unselect|Indep)\s+(?P<type>\S+)\s+(?P<pri>\d+)\s+(?P<no>\d+)\s+(?P<key>\d+)\s+(?P<state>[01]+)\s+(?P<w>\d+)$",
+                s,
+            )
             if m:
-                cur["members"][m["p"]] = {"status": m["st"].lower(), "port_type": m["type"], "port_priority": int(m["pri"]), "port_number": int(m["no"]), "port_key": int(m["key"]), "port_state": m["state"], "weight": int(m["w"])}
+                cur["members"][m["p"]] = {
+                    "status": m["st"].lower(),
+                    "port_type": m["type"],
+                    "port_priority": int(m["pri"]),
+                    "port_number": int(m["no"]),
+                    "port_key": int(m["key"]),
+                    "port_state": m["state"],
+                    "weight": int(m["w"]),
+                }
                 continue
-            m = re.match(r"^(?P<p>\S+)\s+(?P<pri>\d+)\s+(?P<sid>[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4})\s+(?P<ppri>\d+)\s+(?P<no>\d+)\s+(?P<key>\d+)\s+(?P<state>[01]+)$", s)
+            m = re.match(
+                r"^(?P<p>\S+)\s+(?P<pri>\d+)\s+(?P<sid>[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4})\s+(?P<ppri>\d+)\s+(?P<no>\d+)\s+(?P<key>\d+)\s+(?P<state>[01]+)$",
+                s,
+            )
             if m and section == "partner":
-                cur["members"].setdefault(m["p"], {})["partner"] = {"system_priority": int(m["pri"]), "system_id": m["sid"], "port_priority": int(m["ppri"]), "port_number": int(m["no"]), "port_key": int(m["key"]), "port_state": m["state"]}
+                cur["members"].setdefault(m["p"], {})["partner"] = {
+                    "system_priority": int(m["pri"]),
+                    "system_id": m["sid"],
+                    "port_priority": int(m["ppri"]),
+                    "port_number": int(m["no"]),
+                    "port_key": int(m["key"]),
+                    "port_state": m["state"],
+                }
                 continue
             for k, v in re.findall(r"([A-Z][\w\- ]*?)\s*:\s*(.+?)(?=\s{2,}[A-Z][\w\- ]*?\s*:|$)", s):
                 cur[snake(k)] = to_num(v.strip())
         return out
 
     def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        return [record("lag", name=k, status=status(str(v.get("operate_status", ""))), members=list(v["members"])) for k, v in data.items()]
+        return [
+            record("lag", name=k, status=status(str(v.get("operate_status", ""))), members=list(v["members"]))
+            for k, v in data.items()
+        ]
 
 
 @register("vrp", "display port vlan [(active|<interface>)]")
@@ -370,9 +466,19 @@ class DisplayPortVlan(Parser):
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out: List[Dict[str, Any]] = []
         for raw in text.splitlines():
-            m = re.match(r"^(?P<p>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<lt>access|trunk|hybrid|dot1q-tunnel|desirable|auto|--)\s+(?P<pvid>\d+|-)\s*(?P<vl>.*?)\s*$", raw)
+            m = re.match(
+                r"^(?P<p>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<lt>access|trunk|hybrid|dot1q-tunnel|desirable|auto|--)\s+(?P<pvid>\d+|-)\s*(?P<vl>.*?)\s*$",
+                raw,
+            )
             if m:
-                out.append({"interface": m["p"], "link_type": m["lt"], "pvid": to_num(m["pvid"]) if m["pvid"] != "-" else None, "vlans": _vlan_list(m["vl"])})
+                out.append(
+                    {
+                        "interface": m["p"],
+                        "link_type": m["lt"],
+                        "pvid": to_num(m["pvid"]) if m["pvid"] != "-" else None,
+                        "vlans": _vlan_list(m["vl"]),
+                    }
+                )
                 continue
             m = re.match(r"^ {20,}(?P<vl>[\d\-][\d\- ]*)$", raw)
             if m and out:
@@ -402,7 +508,9 @@ class DisplayVlan(Parser):
         mode: Optional[str] = None
         table: Optional[str] = None
         for raw in text.splitlines():
-            if re.match(r"^\s*VID\s+(Type\s+Ports|Ports|Name\s+Status\s+Ports|Type\s+Status\s+Ports)", raw) or re.match(r"^\s*VID\s+Type\s+Ports", raw):
+            if re.match(r"^\s*VID\s+(Type\s+Ports|Ports|Name\s+Status\s+Ports|Type\s+Status\s+Ports)", raw) or re.match(
+                r"^\s*VID\s+Type\s+Ports", raw
+            ):
                 table = "ports"
                 continue
             if re.match(r"^\s*(VID|VLAN ID)\s+(Type\s+)?Status\s+", raw):
@@ -411,15 +519,24 @@ class DisplayVlan(Parser):
             if table is None or not raw.strip() or re.match(r"^-+\s*$", raw.strip()):
                 continue
             if table == "props":
-                m = re.match(r"^\s*(?P<vid>\d+)\s+(?P<type>common|super|sub|mux|dynamic|\S+)\s+(?P<st>enable|disable)\s+(?P<rest>.*?)\s*$", raw)
+                m = re.match(
+                    r"^\s*(?P<vid>\d+)\s+(?P<type>common|super|sub|mux|dynamic|\S+)\s+(?P<st>enable|disable)\s+(?P<rest>.*?)\s*$",
+                    raw,
+                )
                 if m:
                     v = out["vlans"].setdefault(m["vid"], {"untagged": [], "tagged": []})
                     v["type"], v["status"] = m["type"], m["st"]
-                    dm = re.search(r"(?:FWD|DSD|forward|discard)\s+(?:FWD|DSD|forward|discard)\s+(?:FWD|DSD|forward|discard)\s+(?P<desc>\S.*?)?(?:\s{2,}\*.*)?$", m["rest"])
+                    dm = re.search(
+                        r"(?:FWD|DSD|forward|discard)\s+(?:FWD|DSD|forward|discard)\s+(?:FWD|DSD|forward|discard)\s+(?P<desc>\S.*?)?(?:\s{2,}\*.*)?$",
+                        m["rest"],
+                    )
                     if dm and dm["desc"] and not dm["desc"].startswith(("default", "*")):
                         v["description"] = dm["desc"].strip()
                 continue
-            m = re.match(r"^\s*(?P<vid>\d+)\s+(?:(?P<type>common|super|sub|mux|dynamic)\s+)?(?:(?P<name>(?!UT:|TG:|MP:|ST:|enable|disable)\S+)\s+)?(?:(?P<st>enable|disable)\s+)?(?P<rest>(?:UT|TG|MP|ST):.*)?$", raw)
+            m = re.match(
+                r"^\s*(?P<vid>\d+)\s+(?:(?P<type>common|super|sub|mux|dynamic)\s+)?(?:(?P<name>(?!UT:|TG:|MP:|ST:|enable|disable)\S+)\s+)?(?:(?P<st>enable|disable)\s+)?(?P<rest>(?:UT|TG|MP|ST):.*)?$",
+                raw,
+            )
             if m and (m["rest"] or m["st"] or m["type"]):
                 cur = out["vlans"].setdefault(m["vid"], {"untagged": [], "tagged": []})
                 if m["type"]:

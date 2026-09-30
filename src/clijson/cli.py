@@ -1,14 +1,14 @@
 """``clijson`` command line interface.
 
-    clijson parse show_bgp.txt -p iosxr -c "show bgp summary"
-    ssh r1 "show interfaces terse" | clijson parse -p junos -c "show interfaces terse"
-    clijson parse session.log                      # every command in a terminal log
-    clijson parse out.txt -c "dis int br" --normalize -f table
-    clijson commands -p vrp --search bgp
-    clijson diff pre.txt post.txt -c "show bgp summary"   # what changed?
-    clijson detect out.txt
-    clijson serve --port 8080                      # tiny HTTP API
-    clijson run 10.0.0.1 -p iosxr -c "show version" -u admin   # live device (netmiko/scrapli)
+clijson parse show_bgp.txt -p iosxr -c "show bgp summary"
+ssh r1 "show interfaces terse" | clijson parse -p junos -c "show interfaces terse"
+clijson parse session.log                      # every command in a terminal log
+clijson parse out.txt -c "dis int br" --normalize -f table
+clijson commands -p vrp --search bgp
+clijson diff pre.txt post.txt -c "show bgp summary"   # what changed?
+clijson detect out.txt
+clijson serve --port 8080                      # tiny HTTP API
+clijson run 10.0.0.1 -p iosxr -c "show version" -u admin   # live device (netmiko/scrapli)
 """
 
 from __future__ import annotations
@@ -41,7 +41,9 @@ def _rich_console():  # pragma: no cover - cosmetic
 def _read_input(path: Optional[str]) -> str:
     if not path or path == "-":
         if sys.stdin.isatty():
-            raise SystemExit("error: no input file given and nothing piped on stdin (try: clijson parse FILE -c 'show ...')")
+            raise SystemExit(
+                "error: no input file given and nothing piped on stdin (try: clijson parse FILE -c 'show ...')"
+            )
         return sys.stdin.read()
     with open(path, encoding="utf-8", errors="replace") as fh:
         return fh.read()
@@ -109,11 +111,16 @@ def _result_payload(res: ParseResult, args: argparse.Namespace) -> Any:
 def cmd_parse(args: argparse.Namespace) -> int:
     text = _read_input(args.file)
     engines = args.engine.split(",") if args.engine else None
-    kwargs = dict(normalize=args.normalize, engines=engines, strict=args.strict)
+    kwargs = {"normalize": args.normalize, "engines": engines, "strict": args.strict}
     results: List[ParseResult]
     if args.command is None and len(split_session(text)) > 1:
         results = parse_session(text, args.platform, **kwargs)
-        payload: Any = [r.to_dict(meta=True) if args.meta else {"command": r.command, "platform": r.platform, "data": _result_payload(r, args)} for r in results]
+        payload: Any = [
+            r.to_dict(meta=True)
+            if args.meta
+            else {"command": r.command, "platform": r.platform, "data": _result_payload(r, args)}
+            for r in results
+        ]
     else:
         res = parse(text, args.command, args.platform, **kwargs)
         results = [res]
@@ -132,7 +139,12 @@ def cmd_diff(args: argparse.Namespace) -> int:
     from .diff import diff
 
     before = parse(_read_input(args.before), args.command, args.platform, normalize=not args.native)
-    after = parse(_read_input(args.after), args.command or before.command, args.platform or before.platform, normalize=not args.native)
+    after = parse(
+        _read_input(args.after),
+        args.command or before.command,
+        args.platform or before.platform,
+        normalize=not args.native,
+    )
     changes = diff(before, after, ignore=None if args.all else diff.__defaults__[0], normalized=not args.native)
     if args.format == "text":
         if not changes:
@@ -148,11 +160,27 @@ def cmd_commands(args: argparse.Namespace) -> int:
     rows = supported_commands(args.platform)
     if args.search:
         needle = args.search.lower()
-        rows = [r for r in rows if needle in r["command"].lower() or needle in (r["description"] or "").lower() or needle in (r["intent"] or "")]
+        rows = [
+            r
+            for r in rows
+            if needle in r["command"].lower()
+            or needle in (r["description"] or "").lower()
+            or needle in (r["intent"] or "")
+        ]
     if args.format in ("json", "yaml", "json-compact"):
         _emit(rows, args.format)
     else:
-        _print_table([{"platform": r["platform"], "command": r["command"], "intent": r["intent"] or "", "description": r["description"]} for r in rows])
+        _print_table(
+            [
+                {
+                    "platform": r["platform"],
+                    "command": r["command"],
+                    "intent": r["intent"] or "",
+                    "description": r["description"],
+                }
+                for r in rows
+            ]
+        )
         print(f"\n{len(rows)} command patterns", file=sys.stderr)
     return 0
 
@@ -175,7 +203,16 @@ def cmd_detect(args: argparse.Namespace) -> int:
 
 
 def cmd_platforms(args: argparse.Namespace) -> int:
-    rows = [{"name": p.name, "vendor": p.vendor, "display_name": p.display_name, "verb": p.verb, "aliases": ", ".join(p.aliases)} for p in list_platforms()]
+    rows = [
+        {
+            "name": p.name,
+            "vendor": p.vendor,
+            "display_name": p.display_name,
+            "verb": p.verb,
+            "aliases": ", ".join(p.aliases),
+        }
+        for p in list_platforms()
+    ]
     if args.format == "table":
         _print_table(rows)
     else:
@@ -198,21 +235,35 @@ def cmd_run(args: argparse.Namespace) -> int:  # pragma: no cover - needs a devi
         import getpass
 
         password = getpass.getpass(f"Password for {args.username}@{args.host}: ")
-    results = collect(args.host, args.platform, args.command, username=args.username, password=password, port=args.port, normalize=args.normalize)
+    results = collect(
+        args.host,
+        args.platform,
+        args.command,
+        username=args.username,
+        password=password,
+        port=args.port,
+        normalize=args.normalize,
+    )
     payload = {r.command: (r.normalized if args.normalize and r.normalized is not None else r.data) for r in results}
     _emit(payload if len(results) > 1 else next(iter(payload.values())), args.format)
     return 0
 
 
 def cmd_version(args: argparse.Namespace) -> int:
-    info = {"clijson": __version__, "python": sys.version.split()[0], "engines": {"native": True, "generic": True, **available_engines()}}
+    info = {
+        "clijson": __version__,
+        "python": sys.version.split()[0],
+        "engines": {"native": True, "generic": True, **available_engines()},
+    }
     info["commands"] = len(supported_commands())
     _emit(info, "json")
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="clijson", description="Turn router show commands (Cisco IOS XR, Juniper Junos, Huawei VRP) into JSON.")
+    p = argparse.ArgumentParser(
+        prog="clijson", description="Turn router show commands (Cisco IOS XR, Juniper Junos, Huawei VRP) into JSON."
+    )
     p.add_argument("--version", action="version", version=f"clijson {__version__}")
     sub = p.add_subparsers(dest="cmd")
 
@@ -220,10 +271,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("parse", help="parse command output from a file or stdin")
     sp.add_argument("file", nargs="?", help="file with the output ('-' or omitted = stdin)")
-    sp.add_argument("-c", "--command", help="command that produced the output (abbreviations OK); auto-read from the prompt line when omitted")
+    sp.add_argument(
+        "-c",
+        "--command",
+        help="command that produced the output (abbreviations OK); auto-read from the prompt line when omitted",
+    )
     sp.add_argument("-p", "--platform", help="iosxr | junos | vrp (or any alias); auto-detected when omitted")
     sp.add_argument("-n", "--normalize", action="store_true", help="emit the vendor-neutral model when available")
-    sp.add_argument("-m", "--meta", action="store_true", help="include provenance (engine, parser, confidence, warnings)")
+    sp.add_argument(
+        "-m", "--meta", action="store_true", help="include provenance (engine, parser, confidence, warnings)"
+    )
     sp.add_argument("-f", "--format", default="json", choices=["json", "yaml", "table", "json-compact"], help=fmt_help)
     sp.add_argument("-e", "--engine", help="comma separated engine order, e.g. native,generic")
     sp.add_argument("--strict", action="store_true", help="fail unless a dedicated parser exists")
@@ -280,7 +337,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     # `clijson FILE -c ...` is shorthand for `clijson parse FILE -c ...`
     if argv and argv[0] not in SUBCOMMANDS and argv[0] not in ("-h", "--help", "--version"):
-        argv = ["parse"] + argv
+        argv = ["parse", *argv]
     elif not argv and not sys.stdin.isatty():
         argv = ["parse"]
     parser = build_parser()
