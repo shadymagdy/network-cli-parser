@@ -1,0 +1,46 @@
+{
+  "command": "show l2vpn xconnect",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "group": "genie_wqst",
+      "name": "wsq_wqxt_ups2_cm2_21314",
+      "state": "UR",
+      "segment1": {
+        "description": "BE2.61",
+        "state": "UR"
+      },
+      "segment2": {
+        "description": "EVPN 21314,31314,10.4.1.1",
+        "state": "DN"
+      }
+    },
+    {
+      "group": "genie_CM-QF-CF",
+      "name": "G2-2-2-34-422",
+      "state": "UP",
+      "segment1": {
+        "description": "Gi2/2/2/34.422",
+        "state": "UP"
+      },
+      "segment2": {
+        "description": "EVPN 3223,4112,10.1.21.93",
+        "state": "UP"
+      }
+    },
+    {
+      "group": "genie_CM-3-EDQF",
+      "name": "G2-2-2-34-322",
+      "state": "UP",
+      "segment1": {
+        "description": "Gi2/2/2/34.322",
+        "state": "UP"
+      },
+      "segment2": {
+        "description": "10.154.219.82 9593211",
+        "state": "UP"
+      }
+    }
+  ]
+}

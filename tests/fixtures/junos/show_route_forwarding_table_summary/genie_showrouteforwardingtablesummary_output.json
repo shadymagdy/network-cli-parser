@@ -1,0 +1,120 @@
+{
+  "command": "show route forwarding-table summary",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "default.inet": {
+      "routes": {
+        "user": 918,
+        "perm": 5,
+        "intf": 11,
+        "dest": 21
+      },
+      "family": "Internet",
+      "enabled_protocols": [
+        "Bridging"
+      ]
+    },
+    "__pfe_private__.inet": {
+      "routes": {
+        "perm": 5
+      },
+      "family": "Internet",
+      "enabled_protocols": [
+        "Bridging"
+      ]
+    },
+    "__juniper_services__.inet": {
+      "routes": {
+        "perm": 5,
+        "intf": 2,
+        "dest": 3
+      },
+      "family": "Internet",
+      "enabled_protocols": [
+        "Bridging"
+      ]
+    },
+    "__master.anon__.inet": {
+      "routes": {
+        "perm": 5
+      },
+      "family": "Internet",
+      "enabled_protocols": [
+        "Bridging",
+        "Dual VLAN"
+      ]
+    },
+    "default.iso": {
+      "routes": {
+        "perm": 1
+      },
+      "family": "ISO",
+      "enabled_protocols": [
+        "Bridging"
+      ]
+    },
+    "__master.anon__.iso": {
+      "routes": {
+        "perm": 1
+      },
+      "family": "ISO",
+      "enabled_protocols": [
+        "Bridging",
+        "Dual VLAN"
+      ]
+    },
+    "default.inet6": {
+      "routes": {
+        "user": 14,
+        "perm": 6,
+        "intf": 18,
+        "dest": 7
+      },
+      "family": "Internet6",
+      "enabled_protocols": [
+        "Bridging"
+      ]
+    },
+    "__master.anon__.inet6": {
+      "routes": {
+        "perm": 6
+      },
+      "family": "Internet6",
+      "enabled_protocols": [
+        "Bridging",
+        "Dual VLAN"
+      ]
+    },
+    "default.mpls": {
+      "routes": {
+        "user": 44,
+        "perm": 1
+      },
+      "family": "MPLS"
+    },
+    "__mpls-oam__.mpls": {
+      "routes": {
+        "perm": 1
+      },
+      "family": "MPLS",
+      "enabled_protocols": [
+        "Bridging",
+        "Single VLAN",
+        "Dual VLAN"
+      ]
+    },
+    "default-switch.bridge": {
+      "routes": {
+        "perm": 1
+      },
+      "family": "VPLS"
+    },
+    "default.dhcp-snooping": {
+      "routes": {
+        "perm": 1
+      },
+      "family": "DHCP Snooping"
+    }
+  }
+}

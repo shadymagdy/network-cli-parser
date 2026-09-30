@@ -1,0 +1,145 @@
+{
+  "command": "show cdp neighbors",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "device_id": "R1_xe.cisco.com",
+      "local_interface": "Gi0/0/0/0",
+      "hold_time": 135,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "platform": "CSR1000V",
+      "port_id": "Gi2"
+    },
+    {
+      "device_id": "R3_nx.cisco.com",
+      "local_interface": "Gi0/0/0/5",
+      "hold_time": 163,
+      "capabilities": [
+        "R",
+        "S",
+        "I"
+      ],
+      "platform": "N9K-9000v",
+      "port_id": "Et1/4"
+    },
+    {
+      "device_id": "R3_nx.cisco.com",
+      "local_interface": "Gi0/0/0/4",
+      "hold_time": 163,
+      "capabilities": [
+        "R",
+        "S",
+        "I"
+      ],
+      "platform": "N9K-9000v",
+      "port_id": "Et1/3"
+    },
+    {
+      "device_id": "R1_xe.cisco.com",
+      "local_interface": "Gi0/0/0/3",
+      "hold_time": 161,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "platform": "CSR1000V",
+      "port_id": "Gi5"
+    },
+    {
+      "device_id": "R1_xe.cisco.com",
+      "local_interface": "Gi0/0/0/2",
+      "hold_time": 177,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "platform": "CSR1000V",
+      "port_id": "Gi4"
+    },
+    {
+      "device_id": "R3_nx.cisco.com",
+      "local_interface": "Gi0/0/0/1",
+      "hold_time": 151,
+      "capabilities": [
+        "R",
+        "S"
+      ],
+      "platform": "N9K-9000v",
+      "port_id": "Et1/1"
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "Gi0/0/0/0",
+      "neighbor": "R1_xe.cisco.com",
+      "neighbor_interface": "Gi2",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "ttl": 135
+    },
+    {
+      "local_interface": "Gi0/0/0/5",
+      "neighbor": "R3_nx.cisco.com",
+      "neighbor_interface": "Et1/4",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "S",
+        "I"
+      ],
+      "ttl": 163
+    },
+    {
+      "local_interface": "Gi0/0/0/4",
+      "neighbor": "R3_nx.cisco.com",
+      "neighbor_interface": "Et1/3",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "S",
+        "I"
+      ],
+      "ttl": 163
+    },
+    {
+      "local_interface": "Gi0/0/0/3",
+      "neighbor": "R1_xe.cisco.com",
+      "neighbor_interface": "Gi5",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "ttl": 161
+    },
+    {
+      "local_interface": "Gi0/0/0/2",
+      "neighbor": "R1_xe.cisco.com",
+      "neighbor_interface": "Gi4",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "I"
+      ],
+      "ttl": 177
+    },
+    {
+      "local_interface": "Gi0/0/0/1",
+      "neighbor": "R3_nx.cisco.com",
+      "neighbor_interface": "Et1/1",
+      "chassis_id": null,
+      "capabilities": [
+        "R",
+        "S"
+      ],
+      "ttl": 151
+    }
+  ]
+}

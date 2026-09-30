@@ -1,0 +1,10 @@
+ LDP Peer Information in Public network
+ An asterisk (*) before a peer means the peer is being deleted.
+ -------------------------------------------------------------------------
+ PeerID                 TransportAddress   DiscoverySource
+ -------------------------------------------------------------------------
+ 10.0.0.2:0             10.0.0.2           GigabitEthernet0/0/1
+ 10.0.0.3:0             10.0.0.3           GigabitEthernet0/0/2
+                                           Remote Peer : pe3
+ -------------------------------------------------------------------------
+ TOTAL: 2 Peer(s) Found.

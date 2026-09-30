@@ -1,0 +1,21 @@
+{
+  "command": "display mpls ldp peer",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "peer": "10.0.0.2:0",
+      "transport_address": "10.0.0.2",
+      "discovery_sources": [
+        "GigabitEthernet0/0/1"
+      ]
+    },
+    {
+      "peer": "10.0.0.3:0",
+      "transport_address": "10.0.0.3",
+      "discovery_sources": [
+        "GigabitEthernet0/0/2"
+      ]
+    }
+  ]
+}

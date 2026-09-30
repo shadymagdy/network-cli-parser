@@ -1,0 +1,99 @@
+{
+  "command": "show platform",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "node": "0/RP0/CPU0",
+      "type": "8800-RP2",
+      "redundancy_state": "Active",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/RP1/CPU0",
+      "type": "8800-RP2",
+      "redundancy_state": "Standby",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/0/CPU0",
+      "type": "UNKNOWN",
+      "state": "BOOTING",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/1/CPU0",
+      "type": "UNKNOWN",
+      "state": "INSTALL BOOTHOLD",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/2/CPU0",
+      "type": "UNKNOWN",
+      "state": "IOS XR INITIALIZING",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/3/CPU0",
+      "type": "88-LC1-16H16F-EM",
+      "state": "PLATFORM INITIALIZED",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/4/CPU0",
+      "type": "UNKNOWN",
+      "state": "FPD UPGRADE",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/5/CPU0",
+      "type": "88-LC1-16H16F-EM",
+      "state": "INITIALIZING CHILD CARDS",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/6/CPU0",
+      "type": "UNKNOWN",
+      "state": "IMAGE INSTALLING",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FC0",
+      "type": "8808-FC1",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT0",
+      "type": "8808-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT1",
+      "type": "8808-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT2",
+      "type": "8808-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT3",
+      "type": "8808-FAN",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/PT0",
+      "type": "FAM7000-ACHV-TRAY",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    }
+  ]
+}

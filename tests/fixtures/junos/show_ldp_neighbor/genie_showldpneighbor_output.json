@@ -1,0 +1,23 @@
+{
+  "command": "show ldp neighbor",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "address": "10.169.14.158",
+      "interface": "ge-0/0/0.0",
+      "label_space_id": "10.34.2.250:0",
+      "hold_time": 14
+    }
+  ],
+  "normalized": [
+    {
+      "neighbor": "10.34.2.250",
+      "state": "discovered",
+      "uptime": null,
+      "discovery_sources": [
+        "ge-0/0/0.0"
+      ]
+    }
+  ]
+}

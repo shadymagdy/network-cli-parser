@@ -1,0 +1,50 @@
+{
+  "command": "show platform",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "node": "0/RP0/CPU0",
+      "type": "8202-32FH-M",
+      "redundancy_state": "Active",
+      "state": "IOS XR RUN",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FB0",
+      "type": "8202-32FH-M[FB]",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/PM0",
+      "type": "PSU2KW-ACPI",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/PM1",
+      "type": "PSU2KW-ACPI",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT1",
+      "type": "FAN-2RU-PI-V3",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT2",
+      "type": "FAN-2RU-PI-V3",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    },
+    {
+      "node": "0/FT3",
+      "type": "FAN-2RU-PI-V3",
+      "state": "OPERATIONAL",
+      "config_state": "NSHUT"
+    }
+  ]
+}

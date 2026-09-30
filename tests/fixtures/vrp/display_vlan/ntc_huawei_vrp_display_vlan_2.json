@@ -1,0 +1,109 @@
+{
+  "command": "display vlan",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vlans": {
+      "3": {
+        "untagged": [],
+        "tagged": [
+          {
+            "interface": "GE1/0/1",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/2",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/3",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/4",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/5",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/6",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/7",
+            "state": "down"
+          },
+          {
+            "interface": "GE1/0/8",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/9",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/10",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/11",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/12",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/13",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/14",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/15",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/16",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/17",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/18",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/19",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/20",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/21",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/25",
+            "state": "up"
+          },
+          {
+            "interface": "GE1/0/27",
+            "state": "down"
+          }
+        ],
+        "type": "common",
+        "status": "enable",
+        "description": "SOME_TEST"
+      }
+    }
+  }
+}

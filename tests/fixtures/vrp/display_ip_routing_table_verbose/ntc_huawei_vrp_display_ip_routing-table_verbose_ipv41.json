@@ -1,0 +1,337 @@
+{
+  "command": "display ip routing-table verbose",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "tables": {
+      "_public_": {
+        "destinations": 363,
+        "routes": 363
+      }
+    },
+    "routes": [
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "O_ASE",
+        "process_id": 1,
+        "preference": 150,
+        "cost": 1,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m33s",
+        "tag": 0,
+        "priority": "high",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.2.8.0/21",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 81,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m33s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.10.10.0/24",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 81,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m33s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.20.0.0/21",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 81,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m36s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.30.0.0/21",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 51,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "3d13h36m52s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.54.16.64/26",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "O_ASE",
+        "process_id": 1,
+        "preference": 150,
+        "cost": 20,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m37s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.54.17.0/24",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 51,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "30d22h50m37s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      },
+      {
+        "prefix": "10.54.24.128/26",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "10.10.0.1",
+            "interface": "Vlanif10"
+          }
+        ],
+        "protocol": "OSPF",
+        "process_id": 1,
+        "preference": 10,
+        "cost": 15,
+        "neighbour": "0.0.0.0",
+        "state": "Active Adv",
+        "active": true,
+        "age": "5d13h51m01s",
+        "tag": 0,
+        "priority": "medium",
+        "label": "NULL",
+        "qosinfo": "0x0",
+        "indirectid": "0x0",
+        "relay_next_hop": "0.0.0.0",
+        "tunnelid": "0x0",
+        "flags": "D"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 150,
+      "metric": 1,
+      "vrf": "default",
+      "age": "30d22h50m33s"
+    },
+    {
+      "prefix": "10.2.8.0/21",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 81,
+      "vrf": "default",
+      "age": "30d22h50m33s"
+    },
+    {
+      "prefix": "10.10.10.0/24",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 81,
+      "vrf": "default",
+      "age": "30d22h50m33s"
+    },
+    {
+      "prefix": "10.20.0.0/21",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 81,
+      "vrf": "default",
+      "age": "30d22h50m36s"
+    },
+    {
+      "prefix": "10.30.0.0/21",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 51,
+      "vrf": "default",
+      "age": "3d13h36m52s"
+    },
+    {
+      "prefix": "10.54.16.64/26",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 150,
+      "metric": 20,
+      "vrf": "default",
+      "age": "30d22h50m37s"
+    },
+    {
+      "prefix": "10.54.17.0/24",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 51,
+      "vrf": "default",
+      "age": "30d22h50m37s"
+    },
+    {
+      "prefix": "10.54.24.128/26",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.10.0.1",
+          "interface": "Vlanif10"
+        }
+      ],
+      "distance": 10,
+      "metric": 15,
+      "vrf": "default",
+      "age": "5d13h51m01s"
+    }
+  ]
+}

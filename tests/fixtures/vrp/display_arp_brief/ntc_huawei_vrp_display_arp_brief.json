@@ -1,0 +1,63 @@
+{
+  "command": "display arp brief",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "ip_address": "192.168.120.251",
+        "mac_address": "60de-4474-9640",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif1"
+      },
+      {
+        "ip_address": "192.168.120.1",
+        "mac_address": "7054-f5df-9b40",
+        "expire_minutes": 3,
+        "type": "dynamic",
+        "type_code": "D-0",
+        "interface": "GE0/0/0",
+        "vlan": "1/-"
+      },
+      {
+        "ip_address": "192.168.120.252",
+        "mac_address": "04f9-3895-8300",
+        "expire_minutes": 19,
+        "type": "dynamic",
+        "type_code": "D-0",
+        "interface": "GE0/0/0",
+        "vlan": "1/-"
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "dynamic": 2,
+      "static": 0,
+      "interface": 1
+    }
+  },
+  "normalized": [
+    {
+      "ip_address": "192.168.120.251",
+      "mac_address": "60:de:44:74:96:40",
+      "interface": "Vlanif1",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "192.168.120.1",
+      "mac_address": "70:54:f5:df:9b:40",
+      "interface": "GE0/0/0",
+      "age": 3,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "192.168.120.252",
+      "mac_address": "04:f9:38:95:83:00",
+      "interface": "GE0/0/0",
+      "age": 19,
+      "type": "dynamic"
+    }
+  ]
+}

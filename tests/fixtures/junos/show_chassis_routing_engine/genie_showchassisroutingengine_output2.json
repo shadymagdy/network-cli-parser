@@ -1,0 +1,77 @@
+{
+  "command": "show chassis routing-engine",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "slot0": {
+      "slot": 0,
+      "current_state": "Master",
+      "election_priority": "Master (default)",
+      "temperature_c": 42,
+      "cpu_temperature_c": 38,
+      "dram_mb": 32733,
+      "dram_installed_mb": 32768,
+      "memory_utilization_percent": 19,
+      "cpu_utilization": {
+        "user": 3,
+        "background": 0,
+        "kernel": 11,
+        "interrupt": 4,
+        "idle": 82
+      },
+      "model": "RE-S-1800x4",
+      "serial_id": 9009237267,
+      "start_time": "2020-07-16 13:36:25 EST",
+      "uptime": "5 days, 3 hours, 24 minutes, 13 seconds",
+      "uptime_seconds": 444253,
+      "last_reboot_reason": "Router rebooted after a normal shutdown.",
+      "load_average": {
+        "1min": 0.22,
+        "5min": 0.26,
+        "15min": 0.23
+      }
+    },
+    "slot1": {
+      "slot": 1,
+      "current_state": "Backup",
+      "election_priority": "Backup (default)",
+      "temperature_c": 39,
+      "cpu_temperature_c": 34,
+      "dram_mb": 32733,
+      "dram_installed_mb": 32768,
+      "memory_utilization_percent": 8,
+      "cpu_utilization": {
+        "user": 0,
+        "background": 0,
+        "kernel": 0,
+        "interrupt": 0,
+        "idle": 99
+      },
+      "model": "RE-S-1800x4",
+      "serial_id": 9009237474,
+      "start_time": "2020-07-16 13:36:22 EST",
+      "uptime": "5 days, 3 hours, 23 minutes, 59 seconds",
+      "uptime_seconds": 444239,
+      "last_reboot_reason": "Router rebooted after a normal shutdown.",
+      "load_average": {
+        "1min": 0.0,
+        "5min": 0.0,
+        "15min": 0.0
+      }
+    }
+  },
+  "normalized": [
+    {
+      "location": "re0",
+      "one_minute": 18,
+      "five_minute": null,
+      "five_second": null
+    },
+    {
+      "location": "re1",
+      "one_minute": 1,
+      "five_minute": null,
+      "five_second": null
+    }
+  ]
+}

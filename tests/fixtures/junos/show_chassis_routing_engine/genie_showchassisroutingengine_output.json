@@ -1,0 +1,61 @@
+{
+  "command": "show chassis routing-engine",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "slot0": {
+      "slot": 0,
+      "current_state": "Master",
+      "election_priority": "Master (default)",
+      "dram_mb": 2002,
+      "dram_installed_mb": 2048,
+      "memory_utilization_percent": 19,
+      "cpu_utilization_5sec": {
+        "user": 1,
+        "background": 0,
+        "kernel": 1,
+        "interrupt": 0,
+        "idle": 98
+      },
+      "cpu_utilization_1min": {
+        "user": 1,
+        "background": 0,
+        "kernel": 1,
+        "interrupt": 0,
+        "idle": 98
+      },
+      "cpu_utilization_5min": {
+        "user": 1,
+        "background": 0,
+        "kernel": 1,
+        "interrupt": 0,
+        "idle": 98
+      },
+      "cpu_utilization_15min": {
+        "user": 1,
+        "background": 0,
+        "kernel": 1,
+        "interrupt": 0,
+        "idle": 98
+      },
+      "model": "RE-VMX",
+      "start_time": "2019-08-29 09:02:22 UTC",
+      "uptime": "208 days, 23 hours, 14 minutes, 9 seconds",
+      "uptime_seconds": 18054849,
+      "last_reboot_reason": "Router rebooted after a normal shutdown.",
+      "load_average": {
+        "1min": 0.72,
+        "5min": 0.46,
+        "15min": 0.4
+      }
+    }
+  },
+  "normalized": [
+    {
+      "location": "re0",
+      "one_minute": 2,
+      "five_minute": 2,
+      "five_second": null
+    }
+  ]
+}

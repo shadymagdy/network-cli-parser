@@ -1,0 +1,45 @@
+{
+  "command": "show interfaces descriptions",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "interface": "ge-0/0/0",
+      "admin": "up",
+      "link": "up",
+      "description": "none/100G/in/hktGCS002_ge-0/0/0"
+    },
+    {
+      "interface": "ge-0/0/1",
+      "admin": "up",
+      "link": "up",
+      "description": "YW7079/9.6G/BB/sjkGDS221-EC11_xe-0/1/5[SJC]_Area8_Cost100"
+    },
+    {
+      "interface": "ge-0/0/2",
+      "admin": "up",
+      "link": "up",
+      "description": "ve-hkgasr01_Gi2[DefaultCost1000]"
+    }
+  ],
+  "normalized": [
+    {
+      "name": "ge-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "none/100G/in/hktGCS002_ge-0/0/0"
+    },
+    {
+      "name": "ge-0/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "YW7079/9.6G/BB/sjkGDS221-EC11_xe-0/1/5[SJC]_Area8_Cost100"
+    },
+    {
+      "name": "ge-0/0/2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "ve-hkgasr01_Gi2[DefaultCost1000]"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "command": "show chassis fpc",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "slot": 0,
+      "state": "Online",
+      "temperature_c": "Testing",
+      "cpu_total_percent": 3,
+      "cpu_interrupt_percent": 0,
+      "cpu_load": {
+        "1min": 2,
+        "5min": 2,
+        "15min": 2
+      },
+      "dram_mb": 511,
+      "heap_percent": 31,
+      "buffer_percent": 0
+    },
+    {
+      "slot": 1,
+      "state": "Empty"
+    },
+    {
+      "slot": 2,
+      "state": "Empty"
+    },
+    {
+      "slot": 3,
+      "state": "Empty"
+    },
+    {
+      "slot": 4,
+      "state": "Empty"
+    },
+    {
+      "slot": 5,
+      "state": "Empty"
+    },
+    {
+      "slot": 6,
+      "state": "Empty"
+    },
+    {
+      "slot": 7,
+      "state": "Empty"
+    },
+    {
+      "slot": 8,
+      "state": "Empty"
+    },
+    {
+      "slot": 9,
+      "state": "Empty"
+    },
+    {
+      "slot": 10,
+      "state": "Empty"
+    },
+    {
+      "slot": 11,
+      "state": "Empty"
+    }
+  ]
+}

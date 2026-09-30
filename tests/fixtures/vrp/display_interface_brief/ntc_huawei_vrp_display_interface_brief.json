@@ -1,0 +1,326 @@
+{
+  "command": "display interface brief",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "Aux0/0/1",
+      "physical": "down",
+      "protocol": "down",
+      "input_utilization": 0.0,
+      "output_utilization": 0.0,
+      "input_errors": 0,
+      "output_errors": 0
+    },
+    {
+      "interface": "Eth-Trunk2",
+      "physical": "up",
+      "protocol": "up",
+      "input_utilization": 0.0,
+      "output_utilization": 0.38,
+      "input_errors": 0,
+      "output_errors": 0,
+      "members": [
+        {
+          "interface": "GigabitEthernet8/1/16",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.04,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/17",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 1.66,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/18",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.01,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/19",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.0,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/20",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.47,
+          "input_errors": 0,
+          "output_errors": 0
+        }
+      ]
+    },
+    {
+      "interface": "Eth-Trunk3",
+      "physical": "up",
+      "protocol": "up",
+      "input_utilization": 0.0,
+      "output_utilization": 0.0,
+      "input_errors": 0,
+      "output_errors": 0,
+      "members": [
+        {
+          "interface": "GigabitEthernet8/1/21",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.0,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/22",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.0,
+          "output_utilization": 0.0,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet8/1/23",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.01,
+          "output_utilization": 0.01,
+          "input_errors": 0,
+          "output_errors": 0
+        }
+      ]
+    },
+    {
+      "interface": "Eth-Trunk4",
+      "physical": "up",
+      "protocol": "down",
+      "input_utilization": 0.69,
+      "output_utilization": 13.57,
+      "input_errors": 4625,
+      "output_errors": 0,
+      "members": [
+        {
+          "interface": "GigabitEthernet15/1/0",
+          "speed": "10G",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.69,
+          "output_utilization": 14.3,
+          "input_errors": 0,
+          "output_errors": 0
+        },
+        {
+          "interface": "GigabitEthernet16/0/1",
+          "speed": "10G",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.71,
+          "output_utilization": 12.84,
+          "input_errors": 4625,
+          "output_errors": 0
+        }
+      ]
+    },
+    {
+      "interface": "Eth-Trunk4.10",
+      "physical": "up",
+      "protocol": "up",
+      "input_utilization": 0.69,
+      "output_utilization": 13.57,
+      "input_errors": 0,
+      "output_errors": 0
+    },
+    {
+      "interface": "Eth-Trunk5",
+      "physical": "up",
+      "protocol": "down",
+      "input_utilization": 0.01,
+      "output_utilization": 0.0,
+      "input_errors": 0,
+      "output_errors": 0,
+      "members": [
+        {
+          "interface": "GigabitEthernet4/0/4",
+          "speed": "10G",
+          "physical": "up",
+          "protocol": "up",
+          "input_utilization": 0.01,
+          "output_utilization": 0.0,
+          "input_errors": 0,
+          "output_errors": 0
+        }
+      ]
+    },
+    {
+      "interface": "Eth-Trunk5.100",
+      "physical": "up",
+      "protocol": "up",
+      "input_utilization": 0.0,
+      "output_utilization": 0.0,
+      "input_errors": 0,
+      "output_errors": 0
+    }
+  ],
+  "normalized": [
+    {
+      "name": "Aux0/0/1",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/16",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/17",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/18",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/19",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/21",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/22",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet8/1/23",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk4",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet15/1/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet16/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk4.10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk5",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet4/0/4",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "Eth-Trunk5.100",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    }
+  ]
+}

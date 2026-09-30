@@ -1,0 +1,20 @@
+{
+  "command": "show chassis alarms",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "active_count": 2,
+    "alarms": [
+      {
+        "time": "2020-12-22 14:48:15 EST",
+        "class": "Major",
+        "description": "SPMB 1 not online"
+      },
+      {
+        "time": "2020-12-22 14:48:12 EST",
+        "class": "Minor",
+        "description": "Loss of communication with Backup RE"
+      }
+    ]
+  }
+}

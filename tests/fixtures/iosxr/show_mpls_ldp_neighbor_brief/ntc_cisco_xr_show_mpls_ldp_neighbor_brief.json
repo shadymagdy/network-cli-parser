@@ -1,0 +1,81 @@
+{
+  "command": "show mpls ldp neighbor brief",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "peer": "10.100.100.120:0",
+      "graceful_restart": true,
+      "nsr": true,
+      "uptime": "4w2d",
+      "discovery": {
+        "ipv4": 3,
+        "ipv6": 0
+      },
+      "addresses": {
+        "ipv4": 10,
+        "ipv6": 0
+      },
+      "labels": {
+        "ipv4": 56,
+        "ipv6": 0
+      }
+    },
+    {
+      "peer": "10.100.100.119:0",
+      "graceful_restart": true,
+      "nsr": true,
+      "uptime": "4w2d",
+      "discovery": {
+        "ipv4": 3,
+        "ipv6": 0
+      },
+      "addresses": {
+        "ipv4": 10,
+        "ipv6": 0
+      },
+      "labels": {
+        "ipv4": 56,
+        "ipv6": 0
+      }
+    },
+    {
+      "peer": "10.100.100.121:0",
+      "graceful_restart": true,
+      "nsr": null,
+      "uptime": "4w2d",
+      "discovery": {
+        "ipv4": 3,
+        "ipv6": 0
+      },
+      "addresses": {
+        "ipv4": 8,
+        "ipv6": 0
+      },
+      "labels": {
+        "ipv4": 57,
+        "ipv6": 0
+      }
+    }
+  ],
+  "normalized": [
+    {
+      "neighbor": "10.100.100.120",
+      "state": "operational",
+      "uptime": "4w2d",
+      "discovery_sources": null
+    },
+    {
+      "neighbor": "10.100.100.119",
+      "state": "operational",
+      "uptime": "4w2d",
+      "discovery_sources": null
+    },
+    {
+      "neighbor": "10.100.100.121",
+      "state": "operational",
+      "uptime": "4w2d",
+      "discovery_sources": null
+    }
+  ]
+}

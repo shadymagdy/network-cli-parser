@@ -1,0 +1,68 @@
+{
+  "command": "show route advertising-protocol bgp 10.189.5.253",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbor": "10.189.5.253",
+    "direction": "advertised",
+    "tables": {
+      "inet.0": {
+        "destinations": 929,
+        "routes": 1615,
+        "active": 929
+      }
+    },
+    "routes": [
+      {
+        "table": "inet.0",
+        "prefix": "10.220.0.0/16",
+        "active": true,
+        "next_hop": "Self",
+        "med": 12003,
+        "local_preference": 120,
+        "as_path": "(65151 65000)",
+        "origin": "igp"
+      },
+      {
+        "table": "inet.0",
+        "prefix": "10.229.0.0/16",
+        "active": true,
+        "next_hop": "Self",
+        "med": 12003,
+        "local_preference": 120,
+        "as_path": "(65151 65000)",
+        "origin": "igp"
+      },
+      {
+        "table": "inet.0",
+        "prefix": "10.189.0.0/16",
+        "active": true,
+        "next_hop": "Self",
+        "med": 12003,
+        "local_preference": 120,
+        "as_path": "(65151 65000)",
+        "origin": "igp"
+      },
+      {
+        "table": "inet.0",
+        "prefix": "10.151.0.0/16",
+        "active": true,
+        "next_hop": "Self",
+        "med": 12003,
+        "local_preference": 120,
+        "as_path": "(65151 65000)",
+        "origin": "igp"
+      },
+      {
+        "table": "inet.0",
+        "prefix": "10.115.0.0/16",
+        "active": true,
+        "next_hop": "Self",
+        "med": 12003,
+        "local_preference": 120,
+        "as_path": "(65151 65000)",
+        "origin": "igp"
+      }
+    ]
+  }
+}

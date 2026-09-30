@@ -1,0 +1,107 @@
+{
+  "command": "show chassis hardware",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "chassis": [
+      {
+        "name": "Chassis",
+        "serial_number": "VM5D4C6B3599",
+        "description": "VMX"
+      },
+      {
+        "name": "Midplane"
+      },
+      {
+        "name": "Routing Engine 0",
+        "description": "RE-VMX"
+      },
+      {
+        "name": "CB 0",
+        "description": "VMX SCB"
+      },
+      {
+        "name": "FPC 0",
+        "description": "Virtual FPC",
+        "components": [
+          {
+            "name": "CPU",
+            "version": "Rev. 1.0",
+            "part_number": "RIOT-LITE",
+            "serial_number": "BUILTIN"
+          },
+          {
+            "name": "MIC 0",
+            "description": "Virtual",
+            "components": [
+              {
+                "name": "PIC 0",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "Virtual"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "name": "Chassis",
+      "description": "VMX",
+      "part_number": null,
+      "serial_number": "VM5D4C6B3599",
+      "version": null
+    },
+    {
+      "name": "Midplane",
+      "description": null,
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    },
+    {
+      "name": "Routing Engine 0",
+      "description": "RE-VMX",
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    },
+    {
+      "name": "CB 0",
+      "description": "VMX SCB",
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    },
+    {
+      "name": "FPC 0",
+      "description": "Virtual FPC",
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    },
+    {
+      "name": "FPC 0 / CPU",
+      "description": null,
+      "part_number": "RIOT-LITE",
+      "serial_number": "BUILTIN",
+      "version": "Rev. 1.0"
+    },
+    {
+      "name": "FPC 0 / MIC 0",
+      "description": "Virtual",
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    },
+    {
+      "name": "FPC 0 / MIC 0 / PIC 0",
+      "description": "Virtual",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    }
+  ]
+}

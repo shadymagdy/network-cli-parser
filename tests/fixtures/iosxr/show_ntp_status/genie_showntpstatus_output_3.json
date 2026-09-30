@@ -1,0 +1,18 @@
+{
+  "command": "show ntp status",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "synchronized": false,
+    "stratum": 16,
+    "nominal_frequency_hz": 1000000000.0,
+    "actual_frequency_hz": 1000000000.0,
+    "offset_ms": 0.0,
+    "root_delay_ms": 0.0,
+    "root_dispersion_ms": 101.71,
+    "peer_dispersion_ms": 0.0,
+    "poll_interval": 64,
+    "precision": "2**23",
+    "reference_time": "00:00:00.000 UTC Thu Jan  1 1970"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "command": "show interfaces",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "ge-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {
+        "ge-0/0/0.2036": {
+          "index": 74,
+          "protocols": {
+            "inet": {
+              "addresses": [
+                {
+                  "destination": "10.10.199.176/29",
+                  "local": "10.10.199.180",
+                  "broadcast": "10.10.199.183"
+                }
+              ],
+              "mtu": 1500,
+              "flags": [
+                "Sendbcast-pkt-to-re",
+                "Sample-input",
+                "Sample-output"
+              ]
+            }
+          },
+          "snmp_index": 535,
+          "flags": [
+            "Up",
+            "SNMP-Traps",
+            "0x0",
+            "VLAN-Tag",
+            "[",
+            "0x8100.2036",
+            "]"
+          ],
+          "encapsulation": "ENET2",
+          "input_packets": 12439041,
+          "output_packets": 2552075
+        }
+      },
+      "index": 134,
+      "snmp_index": 502,
+      "description": "Test",
+      "link_level_type": "Ethernet",
+      "mtu": 1514,
+      "mru": 0,
+      "link_mode": "Half-duplex",
+      "speed": "1000mbps",
+      "bpdu_error": "None",
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "SNMP-Traps",
+        "Internal:",
+        "0x4000"
+      ],
+      "link_flags": null,
+      "cos_queues": "8 supported, 8 maximum usable queues",
+      "mac_address": "00:0c:29:5e:2c:1a",
+      "hardware_address": "00:0c:29:5e:2c:1a",
+      "last_flapped": "2016-02-09 13:37:59 UTC",
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0,
+      "active_alarms": null,
+      "active_defects": null
+    },
+    "gr-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 139,
+      "snmp_index": 506,
+      "type": "GRE",
+      "link_level_type": "GRE",
+      "mtu": "Unlimited",
+      "speed": "800mbps",
+      "link_flags": [
+        "Scheduler",
+        "Keepalives",
+        "DTE"
+      ],
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "Point-To-Point"
+      ],
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0
+    },
+    "ip-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 140,
+      "snmp_index": 507,
+      "type": "IPIP",
+      "link_level_type": "IP-over-IP",
+      "mtu": "Unlimited",
+      "speed": "800mbps",
+      "link_flags": [
+        "Scheduler",
+        "Keepalives",
+        "DTE"
+      ],
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0
+    },
+    "lsq-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 141,
+      "snmp_index": 509,
+      "link_level_type": "LinkService",
+      "mtu": 1504,
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "Point-To-Point",
+        "SNMP-Traps",
+        "Internal:",
+        "0x4000"
+      ],
+      "last_flapped": "2016-02-09 13:37:59 UTC",
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0
+    },
+    "lt-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 143,
+      "snmp_index": 510,
+      "type": "Logical-tunnel",
+      "link_level_type": "Logical-tunnel",
+      "mtu": "Unlimited",
+      "speed": "800mbps",
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "Point-To-Point",
+        "SNMP-Traps",
+        "Internal:",
+        "0x4000"
+      ],
+      "link_flags": null,
+      "mac_address": "02:96:14:57:ee:b3",
+      "hardware_address": "02:96:14:57:ee:b3",
+      "last_flapped": "Never",
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0
+    },
+    "mt-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 142,
+      "snmp_index": 511,
+      "type": "Multicast-GRE",
+      "link_level_type": "GRE",
+      "mtu": "Unlimited",
+      "speed": "800mbps",
+      "link_flags": [
+        "Keepalives",
+        "DTE"
+      ],
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "SNMP-Traps"
+      ],
+      "input_rate_bps": 0,
+      "input_rate_pps": 0,
+      "output_rate_bps": 0,
+      "output_rate_pps": 0
+    },
+    "sp-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 138,
+      "snmp_index": 515,
+      "type": "Adaptive-Services",
+      "link_level_type": "Adaptive-Services",
+      "mtu": 9192,
+      "speed": "800mbps",
+      "interface_flags": [
+        "Point-To-Point",
+        "SNMP-Traps",
+        "Internal:",
+        "0x4000"
+      ]
+    }
+  },
+  "normalized": [
+    {
+      "name": "ge-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": "Test",
+      "mac_address": "00:0c:29:5e:2c:1a",
+      "mtu": 1514,
+      "bandwidth_kbps": 1000000,
+      "ipv4_addresses": [
+        "10.10.199.180/29"
+      ],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "gr-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": null,
+      "bandwidth_kbps": 800000,
+      "ipv4_addresses": [],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "ip-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": null,
+      "bandwidth_kbps": 800000,
+      "ipv4_addresses": [],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "lsq-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": 1504,
+      "bandwidth_kbps": null,
+      "ipv4_addresses": [],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "lt-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": "02:96:14:57:ee:b3",
+      "mtu": null,
+      "bandwidth_kbps": 800000,
+      "ipv4_addresses": [],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "mt-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": null,
+      "bandwidth_kbps": 800000,
+      "ipv4_addresses": [],
+      "input_rate_bps": 0,
+      "output_rate_bps": 0,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    },
+    {
+      "name": "sp-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": null,
+      "mtu": 9192,
+      "bandwidth_kbps": 800000,
+      "ipv4_addresses": [],
+      "input_rate_bps": null,
+      "output_rate_bps": null,
+      "input_packets": null,
+      "output_packets": null,
+      "input_errors": null,
+      "output_errors": null
+    }
+  ]
+}

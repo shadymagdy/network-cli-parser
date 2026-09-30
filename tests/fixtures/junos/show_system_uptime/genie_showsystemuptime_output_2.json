@@ -1,0 +1,27 @@
+{
+  "command": "show system uptime",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "current_time": "2020-08-13 14:08:16 UTC",
+    "time_source": "LOCAL CLOCK",
+    "system_booted": "2020-08-13 03:05:11 UTC",
+    "system_booted_ago": "11:03:05",
+    "system_booted_ago_seconds": 39785,
+    "protocols_started": "2020-08-13 13:37:06 UTC",
+    "protocols_started_ago": "00:31:10",
+    "protocols_started_ago_seconds": 1870,
+    "last_configured": "2020-08-13 14:08:16 UTC",
+    "last_configured_ago": "00:00:00",
+    "last_configured_ago_seconds": 0,
+    "last_configured_by": "genie",
+    "uptime": "11:03",
+    "uptime_seconds": 39780,
+    "users": 1,
+    "load_average": {
+      "1min": 0.31,
+      "5min": 0.48,
+      "15min": 0.5
+    }
+  }
+}

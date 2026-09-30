@@ -1,0 +1,39 @@
+{
+  "command": "show ospf interface brief",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "interface": "ge-0/0/4.0",
+      "state": "BDR",
+      "area": "0.0.0.4",
+      "dr_id": "10.64.4.4",
+      "bdr_id": "192.168.10.22",
+      "neighbors": 2
+    },
+    {
+      "interface": "ge-0/0/5.0",
+      "state": "BDR",
+      "area": "0.0.0.4",
+      "dr_id": "10.16.2.2",
+      "bdr_id": "10.16.2.2",
+      "neighbors": 3
+    },
+    {
+      "interface": "ge-0/0/6.0",
+      "state": "DR",
+      "area": "0.0.0.4",
+      "dr_id": "10.64.4.4",
+      "bdr_id": "192.168.10.22",
+      "neighbors": 4
+    },
+    {
+      "interface": "lo1.0",
+      "state": "DR",
+      "area": "0.0.0.4",
+      "dr_id": "10.16.2.2",
+      "bdr_id": "0.0.0.0",
+      "neighbors": 0
+    }
+  ]
+}

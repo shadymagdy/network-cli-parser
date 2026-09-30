@@ -1,0 +1,105 @@
+{
+  "command": "show bfd session",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "Fo0/0/1/0",
+      "destination": "10.100.100.141",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    },
+    {
+      "interface": "Fo0/0/0/0",
+      "destination": "10.100.100.19",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    },
+    {
+      "interface": "Fo0/0/0/1",
+      "destination": "10.100.100.125",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    },
+    {
+      "interface": "Fo0/1/0/0",
+      "destination": "10.100.100.113",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    },
+    {
+      "interface": "Fo0/1/1/0",
+      "destination": "10.100.100.145",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    },
+    {
+      "interface": "Fo0/2/1/1",
+      "destination": "10.100.100.129",
+      "echo_detect_time": "45ms(15ms*3)",
+      "async_detect_time": "6s(2s*3)",
+      "state": "UP",
+      "hardware": false
+    }
+  ],
+  "normalized": [
+    {
+      "neighbor": "10.100.100.141",
+      "interface": "Fo0/0/1/0",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    },
+    {
+      "neighbor": "10.100.100.19",
+      "interface": "Fo0/0/0/0",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    },
+    {
+      "neighbor": "10.100.100.125",
+      "interface": "Fo0/0/0/1",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    },
+    {
+      "neighbor": "10.100.100.113",
+      "interface": "Fo0/1/0/0",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    },
+    {
+      "neighbor": "10.100.100.145",
+      "interface": "Fo0/1/1/0",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    },
+    {
+      "neighbor": "10.100.100.129",
+      "interface": "Fo0/2/1/1",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 6000
+    }
+  ]
+}

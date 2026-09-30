@@ -1,0 +1,10 @@
+ LDP Session(s) in Public Network
+ Codes: LAM(Label Advertisement Mode), SsnAge Unit(DDDD:HH:MM)
+ An asterisk (*) before a session means the session is being deleted.
+ --------------------------------------------------------------------------
+ PeerID             Status      LAM  SsnRole  SsnAge       KASent/Rcv
+ --------------------------------------------------------------------------
+ 10.0.0.2:0         Operational DU   Passive  0012:03:41   105931/105930
+ 10.0.0.3:0         Operational DU   Active   0000:00:07   3/3
+ --------------------------------------------------------------------------
+ TOTAL: 2 Session(s) Found.

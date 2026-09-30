@@ -1,0 +1,5 @@
+Total:2     Master:1     Backup:1     Non-active:0
+VRID  State        Interface                Type     Virtual IP
+----------------------------------------------------------------
+1     Master       Vlanif100                Normal   10.1.100.1
+2     Backup       GigabitEthernet0/0/1.20  Normal   10.1.20.1

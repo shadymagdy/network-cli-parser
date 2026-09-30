@@ -1,0 +1,37 @@
+{
+  "command": "display lldp neighbor brief",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "local_interface": "GE0/0/1",
+      "expire": 105,
+      "neighbor_interface": "GE0/0/1",
+      "neighbor": "PE2"
+    },
+    {
+      "local_interface": "GE0/0/2",
+      "expire": 98,
+      "neighbor_interface": "Ethernet1/49",
+      "neighbor": "core-sw01.lab"
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "GE0/0/1",
+      "neighbor": "PE2",
+      "neighbor_interface": "GE0/0/1",
+      "chassis_id": null,
+      "capabilities": null,
+      "ttl": 105
+    },
+    {
+      "local_interface": "GE0/0/2",
+      "neighbor": "core-sw01.lab",
+      "neighbor_interface": "Ethernet1/49",
+      "chassis_id": null,
+      "capabilities": null,
+      "ttl": 98
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+set version 23.2R1.14
+set system host-name mx1
+set system services ssh
+set interfaces ge-0/0/0 description "to core-1"
+set interfaces ge-0/0/0 unit 0 family inet address 10.0.0.1/30
+set interfaces ge-0/0/0 unit 0 family mpls
+set protocols bgp group IBGP neighbor 10.255.0.2
+set protocols bgp group IBGP neighbor 10.255.0.3

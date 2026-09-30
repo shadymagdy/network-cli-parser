@@ -1,0 +1,92 @@
+{
+  "command": "dir",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "files": [
+      {
+        "index": 0,
+        "name": "$_checkpoint",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Nov 11 2019 20:16:35"
+      },
+      {
+        "index": 1,
+        "name": "$_install_mod",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Nov 06 2019 15:51:57"
+      },
+      {
+        "index": 2,
+        "name": "$_license",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Oct 12 2019 18:12:15"
+      },
+      {
+        "index": 3,
+        "name": "$_security_info",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Oct 12 2019 18:12:26"
+      },
+      {
+        "index": 4,
+        "name": "$_startup",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Nov 11 2019 20:16:31"
+      },
+      {
+        "index": 5,
+        "name": "$_system",
+        "attributes": "dr-x",
+        "directory": true,
+        "size": null,
+        "date": "Nov 11 2019 20:15:06"
+      },
+      {
+        "index": 6,
+        "name": "111.cc",
+        "attributes": "-rw-",
+        "directory": false,
+        "size": 14940,
+        "date": "Nov 11 2019 17:56:29"
+      },
+      {
+        "index": 7,
+        "name": "123.cc",
+        "attributes": "-rw-",
+        "directory": false,
+        "size": 572847476,
+        "date": "Oct 21 2019 15:21:23"
+      },
+      {
+        "index": 8,
+        "name": "device.sys",
+        "attributes": "-rw-",
+        "directory": false,
+        "size": 34505,
+        "date": "Nov 11 2019 20:01:07"
+      },
+      {
+        "index": 9,
+        "name": "logfile",
+        "attributes": "drwx",
+        "directory": true,
+        "size": null,
+        "date": "Nov 11 2019 21:01:39"
+      }
+    ],
+    "directory": "flash:/",
+    "total_kb": 2994228,
+    "free_kb": 801664
+  }
+}

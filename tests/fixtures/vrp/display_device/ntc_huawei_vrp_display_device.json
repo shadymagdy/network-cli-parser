@@ -1,0 +1,240 @@
+{
+  "command": "display device",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "slots": [
+      {
+        "slot": 3,
+        "card": null,
+        "type": "CE-L24LQ-EC1",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 4,
+        "card": null,
+        "type": "CE-L24LQ-EC1",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 6,
+        "card": null,
+        "type": "CE-L24LQ-EC1",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 7,
+        "card": null,
+        "type": "CE-L24LQ-EC1",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 8,
+        "card": null,
+        "type": "CE-L48XS-EC",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 9,
+        "card": null,
+        "type": "CE-MPUA-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": "Master"
+      },
+      {
+        "slot": 10,
+        "card": null,
+        "type": "CE-MPUA-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": "Slave"
+      },
+      {
+        "slot": 11,
+        "card": null,
+        "type": "CE-SFUC-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 12,
+        "card": null,
+        "type": "CE-SFUC-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 13,
+        "card": null,
+        "type": "CE-SFUC-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 14,
+        "card": null,
+        "type": "CE-SFUC-S",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": 15,
+        "card": null,
+        "type": "CMU(MPU 9)",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": "Master"
+      },
+      {
+        "slot": 16,
+        "card": null,
+        "type": "CMU(MPU 10)",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": "Slave"
+      },
+      {
+        "slot": "PWR1",
+        "card": null,
+        "type": "PHD-3000WA",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "PWR2",
+        "card": null,
+        "type": "PHD-3000WA",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "PWR3",
+        "card": null,
+        "type": "PHD-3000WA",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "PWR4",
+        "card": null,
+        "type": "PHD-3000WA",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN1",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN2",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN3",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN4",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN5",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      },
+      {
+        "slot": "FAN6",
+        "card": null,
+        "type": "FAN-600A-B",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal",
+        "primary": null
+      }
+    ],
+    "device": "CE12808S"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "command": "show bfd session",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "sessions": [
+      {
+        "address": "10.0.0.1",
+        "state": "Up",
+        "detect_time": 1.5,
+        "transmit_interval": 0.5,
+        "multiplier": 3
+      },
+      {
+        "address": "10.0.0.2",
+        "state": "Up",
+        "interface": "ge-0/0/0.0",
+        "detect_time": 1.5,
+        "transmit_interval": 0.5,
+        "multiplier": 3
+      }
+    ],
+    "total_sessions": 2,
+    "total_clients": 2,
+    "transmit_rate_pps": 4.0,
+    "receive_rate_pps": 4.0
+  },
+  "normalized": [
+    {
+      "neighbor": "10.0.0.1",
+      "interface": null,
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 1500
+    },
+    {
+      "neighbor": "10.0.0.2",
+      "interface": "ge-0/0/0.0",
+      "state": "up",
+      "local_discriminator": null,
+      "remote_discriminator": null,
+      "detect_time_ms": 1500
+    }
+  ]
+}

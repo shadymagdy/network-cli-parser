@@ -1,0 +1,29 @@
+{
+  "command": "display users",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "index": 34,
+      "interface": "VTY 0",
+      "delay": "00:00:00",
+      "type": "SSH",
+      "address": "10.10.10.5",
+      "authen_status": "pass",
+      "author_cmd": "no",
+      "current": true,
+      "username": "netops"
+    },
+    {
+      "index": 35,
+      "interface": "VTY 1",
+      "delay": "00:03:12",
+      "type": "SSH",
+      "address": "10.10.10.6",
+      "authen_status": "pass",
+      "author_cmd": "no",
+      "current": false,
+      "username": "automation"
+    }
+  ]
+}

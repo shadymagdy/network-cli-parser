@@ -1,0 +1,35 @@
+## Last commit: 2024-05-14 09:12:44 UTC by lab
+version 23.2R1.14;
+system {
+    host-name mx1;
+    services {
+        ssh;
+        netconf {
+            ssh;
+        }
+    }
+    name-server [ 8.8.8.8 1.1.1.1 ];
+}
+interfaces {
+    ge-0/0/0 {
+        description "to core-1";
+        unit 0 {
+            family inet {
+                address 10.0.0.1/30;
+            }
+            family mpls;
+        }
+    }
+    inactive: ge-0/0/1 {
+        disable;
+    }
+}
+protocols {
+    bgp {
+        group IBGP {
+            type internal;
+            neighbor 10.255.0.2;
+            neighbor 10.255.0.3;
+        }
+    }
+}

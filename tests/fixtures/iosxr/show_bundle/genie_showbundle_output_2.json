@@ -1,0 +1,107 @@
+{
+  "command": "show bundle",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "Bundle-Ether2": {
+      "members": {
+        "Gi0/0/0/1": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x8000, 0x0001",
+          "bandwidth_kbps": 100000
+        },
+        "MyFirstInterface": {
+          "device": "10.10.10.123",
+          "state": "Negotiating",
+          "port_id": "0x8000, 0x0032",
+          "bandwidth_kbps": 100000
+        }
+      },
+      "status": "Up",
+      "links": {
+        "active": 1,
+        "standby": 0,
+        "configured": 1
+      },
+      "bandwidth_kbps": {
+        "effective": 100000,
+        "available": 100000
+      },
+      "mac_address": "1234.43ff.3232",
+      "mac_source": "Gi0/0/0/1",
+      "minimum_active": {
+        "links": 1,
+        "bandwidth_kbps": 500
+      },
+      "maximum_active_links": 32,
+      "wait_while_timer": "2000 ms",
+      "load_balancing": "Default",
+      "lacp": "Operational",
+      "flap_suppression_timer": "2500 ms",
+      "cisco_extensions": "Disabled",
+      "mlacp": "Operational",
+      "interchassis_group": 3,
+      "foreign_links_active_configured": "1 / 1",
+      "switchover_type": "Revertive",
+      "recovery_delay": "300 s",
+      "maximize_threshold": "2 links",
+      "ipv4_bfd": "Not operational",
+      "state": "Off",
+      "fast_detect": "Enabled",
+      "start_timer": "Off",
+      "neighbor_unconfigured_timer": "Off",
+      "preferred_min_interval": "150 ms",
+      "preferred_multiple": 3,
+      "destination_address": "Not Configured"
+    },
+    "Bundle-Ether3": {
+      "members": {
+        "Gi0/0/0/2": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x8000, 0x0002",
+          "bandwidth_kbps": 100000
+        }
+      },
+      "status": "Up",
+      "links": {
+        "active": 1,
+        "standby": 0,
+        "configured": 1
+      },
+      "mac_address": "1234.43ff.4343",
+      "mac_source": "chassis pool",
+      "minimum_active": {
+        "links": 1,
+        "bandwidth_kbps": 500
+      },
+      "maximum_active_links": "32 (from partner)",
+      "wait_while_timer": "100 ms",
+      "link_order_signaling": "Operational",
+      "hash_type": "Src-IP",
+      "lacp": "Operational",
+      "flap_suppression_timer": "120 s",
+      "cisco_extensions": "Enabled",
+      "mlacp": "Not configured",
+      "ipv4_bfd": "Not operational"
+    }
+  },
+  "normalized": [
+    {
+      "name": "Bundle-Ether2",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/1",
+        "MyFirstInterface"
+      ]
+    },
+    {
+      "name": "Bundle-Ether3",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/2"
+      ]
+    }
+  ]
+}

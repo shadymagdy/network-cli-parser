@@ -1,0 +1,307 @@
+{
+  "command": "show system commit",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "index": 0,
+      "timestamp": "2020-03-05 16:04:34 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 1,
+      "timestamp": "2020-03-05 16:01:49 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 2,
+      "timestamp": "2020-03-05 15:53:03 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 3,
+      "timestamp": "2020-03-05 15:51:16 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 4,
+      "timestamp": "2020-03-05 15:02:37 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 5,
+      "timestamp": "2020-03-05 15:00:57 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 6,
+      "timestamp": "2020-03-05 14:58:06 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 7,
+      "timestamp": "2020-03-05 14:49:36 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 8,
+      "timestamp": "2020-03-05 14:47:49 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 9,
+      "timestamp": "2020-03-05 00:07:34 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 10,
+      "timestamp": "2020-03-05 00:04:48 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 11,
+      "timestamp": "2020-03-04 23:58:42 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 12,
+      "timestamp": "2020-03-04 21:58:30 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 13,
+      "timestamp": "2020-03-04 02:27:13 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 14,
+      "timestamp": "2020-03-04 02:11:40 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 15,
+      "timestamp": "2020-03-04 01:50:35 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 16,
+      "timestamp": "2020-03-04 01:06:08 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 17,
+      "timestamp": "2020-03-04 00:23:13 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 18,
+      "timestamp": "2020-03-03 23:15:16 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 19,
+      "timestamp": "2020-03-03 18:32:59 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 20,
+      "timestamp": "2020-03-03 18:30:05 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 21,
+      "timestamp": "2020-03-03 18:24:06 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 22,
+      "timestamp": "2020-03-03 15:58:04 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 23,
+      "timestamp": "2020-03-03 15:46:09 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 24,
+      "timestamp": "2020-03-03 15:26:19 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 25,
+      "timestamp": "2020-03-03 15:07:59 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 26,
+      "timestamp": "2020-03-03 14:48:07 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 27,
+      "timestamp": "2020-03-03 14:22:09 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 28,
+      "timestamp": "2020-03-03 14:20:28 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 29,
+      "timestamp": "2020-03-03 14:17:33 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 30,
+      "timestamp": "2020-03-03 14:15:45 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 31,
+      "timestamp": "2020-03-03 11:10:33 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 32,
+      "timestamp": "2020-03-03 11:08:14 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 33,
+      "timestamp": "2020-03-03 08:41:29 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 34,
+      "timestamp": "2020-03-03 08:25:57 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 35,
+      "timestamp": "2020-03-03 08:09:34 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 36,
+      "timestamp": "2020-03-03 07:49:00 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 37,
+      "timestamp": "2020-03-03 07:39:35 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 38,
+      "timestamp": "2020-03-03 07:23:14 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 39,
+      "timestamp": "2020-03-03 05:41:34 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 40,
+      "timestamp": "2020-03-03 04:23:30 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 41,
+      "timestamp": "2020-03-02 19:05:48 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 42,
+      "timestamp": "2020-03-02 19:02:29 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 43,
+      "timestamp": "2020-03-02 16:34:53 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 44,
+      "timestamp": "2020-03-02 16:26:08 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 45,
+      "timestamp": "2020-03-02 16:10:44 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 46,
+      "timestamp": "2020-03-02 16:04:23 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 47,
+      "timestamp": "2020-03-02 15:45:11 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 48,
+      "timestamp": "2020-03-02 09:28:52 UTC",
+      "user": "cisco",
+      "client": "cli"
+    },
+    {
+      "index": 49,
+      "timestamp": "2020-03-02 08:42:26 UTC",
+      "user": "cisco",
+      "client": "cli"
+    }
+  ]
+}

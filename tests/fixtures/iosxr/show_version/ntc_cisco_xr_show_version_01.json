@@ -1,0 +1,36 @@
+{
+  "command": "show version",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "software": "Cisco IOS XR",
+    "version": "7.9.2",
+    "train": "LNT",
+    "label": "7.9.2",
+    "build_information": {
+      "built_by": "deenayak",
+      "built_on": "Thu Jun 29 03:07:05 UTC 2023",
+      "build_host": "bdb7eb8f4e82",
+      "workspace": "/auto/srcarchive16/prod/7.9.2/8000/ws",
+      "version": "7.9.2",
+      "label": "7.9.2"
+    },
+    "hostname": "gemini",
+    "uptime": "1 week, 1 day, 17 hours, 47 minutes",
+    "uptime_seconds": 755220,
+    "chassis": "8202-32FH-M",
+    "processor": "Intel(R) Xeon(R) CPU D-1530 @ 2.41GHz",
+    "memory": "64GB",
+    "chassis_description": "Cisco 8200 2RU 32x400G QSFP56-DD w/IOS XR HBM MACsec"
+  },
+  "normalized": {
+    "hostname": "gemini",
+    "vendor": "Cisco",
+    "os": "IOS XR",
+    "version": "7.9.2",
+    "model": "8202-32FH-M",
+    "serial_number": null,
+    "uptime": "1 week, 1 day, 17 hours, 47 minutes",
+    "uptime_seconds": 755220
+  }
+}

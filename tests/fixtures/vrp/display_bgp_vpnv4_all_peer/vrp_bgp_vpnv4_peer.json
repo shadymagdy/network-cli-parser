@@ -1,0 +1,87 @@
+{
+  "command": "display bgp vpnv4 all peer",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor": "10.0.0.9",
+        "version": 4,
+        "remote_as": 65000,
+        "messages_received": 10231,
+        "messages_sent": 10221,
+        "output_queue": 0,
+        "up_down": "0071h10m",
+        "state": "Established",
+        "prefixes_received": 842,
+        "vrf": "default",
+        "address_family": "vpnv4 unicast"
+      },
+      {
+        "neighbor": "192.168.100.2",
+        "version": 4,
+        "remote_as": 64512,
+        "messages_received": 2001,
+        "messages_sent": 2010,
+        "output_queue": 0,
+        "up_down": "0012h01m",
+        "state": "Established",
+        "prefixes_received": 12,
+        "vrf": "CUST-A",
+        "address_family": "vpnv4 unicast"
+      },
+      {
+        "neighbor": "192.168.100.6",
+        "version": 4,
+        "remote_as": 64513,
+        "messages_received": 0,
+        "messages_sent": 0,
+        "output_queue": 0,
+        "up_down": "00:00:21",
+        "state": "Active",
+        "prefixes_received": 0,
+        "vrf": "CUST-A",
+        "address_family": "vpnv4 unicast"
+      }
+    ],
+    "router_id": "10.0.0.1",
+    "local_as": 65000,
+    "total_peers": 3,
+    "established_peers": 3
+  },
+  "normalized": [
+    {
+      "neighbor": "10.0.0.9",
+      "remote_as": 65000,
+      "state": "Established",
+      "established": true,
+      "uptime": "0071h10m",
+      "uptime_seconds": 256200,
+      "prefixes_received": 842,
+      "vrf": "default",
+      "address_family": "vpnv4 unicast"
+    },
+    {
+      "neighbor": "192.168.100.2",
+      "remote_as": 64512,
+      "state": "Established",
+      "established": true,
+      "uptime": "0012h01m",
+      "uptime_seconds": 43260,
+      "prefixes_received": 12,
+      "vrf": "CUST-A",
+      "address_family": "vpnv4 unicast"
+    },
+    {
+      "neighbor": "192.168.100.6",
+      "remote_as": 64513,
+      "state": "Active",
+      "established": false,
+      "uptime": "00:00:21",
+      "uptime_seconds": 21,
+      "prefixes_received": 0,
+      "vrf": "CUST-A",
+      "address_family": "vpnv4 unicast"
+    }
+  ]
+}

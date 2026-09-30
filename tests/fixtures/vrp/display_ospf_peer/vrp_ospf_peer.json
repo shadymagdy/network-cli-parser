@@ -1,0 +1,62 @@
+{
+  "command": "display ospf peer",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "neighbors": [
+      {
+        "process": 1,
+        "area": "0.0.0.0",
+        "interface": "GigabitEthernet0/0/1",
+        "local_address": "10.1.1.1",
+        "neighbor_id": "10.0.0.2",
+        "address": "10.1.1.2",
+        "state": "Full",
+        "mode": "Nbr is  Master",
+        "priority": 1,
+        "dr": "10.1.1.2",
+        "bdr": "10.1.1.1",
+        "mtu": 0,
+        "dead_time": 36,
+        "retransmit_interval": 5,
+        "uptime": "02:14:47"
+      },
+      {
+        "process": 1,
+        "area": "0.0.0.0",
+        "interface": "GigabitEthernet0/0/2",
+        "local_address": "10.1.2.1",
+        "neighbor_id": "10.0.0.3",
+        "address": "10.1.2.2",
+        "state": "Full",
+        "mode": "Nbr is  Slave",
+        "priority": 1,
+        "dr": "0.0.0.0",
+        "bdr": "0.0.0.0",
+        "mtu": 0,
+        "dead_time": 33,
+        "retransmit_interval": 5,
+        "uptime": "5d02h"
+      }
+    ],
+    "router_id": "10.0.0.1"
+  },
+  "normalized": [
+    {
+      "neighbor_id": "10.0.0.2",
+      "priority": 1,
+      "state": "full",
+      "address": "10.1.1.2",
+      "interface": "GigabitEthernet0/0/1",
+      "dead_time": 36
+    },
+    {
+      "neighbor_id": "10.0.0.3",
+      "priority": 1,
+      "state": "full",
+      "address": "10.1.2.2",
+      "interface": "GigabitEthernet0/0/2",
+      "dead_time": 33
+    }
+  ]
+}

@@ -1,0 +1,397 @@
+{
+  "command": "show interfaces terse",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "interface": "ge-0/0/0",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "ge-0/0/0.0",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "10.0.1.1/24"
+            }
+          ]
+        },
+        {
+          "family": "multiservice",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "lc-0/0/0",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "lc-0/0/0.32769",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "vpls",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "pfe-0/0/0",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "pfe-0/0/0.16383",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": []
+        },
+        {
+          "family": "inet6",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "pfh-0/0/0",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "pfh-0/0/0.16383",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "pfh-0/0/0.16384",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/1",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "ge-0/0/1.0",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "10.0.2.1/24"
+            }
+          ]
+        },
+        {
+          "family": "multiservice",
+          "addresses": []
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/2",
+      "admin": "up",
+      "link": "down",
+      "families": []
+    },
+    {
+      "interface": "em1",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "em1.0",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "10.0.0.4/8"
+            },
+            {
+              "local": "172.16.64.1/2"
+            },
+            {
+              "local": "172.16.64.4/2"
+            }
+          ]
+        },
+        {
+          "family": "inet6",
+          "addresses": [
+            {
+              "local": "fe80::250:56ff:fe82:ba52/64"
+            },
+            {
+              "local": "2001:db8:8d82:0:a::4/64"
+            }
+          ]
+        },
+        {
+          "family": "tnp",
+          "addresses": [
+            {
+              "local": "0x4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interface": "fxp0",
+      "admin": "up",
+      "link": "up",
+      "families": []
+    },
+    {
+      "interface": "fxp0.0",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "172.25.192.114/24"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interface": "lo0.0",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "10.1.1.1",
+              "remote": "0/0"
+            },
+            {
+              "local": "10.11.11.11",
+              "remote": "0/0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interface": "lo0.16384",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": [
+            {
+              "local": "127.0.0.1",
+              "remote": "0/0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interface": "lo0.16385",
+      "admin": "up",
+      "link": "up",
+      "families": [
+        {
+          "family": "inet",
+          "addresses": []
+        }
+      ]
+    }
+  ],
+  "normalized": [
+    {
+      "name": "ge-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "ge-0/0/0.0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.0.1.1/24",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "lc-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "lc-0/0/0.32769",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "pfe-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "pfe-0/0/0.16383",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "pfh-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "pfh-0/0/0.16383",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "pfh-0/0/0.16384",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "ge-0/0/1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "ge-0/0/1.0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.0.2.1/24",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "ge-0/0/2",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "em1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "em1.0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.0.0.4/8",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "fxp0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "fxp0.0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "172.25.192.114/24",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "lo0.0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "10.1.1.1",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "lo0.16384",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "127.0.0.1",
+      "vrf": null,
+      "description": null
+    },
+    {
+      "name": "lo0.16385",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": null,
+      "vrf": null,
+      "description": null
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "command": "display esn",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "esn_of_slot_1": "2102351931P0H1000004",
+    "esn_of_slot_2": "2102351931P0H1000011"
+  }
+}

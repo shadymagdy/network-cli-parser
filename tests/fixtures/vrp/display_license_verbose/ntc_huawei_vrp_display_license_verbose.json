@@ -1,0 +1,63 @@
+{
+  "command": "display license verbose",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "features": [
+      {
+        "name": "Trial0",
+        "items": [
+          {
+            "sale_name": "*****0VA5C00",
+            "item_name": "*****LCK00",
+            "item_type": "Function",
+            "control_value": 1,
+            "used_value": 1,
+            "item_state": "Demo",
+            "item_expired_date": "2020-07-12",
+            "item_trial_days": 60,
+            "description": "*****LCK00"
+          },
+          {
+            "sale_name": "*****0VA5C00",
+            "item_name": "*****40VA5C00",
+            "item_type": "Resource",
+            "control_value": 80,
+            "used_value": 0,
+            "item_state": "Demo",
+            "item_expired_date": "2020-07-12",
+            "item_trial_days": 60,
+            "description": "XXXX Host License for 5 Client"
+          },
+          {
+            "sale_name": "*****0VA1C00",
+            "item_name": "*****40VA1C00",
+            "item_type": "Resource",
+            "control_value": 400,
+            "used_value": 0,
+            "item_state": "Demo",
+            "item_expired_date": "2020-07-12",
+            "item_trial_days": 60,
+            "description": "XXXX Host License for 1 Client"
+          }
+        ],
+        "authorize_type": "demo",
+        "expired_date": "2020-07-12",
+        "trial_days": null
+      }
+    ],
+    "active_license": "flash:/LICXXXX",
+    "license_state": "Demo",
+    "revoke_ticket": "No ticket",
+    "license_mode": "common",
+    "product_name": "****",
+    "product_version": "V300R023C00",
+    "license_file_esn": 391091068000297,
+    "license_serial_no": "LIC20190424S0G55M",
+    "creator": "Huawei Technologies Co., Ltd.",
+    "created_time": "2020-04-07 15:03:32",
+    "country": "English",
+    "custom": "RD of Huawei Technologies Co., Ltd.",
+    "office": "ShenZhen"
+  }
+}

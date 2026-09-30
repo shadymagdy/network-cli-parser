@@ -1,0 +1,25 @@
+{
+  "command": "display device",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "slots": [
+      {
+        "slot": "1/3",
+        "type": "CE88-D16Q",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal"
+      },
+      {
+        "slot": "1/4",
+        "type": "CE88-D24S2CQ",
+        "online": "Present",
+        "power": "On",
+        "register": "Registered",
+        "alarm": "Normal"
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+  User-Intf    Delay    Type   Network Address     AuthenStatus    AuthorcmdFlag
++ 34  VTY 0   00:00:00  SSH    10.10.10.5                pass           no
+  Username : netops
+  35  VTY 1   00:03:12  SSH    10.10.10.6                pass           no
+  Username : automation

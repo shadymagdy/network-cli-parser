@@ -1,0 +1,61 @@
+{
+  "command": "display bfd session all",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "sessions": [
+      {
+        "local_discriminator": 8192,
+        "remote_discriminator": 8193,
+        "peer": "10.1.1.2",
+        "state": "Up",
+        "type": "S_IP_IF",
+        "interface": "GigabitEthernet0/0/1"
+      },
+      {
+        "local_discriminator": 8193,
+        "remote_discriminator": 8200,
+        "peer": "10.1.2.2",
+        "state": "Down",
+        "type": "D_IP_IF",
+        "interface": "GigabitEthernet0/0/2"
+      },
+      {
+        "local_discriminator": 8194,
+        "remote_discriminator": 8194,
+        "peer": "10.0.0.9",
+        "state": "Up",
+        "type": "S_MULTI_IP",
+        "interface": null
+      }
+    ],
+    "up": 2,
+    "down": 1
+  },
+  "normalized": [
+    {
+      "neighbor": "10.1.1.2",
+      "interface": "GigabitEthernet0/0/1",
+      "state": "up",
+      "local_discriminator": 8192,
+      "remote_discriminator": 8193,
+      "detect_time_ms": null
+    },
+    {
+      "neighbor": "10.1.2.2",
+      "interface": "GigabitEthernet0/0/2",
+      "state": "down",
+      "local_discriminator": 8193,
+      "remote_discriminator": 8200,
+      "detect_time_ms": null
+    },
+    {
+      "neighbor": "10.0.0.9",
+      "interface": null,
+      "state": "up",
+      "local_discriminator": 8194,
+      "remote_discriminator": 8194,
+      "detect_time_ms": null
+    }
+  ]
+}

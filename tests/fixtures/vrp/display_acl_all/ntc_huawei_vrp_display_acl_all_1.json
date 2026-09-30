@@ -1,0 +1,125 @@
+{
+  "command": "display acl all",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "acls": {
+      "2000": {
+        "number": 2000,
+        "type": "basic",
+        "rules": [
+          {
+            "id": 5,
+            "action": "permit",
+            "match": "source 85.14.167.234 0",
+            "matches": 94
+          },
+          {
+            "id": 10,
+            "action": "permit",
+            "match": "source 85.14.167.193 0",
+            "matches": 26939
+          },
+          {
+            "id": 15,
+            "action": "permit",
+            "match": "source 5.10.130.152 0.0.0.3",
+            "matches": 24
+          },
+          {
+            "id": 20,
+            "action": "permit",
+            "match": "source 185.48.254.19 0",
+            "matches": 0
+          },
+          {
+            "id": 25,
+            "action": "permit",
+            "match": "source 10.0.0.0 0.255.255.255",
+            "matches": 0
+          },
+          {
+            "id": 30,
+            "action": "permit",
+            "match": "source 172.0.0.0 0.15.255.255",
+            "matches": 0
+          },
+          {
+            "id": 35,
+            "action": "permit",
+            "match": "source 192.168.0.0 0.0.255.255",
+            "matches": 0
+          }
+        ],
+        "step": 5
+      },
+      "2500": {
+        "number": 2500,
+        "type": "basic",
+        "rules": [
+          {
+            "id": 35,
+            "action": "permit",
+            "match": "source 192.168.0.0 0.0.255.255",
+            "matches": 5431
+          }
+        ],
+        "step": 5
+      },
+      "3997": {
+        "number": 3997,
+        "type": "advanced",
+        "rules": [
+          {
+            "id": 5,
+            "action": "permit",
+            "match": "ip source 192.165.3.5 0",
+            "matches": 0,
+            "description": "qsdqsdqsdqsdqsdqsdqs az"
+          }
+        ],
+        "step": 5
+      },
+      "REGLE_NAT": {
+        "number": 3998,
+        "type": "advanced",
+        "rules": [
+          {
+            "id": 5,
+            "action": "permit",
+            "match": "tcp source 85.14.167.234 0 destination 192.214.198.156 0 destination-port eq 8022",
+            "matches": 18
+          },
+          {
+            "id": 10,
+            "action": "deny",
+            "match": "tcp destination 192.214.198.156 0 destination-port eq www",
+            "matches": 8
+          },
+          {
+            "id": 15,
+            "action": "deny",
+            "match": "tcp destination 192.23.26.1 0.0.255.255 destination-port range 50 80",
+            "matches": 8
+          },
+          {
+            "id": 20,
+            "action": "permit",
+            "match": "ip",
+            "matches": 278450
+          }
+        ],
+        "name": "REGLE_NAT",
+        "step": 5
+      },
+      "qsdqsd": {
+        "number": 3999,
+        "type": "advanced",
+        "rules": [],
+        "name": "qsdqsd",
+        "step": 5
+      }
+    },
+    "nonempty_count": 3
+  }
+}

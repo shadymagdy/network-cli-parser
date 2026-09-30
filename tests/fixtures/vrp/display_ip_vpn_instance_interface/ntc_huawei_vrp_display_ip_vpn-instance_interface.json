@@ -1,0 +1,37 @@
+{
+  "command": "display ip vpn-instance interface",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "cftv": {
+      "id": 1,
+      "interfaces": [
+        "Vlanif1823",
+        "Vlanif1847",
+        "LoopBack5"
+      ],
+      "interface_count": 3
+    },
+    "met": {
+      "id": 2,
+      "interfaces": [
+        "40GE0/0/3",
+        "Vlanif1774",
+        "Vlanif1797",
+        "LoopBack2",
+        "Vlanif1769"
+      ],
+      "interface_count": 5
+    },
+    "tel": {
+      "id": 3,
+      "interfaces": [
+        "Vlanif755",
+        "Vlanif773",
+        "Vlanif797",
+        "LoopBack1"
+      ],
+      "interface_count": 4
+    }
+  }
+}

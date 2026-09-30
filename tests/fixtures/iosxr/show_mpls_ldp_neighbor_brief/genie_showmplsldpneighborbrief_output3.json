@@ -1,0 +1,35 @@
+{
+  "command": "show mpls ldp neighbor brief",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "peer": "10.36.3.3:0",
+      "graceful_restart": true,
+      "uptime": "00:01:04",
+      "discovery": 3,
+      "addresses": 8
+    },
+    {
+      "peer": "10.16.2.2:0",
+      "graceful_restart": false,
+      "uptime": "00:01:02",
+      "discovery": 2,
+      "addresses": 5
+    }
+  ],
+  "normalized": [
+    {
+      "neighbor": "10.36.3.3",
+      "state": "operational",
+      "uptime": "00:01:04",
+      "discovery_sources": null
+    },
+    {
+      "neighbor": "10.16.2.2",
+      "state": "operational",
+      "uptime": "00:01:02",
+      "discovery_sources": null
+    }
+  ]
+}

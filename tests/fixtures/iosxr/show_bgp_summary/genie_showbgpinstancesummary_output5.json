@@ -1,0 +1,51 @@
+{
+  "command": "show bgp summary",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor": "50.1.1.8",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "ipv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 100,
+        "messages_received": 63471,
+        "messages_sent": 64594,
+        "table_version": 0,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "11w5d",
+        "state": "Idle (Admin)",
+        "prefixes_received": null
+      }
+    ],
+    "router_id": "50.1.1.1",
+    "local_as": 100,
+    "context": {
+      "instance": "default",
+      "vrf": "default",
+      "address_family": "ipv4 unicast",
+      "router_id": "50.1.1.1",
+      "local_as": 100,
+      "nsr": true,
+      "table_state": "Active",
+      "table_version": 1,
+      "mode": "standalone"
+    }
+  },
+  "normalized": [
+    {
+      "neighbor": "50.1.1.8",
+      "remote_as": 100,
+      "state": "Idle (Admin)",
+      "established": false,
+      "uptime": "11w5d",
+      "uptime_seconds": 7084800,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    }
+  ]
+}

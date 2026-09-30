@@ -1,0 +1,15 @@
+# Devices for scripts/harvest.py. Credentials can come from the environment:
+#   CLIJSON_USERNAME / CLIJSON_PASSWORD
+devices:
+  - host: clab-clijson-xrd1
+    platform: iosxr
+  - host: clab-clijson-xrd2
+    platform: iosxr
+  - host: clab-clijson-vjunos1
+    platform: junos
+  - host: clab-clijson-crpd1
+    platform: junos
+  - host: clab-clijson-vrp1
+    platform: vrp
+    username: admin
+    password: admin

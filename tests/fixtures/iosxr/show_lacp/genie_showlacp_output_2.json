@@ -1,0 +1,97 @@
+{
+  "command": "show lacp",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "Bundle-Ether8": {
+      "members": {
+        "Te0/0/0/0": {
+          "actor": {
+            "rate": "1s",
+            "state": "ascdAF--",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active",
+              "fast"
+            ],
+            "port_id": "0x8000,0x0002",
+            "key": "0x0008",
+            "system_id": "0x8000,40-55-39-ff-6c-0f"
+          },
+          "partner": {
+            "rate": "1s",
+            "state": "ascdAF--",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active",
+              "fast"
+            ],
+            "port_id": "0x0001,0x0006",
+            "key": "0x0008",
+            "system_id": "0x0001,cc-ef-48-ff-23-0a"
+          },
+          "receive": "Current",
+          "period": "Fast",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        },
+        "Te0/1/0/0": {
+          "actor": {
+            "rate": "1s",
+            "state": "ascdAF--",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active",
+              "fast"
+            ],
+            "port_id": "0x8000,0x0001",
+            "key": "0x0008",
+            "system_id": "0x8000,40-55-39-ff-6c-0f"
+          },
+          "partner": {
+            "rate": "1s",
+            "state": "ascdAF--",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active",
+              "fast"
+            ],
+            "port_id": "0x8000,0x0004",
+            "key": "0x0008",
+            "system_id": "0x0001,cc-ef-48-ff-23-0a"
+          },
+          "receive": "Current",
+          "period": "Fast",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        }
+      }
+    }
+  },
+  "normalized": [
+    {
+      "name": "Bundle-Ether8",
+      "status": "up",
+      "members": [
+        "Te0/0/0/0",
+        "Te0/1/0/0"
+      ]
+    }
+  ]
+}

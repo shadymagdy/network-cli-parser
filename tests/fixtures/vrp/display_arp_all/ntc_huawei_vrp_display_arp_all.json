@@ -1,0 +1,91 @@
+{
+  "command": "display arp all",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "ip_address": "192.168.1.253",
+        "mac_address": "b076-1b65-6a40",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "MEth0/0/1"
+      },
+      {
+        "ip_address": "10.10.10.1",
+        "mac_address": "b076-1b65-6a4b",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif10"
+      },
+      {
+        "ip_address": "10.10.10.2",
+        "mac_address": "b8d6-f6ff-739b",
+        "expire_minutes": 17,
+        "type": "dynamic",
+        "type_code": "D-0",
+        "interface": "XGE0/0/1",
+        "vlan": "10/-"
+      },
+      {
+        "ip_address": "10.10.20.1",
+        "mac_address": "b076-1b65-6a46",
+        "type": "interface",
+        "type_code": "I-",
+        "interface": "Vlanif20"
+      },
+      {
+        "ip_address": "10.10.20.2",
+        "mac_address": "b8d6-f6ff-7396",
+        "expire_minutes": 17,
+        "type": "dynamic",
+        "type_code": "D-0",
+        "interface": "XGE0/0/1",
+        "vlan": "20/-"
+      }
+    ],
+    "summary": {
+      "total": 5,
+      "dynamic": 2,
+      "static": 0,
+      "interface": 3
+    }
+  },
+  "normalized": [
+    {
+      "ip_address": "192.168.1.253",
+      "mac_address": "b0:76:1b:65:6a:40",
+      "interface": "MEth0/0/1",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "10.10.10.1",
+      "mac_address": "b0:76:1b:65:6a:4b",
+      "interface": "Vlanif10",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "10.10.10.2",
+      "mac_address": "b8:d6:f6:ff:73:9b",
+      "interface": "XGE0/0/1",
+      "age": 17,
+      "type": "dynamic"
+    },
+    {
+      "ip_address": "10.10.20.1",
+      "mac_address": "b0:76:1b:65:6a:46",
+      "interface": "Vlanif20",
+      "age": null,
+      "type": "interface"
+    },
+    {
+      "ip_address": "10.10.20.2",
+      "mac_address": "b8:d6:f6:ff:73:96",
+      "interface": "XGE0/0/1",
+      "age": 17,
+      "type": "dynamic"
+    }
+  ]
+}

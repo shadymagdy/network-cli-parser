@@ -1,0 +1,23 @@
+{
+  "command": "show l2vpn bridge-domain summary",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "groups": {
+      "total": 1,
+      "bridge_domains": 1,
+      "up": 1,
+      "shutdown": 0
+    },
+    "acs": {
+      "total": 1,
+      "up": 1,
+      "down": 0
+    },
+    "pws": {
+      "total": 1,
+      "up": 1,
+      "down": 0
+    }
+  }
+}

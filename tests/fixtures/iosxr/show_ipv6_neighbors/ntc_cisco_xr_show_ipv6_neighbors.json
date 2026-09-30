@@ -1,0 +1,129 @@
+{
+  "command": "show ipv6 neighbors",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "ip_address": "2001:db8:ffff::12:2",
+      "age": 110,
+      "mac_address": "0c07.a11a.b801",
+      "state": "REACH",
+      "interface": "Gi0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "fe80::e07:a1ff:fe1a:b801",
+      "age": 99,
+      "mac_address": "0c07.a11a.b801",
+      "state": "REACH",
+      "interface": "Gi0/0/0/0",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::1",
+      "age": 105,
+      "mac_address": "ca01.0ff1.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::2",
+      "age": 108,
+      "mac_address": "ca02.0fff.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::3",
+      "age": 105,
+      "mac_address": "ca03.100d.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "fe80::c801:fff:fef1:8",
+      "age": 89,
+      "mac_address": "ca01.0ff1.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "fe80::c802:fff:feff:8",
+      "age": 105,
+      "mac_address": "ca02.0fff.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    },
+    {
+      "ip_address": "fe80::c803:10ff:fe0d:8",
+      "age": 91,
+      "mac_address": "ca03.100d.0008",
+      "state": "REACH",
+      "interface": "Gi0/0/0/3",
+      "location": "0/0/CPU0"
+    }
+  ],
+  "normalized": [
+    {
+      "ip_address": "2001:db8:ffff::12:2",
+      "mac_address": "0c:07:a1:1a:b8:01",
+      "interface": "Gi0/0/0/0",
+      "state": "reach",
+      "age": 110
+    },
+    {
+      "ip_address": "fe80::e07:a1ff:fe1a:b801",
+      "mac_address": "0c:07:a1:1a:b8:01",
+      "interface": "Gi0/0/0/0",
+      "state": "reach",
+      "age": 99
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::1",
+      "mac_address": "ca:01:0f:f1:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 105
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::2",
+      "mac_address": "ca:02:0f:ff:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 108
+    },
+    {
+      "ip_address": "2001:db8:1000:beef::3",
+      "mac_address": "ca:03:10:0d:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 105
+    },
+    {
+      "ip_address": "fe80::c801:fff:fef1:8",
+      "mac_address": "ca:01:0f:f1:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 89
+    },
+    {
+      "ip_address": "fe80::c802:fff:feff:8",
+      "mac_address": "ca:02:0f:ff:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 105
+    },
+    {
+      "ip_address": "fe80::c803:10ff:fe0d:8",
+      "mac_address": "ca:03:10:0d:00:08",
+      "interface": "Gi0/0/0/3",
+      "state": "reach",
+      "age": 91
+    }
+  ]
+}

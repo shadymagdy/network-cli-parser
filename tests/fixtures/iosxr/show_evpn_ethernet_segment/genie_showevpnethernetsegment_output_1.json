@@ -1,0 +1,63 @@
+{
+  "command": "show evpn ethernet-segment",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "esi": "0012.12ff.0000.0000.0000",
+      "interface": "nv101",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "0012.12ff.0001.0000.0001",
+      "interface": "PW:10.25.40.40,10001",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "0012.12ff.0001.0000.0002",
+      "interface": "BE1",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "0012.12ff.0001.0000.0003",
+      "interface": "VFI:ves-vfi-1",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "0012.12ff.0002.0000.0001",
+      "interface": "PW:10.25.40.40,10011",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "0012.12ff.0002.0000.0003",
+      "interface": "VFI:ves-vfi-2",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "N/A",
+      "interface": "PW:10.25.40.40,10007",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    },
+    {
+      "esi": "N/A",
+      "interface": "PW:10.25.40.40,10017",
+      "next_hops": [
+        "10.10.10.10"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clijson"
+description = "Turn show/display command output from Cisco IOS XR, Juniper Junos and Huawei VRP routers into JSON."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Shady Magdy" }]
+requires-python = ">=3.8"
+dynamic = ["version"]
+keywords = ["network", "automation", "parser", "cli", "json", "cisco", "iosxr", "juniper", "junos", "huawei", "vrp", "netdevops"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Telecommunications Industry",
+  "Intended Audience :: System Administrators",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: System :: Networking",
+  "Topic :: Text Processing",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+yaml = ["PyYAML>=5.4"]
+pretty = ["rich>=12"]
+ntc = ["ntc-templates>=4"]
+genie = ["pyats.topology", "genie.libs.parser"]
+netmiko = ["netmiko>=4"]
+scrapli = ["scrapli>=2023.7.30"]
+all = ["PyYAML>=5.4", "rich>=12", "ntc-templates>=4"]
+dev = ["pytest>=7", "pytest-cov", "PyYAML>=5.4", "ruff"]
+
+[project.scripts]
+clijson = "clijson.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/shadymagdy/network-cli-parser"
+Issues = "https://github.com/shadymagdy/network-cli-parser/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "clijson.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+clijson = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 200
+target-version = "py38"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B905", "UP006", "UP007", "UP035", "UP037", "UP045", "UP009"]

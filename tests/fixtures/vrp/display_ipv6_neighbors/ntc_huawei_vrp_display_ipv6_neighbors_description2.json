@@ -1,0 +1,76 @@
+{
+  "command": "display ipv6 neighbors",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "entries": [
+      {
+        "ip_address": "FC00:1::2",
+        "mac_address": "0025-9e01-020a",
+        "state": "STALE",
+        "interface": "10GE4/17/6",
+        "age": 75,
+        "vlan": 35,
+        "cevlan": null,
+        "vpn_name": null,
+        "is_router": "TRUE",
+        "secure_flag": "UNSECURE",
+        "nickname": null
+      },
+      {
+        "ip_address": "FE80::225:9EFF:FE01:20A",
+        "mac_address": "0025-9e01-020a",
+        "state": "STALE",
+        "interface": "10GE4/17/6",
+        "age": 38,
+        "vlan": 35,
+        "cevlan": null,
+        "vpn_name": null,
+        "is_router": "TRUE",
+        "secure_flag": "UNSECURE",
+        "nickname": null
+      },
+      {
+        "ip_address": "FC00:2::1",
+        "mac_address": "0023-0045-0067",
+        "state": "INCMP",
+        "interface": "10GE4/17/3",
+        "age": null,
+        "vlan": null,
+        "cevlan": null,
+        "vpn_name": null,
+        "is_router": "TRUE",
+        "secure_flag": "SECURE",
+        "nickname": null
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "dynamic": 2,
+      "static": 1
+    }
+  },
+  "normalized": [
+    {
+      "ip_address": "FC00:1::2",
+      "mac_address": "00:25:9e:01:02:0a",
+      "interface": "10GE4/17/6",
+      "state": "stale",
+      "age": 75
+    },
+    {
+      "ip_address": "FE80::225:9EFF:FE01:20A",
+      "mac_address": "00:25:9e:01:02:0a",
+      "interface": "10GE4/17/6",
+      "state": "stale",
+      "age": 38
+    },
+    {
+      "ip_address": "FC00:2::1",
+      "mac_address": "00:23:00:45:00:67",
+      "interface": "10GE4/17/3",
+      "state": "incmp",
+      "age": null
+    }
+  ]
+}

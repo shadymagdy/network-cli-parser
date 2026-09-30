@@ -1,0 +1,6 @@
+RP/0/RP0/CPU0:PE1#show bgp summary
+BGP router identifier 10.255.0.1, local AS number 65000
+Neighbor        Spk    AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down  St/PfxRcd
+10.255.0.3        0 65000   22311   22301     1090    0    0     3w2d        100
+10.255.0.2        0 65000   12015   12003     1090    0    0 00:00:10 Idle
+10.255.0.5        0 65001       5       6     1090    0    0 00:01:00          3

@@ -1,0 +1,25 @@
+{
+  "command": "display fan",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "slot": "FAN1",
+      "fanid": 1,
+      "online": "Present",
+      "status": "Normal",
+      "speed": "45%",
+      "mode": "Auto",
+      "airflow": "Front-to-Back"
+    },
+    {
+      "slot": "FAN2",
+      "fanid": 1,
+      "online": "Present",
+      "status": "Normal",
+      "speed": "45%",
+      "mode": "Auto",
+      "airflow": "Front-to-Back"
+    }
+  ]
+}

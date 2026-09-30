@@ -1,0 +1,127 @@
+{
+  "command": "show bundle",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "Bundle-Ether1": {
+      "members": {
+        "Gi0/0/0/0": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x000a, 0x0001",
+          "bandwidth_kbps": 1000000,
+          "reason": "Link is Active"
+        },
+        "Gi0/0/0/1": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x8000, 0x0002",
+          "bandwidth_kbps": 1000000,
+          "reason": "Link is Active"
+        }
+      },
+      "status": "Up",
+      "links": {
+        "active": 2,
+        "standby": 0,
+        "configured": 2
+      },
+      "bandwidth_kbps": {
+        "effective": 2000000,
+        "available": 2000000
+      },
+      "mac_address": "001b.0cff.6a35",
+      "mac_source": "Chassis pool",
+      "inter_chassis_link": "No",
+      "minimum_active": {
+        "links": 1,
+        "bandwidth_kbps": 1
+      },
+      "maximum_active_links": 8,
+      "wait_while_timer": "2000 ms",
+      "link_order_signaling": "Not configured",
+      "hash_type": "Default",
+      "locality_threshold": "None",
+      "lacp": "Operational",
+      "flap_suppression_timer": "Off",
+      "cisco_extensions": "Disabled",
+      "non_revertive": "Disabled",
+      "mlacp": "Not configured",
+      "ipv4_bfd": "Not configured",
+      "ipv6_bfd": "Not configured"
+    },
+    "Bundle-Ether2": {
+      "members": {
+        "Gi0/0/0/2": {
+          "device": "Local",
+          "state": "Standby",
+          "port_id": "0x8000, 0x0005",
+          "bandwidth_kbps": 1000000,
+          "reason": "Link is Standby due to maximum-active links configuration"
+        },
+        "Gi0/0/0/3": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x8000, 0x0004",
+          "bandwidth_kbps": 1000000,
+          "reason": "Link is Active"
+        },
+        "Gi0/0/0/4": {
+          "device": "Local",
+          "state": "Active",
+          "port_id": "0x8000, 0x0003",
+          "bandwidth_kbps": 1000000,
+          "reason": "Link is Active"
+        }
+      },
+      "status": "Up",
+      "links": {
+        "active": 2,
+        "standby": 1,
+        "configured": 3
+      },
+      "bandwidth_kbps": {
+        "effective": 2000000,
+        "available": 2000000
+      },
+      "mac_address": "001b.0cff.6a34",
+      "mac_source": "Chassis pool",
+      "inter_chassis_link": "No",
+      "minimum_active": {
+        "links": 2,
+        "bandwidth_kbps": 1
+      },
+      "maximum_active_links": 2,
+      "wait_while_timer": "2000 ms",
+      "link_order_signaling": "Not configured",
+      "hash_type": "Default",
+      "locality_threshold": "None",
+      "lacp": "Operational",
+      "flap_suppression_timer": "Off",
+      "cisco_extensions": "Disabled",
+      "non_revertive": "Disabled",
+      "mlacp": "Not configured",
+      "ipv4_bfd": "Not configured",
+      "ipv6_bfd": "Not configured"
+    }
+  },
+  "normalized": [
+    {
+      "name": "Bundle-Ether1",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/0",
+        "Gi0/0/0/1"
+      ]
+    },
+    {
+      "name": "Bundle-Ether2",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/2",
+        "Gi0/0/0/3",
+        "Gi0/0/0/4"
+      ]
+    }
+  ]
+}

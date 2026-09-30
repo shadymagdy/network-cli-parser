@@ -1,0 +1,531 @@
+{
+  "command": "show bgp summary",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "inet.0": {
+        "total_paths": 1366,
+        "active_paths": 682,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      },
+      "inet.3": {
+        "total_paths": 2,
+        "active_paths": 2,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      },
+      "inet6.0": {
+        "total_paths": 0,
+        "active_paths": 0,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      }
+    },
+    "neighbors": [
+      {
+        "neighbor": "10.49.216.179",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.169.14.240",
+        "remote_as": 65151,
+        "input_messages": 280414,
+        "output_messages": 221573,
+        "output_queue": 0,
+        "flaps": 127,
+        "up_down": "3w2d 4:19:15",
+        "state": "Established",
+        "tables": {
+          "inet.0": {
+            "active": 682,
+            "received": 684,
+            "accepted": 684,
+            "damped": 0
+          },
+          "inet.3": {
+            "active": 2,
+            "received": 2,
+            "accepted": 2,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 686,
+        "uptime_seconds": 2002755
+      },
+      {
+        "neighbor": "10.169.14.249",
+        "remote_as": 65151,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.240",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.241",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.242",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.243",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.245",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "10.189.5.253",
+        "remote_as": 65171,
+        "input_messages": 110832,
+        "output_messages": 172140,
+        "output_queue": 0,
+        "flaps": 44,
+        "up_down": "3w2d 4:18:45",
+        "state": "Established",
+        "tables": {
+          "inet.0": {
+            "active": 0,
+            "received": 682,
+            "accepted": 682,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 682,
+        "uptime_seconds": 2002725
+      },
+      {
+        "neighbor": "10.189.6.250",
+        "remote_as": 65181,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:6be:89bb::1:140",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:eb18:ca45::1",
+        "remote_as": 65151,
+        "input_messages": 218994,
+        "output_messages": 221571,
+        "output_queue": 0,
+        "flaps": 133,
+        "up_down": "3w2d 4:19:10",
+        "state": "Established",
+        "tables": {
+          "inet6.0": {
+            "active": 0,
+            "received": 0,
+            "accepted": 0,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 0,
+        "uptime_seconds": 2002750
+      },
+      {
+        "neighbor": "2001:db8:eb18:ca45::11",
+        "remote_as": 65151,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:223c:ca45::7",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Active",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:223c:ca45::8",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:223c:ca45::9",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:223c:ca45::a",
+        "remote_as": 65171,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      },
+      {
+        "neighbor": "2001:db8:223c:ca45::c",
+        "remote_as": 65171,
+        "input_messages": 110861,
+        "output_messages": 110862,
+        "output_queue": 0,
+        "flaps": 55,
+        "up_down": "3w2d 4:27:54",
+        "state": "Established",
+        "tables": {
+          "inet6.0": {
+            "active": 0,
+            "received": 0,
+            "accepted": 0,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 0,
+        "uptime_seconds": 2003274
+      },
+      {
+        "neighbor": "2001:db8:5961:ca45::1",
+        "remote_as": 65181,
+        "input_messages": 0,
+        "output_messages": 0,
+        "output_queue": 0,
+        "flaps": 0,
+        "up_down": "29w5d 22:42:36",
+        "state": "Connect",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 18052956
+      }
+    ],
+    "groups": 14,
+    "peers": 19,
+    "down_peers": 15,
+    "threading_mode": "BGP I/O"
+  },
+  "normalized": [
+    {
+      "neighbor": "10.49.216.179",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.169.14.240",
+      "remote_as": 65151,
+      "state": "Established",
+      "established": true,
+      "uptime": "3w2d 4:19:15",
+      "uptime_seconds": 2002755,
+      "prefixes_received": 686,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "10.169.14.249",
+      "remote_as": 65151,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.240",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.241",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.242",
+      "remote_as": 65171,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.243",
+      "remote_as": 65171,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.245",
+      "remote_as": 65171,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "10.189.5.253",
+      "remote_as": 65171,
+      "state": "Established",
+      "established": true,
+      "uptime": "3w2d 4:18:45",
+      "uptime_seconds": 2002725,
+      "prefixes_received": 682,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "10.189.6.250",
+      "remote_as": 65181,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:6be:89bb::1:140",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:eb18:ca45::1",
+      "remote_as": 65151,
+      "state": "Established",
+      "established": true,
+      "uptime": "3w2d 4:19:10",
+      "uptime_seconds": 2002750,
+      "prefixes_received": 0,
+      "vrf": "default",
+      "address_family": "ipv6 unicast"
+    },
+    {
+      "neighbor": "2001:db8:eb18:ca45::11",
+      "remote_as": 65151,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:223c:ca45::7",
+      "remote_as": 65171,
+      "state": "Active",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:223c:ca45::8",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:223c:ca45::9",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:223c:ca45::a",
+      "remote_as": 65171,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    },
+    {
+      "neighbor": "2001:db8:223c:ca45::c",
+      "remote_as": 65171,
+      "state": "Established",
+      "established": true,
+      "uptime": "3w2d 4:27:54",
+      "uptime_seconds": 2003274,
+      "prefixes_received": 0,
+      "vrf": "default",
+      "address_family": "ipv6 unicast"
+    },
+    {
+      "neighbor": "2001:db8:5961:ca45::1",
+      "remote_as": 65181,
+      "state": "Connect",
+      "established": false,
+      "uptime": "29w5d 22:42:36",
+      "uptime_seconds": 18052956,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    }
+  ]
+}

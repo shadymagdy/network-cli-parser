@@ -1,0 +1,209 @@
+{
+  "command": "show lacp",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "Bundle-Ether1": {
+      "members": {
+        "Gi0/0/0/0": {
+          "actor": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x000a,0x0001",
+            "key": "0x0001",
+            "system_id": "0x0064,00-1b-0c-ff-6a-36"
+          },
+          "partner": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x000a,0x0001",
+            "key": "0x0001",
+            "system_id": "0x8000,00-0c-86-ff-c6-81"
+          },
+          "receive": "Current",
+          "period": "Slow",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        },
+        "Gi0/0/0/1": {
+          "actor": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0002",
+            "key": "0x0001",
+            "system_id": "0x0064,00-1b-0c-ff-6a-36"
+          },
+          "partner": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0005",
+            "key": "0x0001",
+            "system_id": "0x8000,00-0c-86-ff-c6-81"
+          },
+          "receive": "Current",
+          "period": "Slow",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        }
+      }
+    },
+    "Bundle-Ether2": {
+      "members": {
+        "Gi0/0/0/2": {
+          "actor": {
+            "rate": "30s",
+            "state": "a---A---",
+            "flags": [
+              "aggregatable",
+              "active"
+            ],
+            "port_id": "0x8000,0x0005",
+            "key": "0x0002",
+            "system_id": "0x0064,00-1b-0c-ff-6a-36"
+          },
+          "partner": {
+            "rate": "30s",
+            "state": "as--A---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "active"
+            ],
+            "port_id": "0x8000,0x0004",
+            "key": "0x0002",
+            "system_id": "0x8000,00-0c-86-ff-c6-81"
+          },
+          "receive": "Current",
+          "period": "Slow",
+          "selection": "Standby",
+          "mux": "Waiting",
+          "actor_churn": "Churn",
+          "partner_churn": "None"
+        },
+        "Gi0/0/0/3": {
+          "actor": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0004",
+            "key": "0x0002",
+            "system_id": "0x0064,00-1b-0c-ff-6a-36"
+          },
+          "partner": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0003",
+            "key": "0x0002",
+            "system_id": "0x8000,00-0c-86-ff-c6-81"
+          },
+          "receive": "Current",
+          "period": "Slow",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        },
+        "Gi0/0/0/4": {
+          "actor": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0003",
+            "key": "0x0002",
+            "system_id": "0x0064,00-1b-0c-ff-6a-36"
+          },
+          "partner": {
+            "rate": "30s",
+            "state": "ascdA---",
+            "flags": [
+              "aggregatable",
+              "synchronized",
+              "collecting",
+              "distributing",
+              "active"
+            ],
+            "port_id": "0x8000,0x0002",
+            "key": "0x0002",
+            "system_id": "0x8000,00-0c-86-ff-c6-81"
+          },
+          "receive": "Current",
+          "period": "Slow",
+          "selection": "Selected",
+          "mux": "Distrib",
+          "actor_churn": "None",
+          "partner_churn": "None"
+        }
+      }
+    }
+  },
+  "normalized": [
+    {
+      "name": "Bundle-Ether1",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/0",
+        "Gi0/0/0/1"
+      ]
+    },
+    {
+      "name": "Bundle-Ether2",
+      "status": "up",
+      "members": [
+        "Gi0/0/0/2",
+        "Gi0/0/0/3",
+        "Gi0/0/0/4"
+      ]
+    }
+  ]
+}

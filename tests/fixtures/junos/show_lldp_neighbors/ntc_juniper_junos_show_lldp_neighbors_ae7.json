@@ -1,0 +1,69 @@
+{
+  "command": "show lldp neighbors",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "local_interface": "xe-0/1/1",
+      "parent_interface": "ae7",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "port_info": "Ethernet3/29/1",
+      "system_name": "core01.sjc01"
+    },
+    {
+      "local_interface": "xe-0/3/3",
+      "parent_interface": "ae7",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "port_info": "Ethernet3/29/2",
+      "system_name": "core01.sjc01"
+    },
+    {
+      "local_interface": "xe-2/0/5",
+      "parent_interface": "ae7",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "port_info": "Ethernet3/29/3",
+      "system_name": "core01.sjc01"
+    },
+    {
+      "local_interface": "xe-2/1/5",
+      "parent_interface": "ae7",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "port_info": "Ethernet3/29/4",
+      "system_name": "core01.sjc01"
+    }
+  ],
+  "normalized": [
+    {
+      "local_interface": "xe-0/1/1",
+      "neighbor": "core01.sjc01",
+      "neighbor_interface": "Ethernet3/29/1",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "capabilities": null,
+      "ttl": null
+    },
+    {
+      "local_interface": "xe-0/3/3",
+      "neighbor": "core01.sjc01",
+      "neighbor_interface": "Ethernet3/29/2",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "capabilities": null,
+      "ttl": null
+    },
+    {
+      "local_interface": "xe-2/0/5",
+      "neighbor": "core01.sjc01",
+      "neighbor_interface": "Ethernet3/29/3",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "capabilities": null,
+      "ttl": null
+    },
+    {
+      "local_interface": "xe-2/1/5",
+      "neighbor": "core01.sjc01",
+      "neighbor_interface": "Ethernet3/29/4",
+      "chassis_id": "00:1c:73:ee:c0:46",
+      "capabilities": null,
+      "ttl": null
+    }
+  ]
+}

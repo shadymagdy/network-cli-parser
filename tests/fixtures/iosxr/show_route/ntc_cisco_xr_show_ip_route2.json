@@ -1,0 +1,175 @@
+{
+  "command": "show route",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "routes": [
+      {
+        "prefix": "0.0.0.0/0",
+        "vrf": "default",
+        "protocol": "static",
+        "code": "S",
+        "candidate_default": true,
+        "next_hops": [
+          {
+            "next_hop": "10.72.0.1",
+            "age": "4d01h",
+            "distance": 1,
+            "metric": 0
+          }
+        ],
+        "distance": 1,
+        "metric": 0
+      },
+      {
+        "prefix": "10.39.0.0/16",
+        "vrf": "default",
+        "protocol": "bgp",
+        "code": "B",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "192.168.50.1",
+            "age": "1w4d",
+            "distance": 20,
+            "metric": 0
+          }
+        ],
+        "distance": 20,
+        "metric": 0
+      },
+      {
+        "prefix": "10.14.0.0/16",
+        "vrf": "default",
+        "protocol": "eigrp",
+        "code": "D EX",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "192.168.150.130",
+            "interface": "TenGigE0/0/0/1.5",
+            "age": "14:56:35",
+            "distance": 170,
+            "metric": 153600
+          },
+          {
+            "next_hop": "192.168.150.134",
+            "interface": "TenGigE0/0/0/2.5",
+            "age": "6d21h",
+            "distance": 170,
+            "metric": 153600
+          },
+          {
+            "next_hop": "192.168.150.138",
+            "interface": "TenGigE0/0/0/3.5",
+            "age": "6d21h",
+            "distance": 170,
+            "metric": 153600
+          },
+          {
+            "next_hop": "192.168.150.142",
+            "interface": "TenGigE0/0/0/4.5",
+            "age": "6d21h",
+            "distance": 170,
+            "metric": 153600
+          }
+        ],
+        "distance": 170,
+        "metric": 153600
+      },
+      {
+        "prefix": "10.15.0.0/16",
+        "vrf": "default",
+        "protocol": "bgp",
+        "code": "B",
+        "candidate_default": false,
+        "next_hops": [
+          {
+            "next_hop": "192.168.250.130",
+            "age": "1y03w",
+            "distance": 20,
+            "metric": 0
+          }
+        ],
+        "distance": 20,
+        "metric": 0
+      }
+    ],
+    "gateway_of_last_resort": {
+      "default": {
+        "next_hop": "10.72.0.1",
+        "network": "0.0.0.0"
+      }
+    }
+  },
+  "normalized": [
+    {
+      "prefix": "0.0.0.0/0",
+      "protocol": "static",
+      "next_hops": [
+        {
+          "next_hop": "10.72.0.1",
+          "interface": null
+        }
+      ],
+      "distance": 1,
+      "metric": 0,
+      "vrf": "default",
+      "age": "4d01h"
+    },
+    {
+      "prefix": "10.39.0.0/16",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "192.168.50.1",
+          "interface": null
+        }
+      ],
+      "distance": 20,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1w4d"
+    },
+    {
+      "prefix": "10.14.0.0/16",
+      "protocol": "eigrp",
+      "next_hops": [
+        {
+          "next_hop": "192.168.150.130",
+          "interface": "TenGigE0/0/0/1.5"
+        },
+        {
+          "next_hop": "192.168.150.134",
+          "interface": "TenGigE0/0/0/2.5"
+        },
+        {
+          "next_hop": "192.168.150.138",
+          "interface": "TenGigE0/0/0/3.5"
+        },
+        {
+          "next_hop": "192.168.150.142",
+          "interface": "TenGigE0/0/0/4.5"
+        }
+      ],
+      "distance": 170,
+      "metric": 153600,
+      "vrf": "default",
+      "age": "14:56:35"
+    },
+    {
+      "prefix": "10.15.0.0/16",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "192.168.250.130",
+          "interface": null
+        }
+      ],
+      "distance": 20,
+      "metric": 0,
+      "vrf": "default",
+      "age": "1y03w"
+    }
+  ]
+}

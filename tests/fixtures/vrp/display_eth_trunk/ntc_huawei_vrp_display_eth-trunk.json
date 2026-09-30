@@ -1,0 +1,91 @@
+{
+  "command": "display eth-trunk",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "Eth-Trunk0": {
+      "members": {
+        "GigabitEthernet0/0/27": {
+          "status": "up",
+          "weight": 1
+        },
+        "GigabitEthernet0/0/28": {
+          "status": "up",
+          "weight": 1
+        }
+      },
+      "working_mode": "NORMAL",
+      "hash_arithmetic": "According to SIP-XOR-DIP",
+      "least_active_linknumber": 1,
+      "max_bandwidth_affected_linknumber": 8,
+      "operate_status": "up",
+      "number_of_up_port_in_trunk": 2
+    },
+    "Eth-Trunk1": {
+      "members": {
+        "GigabitEthernet0/0/11": {
+          "status": "selected",
+          "port_type": "1GE",
+          "port_priority": 32768,
+          "port_number": 1,
+          "port_key": 305,
+          "port_state": "10111100",
+          "weight": 1,
+          "partner": {
+            "system_priority": 65535,
+            "system_id": "bbbb-bbbb-bbbb",
+            "port_priority": 255,
+            "port_number": 1,
+            "port_key": 9,
+            "port_state": "10111100"
+          }
+        },
+        "GigabitEthernet0/0/12": {
+          "status": "selected",
+          "port_type": "1GE",
+          "port_priority": 32768,
+          "port_number": 2,
+          "port_key": 305,
+          "port_state": "10111100",
+          "weight": 1,
+          "partner": {
+            "system_priority": 65535,
+            "system_id": "bbbb-bbbb-bbbb",
+            "port_priority": 255,
+            "port_number": 2,
+            "port_key": 9,
+            "port_state": "10111100"
+          }
+        }
+      },
+      "lag_id": 1,
+      "working_mode": "LACP",
+      "preempt_delay": "Disabled",
+      "hash_arithmetic": "According to SIP-XOR-DIP",
+      "system_priority": 32768,
+      "system_id": "aaaa-aaaa-aaaa",
+      "least_active_linknumber": 1,
+      "max_active_linknumber": 8,
+      "operate_status": "up",
+      "number_of_up_port_in_trunk": 2
+    }
+  },
+  "normalized": [
+    {
+      "name": "Eth-Trunk0",
+      "status": "up",
+      "members": [
+        "GigabitEthernet0/0/27",
+        "GigabitEthernet0/0/28"
+      ]
+    },
+    {
+      "name": "Eth-Trunk1",
+      "status": "up",
+      "members": [
+        "GigabitEthernet0/0/11",
+        "GigabitEthernet0/0/12"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "command": "show route",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "routes": [
+      {
+        "prefix": "116.119.10.251/32",
+        "vrf": "default",
+        "next_hops": [
+          {
+            "next_hop": "100.72.21.206",
+            "from": "116.119.10.251",
+            "interface": "Bundle-Ether104",
+            "flags": "Protected",
+            "metric": 10
+          },
+          {
+            "next_hop": "100.72.21.209",
+            "from": "116.119.10.251",
+            "interface": "Bundle-Ether105",
+            "flags": "Backup (Local-LFA)",
+            "metric": 20
+          }
+        ],
+        "protocol": "isis",
+        "process": "T4",
+        "distance": 115,
+        "metric": 10,
+        "attributes": [
+          "labeled SR"
+        ],
+        "tag": 3007,
+        "type": "level-2",
+        "installed": "Aug 15 14:51:07.021",
+        "age": "47w0d"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "116.119.10.251/32",
+      "protocol": "isis",
+      "next_hops": [
+        {
+          "next_hop": "100.72.21.206",
+          "interface": "Bundle-Ether104"
+        },
+        {
+          "next_hop": "100.72.21.209",
+          "interface": "Bundle-Ether105"
+        }
+      ],
+      "distance": 115,
+      "metric": 10,
+      "vrf": "default",
+      "age": "47w0d"
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "command": "show ipv4 vrf all interface brief",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "BVI10",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "red"
+    },
+    {
+      "interface": "BVI20",
+      "ip_address": "192.0.2.1",
+      "status": "Shutdown",
+      "protocol": "Down",
+      "vrf": "red"
+    },
+    {
+      "interface": "BVI30",
+      "ip_address": "192.0.2.1",
+      "status": "Down",
+      "protocol": "Down",
+      "vrf": "red"
+    },
+    {
+      "interface": "Bundle-Ether1",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "**brown"
+    },
+    {
+      "interface": "Bundle-Ether1.10",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "green"
+    },
+    {
+      "interface": "Bundle-Ether1.20",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "blue"
+    },
+    {
+      "interface": "Bundle-Ether1.30",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "blue"
+    },
+    {
+      "interface": "Bundle-Ether2",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "**brown"
+    },
+    {
+      "interface": "Bundle-Ether3",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "**brown"
+    },
+    {
+      "interface": "Loopback0",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "purple"
+    },
+    {
+      "interface": "Loopback1",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "green"
+    },
+    {
+      "interface": "GigabitEthernet100/0/0/0",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "blue"
+    },
+    {
+      "interface": "GigabitEthernet200/0/0/0.10",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "purple"
+    },
+    {
+      "interface": "GigabitEthernet200/0/0/0.20",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "purple"
+    },
+    {
+      "interface": "GigabitEthernet200/0/0/0.30",
+      "ip_address": "192.0.2.1",
+      "status": "Down",
+      "protocol": "Down",
+      "vrf": "purple"
+    },
+    {
+      "interface": "TenGigE0/1/0/0",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "green"
+    },
+    {
+      "interface": "TenGigE0/2/0/0.10",
+      "ip_address": "192.0.2.1",
+      "status": "Up",
+      "protocol": "Up",
+      "vrf": "green"
+    }
+  ],
+  "normalized": [
+    {
+      "name": "BVI10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "red",
+      "description": null
+    },
+    {
+      "name": "BVI20",
+      "admin_status": "admin-down",
+      "oper_status": "down",
+      "ip_address": "192.0.2.1",
+      "vrf": "red",
+      "description": null
+    },
+    {
+      "name": "BVI30",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": "192.0.2.1",
+      "vrf": "red",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "**brown",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether1.10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "green",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether1.20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "blue",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether1.30",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "blue",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether2",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "**brown",
+      "description": null
+    },
+    {
+      "name": "Bundle-Ether3",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "**brown",
+      "description": null
+    },
+    {
+      "name": "Loopback0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "purple",
+      "description": null
+    },
+    {
+      "name": "Loopback1",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "green",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet100/0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "blue",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet200/0/0/0.10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "purple",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet200/0/0/0.20",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "purple",
+      "description": null
+    },
+    {
+      "name": "GigabitEthernet200/0/0/0.30",
+      "admin_status": "up",
+      "oper_status": "down",
+      "ip_address": "192.0.2.1",
+      "vrf": "purple",
+      "description": null
+    },
+    {
+      "name": "TenGigE0/1/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "green",
+      "description": null
+    },
+    {
+      "name": "TenGigE0/2/0/0.10",
+      "admin_status": "up",
+      "oper_status": "up",
+      "ip_address": "192.0.2.1",
+      "vrf": "green",
+      "description": null
+    }
+  ]
+}

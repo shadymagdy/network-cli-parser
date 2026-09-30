@@ -1,0 +1,82 @@
+{
+  "command": "show pim neighbor",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "address": "192.0.2.1",
+      "interface": "Bundle-Ether10.10",
+      "uptime": "1d09h",
+      "expires": "00:01:29",
+      "dr_priority": 1,
+      "dr": false,
+      "self": true,
+      "flags": [
+        "B",
+        "E"
+      ],
+      "vrf": "default"
+    },
+    {
+      "address": "192.0.2.2",
+      "interface": "Bundle-Ether10.20",
+      "uptime": "02:26:23",
+      "expires": "00:01:26",
+      "dr_priority": 1,
+      "dr": true,
+      "self": false,
+      "flags": [],
+      "vrf": "default"
+    },
+    {
+      "address": "192.0.2.3",
+      "interface": "BVI10",
+      "uptime": "2y51w",
+      "expires": "00:01:27",
+      "dr_priority": 2,
+      "dr": true,
+      "self": false,
+      "flags": [
+        "B"
+      ],
+      "vrf": "default"
+    },
+    {
+      "address": "192.0.2.4",
+      "interface": "BVI10",
+      "uptime": "2y51w",
+      "expires": "00:01:24",
+      "dr_priority": 0,
+      "dr": false,
+      "self": false,
+      "flags": [],
+      "vrf": "default"
+    },
+    {
+      "address": "192.0.2.5",
+      "interface": "BVI10",
+      "uptime": "45w1d",
+      "expires": "00:01:19",
+      "dr_priority": 1,
+      "dr": false,
+      "self": false,
+      "flags": [
+        "P"
+      ],
+      "vrf": "default"
+    },
+    {
+      "address": "192.0.2.6",
+      "interface": "BVI10",
+      "uptime": "2y51w",
+      "expires": "00:01:25",
+      "dr_priority": 1,
+      "dr": false,
+      "self": true,
+      "flags": [
+        "B"
+      ],
+      "vrf": "default"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "command": "show interfaces extensive",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "et-0/0/0": {
+      "admin_status": "up",
+      "oper_status": "up",
+      "logical_interfaces": {},
+      "index": 167,
+      "snmp_index": 552,
+      "link_level_type": "Ethernet",
+      "mtu": 1514,
+      "mru": 1522,
+      "speed": "100Gbps",
+      "bpdu_error": "None",
+      "loopback": "Disabled",
+      "source_filtering": "Disabled",
+      "flow_control": "Enabled",
+      "pad_to_minimum_frame_size": "Disabled",
+      "device_flags": [
+        "Present",
+        "Running"
+      ],
+      "interface_flags": [
+        "SNMP-Traps",
+        "Internal:",
+        "0x4000"
+      ],
+      "link_flags": null,
+      "cos_queues": "8 supported, 8 maximum usable queues",
+      "mac_address": "0c:86:10:ff:63:22",
+      "hardware_address": "0c:86:10:ff:63:22",
+      "last_flapped": "2021-01-12 13:06:13 EST",
+      "traffic_statistics": {
+        "input_bytes": 1229986,
+        "input_bps": 0,
+        "output_bytes": 1647636,
+        "output_bps": 0,
+        "input_packets": 17084,
+        "input_pps": 0,
+        "output_packets": 17163,
+        "output_pps": 0
+      },
+      "ipv6_transit_statistics": {
+        "input_bytes": 0,
+        "output_bytes": 0,
+        "input_packets": 0,
+        "output_packets": 0
+      },
+      "label_switched_interface_lsi_traffic_statistics": {
+        "input_bytes": 0,
+        "input_bps": 0,
+        "input_packets": 0,
+        "input_pps": 0
+      },
+      "output_packets": 0,
+      "input_errors": {
+        "errors": 0,
+        "drops": 0,
+        "framing_errors": 0,
+        "runts": 0,
+        "policed_discards": 0,
+        "l3_incompletes": 0,
+        "l2_channel_errors": 0,
+        "l2_mismatch_timeouts": 0,
+        "fifo_errors": 0,
+        "resource_errors": 0
+      },
+      "output_errors": {
+        "carrier_transitions": 0,
+        "errors": 0,
+        "drops": 0,
+        "collisions": 0,
+        "aged_packets": 0,
+        "fifo_errors": 0,
+        "hs_link_crc_errors": 0,
+        "mtu_errors": 0,
+        "resource_errors": 0,
+        "egress_queues": "8 supported",
+        "flags": [
+          "4 in use"
+        ],
+        "queue_counters": "Queued packets  Transmitted packets      Dropped packets",
+        "queue_number": "Mapped forwarding classes"
+      },
+      "active_alarms": null,
+      "active_defects": null,
+      "pcs_statistics": {
+        "bit_errors": 0,
+        "errored_blocks": 0
+      },
+      "mac_statistics": {
+        "total_octets": {
+          "receive": 1624670,
+          "transmit": 1616370
+        },
+        "total_packets": {
+          "receive": 17313,
+          "transmit": 17195
+        },
+        "unicast_packets": {
+          "receive": 2,
+          "transmit": 2
+        },
+        "broadcast_packets": {
+          "receive": 2,
+          "transmit": 2
+        },
+        "multicast_packets": {
+          "receive": 17309,
+          "transmit": 17191
+        },
+        "crc_align_errors": {
+          "receive": 0,
+          "transmit": 0
+        },
+        "fifo_errors": {
+          "receive": 0,
+          "transmit": 0
+        },
+        "mac_control_frames": {
+          "receive": 0,
+          "transmit": 0
+        },
+        "mac_pause_frames": {
+          "receive": 0,
+          "transmit": 0
+        },
+        "oversized_frames": {
+          "receive": 0
+        },
+        "jabber_frames": {
+          "receive": 0
+        },
+        "fragment_frames": {
+          "receive": 0
+        },
+        "vlan_tagged_frames": {
+          "receive": 17313
+        },
+        "code_violations": {
+          "receive": 0
+        },
+        "total_errors": {
+          "receive": 0,
+          "transmit": 0
+        }
+      }
+    }
+  },
+  "normalized": [
+    {
+      "name": "et-0/0/0",
+      "admin_status": "up",
+      "oper_status": "up",
+      "description": null,
+      "mac_address": "0c:86:10:ff:63:22",
+      "mtu": 1514,
+      "bandwidth_kbps": 100000000,
+      "ipv4_addresses": [],
+      "input_rate_bps": null,
+      "output_rate_bps": null,
+      "input_packets": 17084,
+      "output_packets": 17163,
+      "input_errors": 0,
+      "output_errors": 0
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "command": "show isis adjacency",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "adjacencies": [
+      {
+        "instance": "test",
+        "level": "level-1",
+        "system_id": "R1_xe",
+        "interface": "Gi0/0/0/0.115",
+        "snpa": "fa16.3eff.4f49",
+        "state": "Up",
+        "hold_time": 23,
+        "changed": "22:30:27",
+        "nsf": "Yes",
+        "ipv4_bfd": "None",
+        "ipv6_bfd": "None"
+      },
+      {
+        "instance": "test",
+        "level": "level-1",
+        "system_id": "R3_nx",
+        "interface": "Gi0/0/0/1.115",
+        "snpa": "5e00.40ff.0209",
+        "state": "Up",
+        "hold_time": 20,
+        "changed": "22:30:27",
+        "nsf": "Yes",
+        "ipv4_bfd": "None",
+        "ipv6_bfd": "None"
+      },
+      {
+        "instance": "test",
+        "level": "level-2",
+        "system_id": "R1_xe",
+        "interface": "Gi0/0/0/0.115",
+        "snpa": "fa16.3eff.4f49",
+        "state": "Up",
+        "hold_time": 26,
+        "changed": "22:30:26",
+        "nsf": "Yes",
+        "ipv4_bfd": "None",
+        "ipv6_bfd": "None"
+      },
+      {
+        "instance": "test",
+        "level": "level-2",
+        "system_id": "R3_nx",
+        "interface": "Gi0/0/0/1.115",
+        "snpa": "5e00.40ff.0209",
+        "state": "Up",
+        "hold_time": 23,
+        "changed": "22:30:27",
+        "nsf": "Yes",
+        "ipv4_bfd": "None",
+        "ipv6_bfd": "None"
+      }
+    ],
+    "total": 4
+  },
+  "normalized": [
+    {
+      "system_id": "R1_xe",
+      "interface": "Gi0/0/0/0.115",
+      "state": "up",
+      "level": "level-1",
+      "hold_time": 23,
+      "snpa": "fa16.3eff.4f49"
+    },
+    {
+      "system_id": "R3_nx",
+      "interface": "Gi0/0/0/1.115",
+      "state": "up",
+      "level": "level-1",
+      "hold_time": 20,
+      "snpa": "5e00.40ff.0209"
+    },
+    {
+      "system_id": "R1_xe",
+      "interface": "Gi0/0/0/0.115",
+      "state": "up",
+      "level": "level-2",
+      "hold_time": 26,
+      "snpa": "fa16.3eff.4f49"
+    },
+    {
+      "system_id": "R3_nx",
+      "interface": "Gi0/0/0/1.115",
+      "state": "up",
+      "level": "level-2",
+      "hold_time": 23,
+      "snpa": "5e00.40ff.0209"
+    }
+  ]
+}

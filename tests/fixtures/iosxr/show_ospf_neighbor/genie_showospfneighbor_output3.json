@@ -1,0 +1,91 @@
+{
+  "command": "show ospf neighbor",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor_id": "192.168.199.137",
+        "priority": 1,
+        "state": "FULL",
+        "role": "DR",
+        "dead_time": "0:00:31",
+        "address": "172.31.80.37",
+        "interface": "GigabitEthernet 0/3/0/2",
+        "process": null,
+        "vrf": "default",
+        "uptime": "18:45:22"
+      },
+      {
+        "neighbor_id": "192.168.48.1",
+        "priority": 1,
+        "state": "FULL",
+        "role": "DROTHER",
+        "dead_time": "0:00:33",
+        "address": "192.168.48.1",
+        "interface": "GigabitEthernet 0/3/0/3",
+        "process": null,
+        "vrf": "default",
+        "uptime": "18:45:30"
+      },
+      {
+        "neighbor_id": "192.168.48.200",
+        "priority": 1,
+        "state": "FULL",
+        "role": "DROTHER",
+        "dead_time": "0:00:33",
+        "address": "192.168.48.200",
+        "interface": "GigabitEthernet 0/3/0/3",
+        "process": null,
+        "vrf": "default",
+        "uptime": "18:45:25"
+      },
+      {
+        "neighbor_id": "192.168.199.138",
+        "priority": 5,
+        "state": "FULL",
+        "role": "DR",
+        "dead_time": "0:00:33",
+        "address": "192.168.48.189",
+        "interface": "GigabitEthernet 0/3/0/3",
+        "process": null,
+        "vrf": "default",
+        "uptime": "18:45:27"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "neighbor_id": "192.168.199.137",
+      "priority": 1,
+      "state": "full",
+      "address": "172.31.80.37",
+      "interface": "GigabitEthernet 0/3/0/2",
+      "dead_time": "0:00:31"
+    },
+    {
+      "neighbor_id": "192.168.48.1",
+      "priority": 1,
+      "state": "full",
+      "address": "192.168.48.1",
+      "interface": "GigabitEthernet 0/3/0/3",
+      "dead_time": "0:00:33"
+    },
+    {
+      "neighbor_id": "192.168.48.200",
+      "priority": 1,
+      "state": "full",
+      "address": "192.168.48.200",
+      "interface": "GigabitEthernet 0/3/0/3",
+      "dead_time": "0:00:33"
+    },
+    {
+      "neighbor_id": "192.168.199.138",
+      "priority": 5,
+      "state": "full",
+      "address": "192.168.48.189",
+      "interface": "GigabitEthernet 0/3/0/3",
+      "dead_time": "0:00:33"
+    }
+  ]
+}

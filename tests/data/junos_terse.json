@@ -1,0 +1,33 @@
+{
+    "interface-information" : [
+    {
+        "attributes" : {"xmlns" : "http://xml.juniper.net/junos/20.4R0/junos-interface",
+                        "junos:style" : "terse"
+                       },
+        "physical-interface" : [
+        {
+            "name" : [{"data" : "ge-0/0/0"}],
+            "admin-status" : [{"data" : "up"}],
+            "oper-status" : [{"data" : "up"}],
+            "logical-interface" : [
+            {
+                "name" : [{"data" : "ge-0/0/0.0"}],
+                "admin-status" : [{"data" : "up"}],
+                "oper-status" : [{"data" : "up"}],
+                "address-family" : [
+                {
+                    "address-family-name" : [{"data" : "inet"}],
+                    "interface-address" : [
+                    {
+                        "ifa-local" : [{"data" : "10.0.0.1/30", "attributes" : {"junos:emit" : "emit"}}]
+                    }]
+                }]
+            }]
+        },
+        {
+            "name" : [{"data" : "ge-0/0/1"}],
+            "admin-status" : [{"data" : "down"}],
+            "oper-status" : [{"data" : "down"}]
+        }]
+    }]
+}

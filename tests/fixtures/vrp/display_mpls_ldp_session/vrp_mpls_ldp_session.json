@@ -1,0 +1,39 @@
+{
+  "command": "display mpls ldp session",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "peer": "10.0.0.2:0",
+      "status": "Operational",
+      "label_advertisement_mode": "DU",
+      "session_role": "Passive",
+      "session_age": "0012:03:41",
+      "keepalives_sent": 105931,
+      "keepalives_received": 105930
+    },
+    {
+      "peer": "10.0.0.3:0",
+      "status": "Operational",
+      "label_advertisement_mode": "DU",
+      "session_role": "Active",
+      "session_age": "0000:00:07",
+      "keepalives_sent": 3,
+      "keepalives_received": 3
+    }
+  ],
+  "normalized": [
+    {
+      "neighbor": "10.0.0.2",
+      "state": "operational",
+      "uptime": "0012:03:41",
+      "discovery_sources": null
+    },
+    {
+      "neighbor": "10.0.0.3",
+      "state": "operational",
+      "uptime": "0000:00:07",
+      "discovery_sources": null
+    }
+  ]
+}

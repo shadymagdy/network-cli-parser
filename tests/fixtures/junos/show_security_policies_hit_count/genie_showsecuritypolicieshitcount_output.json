@@ -1,0 +1,639 @@
+{
+  "command": "show security policies hit-count",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "index": 1,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-TRACE-IN",
+      "hit_count": 78,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 2,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-RADIUS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 3,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-NTP-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 4,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-ICMP-IN",
+      "hit_count": 3504,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 5,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-SNMP-IN",
+      "hit_count": 1,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 6,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "DEFAULT-DENY",
+      "hit_count": 4567302,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 7,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-DNS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 8,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-TELEMETRY-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 9,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-SSH-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 10,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-KNOWN-WIDE",
+      "hit_count": 337917,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 11,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-OPENGEAR-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 12,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SSH-IN",
+      "hit_count": 445265,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 13,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SNMP-IN",
+      "hit_count": 287972350,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 14,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-TELEMETRY-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 15,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-NETCONF-IN",
+      "hit_count": 523,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 16,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SSH-CORE-IN",
+      "hit_count": 782267,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 17,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SSH-PDUs-IN",
+      "hit_count": 333,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 18,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SSH-TEST-FW-IN",
+      "hit_count": 91441,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 19,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-ICMP-IN",
+      "hit_count": 24426998,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 20,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-TRACE-IN",
+      "hit_count": 1196,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 21,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-RADIUS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 22,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-NTP-IN",
+      "hit_count": 117709,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 23,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-TEST-IPSEC-GRE-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 24,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-SSH-NSO-CORE-IN",
+      "hit_count": 223809,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 25,
+      "from_zone": "untrust",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-PERMIT-DNS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 26,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-MONITORING-IN",
+      "hit_count": 475804,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 27,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-SNMP-IN",
+      "hit_count": 32808,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 28,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-DNS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 29,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-NTP-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 30,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-ICMP-IN",
+      "hit_count": 1129854,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 31,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-ONE-CONTROL-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 32,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-MCP-IN",
+      "hit_count": 5305845,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 33,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-RADIUS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 34,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-PNC-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 35,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-TRACE-IN",
+      "hit_count": 592,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 36,
+      "from_zone": "untrust",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-PERMIT-SSH-IN",
+      "hit_count": 77474,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 37,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-KNOWN-RDP-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 38,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-RDP-IN",
+      "hit_count": 7636,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 39,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-TELNET-IN",
+      "hit_count": 51210,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 40,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-KNOWN-TELNET-IN",
+      "hit_count": 1,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 41,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-IDRAC-IN",
+      "hit_count": 2167,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 42,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-IDRAC-IN",
+      "hit_count": 6528,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 43,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-SSH-IN",
+      "hit_count": 10886,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 44,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-SSH-IN",
+      "hit_count": 36221,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 45,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-OTHER-NTP-IN",
+      "hit_count": 253,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 46,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-KNOWN-NTP-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 47,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-BLOCK-OTHER-DNS-IN",
+      "hit_count": 10292,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 48,
+      "from_zone": "untrust",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-PERMIT-DNS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 49,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-NTP-OUT",
+      "hit_count": 4468672,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 50,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "All_TEST-STRICT_COMMODITY-INTERNET",
+      "hit_count": 14599527,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 51,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-SNMP-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 52,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-BLOCK-SNMP-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 53,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-TELEMETRY-OUT",
+      "hit_count": 4038240,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 54,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-SYSLOG-OUT",
+      "hit_count": 125964123,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 55,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-BLOCK-SYSLOG-OUT",
+      "hit_count": 205620273,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 56,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-DNS-OUT",
+      "hit_count": 27,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 57,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-BLOCK-DNS-OUT",
+      "hit_count": 160995,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 58,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-BLOCK-NTP-OUT",
+      "hit_count": 38040,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 59,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-PERMIT-RADIUS-OUT",
+      "hit_count": 1699379,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 60,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "untrust",
+      "policy": "STRICT-BLOCK-RADIUS-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 61,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "TEST-STRICT",
+      "policy": "STRICT-INTRA-ZONE-PERMIT",
+      "hit_count": 118930,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 62,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "STRICT-TO-OPTICAL-PERMIT-TELEMETRY",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 63,
+      "from_zone": "TEST-STRICT",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "STRICT-TO-OPTICAL-PERMIT-ICMP",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 64,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-PERMIT-MCP-OUT",
+      "hit_count": 81375,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 65,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-PERMIT-WAVESERVERS-TEST-TRAPS-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 66,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-PERMIT-RADIUS-OUT",
+      "hit_count": 158601,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 67,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-DEFAULT-DENY-OUT",
+      "hit_count": 43959,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 68,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-PERMIT-SYSLOG-OUT",
+      "hit_count": 13650,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 69,
+      "from_zone": "TEST-DCN",
+      "to_zone": "untrust",
+      "policy": "DCN-PERMIT-NTP-OUT",
+      "hit_count": 204,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 70,
+      "from_zone": "TEST-DCN",
+      "to_zone": "TEST-DCN",
+      "policy": "DCN-INTRA-ZONE-PERMIT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 71,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "untrust",
+      "policy": "OPTICAL-DEFAULT-DENY-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 72,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "untrust",
+      "policy": "OPTICAL-PERMIT-DNS-OUT",
+      "hit_count": 7552861,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 73,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "untrust",
+      "policy": "OPTICAL-BLOCK-OTHER-NTP-OUT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 74,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "untrust",
+      "policy": "OPTICAL-PERMIT-NTP-OUT",
+      "hit_count": 1222475,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 75,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "untrust",
+      "policy": "OPTICAL-BLOCK-OTHER-DNS-OUT",
+      "hit_count": 2256,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 76,
+      "from_zone": "TEST-OPTICAL",
+      "to_zone": "TEST-OPTICAL",
+      "policy": "OPTICAL-INTRA-ZONE-PERMIT",
+      "hit_count": 0,
+      "logical_system": "root-logical-system"
+    },
+    {
+      "index": 1,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-TRACE-IN",
+      "hit_count": 78,
+      "logical_system": "root-logical-system2"
+    },
+    {
+      "index": 2,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-RADIUS-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system2"
+    },
+    {
+      "index": 3,
+      "from_zone": "junos-global",
+      "to_zone": "junos-global",
+      "policy": "GLOBAL-PERMIT-NTP-IN",
+      "hit_count": 0,
+      "logical_system": "root-logical-system2"
+    }
+  ]
+}

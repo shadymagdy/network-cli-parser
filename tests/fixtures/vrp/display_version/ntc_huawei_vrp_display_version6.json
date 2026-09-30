@@ -1,0 +1,39 @@
+{
+  "command": "display version",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "vrp_version": "5.170",
+    "product_series": "AR610",
+    "version": "V300R022C00SPC100",
+    "model": "AR617VW-LTE4EA",
+    "uptime": "0 week, 0 day, 0 hour, 3 minutes",
+    "uptime_seconds": 180,
+    "boards": [
+      {
+        "board": "MPU",
+        "slot": 0,
+        "role": "master",
+        "uptime": "0 week, 0 day, 0 hour, 1 minute",
+        "versions": {
+          "pcb": "AR-SRU617 VER.C",
+          "mab": "0",
+          "bootrom": "1"
+        },
+        "sdram_memory_mb": 1024,
+        "flash_0_memory_mb": 1024,
+        "board_type": "AR617VW-LTE4EA"
+      }
+    ]
+  },
+  "normalized": {
+    "hostname": null,
+    "vendor": "Huawei",
+    "os": "VRP",
+    "version": "V300R022C00SPC100",
+    "model": "AR617VW-LTE4EA",
+    "serial_number": null,
+    "uptime": "0 week, 0 day, 0 hour, 3 minutes",
+    "uptime_seconds": 180
+  }
+}

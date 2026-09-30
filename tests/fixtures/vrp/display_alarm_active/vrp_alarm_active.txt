@@ -1,0 +1,8 @@
+A/B/C/D/E/F/G/H/I/J
+A=Sequence, B=RootKindFlag(Independent|RootCause|nonRootCause)
+------------------------------------------------------------------------------------------
+Sequence   AlarmId    Severity Date Time  Description
+------------------------------------------------------------------------------------------
+2          0x81A20015 Warning  2024-05-10 11:25:41+08:00 The license was activated, and the license file name is XXXX.dat.
+1          0x08520003 Major    2024-05-09 08:00:01+08:00 The interface status changes. (ifName=GigabitEthernet0/0/3, AdminStatus=UP, OperStatus=DOWN)
+------------------------------------------------------------------------------------------

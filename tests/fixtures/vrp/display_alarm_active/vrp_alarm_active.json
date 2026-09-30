@@ -1,0 +1,21 @@
+{
+  "command": "display alarm active",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "sequence": 2,
+      "alarm_id": "0x81A20015",
+      "severity": "Warning",
+      "time": "2024-05-10 11:25:41+08:00",
+      "description": "The license was activated, and the license file name is XXXX.dat."
+    },
+    {
+      "sequence": 1,
+      "alarm_id": "0x08520003",
+      "severity": "Major",
+      "time": "2024-05-09 08:00:01+08:00",
+      "description": "The interface status changes. (ifName=GigabitEthernet0/0/3, AdminStatus=UP, OperStatus=DOWN)"
+    }
+  ]
+}

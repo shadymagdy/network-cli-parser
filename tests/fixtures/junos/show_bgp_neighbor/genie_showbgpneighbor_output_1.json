@@ -1,0 +1,223 @@
+{
+  "command": "show bgp neighbor",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "10.145.0.3": {
+      "peer_as": 30000,
+      "local_address": "10.145.0.1",
+      "local_as": 1,
+      "tables": {
+        "inet.0": {
+          "rib_state": "BGP restart is complete",
+          "send_state": "in sync",
+          "active_prefixes": 1,
+          "received_prefixes": 1,
+          "accepted_prefixes": 1,
+          "suppressed_due_to_damping": 0,
+          "advertised_prefixes": 2
+        }
+      },
+      "peer_port": 64180,
+      "local_port": 179,
+      "type": "External",
+      "state": "Established",
+      "flags": [
+        "ImportEval",
+        "Sync"
+      ],
+      "last_state": "OpenConfirm",
+      "last_event": "RecvKeepAlive",
+      "last_error": "None",
+      "export": "export2bgp",
+      "options": [
+        "Preference",
+        "PeerAS",
+        "Refresh"
+      ],
+      "flaps": 0,
+      "peer_id": "10.16.2.2",
+      "local_id": "10.4.1.1",
+      "active_holdtime": 90,
+      "keepalive_interval": 30,
+      "bfd": "disabled, down",
+      "nlri_advertised_by_peer": [
+        "inet-unicast"
+      ],
+      "nlri_for_this_session": [
+        "inet-unicast"
+      ],
+      "last_traffic": {
+        "received": 6,
+        "sent": 1,
+        "checked": 52
+      },
+      "input_messages": 9,
+      "input_updates": 2,
+      "output_messages": 10,
+      "output_updates": 2
+    },
+    "10.135.0.2": {
+      "peer_as": 2,
+      "local_address": "10.135.0.1",
+      "local_as": 1,
+      "tables": {
+        "inet.0": {
+          "rib_state": "BGP restart is complete",
+          "send_state": "in sync",
+          "active_prefixes": 1,
+          "received_prefixes": 1,
+          "accepted_prefixes": 1,
+          "suppressed_due_to_damping": 0,
+          "advertised_prefixes": 2
+        }
+      },
+      "peer_port": 55323,
+      "local_port": 179,
+      "type": "External",
+      "state": "Established",
+      "flags": [
+        "ImportEval",
+        "Sync"
+      ],
+      "last_state": "OpenConfirm",
+      "last_event": "RecvKeepAlive",
+      "last_error": "None",
+      "export": "export2bgp",
+      "options": [
+        "Preference",
+        "PeerAS",
+        "Refresh"
+      ],
+      "flaps": 0,
+      "peer_id": "10.36.3.3",
+      "local_id": "10.4.1.1",
+      "active_holdtime": 90,
+      "keepalive_interval": 30,
+      "bfd": "disabled, down",
+      "nlri_advertised_by_peer": [
+        "inet-unicast"
+      ],
+      "nlri_for_this_session": [
+        "inet-unicast"
+      ],
+      "last_traffic": {
+        "received": 18,
+        "sent": 12,
+        "checked": 35
+      },
+      "input_messages": 8,
+      "input_updates": 2,
+      "output_messages": 9,
+      "output_updates": 2
+    },
+    "2001:20::3": {
+      "peer_as": 30000,
+      "local_address": "2001:20::1",
+      "local_as": 1,
+      "tables": {
+        "inet6.0": {
+          "rib_state": "BGP restart is complete",
+          "send_state": "in sync",
+          "active_prefixes": 1,
+          "received_prefixes": 1,
+          "accepted_prefixes": 1,
+          "suppressed_due_to_damping": 0,
+          "advertised_prefixes": 2
+        }
+      },
+      "peer_port": 179,
+      "local_port": 62643,
+      "type": "External",
+      "state": "Established",
+      "flags": [
+        "ImportEval",
+        "Sync"
+      ],
+      "last_state": "OpenConfirm",
+      "last_event": "RecvKeepAlive",
+      "last_error": "None",
+      "export": "export2bgp",
+      "options": [
+        "Preference",
+        "PeerAS",
+        "Refresh"
+      ],
+      "flaps": 0,
+      "peer_id": "10.16.2.2",
+      "local_id": "10.4.1.1",
+      "active_holdtime": 90,
+      "keepalive_interval": 30,
+      "bfd": "disabled, down",
+      "nlri_advertised_by_peer": [
+        "inet6-unicast"
+      ],
+      "nlri_for_this_session": [
+        "inet6-unicast"
+      ],
+      "last_traffic": {
+        "received": 15,
+        "sent": 10,
+        "checked": 29
+      },
+      "input_messages": 7,
+      "input_updates": 2,
+      "output_messages": 9,
+      "output_updates": 2
+    },
+    "2001:30::2": {
+      "peer_as": 2,
+      "local_address": "2001:30::1",
+      "local_as": 1,
+      "tables": {
+        "inet6.0": {
+          "rib_state": "BGP restart is complete",
+          "send_state": "in sync",
+          "active_prefixes": 1,
+          "received_prefixes": 1,
+          "accepted_prefixes": 1,
+          "suppressed_due_to_damping": 0,
+          "advertised_prefixes": 2
+        }
+      },
+      "peer_port": 179,
+      "local_port": 61370,
+      "type": "External",
+      "state": "Established",
+      "flags": [
+        "ImportEval",
+        "Sync"
+      ],
+      "last_state": "OpenConfirm",
+      "last_event": "RecvKeepAlive",
+      "last_error": "None",
+      "export": "export2bgp",
+      "options": [
+        "Preference",
+        "PeerAS",
+        "Refresh"
+      ],
+      "flaps": 0,
+      "peer_id": "10.36.3.3",
+      "local_id": "10.4.1.1",
+      "active_holdtime": 90,
+      "keepalive_interval": 30,
+      "bfd": "disabled, down",
+      "nlri_advertised_by_peer": [
+        "inet6-unicast"
+      ],
+      "nlri_for_this_session": [
+        "inet6-unicast"
+      ],
+      "last_traffic": {
+        "received": 2,
+        "sent": 1,
+        "checked": 21
+      },
+      "input_messages": 7,
+      "input_updates": 2,
+      "output_messages": 9,
+      "output_updates": 2
+    }
+  }
+}

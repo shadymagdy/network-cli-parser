@@ -1,0 +1,169 @@
+{
+  "command": "display temperature",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 0,
+      "address": 0,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 68,
+        "major": 76,
+        "fatal": 83
+      },
+      "fan_adjust": {
+        "min": 55,
+        "max": 65
+      },
+      "temperature_c": 38
+    },
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 0,
+      "address": 1,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 63,
+        "major": 71,
+        "fatal": 78
+      },
+      "fan_adjust": {
+        "min": 50,
+        "max": 60
+      },
+      "temperature_c": 36
+    },
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 0,
+      "address": 2,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 69,
+        "major": 77,
+        "fatal": 85
+      },
+      "fan_adjust": {
+        "min": 56,
+        "max": 66
+      },
+      "temperature_c": 28
+    },
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 7,
+      "address": 175,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 89,
+        "major": 94,
+        "fatal": 105
+      },
+      "fan_adjust": {
+        "min": 76,
+        "max": 86
+      },
+      "temperature_c": 55
+    },
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 7,
+      "address": 175,
+      "channel": 1,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 89,
+        "major": 94,
+        "fatal": 105
+      },
+      "fan_adjust": {
+        "min": 76,
+        "max": 86
+      },
+      "temperature_c": 37
+    },
+    {
+      "slot": 2,
+      "pcb": "LPUF41A",
+      "i2c": 7,
+      "address": 175,
+      "channel": 2,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 89,
+        "major": 94,
+        "fatal": 105
+      },
+      "fan_adjust": {
+        "min": 76,
+        "max": 86
+      },
+      "temperature_c": 41
+    },
+    {
+      "slot": 2,
+      "pcb": "EFGF",
+      "i2c": 2,
+      "address": 73,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 77,
+        "major": 83,
+        "fatal": 92
+      },
+      "fan_adjust": {
+        "min": 64,
+        "max": 74
+      },
+      "temperature_c": 30
+    },
+    {
+      "slot": 2,
+      "pcb": "EFGF",
+      "i2c": 3,
+      "address": 73,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 77,
+        "major": 83,
+        "fatal": 92
+      },
+      "fan_adjust": {
+        "min": 64,
+        "max": 74
+      },
+      "temperature_c": 36
+    },
+    {
+      "slot": 27,
+      "pcb": "FAN",
+      "i2c": 1,
+      "address": 0,
+      "channel": 0,
+      "status": "NORMAL",
+      "thresholds": {
+        "minor": 70,
+        "major": 80,
+        "fatal": 95
+      },
+      "fan_adjust": {
+        "min": 32,
+        "max": 45
+      },
+      "temperature_c": 25
+    }
+  ]
+}

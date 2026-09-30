@@ -1,0 +1,126 @@
+{
+  "command": "show route",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "TESTVPN.inet.0": {
+        "destinations": 3,
+        "routes": 3,
+        "active": 3,
+        "holddown": 0,
+        "hidden": 0
+      }
+    },
+    "routes": [
+      {
+        "table": "TESTVPN.inet.0",
+        "prefix": "192.168.51.0/30",
+        "paths": [
+          {
+            "active": true,
+            "last_active": true,
+            "protocol": "Direct",
+            "preference": 0,
+            "age": "00:41:59",
+            "next_hops": [
+              {
+                "interface": "xe-1/0/0.0",
+                "selected": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "table": "TESTVPN.inet.0",
+        "prefix": "192.168.51.1/32",
+        "paths": [
+          {
+            "active": true,
+            "last_active": true,
+            "protocol": "Local",
+            "preference": 0,
+            "age": "00:41:59",
+            "next_hops": [
+              {
+                "type": "local",
+                "interface": "xe-1/0/0.0",
+                "selected": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "table": "TESTVPN.inet.0",
+        "prefix": "192.168.61.0/30",
+        "paths": [
+          {
+            "active": true,
+            "last_active": true,
+            "protocol": "BGP",
+            "preference": 170,
+            "age": "00:25:19",
+            "next_hops": [
+              {
+                "next_hop": "10.120.202.49",
+                "interface": "xe-2/0/0.0",
+                "selected": true,
+                "label_operation": "Push 16, Push 299792(top)"
+              }
+            ],
+            "localpref": 100,
+            "from": "10.120.202.40",
+            "as_path": "I",
+            "validation_state": "unverified"
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "192.168.51.0/30",
+      "protocol": "direct",
+      "next_hops": [
+        {
+          "next_hop": null,
+          "interface": "xe-1/0/0.0"
+        }
+      ],
+      "distance": 0,
+      "metric": null,
+      "vrf": "TESTVPN",
+      "age": "00:41:59"
+    },
+    {
+      "prefix": "192.168.51.1/32",
+      "protocol": "local",
+      "next_hops": [
+        {
+          "next_hop": null,
+          "interface": "xe-1/0/0.0"
+        }
+      ],
+      "distance": 0,
+      "metric": null,
+      "vrf": "TESTVPN",
+      "age": "00:41:59"
+    },
+    {
+      "prefix": "192.168.61.0/30",
+      "protocol": "bgp",
+      "next_hops": [
+        {
+          "next_hop": "10.120.202.49",
+          "interface": "xe-2/0/0.0"
+        }
+      ],
+      "distance": 170,
+      "metric": null,
+      "vrf": "TESTVPN",
+      "age": "00:25:19"
+    }
+  ]
+}

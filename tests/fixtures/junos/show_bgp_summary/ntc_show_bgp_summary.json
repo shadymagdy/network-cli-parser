@@ -1,0 +1,202 @@
+{
+  "command": "show bgp summary",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "tables": {},
+    "neighbors": [
+      {
+        "neighbor": "192.0.2.254",
+        "remote_as": 64496,
+        "input_messages": 1165670,
+        "output_messages": 1238837,
+        "output_queue": 0,
+        "flaps": 1,
+        "up_down": "9w2d 5:23:37",
+        "state": "Established",
+        "tables": {
+          "wanTrusted.inet.0": {
+            "active": 23,
+            "received": 224,
+            "accepted": 224,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 224,
+        "uptime_seconds": 5635417
+      },
+      {
+        "neighbor": "192.0.2.252",
+        "remote_as": 64496,
+        "input_messages": 753373,
+        "output_messages": 783304,
+        "output_queue": 0,
+        "flaps": 50,
+        "up_down": "35w2d 3:57:43",
+        "state": "Established",
+        "tables": {
+          "wanTrusted.inet.0": {
+            "active": 65,
+            "received": 224,
+            "accepted": 224,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 224,
+        "uptime_seconds": 21355063
+      },
+      {
+        "neighbor": "198.51.100.100",
+        "remote_as": 64496,
+        "input_messages": 814804,
+        "output_messages": 865022,
+        "output_queue": 0,
+        "flaps": 19,
+        "up_down": "6w3d 13:02:17",
+        "state": "Established",
+        "tables": {
+          "wanTrusted.inet.0": {
+            "active": 30,
+            "received": 226,
+            "accepted": 226,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 226,
+        "uptime_seconds": 3934937
+      },
+      {
+        "neighbor": "198.51.100.200",
+        "remote_as": 64496,
+        "input_messages": 768547,
+        "output_messages": 816071,
+        "output_queue": 0,
+        "flaps": 47,
+        "up_down": "36w5d 12:18:32",
+        "state": "Established",
+        "tables": {
+          "wanUntrust.inet.0": {
+            "active": 1,
+            "received": 70,
+            "accepted": 70,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 70,
+        "uptime_seconds": 22249112
+      },
+      {
+        "neighbor": "203.0.113.0",
+        "remote_as": 64496,
+        "input_messages": 811361,
+        "output_messages": 865023,
+        "output_queue": 0,
+        "flaps": 20,
+        "up_down": "6w3d 13:02:22",
+        "state": "Established",
+        "tables": {
+          "wanUntrust.inet.0": {
+            "active": 6,
+            "received": 74,
+            "accepted": 74,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 74,
+        "uptime_seconds": 3934942
+      },
+      {
+        "neighbor": "203.0.113.0",
+        "remote_as": 64496,
+        "input_messages": 1162649,
+        "output_messages": 1238837,
+        "output_queue": 0,
+        "flaps": 1,
+        "up_down": "9w2d 5:23:33",
+        "state": "Established",
+        "tables": {
+          "wanUntrust.inet.0": {
+            "active": 4,
+            "received": 72,
+            "accepted": 72,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 72,
+        "uptime_seconds": 5635413
+      }
+    ],
+    "groups": 2,
+    "peers": 6,
+    "down_peers": 0,
+    "threading_mode": "BGP I/O"
+  },
+  "normalized": [
+    {
+      "neighbor": "192.0.2.254",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "9w2d 5:23:37",
+      "uptime_seconds": 5635417,
+      "prefixes_received": 224,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "192.0.2.252",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "35w2d 3:57:43",
+      "uptime_seconds": 21355063,
+      "prefixes_received": 224,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "198.51.100.100",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "6w3d 13:02:17",
+      "uptime_seconds": 3934937,
+      "prefixes_received": 226,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "198.51.100.200",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "36w5d 12:18:32",
+      "uptime_seconds": 22249112,
+      "prefixes_received": 70,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "203.0.113.0",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "6w3d 13:02:22",
+      "uptime_seconds": 3934942,
+      "prefixes_received": 74,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "203.0.113.0",
+      "remote_as": 64496,
+      "state": "Established",
+      "established": true,
+      "uptime": "9w2d 5:23:33",
+      "uptime_seconds": 5635413,
+      "prefixes_received": 72,
+      "vrf": "default",
+      "address_family": "ipv4 unicast"
+    }
+  ]
+}

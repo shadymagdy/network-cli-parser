@@ -1,0 +1,353 @@
+{
+  "command": "show chassis hardware",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "chassis": [
+      {
+        "name": "Chassis",
+        "serial_number": "A1111",
+        "description": "MX10-T"
+      },
+      {
+        "name": "Midplane",
+        "version": "REV 08",
+        "part_number": "711-038213",
+        "serial_number": "XXXX2118",
+        "description": "MX10-T"
+      },
+      {
+        "name": "PEM 0",
+        "version": "Rev 05",
+        "part_number": "740-028288",
+        "serial_number": "AJ00000",
+        "description": "AC Power Entry Module"
+      },
+      {
+        "name": "PEM 1",
+        "version": "Rev 05",
+        "part_number": "740-028288",
+        "serial_number": "AJ00001",
+        "description": "AC Power Entry Module"
+      },
+      {
+        "name": "Routing Engine",
+        "part_number": "BUILTIN",
+        "serial_number": "BUILTIN",
+        "description": "Routing Engine"
+      },
+      {
+        "name": "TFEB 0",
+        "part_number": "BUILTIN",
+        "serial_number": "BUILTIN",
+        "description": "Forwarding Engine Processor",
+        "components": [
+          {
+            "name": "QXM 0",
+            "version": "REV 05",
+            "part_number": "711-028408",
+            "serial_number": "ABCB4000",
+            "description": "MPC QXM"
+          }
+        ]
+      },
+      {
+        "name": "FPC 0",
+        "part_number": "BUILTIN",
+        "serial_number": "BUILTIN",
+        "description": "MPC BUILTIN",
+        "components": [
+          {
+            "name": "MIC 0",
+            "part_number": "BUILTIN",
+            "serial_number": "BUILTIN",
+            "description": "4x 10GE XFP",
+            "components": [
+              {
+                "name": "PIC 0",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "4x 10GE XFP",
+                "components": [
+                  {
+                    "name": "Xcvr 0",
+                    "version": "REV 01",
+                    "part_number": "740-011571",
+                    "serial_number": "USASR24490",
+                    "description": "XFP-10G-SR"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "FPC 1",
+        "part_number": "BUILTIN",
+        "serial_number": "BUILTIN",
+        "description": "MPC BUILTIN",
+        "components": [
+          {
+            "name": "MIC 0",
+            "version": "REV 30",
+            "part_number": "750-028380",
+            "serial_number": "CALW4921",
+            "description": "3D 2x 10GE XFP",
+            "components": [
+              {
+                "name": "PIC 0",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "1x 10GE XFP",
+                "components": [
+                  {
+                    "name": "Xcvr 0",
+                    "version": "REV 01",
+                    "part_number": "740-011607",
+                    "serial_number": "A1JACT3",
+                    "description": "XFP-10G-LR"
+                  }
+                ]
+              },
+              {
+                "name": "PIC 1",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "1x 10GE XFP",
+                "components": [
+                  {
+                    "name": "Xcvr 0",
+                    "version": "REV 01",
+                    "part_number": "740-011607",
+                    "serial_number": "A1KBPNC",
+                    "description": "XFP-10G-LR"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "MIC 1",
+            "version": "REV 20",
+            "part_number": "750-028380",
+            "serial_number": "ABCC2190",
+            "description": "3D 2x 10GE XFP",
+            "components": [
+              {
+                "name": "PIC 2",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "1x 10GE XFP",
+                "components": [
+                  {
+                    "name": "Xcvr 0",
+                    "part_number": "NON-JNPR",
+                    "serial_number": "CC37BK0PQ",
+                    "description": "XFP-10G-SR"
+                  }
+                ]
+              },
+              {
+                "name": "PIC 3",
+                "part_number": "BUILTIN",
+                "serial_number": "BUILTIN",
+                "description": "1x 10GE XFP",
+                "components": [
+                  {
+                    "name": "Xcvr 0",
+                    "version": "REV 01",
+                    "part_number": "740-014279",
+                    "serial_number": "EOXH27560005",
+                    "description": "XFP-10G-LR"
+                  },
+                  {
+                    "name": "Xcvr 1",
+                    "version": "REV 01",
+                    "part_number": "740-014279",
+                    "serial_number": "XXXXXXXXXXXX",
+                    "description": "XFP-10G-LR"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Fan Tray",
+        "description": "Fan Tray"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "name": "Chassis",
+      "description": "MX10-T",
+      "part_number": null,
+      "serial_number": "A1111",
+      "version": null
+    },
+    {
+      "name": "Midplane",
+      "description": "MX10-T",
+      "part_number": "711-038213",
+      "serial_number": "XXXX2118",
+      "version": "REV 08"
+    },
+    {
+      "name": "PEM 0",
+      "description": "AC Power Entry Module",
+      "part_number": "740-028288",
+      "serial_number": "AJ00000",
+      "version": "Rev 05"
+    },
+    {
+      "name": "PEM 1",
+      "description": "AC Power Entry Module",
+      "part_number": "740-028288",
+      "serial_number": "AJ00001",
+      "version": "Rev 05"
+    },
+    {
+      "name": "Routing Engine",
+      "description": "Routing Engine",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "TFEB 0",
+      "description": "Forwarding Engine Processor",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "TFEB 0 / QXM 0",
+      "description": "MPC QXM",
+      "part_number": "711-028408",
+      "serial_number": "ABCB4000",
+      "version": "REV 05"
+    },
+    {
+      "name": "FPC 0",
+      "description": "MPC BUILTIN",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 0 / MIC 0",
+      "description": "4x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 0 / MIC 0 / PIC 0",
+      "description": "4x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 0 / MIC 0 / PIC 0 / Xcvr 0",
+      "description": "XFP-10G-SR",
+      "part_number": "740-011571",
+      "serial_number": "USASR24490",
+      "version": "REV 01"
+    },
+    {
+      "name": "FPC 1",
+      "description": "MPC BUILTIN",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 0",
+      "description": "3D 2x 10GE XFP",
+      "part_number": "750-028380",
+      "serial_number": "CALW4921",
+      "version": "REV 30"
+    },
+    {
+      "name": "FPC 1 / MIC 0 / PIC 0",
+      "description": "1x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 0 / PIC 0 / Xcvr 0",
+      "description": "XFP-10G-LR",
+      "part_number": "740-011607",
+      "serial_number": "A1JACT3",
+      "version": "REV 01"
+    },
+    {
+      "name": "FPC 1 / MIC 0 / PIC 1",
+      "description": "1x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 0 / PIC 1 / Xcvr 0",
+      "description": "XFP-10G-LR",
+      "part_number": "740-011607",
+      "serial_number": "A1KBPNC",
+      "version": "REV 01"
+    },
+    {
+      "name": "FPC 1 / MIC 1",
+      "description": "3D 2x 10GE XFP",
+      "part_number": "750-028380",
+      "serial_number": "ABCC2190",
+      "version": "REV 20"
+    },
+    {
+      "name": "FPC 1 / MIC 1 / PIC 2",
+      "description": "1x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 1 / PIC 2 / Xcvr 0",
+      "description": "XFP-10G-SR",
+      "part_number": "NON-JNPR",
+      "serial_number": "CC37BK0PQ",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 1 / PIC 3",
+      "description": "1x 10GE XFP",
+      "part_number": "BUILTIN",
+      "serial_number": "BUILTIN",
+      "version": null
+    },
+    {
+      "name": "FPC 1 / MIC 1 / PIC 3 / Xcvr 0",
+      "description": "XFP-10G-LR",
+      "part_number": "740-014279",
+      "serial_number": "EOXH27560005",
+      "version": "REV 01"
+    },
+    {
+      "name": "FPC 1 / MIC 1 / PIC 3 / Xcvr 1",
+      "description": "XFP-10G-LR",
+      "part_number": "740-014279",
+      "serial_number": "XXXXXXXXXXXX",
+      "version": "REV 01"
+    },
+    {
+      "name": "Fan Tray",
+      "description": "Fan Tray",
+      "part_number": null,
+      "serial_number": null,
+      "version": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+# containerlab topology: Cisco XRd + Juniper cRPD/vJunos + Huawei VRP (vrnetlab)
+#
+#   sudo containerlab deploy -t lab/clab-multivendor.yml
+#   python scripts/harvest.py lab/inventory.yml --out harvest/
+#
+# Images are not redistributable: pull/build them from the vendors first (see lab/README.md)
+# and adjust the image tags below.
+name: clijson
+
+topology:
+  nodes:
+    xrd1:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:24.1.1
+    xrd2:
+      kind: cisco_xrd
+      image: ios-xr/xrd-control-plane:24.1.1
+    vjunos1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:23.2R1.15
+    crpd1:
+      kind: juniper_crpd
+      image: crpd:23.4R1.9
+    vrp1:
+      kind: huawei_vrp
+      image: vrnetlab/huawei_vrp:ne40e-8.180
+
+  links:
+    - endpoints: ["xrd1:Gi0-0-0-0", "xrd2:Gi0-0-0-0"]
+    - endpoints: ["xrd1:Gi0-0-0-1", "vjunos1:eth1"]
+    - endpoints: ["xrd2:Gi0-0-0-1", "vrp1:eth1"]
+    - endpoints: ["vjunos1:eth2", "crpd1:eth1"]
+    - endpoints: ["vjunos1:eth3", "vrp1:eth2"]

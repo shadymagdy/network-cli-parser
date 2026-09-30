@@ -1,0 +1,10 @@
+{
+  "command": "show watchdog memory-state",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "physical_memory_mb": 32768,
+    "free_memory_mb": 25623.558,
+    "memory_state": "Normal"
+  }
+}

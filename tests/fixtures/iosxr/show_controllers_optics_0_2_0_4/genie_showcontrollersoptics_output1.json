@@ -1,0 +1,61 @@
+{
+  "command": "show controllers optics 0/2/0/4",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "controller_state": "Up",
+    "transport_admin_state": "In Service",
+    "laser_state": "N/A",
+    "led_state": "Not Applicable",
+    "fec_state": "FEC DISABLED",
+    "optics_type": "1G 1000BASE-T",
+    "wavelength_nm": 0.0,
+    "alarms": [],
+    "tx_power": null,
+    "rx_power": null,
+    "performance_monitoring": "Disable",
+    "thresholds": {
+      "rx_power_dbm": {
+        "high_alarm": 0.0,
+        "low_alarm": 0.0,
+        "high_warning": 0.0,
+        "low_warning": 0.0
+      },
+      "tx_power_dbm": {
+        "high_alarm": 0.0,
+        "low_alarm": 0.0,
+        "high_warning": 0.0,
+        "low_warning": 0.0
+      },
+      "lbc_ma": {
+        "high_alarm": 0.0,
+        "low_alarm": 0.0,
+        "high_warning": 0.0,
+        "low_warning": 0.0
+      },
+      "temp_celsius": {
+        "high_alarm": 0.0,
+        "low_alarm": 0.0,
+        "high_warning": 0.0,
+        "low_warning": 0.0
+      },
+      "voltage_volt": {
+        "high_alarm": 0.0,
+        "low_alarm": 0.0,
+        "high_warning": 0.0,
+        "low_warning": 0.0
+      }
+    },
+    "temperature_c": 0.0,
+    "voltage_v": 0.0,
+    "vendor": {
+      "form_factor": "SFP",
+      "optics_type": "N/A",
+      "name": "N/A",
+      "oui_number": "00.00.00",
+      "part_number": "N/A",
+      "rev_number": "N/A",
+      "serial_number": "N/A"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "command": "display ip routing-table verbose",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "tables": {
+      "_public_": {
+        "destinations": 1,
+        "routes": 1
+      }
+    },
+    "routes": [
+      {
+        "prefix": "::1/128",
+        "vrf": "_public_",
+        "next_hops": [
+          {
+            "next_hop": "::1",
+            "interface": "InLoopBack0"
+          }
+        ],
+        "preference": 0,
+        "neighbour": "::",
+        "processid": 0,
+        "label": "NULL",
+        "protocol": "Direct",
+        "state": "Active NoAdv",
+        "active": true,
+        "cost": 0,
+        "entry_id": 2826122436,
+        "entry_flags": "0x80010050",
+        "reference_cnt": 2,
+        "tag": 0,
+        "priority": "high",
+        "age": "93545sec",
+        "indirectid": "0x0",
+        "relay_next_hop": "::",
+        "tunnelid": "0x0",
+        "flags": "D"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "::1/128",
+      "protocol": "connected",
+      "next_hops": [
+        {
+          "next_hop": "::1",
+          "interface": "InLoopBack0"
+        }
+      ],
+      "distance": 0,
+      "metric": 0,
+      "vrf": "default",
+      "age": "93545sec"
+    }
+  ]
+}

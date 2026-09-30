@@ -1,0 +1,56 @@
+{
+  "command": "show route",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "inet.3": {
+        "destinations": 3,
+        "routes": 3,
+        "active": 3,
+        "holddown": 0,
+        "hidden": 0
+      }
+    },
+    "routes": [
+      {
+        "table": "inet.3",
+        "prefix": "192.168.36.220/32",
+        "paths": [
+          {
+            "active": true,
+            "last_active": true,
+            "protocol": "LDP",
+            "preference": 9,
+            "age": "03:41:19",
+            "next_hops": [
+              {
+                "next_hop": "192.168.220.6",
+                "interface": "ge-0/0/1.0",
+                "selected": true,
+                "label_operation": "Push 305550"
+              }
+            ],
+            "metric": 1111
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "192.168.36.220/32",
+      "protocol": "ldp",
+      "next_hops": [
+        {
+          "next_hop": "192.168.220.6",
+          "interface": "ge-0/0/1.0"
+        }
+      ],
+      "distance": 9,
+      "metric": 1111,
+      "vrf": "inet",
+      "age": "03:41:19"
+    }
+  ]
+}

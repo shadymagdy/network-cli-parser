@@ -1,0 +1,108 @@
+{
+  "command": "show firewall",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "catch_all": {
+      "counters": {
+        "cflow_counter_v4": {
+          "bytes": 28553344730,
+          "packets": 151730215
+        }
+      }
+    },
+    "local-access-control": {
+      "counters": {
+        "fragment-test": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "fragment-test2": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "last_policer": {
+          "bytes": 1069200810,
+          "packets": 19016081
+        },
+        "ntp-deny-count": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "telnet-deny-count": {
+          "bytes": 1316,
+          "packets": 23
+        },
+        "traceroute-udp-deny-count": {
+          "bytes": 1385466,
+          "packets": 8350
+        }
+      },
+      "policers": {
+        "MINIMUM-RATE-POLICER": {
+          "bytes": 2508396,
+          "packets": 48164
+        }
+      }
+    },
+    "v4_EXT_inbound": {
+      "counters": {
+        "deny-dst-in": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "deny-p-in": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "deny-src-in": {
+          "bytes": 0,
+          "packets": 0
+        }
+      }
+    },
+    "v4_toIPVPN_inbound": {
+      "counters": {
+        "cflow_counter_v4": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "deny-dst-in": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "deny-rsvp-in": {
+          "bytes": 0,
+          "packets": 0
+        }
+      }
+    },
+    "v6_catch_all": {
+      "counters": {
+        "cflow_counter_v6": {
+          "bytes": 12001013864,
+          "packets": 149192171
+        }
+      }
+    },
+    "v6_local-access-control": {
+      "counters": {
+        "traceroute-udp-deny-count": {
+          "bytes": 0,
+          "packets": 0
+        },
+        "v6_last_policer": {
+          "bytes": 1061535120,
+          "packets": 7859252
+        }
+      },
+      "policers": {
+        "MINIMUM-RATE-POLICER": {
+          "bytes": 0,
+          "packets": 0
+        }
+      }
+    },
+    "__default_bpdu_filter__": {}
+  }
+}

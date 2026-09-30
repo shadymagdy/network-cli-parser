@@ -1,0 +1,95 @@
+{
+  "command": "show vrf all detail",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "VRF1": {
+      "rd": "200:1",
+      "vpn_id": null,
+      "interfaces": [
+        "GigabitEthernet0/0/0/1",
+        "GigabitEthernet0/0/0/0.415",
+        "GigabitEthernet0/0/0/0.420",
+        "GigabitEthernet0/0/0/1.390",
+        "GigabitEthernet0/0/0/1.410",
+        "GigabitEthernet0/0/0/1.415",
+        "GigabitEthernet0/0/0/1.420"
+      ],
+      "address_families": {
+        "ipv4 unicast": {
+          "import_route_targets": [
+            "200:1",
+            "200:2",
+            "300:1",
+            "400:1"
+          ],
+          "export_route_targets": [
+            "200:1"
+          ]
+        },
+        "ipv6 unicast": {
+          "import_route_targets": [
+            "200:1",
+            "200:2",
+            "300:1",
+            "400:1"
+          ],
+          "export_route_targets": [
+            "200:1"
+          ]
+        }
+      },
+      "mode": "Regular",
+      "description": null
+    },
+    "VRF2": {
+      "rd": "200:2",
+      "vpn_id": null,
+      "interfaces": [
+        "GigabitEthernet0/0/0/2"
+      ],
+      "address_families": {
+        "ipv4 unicast": {
+          "import_route_targets": [
+            "200:2"
+          ],
+          "export_route_targets": [
+            "200:2"
+          ]
+        },
+        "ipv6 unicast": {
+          "import_route_targets": [
+            "200:2"
+          ],
+          "export_route_targets": [
+            "200:2"
+          ]
+        }
+      },
+      "mode": "Regular",
+      "description": null
+    }
+  },
+  "normalized": [
+    {
+      "name": "VRF1",
+      "rd": "200:1",
+      "interfaces": [
+        "GigabitEthernet0/0/0/1",
+        "GigabitEthernet0/0/0/0.415",
+        "GigabitEthernet0/0/0/0.420",
+        "GigabitEthernet0/0/0/1.390",
+        "GigabitEthernet0/0/0/1.410",
+        "GigabitEthernet0/0/0/1.415",
+        "GigabitEthernet0/0/0/1.420"
+      ]
+    },
+    {
+      "name": "VRF2",
+      "rd": "200:2",
+      "interfaces": [
+        "GigabitEthernet0/0/0/2"
+      ]
+    }
+  ]
+}

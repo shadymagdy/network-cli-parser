@@ -1,0 +1,12 @@
+<PE1>display ospf peer brief
+
+          OSPF Process 1 with Router ID 10.0.0.1
+                   Peer Statistic Information
+ ----------------------------------------------------------------------------
+ Area Id          Interface                        Neighbor id      State
+ 0.0.0.0          GigabitEthernet0/0/1             10.0.0.2         Full
+ 0.0.0.0          GigabitEthernet0/0/2             10.0.0.3         Full
+ 0.0.0.10         Vlanif100                        10.0.0.9         2-Way
+ ----------------------------------------------------------------------------
+ Total Peer(s):     3
+<PE1>

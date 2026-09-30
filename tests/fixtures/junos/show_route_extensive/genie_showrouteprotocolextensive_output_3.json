@@ -1,0 +1,67 @@
+{
+  "command": "show route extensive",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "tables": {
+      "inet.0": {
+        "destinations": 929,
+        "routes": 1615,
+        "active": 929,
+        "holddown": 0,
+        "hidden": 0
+      }
+    },
+    "routes": [
+      {
+        "table": "inet.0",
+        "prefix": "10.169.196.241/32",
+        "entries": 1,
+        "announced": 1,
+        "paths": [
+          {
+            "active": true,
+            "protocol": "OSPF",
+            "preference": 10,
+            "next_hops": [
+              {
+                "next_hop": "10.169.14.121",
+                "interface": "ge-0/0/1.0",
+                "selected": true
+              }
+            ],
+            "preference2": 10,
+            "next_hop_type": "Router, Next hop index: 613",
+            "state": [
+              "Active",
+              "Int"
+            ],
+            "local_as": 65171,
+            "age": "6d 17:23:01",
+            "metric": 1201,
+            "validation_state": "unverified",
+            "area": "0.0.0.8",
+            "task": "OSPF",
+            "as_path": "I"
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "prefix": "10.169.196.241/32",
+      "protocol": "ospf",
+      "next_hops": [
+        {
+          "next_hop": "10.169.14.121",
+          "interface": "ge-0/0/1.0"
+        }
+      ],
+      "distance": 10,
+      "metric": 1201,
+      "vrf": "default",
+      "age": "6d 17:23:01"
+    }
+  ]
+}

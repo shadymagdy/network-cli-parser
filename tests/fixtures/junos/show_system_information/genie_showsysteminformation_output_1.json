@@ -1,0 +1,11 @@
+{
+  "command": "show system information",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "model": "vmx",
+    "family": "junos",
+    "version": "19.2R1.8",
+    "hostname": "P4"
+  }
+}

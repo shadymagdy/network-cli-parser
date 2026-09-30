@@ -1,0 +1,143 @@
+{
+  "command": "show bgp summary",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbors": [
+      {
+        "neighbor": "10.16.2.2",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv4 unicast",
+        "speaker_id": 0,
+        "remote_as": 100,
+        "messages_received": 59,
+        "messages_sent": 56,
+        "table_version": 43,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "00:50:38",
+        "state": "Established",
+        "prefixes_received": 10
+      },
+      {
+        "neighbor": "10.36.3.3",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv4 unicast",
+        "speaker_id": 0,
+        "remote_as": "60000.60001",
+        "messages_received": 68,
+        "messages_sent": 58,
+        "table_version": 43,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "00:47:11",
+        "state": "Established",
+        "prefixes_received": 10
+      },
+      {
+        "neighbor": "10.16.2.2",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv6 unicast",
+        "speaker_id": 0,
+        "remote_as": 100,
+        "messages_received": 59,
+        "messages_sent": 56,
+        "table_version": 43,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "00:50:38",
+        "state": "Established",
+        "prefixes_received": 10
+      },
+      {
+        "neighbor": "10.36.3.3",
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv6 unicast",
+        "speaker_id": 0,
+        "remote_as": "60000.60002",
+        "messages_received": 68,
+        "messages_sent": 58,
+        "table_version": 43,
+        "input_queue": 0,
+        "output_queue": 0,
+        "up_down": "00:47:11",
+        "state": "Established",
+        "prefixes_received": 10
+      }
+    ],
+    "contexts": [
+      {
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv4 unicast",
+        "router_id": "10.4.1.1",
+        "local_as": 100,
+        "nsr": true,
+        "table_state": "Active",
+        "table_version": 43,
+        "mode": "standalone"
+      },
+      {
+        "instance": "default",
+        "vrf": "default",
+        "address_family": "vpnv6 unicast",
+        "router_id": "10.4.1.1",
+        "local_as": 100,
+        "nsr": true,
+        "table_state": "Active",
+        "table_version": 43,
+        "mode": "standalone"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "neighbor": "10.16.2.2",
+      "remote_as": 100,
+      "state": "Established",
+      "established": true,
+      "uptime": "00:50:38",
+      "uptime_seconds": 3038,
+      "prefixes_received": 10,
+      "vrf": "default",
+      "address_family": "vpnv4 unicast"
+    },
+    {
+      "neighbor": "10.36.3.3",
+      "remote_as": "60000.60001",
+      "state": "Established",
+      "established": true,
+      "uptime": "00:47:11",
+      "uptime_seconds": 2831,
+      "prefixes_received": 10,
+      "vrf": "default",
+      "address_family": "vpnv4 unicast"
+    },
+    {
+      "neighbor": "10.16.2.2",
+      "remote_as": 100,
+      "state": "Established",
+      "established": true,
+      "uptime": "00:50:38",
+      "uptime_seconds": 3038,
+      "prefixes_received": 10,
+      "vrf": "default",
+      "address_family": "vpnv6 unicast"
+    },
+    {
+      "neighbor": "10.36.3.3",
+      "remote_as": "60000.60002",
+      "state": "Established",
+      "established": true,
+      "uptime": "00:47:11",
+      "uptime_seconds": 2831,
+      "prefixes_received": 10,
+      "vrf": "default",
+      "address_family": "vpnv6 unicast"
+    }
+  ]
+}

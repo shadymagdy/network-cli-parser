@@ -1,0 +1,63 @@
+{
+  "command": "show bgp vrf VRF_1 ipv6 unicast 2000:90:11:1::/64",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "entries": [
+      {
+        "prefix": "2000:90:11:1::/64",
+        "paths": [
+          {
+            "index": 1,
+            "received_by": "Received by speaker 0",
+            "as_path": null,
+            "next_hop": "::",
+            "from": "::",
+            "router_id": "50.1.1.1",
+            "origin": "incomplete",
+            "metric": 0,
+            "local_preference": 100,
+            "weight": 32768,
+            "flags": [
+              "valid",
+              "redistributed",
+              "best",
+              "group-best",
+              "import-candidate"
+            ],
+            "best": true,
+            "extended_communities": [
+              "RT:100:1001"
+            ]
+          },
+          {
+            "index": 2,
+            "received_by": "Received by speaker 0",
+            "as_path": "5000",
+            "next_hop": "2000:90:11:1::2",
+            "from": "2000:90:11:1::2",
+            "router_id": "70.1.1.1",
+            "origin": "incomplete",
+            "metric": 0,
+            "local_preference": 100,
+            "flags": [
+              "valid",
+              "external",
+              "group-best"
+            ],
+            "best": false,
+            "extended_communities": [
+              "RT:100:1001"
+            ]
+          }
+        ],
+        "route_distinguisher": "50.1.1.1:0",
+        "local_label": 24021,
+        "last_modified": "Mar 31 12:40:50.327",
+        "age": "2d16h",
+        "paths_available": 2,
+        "best_path": 1
+      }
+    ]
+  }
+}
