@@ -263,7 +263,7 @@ and reports how much of it parsed natively. This is how new OS releases get chec
 
 ```bash
 pip install -e ".[dev]"
-pytest                          # ~881 tests incl. 238 fixtures
+pytest                          # ~1050 tests incl. 238 fixtures
 ruff check src tests scripts
 python scripts/fixture.py check # or `update` after an intentional parser change
 python scripts/gen_docs.py      # refresh docs/commands.md
