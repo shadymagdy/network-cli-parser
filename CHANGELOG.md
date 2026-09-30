@@ -4,7 +4,7 @@
 
 First release.
 
-* 124 dedicated parsers (190 command patterns) for Cisco IOS XR, Juniper Junos and Huawei VRP.
+* 158 dedicated parsers (232 command patterns) for Cisco IOS XR, Juniper Junos and Huawei VRP.
 * Abbreviation-aware command grammar. Huawei `show` alias.
 * Platform detection from prompts, command verbs and output fingerprints, with trial parsing as a fallback.
 * Generic engine for any other output: tables, key/value pairs and indented sections.
@@ -14,4 +14,4 @@ First release.
 * Session logs with many commands (`parse_session`).
 * Optional ntc-templates and Genie fallback engines.
 * CLI (`clijson`), HTTP API (`clijson serve`) and live collection (`clijson run`, scrapli/netmiko).
-* 185 regression fixtures from real devices.
+* 230 regression fixtures from real devices.

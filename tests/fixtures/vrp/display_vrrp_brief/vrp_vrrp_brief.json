@@ -1,0 +1,21 @@
+{
+  "command": "display vrrp brief",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "vrid": 1,
+      "state": "Master",
+      "interface": "Vlanif100",
+      "type": "Normal",
+      "virtual_ip": "10.1.100.1"
+    },
+    {
+      "vrid": 2,
+      "state": "Backup",
+      "interface": "GigabitEthernet0/0/1.20",
+      "type": "Normal",
+      "virtual_ip": "10.1.20.1"
+    }
+  ]
+}

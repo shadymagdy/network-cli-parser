@@ -1,0 +1,74 @@
+{
+  "command": "show filesystem location all",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "0/RP0/CPU0": [
+      {
+        "prefix": "ftp:",
+        "size_bytes": 0,
+        "free_bytes": 0,
+        "type": "network",
+        "flags": "rw"
+      },
+      {
+        "prefix": "apphost:",
+        "size_bytes": 3962216448,
+        "free_bytes": 3926405120,
+        "type": "flash-disk",
+        "flags": "rw"
+      },
+      {
+        "prefix": "tftp:",
+        "size_bytes": 0,
+        "free_bytes": 0,
+        "type": "network",
+        "flags": "rw"
+      },
+      {
+        "prefix": "harddisk:",
+        "size_bytes": 24467337216,
+        "free_bytes": 22803652608,
+        "type": "harddisk",
+        "flags": "rw"
+      },
+      {
+        "prefix": "/misc/config",
+        "size_bytes": 480907264,
+        "free_bytes": 478617600,
+        "type": "flash",
+        "flags": "rw"
+      },
+      {
+        "prefix": "disk0:",
+        "size_bytes": 2069835776,
+        "free_bytes": 2051518464,
+        "type": "flash-disk",
+        "flags": "rw"
+      }
+    ],
+    "0/0/CPU0": [
+      {
+        "prefix": "disk0:",
+        "size_bytes": 2069835776,
+        "free_bytes": 2063699968,
+        "type": "flash-disk",
+        "flags": "rw"
+      },
+      {
+        "prefix": "/misc/config",
+        "size_bytes": 480907264,
+        "free_bytes": 480137216,
+        "type": "flash",
+        "flags": "rw"
+      },
+      {
+        "prefix": "apphost:",
+        "size_bytes": 3962216448,
+        "free_bytes": 3926405120,
+        "type": "flash-disk",
+        "flags": "rw"
+      }
+    ]
+  }
+}

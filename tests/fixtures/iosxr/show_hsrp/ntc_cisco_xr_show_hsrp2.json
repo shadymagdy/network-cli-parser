@@ -1,0 +1,117 @@
+{
+  "command": "show hsrp",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "Gi0/0/0/0",
+      "group": 1,
+      "priority": 110,
+      "preempt": true,
+      "state": "Active",
+      "family": "ipv4",
+      "active_address": "local",
+      "standby_address": "10.0.0.3",
+      "virtual_address": "10.0.0.1"
+    },
+    {
+      "interface": "Gi0/0/0/0.123",
+      "group": 123,
+      "priority": 90,
+      "preempt": true,
+      "state": "Standby",
+      "family": "ipv4",
+      "active_address": "10.1.2.4",
+      "standby_address": "local",
+      "virtual_address": "10.1.2.1"
+    },
+    {
+      "interface": "Gi0/0/0/0.456",
+      "group": 456,
+      "priority": 100,
+      "preempt": false,
+      "state": "Active",
+      "family": "ipv4",
+      "active_address": "local",
+      "standby_address": "10.4.56.3",
+      "virtual_address": "10.4.56.1"
+    },
+    {
+      "interface": "Gi0/0/0/0",
+      "group": 6,
+      "priority": 110,
+      "preempt": true,
+      "state": "Active",
+      "family": "ipv6",
+      "active_address": "local",
+      "standby_address": "fe80::5054:ff:fe0d:1111",
+      "virtual_address": "fe80::1"
+    },
+    {
+      "interface": "Gi0/0/0/0.66",
+      "group": 66,
+      "priority": 100,
+      "preempt": false,
+      "state": "Active",
+      "family": "ipv6",
+      "active_address": "local",
+      "standby_address": "fe80::5054:ff:fe0d:1111",
+      "virtual_address": "fe80::4:5:6:66"
+    },
+    {
+      "interface": "Gi0/0/0/0.123",
+      "group": 123,
+      "priority": 90,
+      "preempt": true,
+      "state": "Standby",
+      "family": "ipv6",
+      "active_address": "fe80::5054:ff:fe0d:1111",
+      "standby_address": "local",
+      "virtual_address": "fe80:1:2:3:4:5:6:7"
+    },
+    {
+      "interface": "Gi0/0/0/0.234",
+      "group": 234,
+      "priority": 90,
+      "preempt": false,
+      "state": "Standby",
+      "family": "ipv6",
+      "active_address": "fe80::5054:ff:fe0d:1111",
+      "standby_address": "local",
+      "virtual_address": "fe80:7:6:5:4:3:2:1"
+    },
+    {
+      "interface": "Gi0/0/0/0.456",
+      "group": 456,
+      "priority": 100,
+      "preempt": false,
+      "state": "Active",
+      "family": "ipv6",
+      "active_address": "local",
+      "standby_address": "fe80::5054:ff:fe0d:1111",
+      "virtual_address": "fe80::4:5:6:456"
+    },
+    {
+      "interface": "Gi0/0/0/0.789",
+      "group": 788,
+      "priority": 100,
+      "preempt": false,
+      "state": "Active",
+      "family": "ipv6",
+      "active_address": "local",
+      "standby_address": "fe80::9",
+      "virtual_address": "fe80::788"
+    },
+    {
+      "interface": "Gi0/0/0/0.789",
+      "group": 789,
+      "priority": 110,
+      "preempt": true,
+      "state": "Active",
+      "family": "ipv6",
+      "active_address": "local",
+      "standby_address": "fe80::9",
+      "virtual_address": "fe80::789"
+    }
+  ]
+}

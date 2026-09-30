@@ -1,0 +1,49 @@
+{
+  "command": "show pim neighbor",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "address": "10.100.100.129",
+      "interface": "FortyGigE0/2/1/1",
+      "uptime": "4w2d",
+      "expires": "00:01:41",
+      "dr_priority": 1,
+      "dr": false,
+      "self": false,
+      "flags": [
+        "B",
+        "P"
+      ],
+      "vrf": "default"
+    },
+    {
+      "address": "10.100.100.130",
+      "interface": "FortyGigE0/2/1/1",
+      "uptime": "4w2d",
+      "expires": "00:01:25",
+      "dr_priority": 1,
+      "dr": true,
+      "self": true,
+      "flags": [
+        "B",
+        "E"
+      ],
+      "vrf": "default"
+    },
+    {
+      "address": "10.100.100.125",
+      "interface": "FortyGigE0/0/0/1",
+      "uptime": "4w2d",
+      "expires": "00:01:27",
+      "dr_priority": 1,
+      "dr": false,
+      "self": false,
+      "flags": [
+        "B",
+        "P"
+      ],
+      "vrf": "default"
+    }
+  ]
+}

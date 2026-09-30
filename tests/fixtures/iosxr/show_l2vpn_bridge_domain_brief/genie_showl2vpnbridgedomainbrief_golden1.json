@@ -1,0 +1,175 @@
+{
+  "command": "show l2vpn bridge-domain brief",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "group": "D",
+      "bridge_domain": "D-w",
+      "id": 0,
+      "state": "up",
+      "acs": {
+        "total": 1,
+        "up": 1
+      },
+      "pws": {
+        "total": 1,
+        "up": 1
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "d",
+      "bridge_domain": "s-VLAN_20",
+      "id": 1,
+      "state": "up",
+      "acs": {
+        "total": 2,
+        "up": 2
+      },
+      "pws": {
+        "total": 1,
+        "up": 1
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "MGMT",
+      "bridge_domain": "DSL-MGMT",
+      "id": 2,
+      "state": "up",
+      "acs": {
+        "total": 1,
+        "up": 0
+      },
+      "pws": {
+        "total": 0,
+        "up": 0
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "WOrd",
+      "bridge_domain": "CODE-123-4567",
+      "id": 3,
+      "state": "up",
+      "acs": {
+        "total": 1,
+        "up": 0
+      },
+      "pws": {
+        "total": 1,
+        "up": 0
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "woRD",
+      "bridge_domain": "THING_PLACE_DIA-765_4321",
+      "id": 4,
+      "state": "up",
+      "acs": {
+        "total": 1,
+        "up": 1
+      },
+      "pws": {
+        "total": 1,
+        "up": 1
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "GO-LEAFS",
+      "bridge_domain": "GO",
+      "id": 9,
+      "state": "up",
+      "acs": {
+        "total": 3,
+        "up": 2
+      },
+      "pws": {
+        "total": 7,
+        "up": 5
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "admin1",
+      "bridge_domain": "domain1",
+      "id": 6,
+      "state": "admin down",
+      "acs": {
+        "total": 1,
+        "up": 0
+      },
+      "pws": {
+        "total": 1,
+        "up": 0
+      },
+      "pbbs": {
+        "total": 0,
+        "up": 0
+      },
+      "vnis": {
+        "total": 0,
+        "up": 0
+      }
+    },
+    {
+      "group": "g1",
+      "bridge_domain": "bd1",
+      "id": 0,
+      "state": "up",
+      "acs": {
+        "total": 1,
+        "up": 1
+      },
+      "pws": {
+        "total": 1,
+        "up": 1
+      }
+    }
+  ]
+}

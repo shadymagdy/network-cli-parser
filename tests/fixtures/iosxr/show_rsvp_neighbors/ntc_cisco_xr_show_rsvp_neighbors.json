@@ -1,0 +1,20 @@
+{
+  "command": "show rsvp neighbors",
+  "platform": "iosxr",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "global_neighbor": "10.100.100.120",
+      "interface_neighbors": [
+        {
+          "neighbor": "10.100.100.141",
+          "interface": "FortyGigE0/0/1/0"
+        },
+        {
+          "neighbor": "10.100.100.145",
+          "interface": "FortyGigE0/1/1/0"
+        }
+      ]
+    }
+  ]
+}

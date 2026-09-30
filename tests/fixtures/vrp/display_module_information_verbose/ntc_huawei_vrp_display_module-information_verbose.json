@@ -1,0 +1,25 @@
+{
+  "command": "display module-information verbose",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": {
+    "modules": [
+      {
+        "module": "semls",
+        "version": "xxxxxx",
+        "install_time": "2020-05-29 09:57:32",
+        "package": "xxxxxx.MOD"
+      }
+    ],
+    "boards": [
+      {
+        "slot_cpu": "1/0",
+        "process": "swm_daemon_master",
+        "type": "C",
+        "file": "HM780000.mod",
+        "effective_time": "2020-05-29 09:57:28.050",
+        "module": "semls"
+      }
+    ]
+  }
+}

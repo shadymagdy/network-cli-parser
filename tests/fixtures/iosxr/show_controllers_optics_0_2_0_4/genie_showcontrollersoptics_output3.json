@@ -1,0 +1,121 @@
+{
+  "command": "show controllers optics 0/2/0/4",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "controller_state": "Administratively Down",
+    "transport_admin_state": "Out Of Service",
+    "laser_state": "Off",
+    "host_squelch_status": "Enable",
+    "led_state": "Off",
+    "fec_state": "FEC DISABLED",
+    "power_mode": "Low",
+    "dom_data_status": "Ready",
+    "last_link_flapped": "00:05:05",
+    "optics_type": "QSFP+ 40G 4x10G BASE LR",
+    "wavelength_nm": 1307.0,
+    "alarms": [
+      "LOW-RX1-PWR",
+      "LOW-RX2-PWR",
+      "LOW-RX3-PWR",
+      "LOW-RX4-PWR",
+      "LOW-TX1-PWR",
+      "LOW-TX2-PWR",
+      "LOW-TX3-PWR",
+      "LOW-TX4-PWR",
+      "LOW-TX1_LBC",
+      "LOW-TX2_LBC",
+      "LOW-TX3_LBC",
+      "LOW-TX4_LBC"
+    ],
+    "los_lol_fault": [
+      "RX-LOS"
+    ],
+    "performance_monitoring": "Disable",
+    "thresholds": {
+      "rx_power_dbm": {
+        "high_alarm": 3.4,
+        "low_alarm": -18.4,
+        "high_warning": 0.4,
+        "low_warning": -14.4
+      },
+      "rx_power_mw": {
+        "high_alarm": 2.1,
+        "low_alarm": 0.0,
+        "high_warning": 1.0,
+        "low_warning": 0.0
+      },
+      "tx_power_dbm": {
+        "high_alarm": 3.4,
+        "low_alarm": -12.2,
+        "high_warning": 0.4,
+        "low_warning": -8.2
+      },
+      "tx_power_mw": {
+        "high_alarm": 2.1,
+        "low_alarm": 0.0,
+        "high_warning": 1.0,
+        "low_warning": 0.1
+      },
+      "lbc_ma": {
+        "high_alarm": 81.75,
+        "low_alarm": 10.38,
+        "high_warning": 76.3,
+        "low_warning": 12.45
+      },
+      "temp_celsius": {
+        "high_alarm": 75.0,
+        "low_alarm": -5.0,
+        "high_warning": 70.0,
+        "low_warning": 0.0
+      },
+      "voltage_volt": {
+        "high_alarm": 3.63,
+        "low_alarm": 2.97,
+        "high_warning": 3.46,
+        "low_warning": 3.1
+      }
+    },
+    "lanes": [
+      {
+        "lane": 0,
+        "laser_bias_ma": 0.0,
+        "tx_power_dbm": -40.0,
+        "rx_power_dbm": -40.0
+      },
+      {
+        "lane": 1,
+        "laser_bias_ma": 0.0,
+        "tx_power_dbm": -40.0,
+        "rx_power_dbm": -40.0
+      },
+      {
+        "lane": 2,
+        "laser_bias_ma": 0.0,
+        "tx_power_dbm": -40.0,
+        "rx_power_dbm": -40.0
+      },
+      {
+        "lane": 3,
+        "laser_bias_ma": 0.0,
+        "tx_power_dbm": -40.0,
+        "rx_power_dbm": -40.0
+      }
+    ],
+    "temperature_c": 14.39,
+    "voltage_v": 3.36,
+    "vendor": {
+      "form_factor": "QSFP+",
+      "optics_type": "QSFP+ 40G 4x10G BASE LR",
+      "name": "CISCO-INNOLIGHT",
+      "oui_number": "44.7c.7f",
+      "part_number": "TR-IQ13L-NC2",
+      "rev_number": "1B",
+      "serial_number": "INL21370445",
+      "pid": "QSFP-4X10G-LR-S",
+      "vid": "V02",
+      "hardware_version": "66.49",
+      "date_code_yy_mm_dd": "17/09/16"
+    }
+  }
+}

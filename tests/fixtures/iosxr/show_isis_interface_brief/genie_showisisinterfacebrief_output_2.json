@@ -1,0 +1,85 @@
+{
+  "command": "show isis interface brief",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "instance": "1",
+      "interface": "Gi0/0/0/1",
+      "all_ok": false
+    },
+    {
+      "instance": "10",
+      "interface": "BE10",
+      "all_ok": true,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": 0
+      },
+      "adjacency_topologies": "1/1",
+      "advertised_topologies": "1/1",
+      "clns": "Up",
+      "mtu": 1497,
+      "priority": {
+        "level_1": null,
+        "level_2": 64
+      }
+    },
+    {
+      "instance": "10",
+      "interface": "BE10.10",
+      "all_ok": true,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": 1
+      },
+      "adjacency_topologies": "2/2",
+      "advertised_topologies": "2/2",
+      "clns": "Up",
+      "mtu": 1497,
+      "priority": {
+        "level_1": null,
+        "level_2": 64
+      }
+    },
+    {
+      "instance": "10",
+      "interface": "Gi0/0/0/1.10",
+      "all_ok": false
+    },
+    {
+      "instance": "10",
+      "interface": "Gi0/0/0/1.19",
+      "all_ok": false,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": null
+      },
+      "adjacency_topologies": "0/2",
+      "advertised_topologies": "0/2",
+      "clns": "Down",
+      "mtu": 1497,
+      "priority": {
+        "level_1": null,
+        "level_2": null
+      }
+    },
+    {
+      "instance": "99",
+      "interface": "Gi0/0/0/6",
+      "all_ok": false,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": null
+      },
+      "adjacency_topologies": "0/1",
+      "advertised_topologies": "0/1",
+      "clns": "Up",
+      "mtu": 1501,
+      "priority": {
+        "level_1": null,
+        "level_2": null
+      }
+    }
+  ]
+}

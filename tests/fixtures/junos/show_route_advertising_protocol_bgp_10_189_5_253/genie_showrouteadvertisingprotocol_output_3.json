@@ -1,0 +1,142 @@
+{
+  "command": "show route advertising-protocol bgp 10.189.5.253",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbor": "10.189.5.253",
+    "direction": "advertised",
+    "tables": {
+      "inet6.0": {
+        "destinations": 21,
+        "routes": 23,
+        "active": 21
+      }
+    },
+    "routes": [
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::1/128",
+        "active": true,
+        "next_hop": "Self",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::2/128",
+        "active": true,
+        "next_hop": "Self",
+        "med": 1,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::3/128",
+        "active": true,
+        "next_hop": "Self",
+        "med": 1,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::4/128",
+        "active": true,
+        "next_hop": "Self",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::5/128",
+        "active": true,
+        "next_hop": "Self",
+        "med": 3,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:d3e9::/64",
+        "active": true,
+        "next_hop": "Self",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:d8be::/64",
+        "active": true,
+        "next_hop": "Self",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:dd95::/64",
+        "active": true,
+        "next_hop": "Self",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:e26e::/64",
+        "active": true,
+        "next_hop": "Self",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:e749::/64",
+        "active": true,
+        "next_hop": "Self",
+        "med": 3,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::2/128",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::3/128",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::3",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::4/128",
+        "active": true,
+        "next_hop": "Self",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "command": "display bgp routing-table",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "routes": [
+      {
+        "network": "10.0.0.1/32",
+        "next_hop": "0.0.0.0",
+        "valid": true,
+        "best": true,
+        "internal": false,
+        "med": 0,
+        "preferred_value": 0,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "network": "10.255.0.9/32",
+        "next_hop": "10.0.0.9",
+        "valid": true,
+        "best": true,
+        "internal": true,
+        "med": 0,
+        "local_preference": 100,
+        "preferred_value": 0,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "network": "172.16.10.0/24",
+        "next_hop": "192.168.100.2",
+        "valid": true,
+        "best": true,
+        "internal": false,
+        "med": 0,
+        "preferred_value": 0,
+        "as_path": "64512",
+        "origin": "incomplete"
+      },
+      {
+        "network": "172.16.10.0/24",
+        "next_hop": "10.0.0.9",
+        "valid": true,
+        "best": false,
+        "internal": true,
+        "med": 0,
+        "local_preference": 100,
+        "preferred_value": 0,
+        "as_path": "64512",
+        "origin": "incomplete"
+      }
+    ],
+    "router_id": "10.0.0.1",
+    "total_routes": 4
+  }
+}

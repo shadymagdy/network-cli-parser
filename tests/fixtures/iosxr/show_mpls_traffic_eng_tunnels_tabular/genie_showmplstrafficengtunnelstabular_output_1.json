@@ -1,0 +1,158 @@
+{
+  "command": "show mpls traffic-eng tunnels tabular",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "tunnel": "tunnel-te50000",
+      "lsp_id": 4,
+      "destination": "109.109.109.109",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Ready",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te50010",
+      "lsp_id": 3,
+      "destination": "108.108.108.108",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Ready",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te53000",
+      "lsp_id": 2,
+      "destination": "141.141.141.141",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te53010",
+      "lsp_id": 2,
+      "destination": "106.106.106.106",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te53100",
+      "lsp_id": 2,
+      "destination": "107.107.107.107",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te53300",
+      "lsp_id": 2,
+      "destination": "109.109.109.109",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "tunnel-te53400",
+      "lsp_id": 2,
+      "destination": "107.107.107.107",
+      "source": "17.17.17.17",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "head",
+      "path_protection": "Inact"
+    },
+    {
+      "tunnel": "NHOP_15060_F141-A",
+      "lsp_id": 3,
+      "destination": "17.17.17.17",
+      "source": "141.141.141.141",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    },
+    {
+      "tunnel": "NNHOP_15370_F141-",
+      "lsp_id": 3,
+      "destination": "106.106.106.106",
+      "source": "141.141.141.141",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "mid"
+    },
+    {
+      "tunnel": "NHOP_16060_F107-A",
+      "lsp_id": 61,
+      "destination": "106.106.106.106",
+      "source": "107.107.107.107",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "mid"
+    },
+    {
+      "tunnel": "NNHOP_16370_F107-",
+      "lsp_id": 48,
+      "destination": "17.17.17.17",
+      "source": "107.107.107.107",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    },
+    {
+      "tunnel": "NNHOP_16710_F107-",
+      "lsp_id": 74,
+      "destination": "17.17.17.17",
+      "source": "107.107.107.107",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    },
+    {
+      "tunnel": "51000_F106-ASR900",
+      "lsp_id": 167,
+      "destination": "109.109.109.109",
+      "source": "106.106.106.106",
+      "state": "up",
+      "frr_state": "Ready",
+      "role": "mid"
+    },
+    {
+      "tunnel": "55000_F109-ASR900",
+      "lsp_id": 3,
+      "destination": "17.17.17.17",
+      "source": "109.109.109.109",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    },
+    {
+      "tunnel": "56000_F108-ASR900",
+      "lsp_id": 26,
+      "destination": "17.17.17.17",
+      "source": "108.108.108.108",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    },
+    {
+      "tunnel": "NNHOP_58300_F109-",
+      "lsp_id": 4,
+      "destination": "17.17.17.17",
+      "source": "109.109.109.109",
+      "state": "up",
+      "frr_state": "Inact",
+      "role": "tail"
+    }
+  ]
+}

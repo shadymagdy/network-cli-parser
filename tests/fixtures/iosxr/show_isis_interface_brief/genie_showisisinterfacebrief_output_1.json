@@ -1,0 +1,58 @@
+{
+  "command": "show isis interface brief",
+  "platform": "iosxr",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": [
+    {
+      "instance": "ACCESS",
+      "interface": "Lo0",
+      "all_ok": true,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": 0
+      },
+      "adjacency_topologies": "2/2",
+      "advertised_topologies": "2/2",
+      "clns": "Up",
+      "mtu": 1500,
+      "priority": {
+        "level_1": null,
+        "level_2": null
+      }
+    },
+    {
+      "instance": "ACCESS",
+      "interface": "Gi0/0/0/0",
+      "all_ok": true,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": 1
+      },
+      "adjacency_topologies": "2/2",
+      "advertised_topologies": "2/2",
+      "clns": "Up",
+      "mtu": 1497,
+      "priority": {
+        "level_1": null,
+        "level_2": 64
+      }
+    },
+    {
+      "instance": "ACCESS",
+      "interface": "Gi0/0/0/1",
+      "all_ok": true,
+      "adjacencies": {
+        "level_1": null,
+        "level_2": 1
+      },
+      "adjacency_topologies": "2/2",
+      "advertised_topologies": "2/2",
+      "clns": "Up",
+      "mtu": 1497,
+      "priority": {
+        "level_1": null,
+        "level_2": 64
+      }
+    }
+  ]
+}

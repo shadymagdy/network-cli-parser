@@ -1,0 +1,57 @@
+{
+  "command": "display mpls te tunnel",
+  "platform": "vrp",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "ingress_lsr_id": "10.219.220.136",
+      "destination": "10.219.220.8",
+      "lsp_id": 29,
+      "in_label": null,
+      "out_label": 2080,
+      "role": "ingress",
+      "tunnel": "Tunnel1_RR-KL2414993-01H_to_RAW-KL1956-01H",
+      "detour": false
+    },
+    {
+      "ingress_lsr_id": "10.219.220.136",
+      "destination": "10.219.220.9",
+      "lsp_id": 22684,
+      "in_label": null,
+      "out_label": 2204,
+      "role": "ingress",
+      "tunnel": "Tunnel2_RR-KL2414993-01H_to_RAW-KL1938-01H",
+      "detour": false
+    },
+    {
+      "ingress_lsr_id": "10.219.220.8",
+      "destination": "10.219.220.136",
+      "lsp_id": 34518,
+      "in_label": 2096,
+      "out_label": null,
+      "role": "egress",
+      "tunnel": "Tunnel12_RAW-KL1956-01H_to_RR-KL3453225G-01H",
+      "detour": false
+    },
+    {
+      "ingress_lsr_id": "10.219.220.8",
+      "destination": "10.219.220.136",
+      "lsp_id": 34521,
+      "in_label": 2098,
+      "out_label": null,
+      "role": "egress",
+      "tunnel": "Tunnel12_RAW-KL1956-01H_to_RR-KL3453225G-01H",
+      "detour": false
+    },
+    {
+      "ingress_lsr_id": "10.219.220.9",
+      "destination": "10.219.220.136",
+      "lsp_id": 34510,
+      "in_label": 2144,
+      "out_label": null,
+      "role": "egress",
+      "tunnel": "Tunnel12_RAW-KL1938-01H_to_RR-KL3453225G-01H",
+      "detour": false
+    }
+  ]
+}

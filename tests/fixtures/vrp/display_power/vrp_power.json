@@ -1,0 +1,31 @@
+{
+  "command": "display power",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": [
+    {
+      "slot": "PWR1",
+      "present": true,
+      "mode": "AC",
+      "state": "Supply",
+      "current_a": 11.63,
+      "voltage_v": 12.18,
+      "power_w": 141.65
+    },
+    {
+      "slot": "PWR2",
+      "present": true,
+      "mode": "AC",
+      "state": "Supply",
+      "current_a": 11.02,
+      "voltage_v": 12.21,
+      "power_w": 134.55
+    },
+    {
+      "slot": "PWR3",
+      "present": false,
+      "mode": "-",
+      "state": "-"
+    }
+  ]
+}

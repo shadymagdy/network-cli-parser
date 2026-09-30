@@ -19,7 +19,7 @@ It has **no runtime dependencies**.
 
 | | |
 |---|---|
-| **Works on any command** | 124 dedicated parsers (190 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
+| **Works on any command** | 158 dedicated parsers (232 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Huawei accepts `show` as well as `display`. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from the prompt, the command verb or fingerprints in the output. If those don't settle it, **trial parsing** lets each vendor's parser try and keeps the one that understands the output. Echoed prompts, `--More--` pagers, ANSI codes, timestamps and `{master}` lines are removed. |
 | **One model for all vendors** | `normalize=True` adds a **vendor-neutral view** for 18 common concepts (BGP peers, interfaces, routes, LLDP, OSPF/IS-IS/LDP, ARP/ND, BFD, LAG, VRFs, …), so one script can handle all three vendors. |
@@ -28,7 +28,7 @@ It has **no runtime dependencies**.
 | **Whole sessions** | Paste a terminal log with 20 commands and get 20 results (`parse_session`). |
 | **Stands on giants' shoulders** | If you have [ntc-templates](https://github.com/networktocode/ntc-templates) or [Cisco Genie](https://github.com/CiscoTestAutomation/genieparser) installed, their templates become extra fallback engines automatically. |
 | **Tells you how it got the answer** | Every result carries `engine`, `parser`, `confidence`, `warnings` (for example "output was filtered by `| include`") and metadata such as the hostname and timestamp. |
-| **Tested on real output** | 185 regression fixtures captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices. |
+| **Tested on real output** | 230 regression fixtures captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices. |
 | **Easy to use from any language** | Python API, a full CLI (`clijson`), and a zero-dependency HTTP API (`clijson serve`). |
 
 ## Install
@@ -145,15 +145,17 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 | Platform | Aliases (any of these work) | Dedicated parsers |
 |---|---|---:|
-| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 46 |
-| Juniper Junos / Junos Evolved (MX, PTX, ACX, QFX, EX, SRX, vMX, cRPD) | `junos`, `juniper`, `juniper_junos`, `evo`, … | 39 |
-| Huawei VRP (NE40E/NE8000, CX600, ATN, CE, S, AR) | `vrp`, `huawei`, `huawei_vrp`, `vrpv8`, … | 39 |
+| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 62 |
+| Juniper Junos / Junos Evolved (MX, PTX, ACX, QFX, EX, SRX, vMX, cRPD) | `junos`, `juniper`, `juniper_junos`, `evo`, … | 48 |
+| Huawei VRP (NE40E/NE8000, CX600, ATN, CE, S, AR) | `vrp`, `huawei`, `huawei_vrp`, `vrpv8`, … | 48 |
 
-They cover the commands you run every day: version and inventory, platform and RE/FPC state, CPU and memory,
-interfaces (brief, detail, description, counters, optics), LAG/LACP, IPv4/IPv6 addressing, ARP/ND and MAC tables,
-VLANs, LLDP/CDP, RIB (brief and detail/extensive), BGP (summary and neighbor detail, including VRF, instance and
-address family), OSPF/OSPFv3, IS-IS, MPLS LDP, RSVP/LSPs, LFIB, BFD, VRFs and VPN instances, L2VPN xconnects,
-NTP, users, alarms, logging, commit history, startup/patch info and running configuration.
+They cover the commands you run every day: version and inventory, platform and RE/FPC state, CPU, memory,
+power, fans and temperature, interfaces (brief, detail, description, counters, optics/DOM), LAG/LACP, IPv4/IPv6
+addressing, ARP/ND and MAC tables, VLANs, LLDP/CDP, RIB (brief and detail/extensive), BGP (summary, neighbor detail,
+advertised/received routes and BGP RIB, including VRF, instance and address family), OSPF/OSPFv3, IS-IS, MPLS LDP,
+RSVP-TE tunnels and LSPs, LFIB, BFD, HSRP/VRRP, PIM, VRFs and VPN instances, L2VPN xconnects and bridge domains,
+EVPN, firewall filters, ACLs, SRX cluster and policies, NTP, users, alarms, logging, licenses, file systems,
+commit history, startup/patch info and running configuration.
 
 The full, generated list is in **[docs/commands.md](docs/commands.md)**. You can also run `clijson commands`.
 
@@ -199,7 +201,7 @@ Third-party packages can ship parsers through the `clijson.parsers` entry point.
 
 ```bash
 pip install -e ".[dev]"
-pytest                          # ~600 tests incl. 185 real-device fixtures
+pytest                          # ~694 tests incl. 230 real-device fixtures
 ruff check src tests scripts
 python scripts/fixture.py check # or `update` after an intentional parser change
 python scripts/gen_docs.py      # refresh docs/commands.md

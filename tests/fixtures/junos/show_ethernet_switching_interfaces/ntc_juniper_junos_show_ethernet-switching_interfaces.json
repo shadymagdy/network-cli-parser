@@ -1,0 +1,156 @@
+{
+  "command": "show ethernet-switching interfaces",
+  "platform": "junos",
+  "source": "ntc-templates (Apache-2.0) https://github.com/networktocode/ntc-templates",
+  "expected": [
+    {
+      "interface": "ae0.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "default",
+          "tagging": "untagged",
+          "blocking": "unblocked"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/2.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "vlan300",
+          "tag": 300,
+          "tagging": "untagged",
+          "blocking": "blocked by RTG (rtggroup)"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/3.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "default",
+          "blocking": "blocked by STP"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/4.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "default",
+          "blocking": "MAC limit exceeded"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/5.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "default",
+          "blocking": "MAC move limit exceeded"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/6.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "default",
+          "blocking": "Storm control in effect"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/7.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "default",
+          "blocking": "unblocked"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/13.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "default",
+          "tagging": "untagged",
+          "blocking": "unblocked"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/14.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "vlan100",
+          "tag": 100,
+          "tagging": "tagged",
+          "blocking": "unblocked"
+        },
+        {
+          "vlan": "vlan200",
+          "tag": 200,
+          "tagging": "tagged",
+          "blocking": "unblocked"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/15.0",
+      "state": "up",
+      "vlans": [
+        {
+          "vlan": "vlan100",
+          "tag": 100,
+          "tagging": "tagged",
+          "blocking": "blocked by STP"
+        },
+        {
+          "vlan": "vlan200",
+          "tag": 200,
+          "tagging": "tagged",
+          "blocking": "blocked by STP"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/16.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "default",
+          "tagging": "untagged",
+          "blocking": "unblocked"
+        }
+      ]
+    },
+    {
+      "interface": "ge-0/0/17.0",
+      "state": "down",
+      "vlans": [
+        {
+          "vlan": "vlan100",
+          "tag": 100,
+          "tagging": "tagged",
+          "blocking": "Disabled by bpdu-control"
+        },
+        {
+          "vlan": "vlan200",
+          "tag": 200,
+          "tagging": "tagged",
+          "blocking": "Disabled by bpdu-control"
+        }
+      ]
+    }
+  ]
+}

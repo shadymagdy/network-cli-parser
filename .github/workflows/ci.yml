@@ -38,7 +38,7 @@ jobs:
         if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
         run: |
           python scripts/gen_docs.py
-          git diff --exit-code docs/commands.md
+          git diff --exit-code docs/
 
   optional-engines:
     runs-on: ubuntu-latest

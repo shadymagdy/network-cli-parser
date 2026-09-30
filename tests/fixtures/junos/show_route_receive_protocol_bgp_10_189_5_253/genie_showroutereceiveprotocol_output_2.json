@@ -1,0 +1,182 @@
+{
+  "command": "show route receive-protocol bgp 10.189.5.253",
+  "platform": "junos",
+  "source": "Cisco genieparser (Apache-2.0) https://github.com/CiscoTestAutomation/genieparser",
+  "expected": {
+    "neighbor": "10.189.5.253",
+    "direction": "received",
+    "tables": {
+      "inet6.0": {
+        "destinations": 24,
+        "routes": 36,
+        "active": 24
+      }
+    },
+    "routes": [
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::1/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::2/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 1,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::3/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 1,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::4/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:ca45::5/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 3,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:d3e9::/64",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:d8be::/64",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 2,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:dd95::/64",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:e26e::/64",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:e749::/64",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "med": 3,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::2/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::3/128",
+        "active": false,
+        "next_hop": "2001:db8:7fc5:ca45::3",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:7fc5:9a4b::4/128",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::4",
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:22::/48",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "med": 1000,
+        "local_preference": 65509,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:a280::/48",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "med": 1000,
+        "local_preference": 65509,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:6880::/48",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "med": 1000,
+        "local_preference": 100,
+        "as_path": null,
+        "origin": "igp"
+      },
+      {
+        "table": "inet6.0",
+        "prefix": "2001:db8:3000::/48",
+        "active": true,
+        "next_hop": "2001:db8:7fc5:ca45::2",
+        "med": 100,
+        "local_preference": 65509,
+        "as_path": null,
+        "origin": "igp"
+      }
+    ]
+  }
+}
