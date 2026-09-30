@@ -18,6 +18,7 @@ All notable changes to this project are documented here. The format follows
 * pre-commit hooks for ruff, the lockfile and basic file hygiene.
 * CI runs on `astral-sh/setup-uv` with a locked environment and dependency caching. It also cancels superseded
   runs and builds and smoke-tests the wheel.
+* GitHub Actions are pinned to commit SHAs. Dependabot keeps them and `uv.lock` up to date.
 * A plugin that fails to load now raises a `RuntimeWarning` instead of failing silently.
 
 ### Removed
