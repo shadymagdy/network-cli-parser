@@ -279,8 +279,10 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     # `clijson FILE -c ...` is shorthand for `clijson parse FILE -c ...`
-    if argv and argv[0] not in SUBCOMMANDS and not argv[0].startswith("-") or (argv and argv[0] in ("-c", "-p", "--command", "--platform")):
+    if argv and argv[0] not in SUBCOMMANDS and argv[0] not in ("-h", "--help", "--version"):
         argv = ["parse"] + argv
+    elif not argv and not sys.stdin.isatty():
+        argv = ["parse"]
     parser = build_parser()
     args = parser.parse_args(argv)
     if not getattr(args, "func", None):

@@ -33,6 +33,44 @@ It has **no runtime dependencies**.
 | **Tested on real output** | 238 regression fixtures: 217 captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices, plus 21 written from vendor documentation formats. |
 | **Easy to use from any language** | Python API, a full CLI (`clijson`), and a zero-dependency HTTP API (`clijson serve`). |
 
+## What it looks like
+
+Input: a Huawei capture pasted straight from the terminal, prompt included.
+
+```text
+<PE1>display interface brief
+PHY: Physical
+*down: administratively down
+Interface                   PHY   Protocol  InUti OutUti   inErrors  outErrors
+Eth-Trunk1                  up    up        0.01%  0.38%          0          0
+  GigabitEthernet0/0/1      up    up        0.01%  0.40%          0          0
+  GigabitEthernet0/0/2      up    up           0%  0.36%          0          0
+GigabitEthernet0/0/3        *down down         0%     0%          0          0
+LoopBack0                   up    up(s)        0%     0%          0          0
+<PE1>
+```
+
+`clijson pe1.txt` detects Huawei VRP and `display interface brief`, nests the trunk members and decodes the
+flags. Output is abbreviated here:
+
+```json
+[
+  {"interface": "Eth-Trunk1", "physical": "up", "protocol": "up", "input_utilization": 0.01, "output_utilization": 0.38,
+   "input_errors": 0, "output_errors": 0,
+   "members": [{"interface": "GigabitEthernet0/0/1", "physical": "up", "protocol": "up", ...},
+               {"interface": "GigabitEthernet0/0/2", ...}]},
+  {"interface": "GigabitEthernet0/0/3", "physical": "down", "protocol": "down", "admin_down": true, ...},
+  {"interface": "LoopBack0", "physical": "up", "protocol": "up", "flags": ["spoofing"], ...}
+]
+```
+
+`clijson pe1.txt -n` gives the vendor-neutral view. It has the same shape for IOS XR and Junos:
+
+```json
+[{"name": "Eth-Trunk1", "admin_status": "up", "oper_status": "up", "ip_address": null, "vrf": null, "description": null},
+ {"name": "GigabitEthernet0/0/3", "admin_status": "admin-down", "oper_status": "down", ...}, ...]
+```
+
 ## Install
 
 ```bash
