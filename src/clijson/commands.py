@@ -130,6 +130,29 @@ def _expect(tokens: List[str], idx: int, what: str) -> None:
 EXACT, PREFIX, PARAM = 100, 60, 25
 MIN_PREFIX = 2
 
+_IP_LIKE = re.compile(r"^(?:[0-9]{1,3}(?:\.[0-9]{1,3}){3}|[0-9a-fA-F]*:[0-9a-fA-F:.]*)$")
+_PREFIX_LIKE = re.compile(r"^(?:[0-9]{1,3}(?:\.[0-9]{1,3}){0,3}|[0-9a-fA-F]*:[0-9a-fA-F:.]*)(?:/\d{1,3})?$")
+_INTERFACE_LIKE = re.compile(r"^[A-Za-z][\w\-./:]*\d[\w\-./:]*$")
+
+#: Parameters whose name implies a type only accept matching tokens, so typos such as
+#: ``show bgp summry`` are not swallowed as a ``<prefix>``.
+PARAM_TYPES = {
+    "prefix": _PREFIX_LIKE,
+    "neighbor": re.compile(_IP_LIKE.pattern + "|^[0-9]{1,3}(?:\\.[0-9]{1,3}){3}\\+\\d+$"),
+    "address": _IP_LIKE,
+    "peer": re.compile(r"^(?:[0-9]{1,3}(?:\.[0-9]{1,3}){3}(?::\d+)?|[0-9a-fA-F]*:[0-9a-fA-F:.]*)$"),
+    "ip": _IP_LIKE,
+    "dest": _IP_LIKE,
+    "interface": _INTERFACE_LIKE,
+    "count": re.compile(r"^\d+$"),
+    "vrid": re.compile(r"^\d+$"),
+}
+
+
+def _param_ok(name: str, token: str) -> bool:
+    rx = PARAM_TYPES.get(name)
+    return rx is None or bool(rx.match(token))
+
 
 @dataclass(order=True)
 class Match:
@@ -166,7 +189,7 @@ def _match(seq: Seq, i: int, tokens: Sequence[str], acc: Match) -> Iterator[Tupl
                 p = dict(acc.params)
                 p[node.name] = " ".join(tokens[i:end])
                 yield from _match(rest, end, tokens, Match(acc.score + PARAM, acc.literals, p))
-        elif i < len(tokens):
+        elif i < len(tokens) and _param_ok(node.name, tokens[i]):
             p = dict(acc.params)
             p[node.name] = tokens[i]
             yield from _match(rest, i + 1, tokens, Match(acc.score + PARAM, acc.literals, p))

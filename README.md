@@ -19,7 +19,7 @@ It has **no runtime dependencies**.
 
 | | |
 |---|---|
-| **Works on any command** | 158 dedicated parsers (232 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
+| **Works on any command** | 161 dedicated parsers (237 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Huawei accepts `show` as well as `display`. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from the prompt, the command verb or fingerprints in the output. If those don't settle it, **trial parsing** lets each vendor's parser try and keeps the one that understands the output. Echoed prompts, `--More--` pagers, ANSI codes, timestamps and `{master}` lines are removed. |
 | **One model for all vendors** | `normalize=True` adds a **vendor-neutral view** for 18 common concepts (BGP peers, interfaces, routes, LLDP, OSPF/IS-IS/LDP, ARP/ND, BFD, LAG, VRFs, …), so one script can handle all three vendors. |
@@ -30,7 +30,7 @@ It has **no runtime dependencies**.
 | **Clear about failures** | Device errors (`% Invalid input`, `syntax error`, `Error: Unrecognized command`) come back as `engine="device-error"` with the message, instead of garbage data. |
 | **Stands on giants' shoulders** | If you have [ntc-templates](https://github.com/networktocode/ntc-templates) or [Cisco Genie](https://github.com/CiscoTestAutomation/genieparser) installed, their templates become extra fallback engines automatically. |
 | **Tells you how it got the answer** | Every result carries `engine`, `parser`, `confidence`, `warnings` (for example "output was filtered by `| include`") and metadata such as the hostname and timestamp. |
-| **Tested on real output** | 230 regression fixtures captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices. |
+| **Tested on real output** | 238 regression fixtures: 217 captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices, plus 21 written from vendor documentation formats. |
 | **Easy to use from any language** | Python API, a full CLI (`clijson`), and a zero-dependency HTTP API (`clijson serve`). |
 
 ## Install
@@ -162,7 +162,7 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 | Platform | Aliases (any of these work) | Dedicated parsers |
 |---|---|---:|
-| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 62 |
+| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 65 |
 | Juniper Junos / Junos Evolved (MX, PTX, ACX, QFX, EX, SRX, vMX, cRPD) | `junos`, `juniper`, `juniper_junos`, `evo`, … | 48 |
 | Huawei VRP (NE40E/NE8000, CX600, ATN, CE, S, AR) | `vrp`, `huawei`, `huawei_vrp`, `vrpv8`, … | 48 |
 
@@ -214,11 +214,18 @@ class ShowHsrpBrief(Parser):
 Third-party packages can ship parsers through the `clijson.parsers` entry point. See
 [docs/writing-parsers.md](docs/writing-parsers.md).
 
+## Testing against real routers
+
+`lab/` has a [containerlab](https://containerlab.dev) topology with Cisco XRd, Juniper vJunos/cRPD and Huawei
+VRP. `scripts/harvest.py` runs every supported command on each device (live or emulated), saves the raw output
+and reports how much of it parsed natively. This is how new OS releases get checked. See
+[lab/README.md](lab/README.md).
+
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-pytest                          # ~694 tests incl. 230 real-device fixtures
+pytest                          # ~881 tests incl. 238 fixtures
 ruff check src tests scripts
 python scripts/fixture.py check # or `update` after an intentional parser change
 python scripts/gen_docs.py      # refresh docs/commands.md

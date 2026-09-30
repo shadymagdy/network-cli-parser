@@ -150,6 +150,7 @@ class Registry:
                     {
                         "platform": plat,
                         "command": render(e.compiled),
+                        "example": canonical(e.compiled),
                         "parser": e.parser.name,
                         "intent": e.parser.intent,
                         "description": e.parser.description,

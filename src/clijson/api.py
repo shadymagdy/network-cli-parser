@@ -22,7 +22,7 @@ PathLike = Union[str, "os.PathLike[str]"]
 
 
 def parse(
-    output: str,
+    output: Union[str, bytes],
     command: Optional[str] = None,
     platform: Union[str, Platform, None] = None,
     *,
@@ -54,7 +54,22 @@ def parse(
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
-    text = clean_output(output or "")
+    result = _parse(output or "", command, platform, normalize=normalize, engines=engines, strict=strict, raise_on_error=raise_on_error)
+    result.raw = output
+    return result
+
+
+def _parse(
+    output: str,
+    command: Optional[str],
+    platform: Union[str, Platform, None],
+    *,
+    normalize: bool,
+    engines: Optional[Sequence[str]],
+    strict: bool,
+    raise_on_error: bool,
+) -> ParseResult:
+    text = clean_output(output)
     warnings: List[str] = []
     metadata: Dict[str, Any] = {}
 

@@ -36,8 +36,15 @@ def test_rest_param():
 
 def test_exact_beats_param():
     exact = m("show interfaces brief", "show interfaces brief")
-    param = m("show interfaces [<interface>]", "show interfaces brief")
+    param = m("show interfaces [<name>]", "show interfaces brief")
     assert exact > param
+
+
+def test_typed_params_reject_typos():
+    assert m("show bgp [<prefix>]", "show bgp 10.0.0.0/8").params == {"prefix": "10.0.0.0/8"}
+    assert m("show bgp [<prefix>]", "show bgp summry") is None
+    assert m("show interfaces [<interface>]", "show interfaces irb.100")
+    assert m("show interfaces [<interface>]", "show interfaces breif") is None
 
 
 def test_render_and_canonical():

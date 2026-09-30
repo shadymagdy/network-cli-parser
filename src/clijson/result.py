@@ -32,6 +32,8 @@ class ParseResult:
     warnings: List[str] = field(default_factory=list)
     normalized: Any = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    #: The original text that was parsed (not included in ``to_dict``/``to_json``).
+    raw: Optional[str] = field(default=None, repr=False, compare=False)
 
     # -- convenience --------------------------------------------------------
     def __getitem__(self, key: Any) -> Any:
