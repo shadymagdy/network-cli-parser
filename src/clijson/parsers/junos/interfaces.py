@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import mac, record, status
 from ...registry import Parser, register
@@ -20,10 +20,10 @@ from ...textutils import match_lines, none_if, snake, to_num
 class ShowInterfacesTerse(Parser):
     """Admin/link state and addresses per family for physical and logical interfaces."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
-        fam: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
+        fam: dict[str, Any] | None = None
         for raw in text.splitlines():
             if not raw.strip() or re.match(r"^\s*Interface\s+Admin\s+Link", raw):
                 continue
@@ -55,7 +55,7 @@ class ShowInterfacesTerse(Parser):
                 _addr(fam, m["local"], m["remote"])
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         res = []
         for r in data:
             ip = next((a["local"] for f in r["families"] if f["family"] == "inet" for a in f["addresses"]), None)
@@ -71,7 +71,7 @@ class ShowInterfacesTerse(Parser):
         return res
 
 
-def _addr(fam: Dict[str, Any], local: Optional[str], remote: Optional[str]) -> None:
+def _addr(fam: dict[str, Any], local: str | None, remote: str | None) -> None:
     if local:
         a = {"local": local}
         if remote:
@@ -83,13 +83,13 @@ def _addr(fam: Dict[str, Any], local: Optional[str], remote: Optional[str]) -> N
 class ShowInterfacesDescriptions(Parser):
     """Interface admin/link state and description."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(r"^(?P<name>\S+)\s+(?P<admin>up|down)\s+(?P<link>up|down)\s+(?P<desc>.*?)\s*$", text):
             out.append({"interface": m["name"], "admin": m["admin"], "link": m["link"], "description": m["desc"]})
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "interfaces.description",
@@ -105,9 +105,9 @@ class ShowInterfacesDescriptions(Parser):
 _KV_SPLIT = re.compile(r",\s+")
 
 
-def _kv_line(line: str) -> Dict[str, Any]:
+def _kv_line(line: str) -> dict[str, Any]:
     """``Link-level type: Ethernet, MTU: 1514, Speed: 1000mbps`` -> dict."""
-    out: Dict[str, Any] = {}
+    out: dict[str, Any] = {}
     for part in _KV_SPLIT.split(line.strip().rstrip(",")):
         if ":" not in part:
             if part.strip():
@@ -128,12 +128,12 @@ def _kv_line(line: str) -> Dict[str, Any]:
 class ShowInterfaces(Parser):
     """Physical and logical interfaces: state, speed, MAC, counters, errors, families and addresses."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        phy: Dict[str, Any] = {}
-        logical: Optional[Dict[str, Any]] = None
-        proto: Optional[Dict[str, Any]] = None
-        section: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        phy: dict[str, Any] = {}
+        logical: dict[str, Any] | None = None
+        proto: dict[str, Any] | None = None
+        section: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -308,7 +308,7 @@ class ShowInterfaces(Parser):
                     phy[f"{m.group(1).lower()}_packets"] = int(m.group(2))
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for name, d in data.items():
             ips = [
@@ -353,9 +353,9 @@ class ShowInterfaces(Parser):
 class ShowLacpInterfaces(Parser):
     """LACP actor/partner state and mux state per aggregated Ethernet member."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
         section = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -398,7 +398,7 @@ class ShowLacpInterfaces(Parser):
                     mem["receive_state"], mem["transmit_state"], mem["mux_state"] = m["rx"], m["tx"], m["mux"]
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for k, v in data.items():
             up = any(
@@ -412,10 +412,10 @@ class ShowLacpInterfaces(Parser):
 class ShowInterfacesDiagnosticsOptics(Parser):
     """Optical transceiver DOM readings (Tx/Rx power, bias, temperature, voltage)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
-        lane: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
+        lane: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^Physical interface: (\S+)", s)

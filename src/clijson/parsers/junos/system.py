@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import record, seconds
 from ...registry import Parser, register
@@ -20,11 +20,11 @@ from .common import split_re_sections
 class ShowVersion(Parser):
     """Hostname, model, Junos release and installed packages (per member/RE)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        members: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        members: dict[str, Any] = {}
         for name, body in split_re_sections(text):
-            info: Dict[str, Any] = {}
-            packages: List[Dict[str, str]] = []
+            info: dict[str, Any] = {}
+            packages: list[dict[str, str]] = []
             for ln in body.splitlines():
                 s = ln.strip()
                 m = re.match(r"^(Hostname|Model|Junos|Family|JUNOS OS Kernel|Junos Version):\s*(.+)$", s)
@@ -57,7 +57,7 @@ class ShowVersion(Parser):
                 members[name or "local"] = info
         if len(members) == 1:
             return next(iter(members.values()))
-        first = next(iter(members.values()), {})
+        first: dict[str, Any] = next(iter(members.values()), {})
         return {
             "hostname": first.get("hostname"),
             "model": first.get("model"),
@@ -65,7 +65,7 @@ class ShowVersion(Parser):
             "members": members,
         }
 
-    def normalize(self, d: Dict[str, Any]) -> Dict[str, Any]:
+    def normalize(self, d: dict[str, Any]) -> dict[str, Any]:
         return record(
             "system.version",
             hostname=d.get("hostname"),
@@ -80,10 +80,10 @@ class ShowVersion(Parser):
 class ShowSystemUptime(Parser):
     """Current time, boot/protocol start times, last commit and load averages."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        members: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        members: dict[str, Any] = {}
         for name, body in split_re_sections(text):
-            d: Dict[str, Any] = {}
+            d: dict[str, Any] = {}
             for ln in body.splitlines():
                 s = ln.strip()
                 m = re.match(r"^Current time:\s*(?P<t>.+)$", s)
@@ -120,7 +120,7 @@ class ShowSystemUptime(Parser):
         return next(iter(members.values())) if len(members) == 1 else {"members": members}
 
 
-def junos_ago_seconds(ago: str) -> Optional[int]:
+def junos_ago_seconds(ago: str) -> int | None:
     """``29w6d 23:14`` (hh:mm) / ``11:03:05`` (hh:mm:ss) -> seconds."""
     m = re.match(r"^\s*(?:(\d+)w)?(?:(\d+)d)?\s*(?:(\d+):(\d+)(?::(\d+))?)?\s*$", ago)
     if not m or not any(m.groups()):
@@ -129,7 +129,7 @@ def junos_ago_seconds(ago: str) -> Optional[int]:
     return w * 604800 + d * 86400 + h * 3600 + mi * 60 + sec
 
 
-def _uptime_seconds(up: str) -> Optional[int]:
+def _uptime_seconds(up: str) -> int | None:
     """``209 days, 23:14`` / ``15 days, 5 mins`` / ``11:03`` -> seconds."""
     total = 0
     m = re.search(r"(\d+)\s+days?", up)
@@ -154,8 +154,8 @@ def _uptime_seconds(up: str) -> Optional[int]:
 class ShowChassisHardware(Parser):
     """Hardware inventory as a component tree (chassis -> FPC -> PIC -> Xcvr)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        members: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        members: dict[str, Any] = {}
         for name, body in split_re_sections(text):
             lines = body.splitlines()
             hdr = next((i for i, ln in enumerate(lines) if re.match(r"^\s*Item\s+Version\s+Part number", ln)), None)
@@ -164,8 +164,8 @@ class ShowChassisHardware(Parser):
             header = lines[hdr]
             cols = [header.index(c) for c in ("Version", "Part number", "Serial number", "Description")]
             base = len(header) - len(header.lstrip())
-            items: List[Dict[str, Any]] = []
-            stack: List[tuple] = []
+            items: list[dict[str, Any]] = []
+            stack: list[tuple[int, dict[str, Any]]] = []
             for ln in lines[hdr + 1 :]:
                 if not ln.strip():
                     continue
@@ -197,10 +197,10 @@ class ShowChassisHardware(Parser):
             return {"chassis": next(iter(members.values()))}
         return {"members": {k: {"chassis": v} for k, v in members.items()}}
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
 
-        def walk(items: List[Dict[str, Any]], prefix: str = "") -> None:
+        def walk(items: list[dict[str, Any]], prefix: str = "") -> None:
             for it in items:
                 full = f"{prefix}{it['name']}"
                 out.append(
@@ -222,7 +222,7 @@ class ShowChassisHardware(Parser):
         return out
 
 
-def _fields_by_regex(rest: str) -> Dict[str, str]:
+def _fields_by_regex(rest: str) -> dict[str, str]:
     parts = split_columns(rest)
     keys = ["version", "part_number", "serial_number", "description"]
     if len(parts) == 4:
@@ -236,24 +236,24 @@ def _fields_by_regex(rest: str) -> Dict[str, str]:
 class ShowChassisAlarms(Parser):
     """Active chassis or system alarms."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         alarms = []
         for m in match_lines(
             r"^\s*(?P<time>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+)\s+(?P<cls>Major|Minor|Critical|Warning|Info)\s+(?P<desc>.+?)\s*$",
             text,
         ):
             alarms.append({"time": m["time"], "class": m["cls"], "description": m["desc"]})
-        m = re.search(r"(\d+) alarms? currently active", text)
-        return {"active_count": int(m.group(1)) if m else len(alarms), "alarms": alarms}
+        mt = re.search(r"(\d+) alarms? currently active", text)
+        return {"active_count": int(mt.group(1)) if mt else len(alarms), "alarms": alarms}
 
 
 @register("junos", "show chassis routing-engine [<slot>] [(bios|no-forwarding)]", intent="cpu")
 class ShowChassisRoutingEngine(Parser):
     """Routing Engine state, CPU/memory utilisation, temperature and uptime."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
         cpu_key = "cpu_utilization"
         load_pending = False
         for raw in text.splitlines():
@@ -311,7 +311,7 @@ class ShowChassisRoutingEngine(Parser):
                     cur[k] = to_num(v)
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for v in data.values():
             cpu = v.get("cpu_utilization_1min") or v.get("cpu_utilization") or {}
@@ -343,7 +343,7 @@ class ShowChassisFpc(Parser):
             r"^\s*(?P<slot>\d+)\s+(?P<state>Online|Offline|Empty|Present|Testing|Diag|Dead|Announce online|Spare|Fault|Resync)(?:\s+(?P<temp>\d+|Testing))?(?:\s+(?P<cpu_total>\d+)\s+(?P<cpu_int>\d+))?(?:\s+(?P<l1>\d+)\s+(?P<l5>\d+)\s+(?P<l15>\d+))?(?:\s+(?P<dram>\d+)\s+(?P<heap>\d+)\s+(?P<buf>\d+))?\s*(?P<comment>.*)$",
             text,
         ):
-            e: Dict[str, Any] = {"slot": int(m["slot"]), "state": m["state"]}
+            e: dict[str, Any] = {"slot": int(m["slot"]), "state": m["state"]}
             if m["temp"]:
                 e["temperature_c"] = to_num(m["temp"])
             if m["cpu_total"]:
@@ -357,9 +357,9 @@ class ShowChassisFpc(Parser):
             out.append(e)
         return out
 
-    def _pic_status(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
+    def _pic_status(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             m = re.match(r"^\s*Slot (?P<slot>\d+)\s+(?P<state>\S+)\s+(?P<desc>.*)$", raw)
             if m:
@@ -376,7 +376,7 @@ class ShowChassisFpc(Parser):
 class ShowChassisEnvironment(Parser):
     """Temperature, power and fan status per component."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         cls = None
         for raw in text.splitlines():
@@ -389,7 +389,7 @@ class ShowChassisEnvironment(Parser):
             if m:
                 if m["cls"] and not raw.startswith(" "):
                     cls = m["cls"]
-                e: Dict[str, Any] = {"class": cls, "item": m["item"].strip(), "status": m["status"]}
+                e: dict[str, Any] = {"class": cls, "item": m["item"].strip(), "status": m["status"]}
                 meas = m["meas"]
                 if meas:
                     tm = re.match(r"(-?\d+) degrees C", meas)
@@ -405,8 +405,8 @@ class ShowChassisEnvironment(Parser):
 class ShowSystemUsers(Parser):
     """Logged in users and system load."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"users": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"users": []}
         m = re.search(
             r"up\s+(?P<up>.+?),\s+(?P<n>\d+) users?,\s+load averages?:\s*(?P<l1>[\d.]+),\s*(?P<l5>[\d.]+),\s*(?P<l15>[\d.]+)",
             text,
@@ -439,7 +439,7 @@ class ShowSystemStorage(Parser):
     """Filesystem usage."""
 
     def parse(self, text: str) -> Any:
-        members: Dict[str, Any] = {}
+        members: dict[str, Any] = {}
         for name, body in split_re_sections(text):
             rows = []
             for m in match_lines(
@@ -464,7 +464,7 @@ class ShowSystemStorage(Parser):
 class ShowNtpAssociations(Parser):
     """NTP peers with stratum, reach, delay/offset/jitter."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         peers = []
         for m in match_lines(
             r"^(?P<tally>[ x.\-+#*o])(?P<remote>\S+)\s+(?P<refid>\S+)\s+(?P<st>\d+)\s+(?P<t>\S)\s+(?P<when>\S+)\s+(?P<poll>\d+)\s+(?P<reach>\d+)\s+(?P<delay>[-\d.]+)\s+(?P<offset>[-+\d.]+)\s+(?P<jitter>[-\d.]+)\s*$",
@@ -494,7 +494,7 @@ class ShowNtpAssociations(Parser):
 class ShowSystemCommit(Parser):
     """Commit history."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<idx>\d+)\s+(?P<ts>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \S+) by (?P<user>\S+) via (?P<client>\S+)(?:\s+(?P<comment>.+?))?\s*$",
@@ -511,12 +511,12 @@ class ShowSystemCommit(Parser):
 class ShowChassisClusterStatus(Parser):
     """SRX cluster redundancy groups and node priorities/status."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"redundancy_groups": {}}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"redundancy_groups": {}}
         m = re.search(r"Cluster ID:\s*(\d+)", text)
         if m:
             out["cluster_id"] = int(m.group(1))
-        rg = None
+        rg: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^Redundancy group:\s*(\d+)\s*,\s*Failover count:\s*(\d+)", s)
@@ -545,8 +545,8 @@ class ShowChassisClusterStatus(Parser):
 class ShowSystemProcessesSummary(Parser):
     """Process table (``top`` style) with CPU/memory headline."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(r"last pid:\s*(\d+);\s*load averages:\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)", text)
         if m:
             out["last_pid"] = int(m.group(1))

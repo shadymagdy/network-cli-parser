@@ -244,6 +244,8 @@ Normalized values are standardised too. Statuses become `up` / `down` / `admin-d
 Adding a parser takes a decorator and a method. Run `python scripts/fixture.py add` to add a regression test for it:
 
 ```python
+from typing import Any
+
 from clijson import Parser, register
 from clijson.textutils import match_lines
 
@@ -251,7 +253,7 @@ from clijson.textutils import match_lines
 class ShowHsrpBrief(Parser):
     """HSRP groups, state and virtual IP."""
 
-    def parse(self, text):
+    def parse(self, text: str) -> list[dict[str, Any]]:
         return [m.groupdict() for m in match_lines(
             r"^\s*(?P<interface>\S+)\s+(?P<group>\d+)\s+(?P<priority>\d+)\s+(?P<state>\w+)\s+(?P<vip>\S+)", text)]
 ```

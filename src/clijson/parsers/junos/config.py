@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from ...engines.config import parse_config
 from ...registry import Parser, register
@@ -12,5 +12,5 @@ from ...registry import Parser, register
 class ShowConfiguration(Parser):
     """Configuration (curly-brace or ``| display set``) as a nested tree."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         return parse_config(text, "junos")

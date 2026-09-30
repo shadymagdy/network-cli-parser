@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ...registry import Parser, register
 from ...textutils import to_num
@@ -15,7 +15,7 @@ _NET_ONLY = re.compile(rf"^(?P<codes>[sdhirSNmbfxac*> ]*?)(?P<net>(?:{_IP})/\d+)
 _ORIGIN = {"i": "igp", "e": "egp", "?": "incomplete"}
 
 
-def _path_origin(text: str) -> Dict[str, Any]:
+def _path_origin(text: str) -> dict[str, Any]:
     text = text.strip()
     m = re.match(r"^(?P<path>.*?)\s*(?P<o>[ie?])$", text)
     if not m:
@@ -23,18 +23,18 @@ def _path_origin(text: str) -> Dict[str, Any]:
     return {"as_path": m["path"].strip() or None, "origin": _ORIGIN[m["o"]]}
 
 
-def parse_bgp_table(text: str, vrf: Optional[str], af: str) -> Dict[str, Any]:
+def parse_bgp_table(text: str, vrf: str | None, af: str) -> dict[str, Any]:
     """Parse the ``Network  Next Hop  Metric LocPrf Weight Path`` table (shared by several commands)."""
-    out: Dict[str, Any] = {"routes": []}
+    out: dict[str, Any] = {"routes": []}
     m = re.search(r"BGP router identifier (\S+), local AS number (\S+)", text)
     if m:
         out["router_id"] = m.group(1)
         out["local_as"] = int(m.group(2)) if m.group(2).isdigit() else m.group(2)
     rd = None
     cur_vrf = vrf or "default"
-    cols: Dict[str, int] = {}
-    network: Optional[str] = None
-    pending: Optional[str] = None
+    cols: dict[str, int] = {}
+    network: str | None = None
+    pending: str | None = None
     for raw in text.splitlines():
         s = raw.rstrip()
         if not s.strip():
@@ -74,7 +74,7 @@ def parse_bgp_table(text: str, vrf: Optional[str], af: str) -> Dict[str, Any]:
             network = m["net"]
         if network is None or ("*" not in codes and not codes.strip()):
             continue
-        route: Dict[str, Any] = {
+        route: dict[str, Any] = {
             "network": network,
             "next_hop": m["nh"],
             "valid": "*" in codes,
@@ -93,7 +93,7 @@ def parse_bgp_table(text: str, vrf: Optional[str], af: str) -> Dict[str, Any]:
         # Metric/LocPrf are right-aligned and optional; Weight is always printed and is the last
         # number that starts inside the Weight column. Anything after it is the AS path.
         weight_end = cols.get("Weight", 10**6)
-        zone = []
+        zone: list[re.Match[str]] = []
         path_start = len(rest)
         for tok in re.finditer(r"\S+", rest):
             if tok.group().isdigit() and offset + tok.start() <= weight_end and len(zone) < 3:
@@ -120,10 +120,10 @@ def parse_bgp_table(text: str, vrf: Optional[str], af: str) -> Dict[str, Any]:
     return out
 
 
-def _parse_prefix_detail(text: str) -> Dict[str, Any]:
-    out: Dict[str, Any] = {"entries": []}
-    cur: Optional[Dict[str, Any]] = None
-    path: Optional[Dict[str, Any]] = None
+def _parse_prefix_detail(text: str) -> dict[str, Any]:
+    out: dict[str, Any] = {"entries": []}
+    cur: dict[str, Any] | None = None
+    path: dict[str, Any] | None = None
     expect_path_as = False
     for raw in text.splitlines():
         s = raw.strip()
@@ -201,7 +201,7 @@ def _parse_prefix_detail(text: str) -> Dict[str, Any]:
 class ShowBgp(Parser):
     """BGP table (status codes, next hop, metric, local-pref, weight, AS path, origin) or per-prefix path detail."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         if re.search(r"^[ \t]*BGP routing table entry for ", text, re.M):
             return _parse_prefix_detail(text)
         vrf = self.params.get("vrf")
@@ -215,7 +215,7 @@ class ShowBgp(Parser):
 class ShowBgpNeighborRoutes(Parser):
     """Routes received from a neighbor (accepted or pre-policy)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         vrf = self.params.get("vrf")
         data = parse_bgp_table(text, None if vrf in (None, "all") else vrf, af_from_command(self.command))
         data["neighbor"] = self.params.get("neighbor")
@@ -229,11 +229,11 @@ class ShowBgpNeighborRoutes(Parser):
 class ShowBgpNeighborAdvertisedRoutes(Parser):
     """Routes advertised to a neighbor: network, next hop, from, AS path, origin."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbor": self.params.get("neighbor"), "routes": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbor": self.params.get("neighbor"), "routes": []}
         vrf = self.params.get("vrf") if self.params.get("vrf") not in (None, "all") else "default"
         rd = None
-        pending: Optional[str] = None
+        pending: str | None = None
         af = af_from_command(self.command)
         for raw in text.splitlines():
             s = raw.strip()

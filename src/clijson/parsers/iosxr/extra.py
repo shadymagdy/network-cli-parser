@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar
 
 from ...models import record
 from ...registry import Parser, register
@@ -14,9 +14,9 @@ from ...textutils import compact, match_lines, none_if, snake, to_num
 class ShowControllersOptics(Parser):
     """Transceiver state, DOM readings (per lane), thresholds, alarms and vendor details."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        section: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        section: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -111,9 +111,9 @@ class ShowControllersOptics(Parser):
         return out
 
 
-def _fhrp_rows(text: str) -> List[Dict[str, Any]]:
+def _fhrp_rows(text: str) -> list[dict[str, Any]]:
     """Shared by ``show hsrp`` / ``show vrrp`` brief tables (IPv6 group address may wrap)."""
-    out: List[Dict[str, Any]] = []
+    out: list[dict[str, Any]] = []
     family = "ipv4"
     for raw in text.splitlines():
         s = raw.rstrip()
@@ -148,7 +148,7 @@ def _fhrp_rows(text: str) -> List[Dict[str, Any]]:
 class ShowHsrp(Parser):
     """HSRP groups: priority, preempt, state, active/standby/virtual addresses."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         rows = _fhrp_rows(text)
         for r in rows:
             a = r.pop("_addrs")
@@ -160,7 +160,7 @@ class ShowHsrp(Parser):
 class ShowVrrp(Parser):
     """VRRP groups: priority, preempt, state, master and virtual addresses."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         rows = _fhrp_rows(text)
         for r in rows:
             a = r.pop("_addrs")
@@ -172,13 +172,13 @@ class ShowVrrp(Parser):
 class ShowL2vpnBridgeDomainBrief(Parser):
     """Bridge domains with state and AC/PW/PBB/VNI up counts."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<name>\S+?)(?::|/)(?P<bd>\S+)\s+(?P<id>\d+)\s+(?P<state>up|down|admin down)\s+(?P<acs>\d+)/(?P<acsu>\d+)\s+(?P<pws>\d+)/(?P<pwsu>\d+)(?:\s+(?P<pbb>\d+)/(?P<pbbu>\d+))?(?:\s+(?P<vni>\d+)/(?P<vniu>\d+))?\s*$",
             text,
         ):
-            e: Dict[str, Any] = {
+            e: dict[str, Any] = {
                 "group": m["name"],
                 "bridge_domain": m["bd"],
                 "id": int(m["id"]),
@@ -198,8 +198,8 @@ class ShowL2vpnBridgeDomainBrief(Parser):
 class ShowL2vpnBridgeDomainSummary(Parser):
     """Bridge-domain, AC, PW counters."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         section = "summary"
         for raw in text.splitlines():
             s = raw.strip()
@@ -219,7 +219,7 @@ class ShowL2vpnBridgeDomainSummary(Parser):
 class ShowEvpnEvi(Parser):
     """EVPN instances with bridge domain and type."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(r"^\s*(?P<evi>\d+)\s+(?P<bd>\S+)\s+(?P<type>\S.*?)\s*$", text):
             out.append({"evi": int(m["evi"]), "bridge_domain": m["bd"], "type": m["type"]})
@@ -230,9 +230,9 @@ class ShowEvpnEvi(Parser):
 class ShowEvpnEthernetSegment(Parser):
     """EVPN ethernet segments: ESI, interface and next-hops."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             m = re.match(
                 r"^(?P<esi>[0-9a-fA-F]{4}\.[0-9a-fA-F.]+|N/A|\S+\.\S+\.\S+)\s+(?P<intf>\S+)\s+(?P<nh>[\d.:a-fA-F]+)\s*$",
@@ -252,7 +252,7 @@ class ShowEvpnEthernetSegment(Parser):
 class ShowLacp(Parser):
     """LACP actor/partner state flags, port IDs, keys, system IDs and mux state per bundle member."""
 
-    _FLAGS: ClassVar[Dict[str, str]] = {
+    _FLAGS: ClassVar[dict[str, str]] = {
         "a": "aggregatable",
         "s": "synchronized",
         "c": "collecting",
@@ -263,10 +263,10 @@ class ShowLacp(Parser):
         "E": "expired",
     }
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        bundle: Optional[Dict[str, Any]] = None
-        last_port: Optional[str] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        bundle: dict[str, Any] | None = None
+        last_port: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^(Bundle-Ether\d+|Bundle-POS\d+)$", s)
@@ -311,7 +311,7 @@ class ShowLacp(Parser):
                 )
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for name, b in data.items():
             up = any(m.get("mux", "").lower().startswith("distrib") for m in b["members"].values())
@@ -323,8 +323,8 @@ class ShowLacp(Parser):
 class ShowNtpStatus(Parser):
     """NTP clock state, stratum, reference, offsets and delays."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(r"Clock is (?P<st>\w+), stratum (?P<stratum>\d+)(?:, reference is (?P<ref>\S+))?", text)
         if m:
             out["synchronized"] = m["st"] == "synchronized"
@@ -357,7 +357,7 @@ class ShowNtpStatus(Parser):
 class ShowIsisInterfaceBrief(Parser):
     """IS-IS interfaces: adjacency counts per level, topologies, CLNS state, MTU and priority."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         inst = None
         for raw in text.splitlines():
@@ -370,7 +370,7 @@ class ShowIsisInterfaceBrief(Parser):
                 raw,
             )
             if m:
-                e: Dict[str, Any] = {"instance": inst, "interface": m["intf"], "all_ok": m["ok"] == "Yes"}
+                e: dict[str, Any] = {"instance": inst, "interface": m["intf"], "all_ok": m["ok"] == "Yes"}
                 if m["l1"]:
                     e.update(
                         {
@@ -396,9 +396,9 @@ class ShowIsisInterfaceBrief(Parser):
 class ShowRsvpNeighbors(Parser):
     """RSVP global neighbors and their interface neighbors."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^Global Neighbor:\s*(\S+)", s)
@@ -416,7 +416,7 @@ class ShowRsvpNeighbors(Parser):
 class ShowPimNeighbor(Parser):
     """PIM neighbors: interface, uptime, expiry, DR priority and capability flags."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         vrf = self.params.get("vrf") or "default"
         for raw in text.splitlines():
@@ -449,7 +449,7 @@ class ShowPimNeighbor(Parser):
 class ShowMplsTrafficEngTunnelsTabular(Parser):
     """RSVP-TE tunnels: LSP ID, endpoints, state, FRR state, role and path protection."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<name>\S+)\s+(?P<lsp>\d+)\s+(?P<dst>\d+\.\d+\.\d+\.\d+)\s+(?P<src>\d+\.\d+\.\d+\.\d+)\s+(?P<state>up|down|admin-down|\S+)\s+(?P<frr>\S+)\s+(?P<role>Head|Mid|Tail)(?:\s+(?P<prot>\S+))?\s*$",
@@ -476,8 +476,8 @@ class ShowMplsTrafficEngTunnelsTabular(Parser):
 class ShowWatchdogMemoryState(Parser):
     """Physical/free memory and memory state per node."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        nodes: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        nodes: dict[str, Any] = {}
         node = "local"
         for raw in text.splitlines():
             s = raw.strip()
@@ -496,8 +496,8 @@ class ShowWatchdogMemoryState(Parser):
 class ShowFilesystem(Parser):
     """File systems per node: size, free, type, flags and prefixes."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         node = "local"
         for raw in text.splitlines():
             s = raw.strip()
@@ -523,8 +523,8 @@ class ShowFilesystem(Parser):
 class Dir(Parser):
     """Directory listing with totals."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"files": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"files": []}
         m = re.search(r"Directory of (\S+)", text)
         if m:
             out["directory"] = m.group(1)

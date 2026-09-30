@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Iterable, List, Optional
+from collections.abc import Iterable
 
 
 class CliJsonError(Exception):
@@ -25,7 +25,7 @@ class PlatformDetectionError(CliJsonError):
 class ParserNotFound(CliJsonError, LookupError):
     """Raised in ``strict`` mode when no dedicated parser supports a command."""
 
-    def __init__(self, platform: str, command: str, suggestions: Optional[List[str]] = None):
+    def __init__(self, platform: str, command: str, suggestions: list[str] | None = None):
         self.platform = platform
         self.command = command
         self.suggestions = suggestions or []

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import mac, record
 from ...registry import Parser, register
@@ -14,7 +14,7 @@ from ...textutils import compact, match_lines, none_if, snake, to_num
 class DisplayLldpNeighborBrief(Parser):
     """LLDP neighbors (one line each)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<local>[A-Za-z][\w\-/.:]*\d\S*)\s+(?P<exp>\d+)\s+(?P<nintf>\S+)\s+(?P<ndev>\S+)\s*$", text
@@ -42,7 +42,7 @@ class DisplayLldpNeighborBrief(Parser):
                 )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "lldp.neighbors",
@@ -61,11 +61,11 @@ class DisplayLldpNeighborBrief(Parser):
 class DisplayLldpNeighbor(Parser):
     """LLDP neighbors in detail (chassis/port IDs, system name/description, capabilities, management address)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         local = None
-        cur: Optional[Dict[str, Any]] = None
-        last_key: Optional[str] = None
+        cur: dict[str, Any] | None = None
+        last_key: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -103,7 +103,7 @@ class DisplayLldpNeighbor(Parser):
                 cur["system_description"] = f"{cur.get('system_description') or ''}\n{s}".strip()
         return [compact(c) for c in out]
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "lldp.neighbors",
@@ -127,8 +127,8 @@ class DisplayLldpNeighbor(Parser):
 class DisplayArp(Parser):
     """ARP table (with VLAN/CE-VLAN and VPN instance)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"entries": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"entries": []}
         for raw in text.splitlines():
             m = re.match(
                 r"^(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}|Incomplete)\s+(?P<exp>\d+)?\s*(?P<type>[IDS]\S*(?: -)?|\S+)\s+(?P<intf>\S+)(?:\s+(?P<extra>\S+))?\s*$",
@@ -164,7 +164,7 @@ class DisplayArp(Parser):
             }
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "arp",
@@ -182,9 +182,9 @@ class DisplayArp(Parser):
 class DisplayIpv6Neighbors(Parser):
     """IPv6 neighbor cache (block format)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"entries": []}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"entries": []}
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^IPv6 Address\s*:\s*(\S+)", s)
@@ -204,7 +204,7 @@ class DisplayIpv6Neighbors(Parser):
             out["summary"] = {"total": int(m.group(1)), "dynamic": int(m.group(2)), "static": int(m.group(3))}
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "ipv6.neighbors",
@@ -226,15 +226,15 @@ class DisplayIpv6Neighbors(Parser):
 class DisplayMacAddress(Parser):
     """MAC address table."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"entries": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"entries": []}
         for m in match_lines(
             r"^\s*(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4})\s+(?P<vlan>\S+)\s+(?P<intf>\S+)\s+(?P<type>\S+)(?:\s+(?P<age>\S+))?\s*$",
             text,
         ):
             vlan = m["vlan"]
             parts = vlan.split("/")
-            e: Dict[str, Any] = {
+            e: dict[str, Any] = {
                 "mac_address": m["mac"],
                 "vlan": to_num(parts[0]) if parts[0] not in ("-", "") else None,
                 "interface": m["intf"],
@@ -247,12 +247,12 @@ class DisplayMacAddress(Parser):
             if m["age"]:
                 e["age"] = m["age"]
             out["entries"].append(e)
-        m = re.search(r"Total (?:items displayed|matching items[^=]*?)\s*=\s*(\d+)", text)
-        if m:
-            out["total"] = int(m.group(1))
+        mt = re.search(r"Total (?:items displayed|matching items[^=]*?)\s*=\s*(\d+)", text)
+        if mt:
+            out["total"] = int(mt.group(1))
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "mac.table",
@@ -269,8 +269,8 @@ class DisplayMacAddress(Parser):
 class DisplayIpVpnInstance(Parser):
     """VPN instances (VRFs) with RD and address families."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"vpn_instances": {}}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"vpn_instances": {}}
         for k, rx in (
             ("total", r"Total VPN-Instances configured\s*:\s*(\d+)"),
             ("total_ipv4", r"Total IPv4 VPN-Instances configured\s*:\s*(\d+)"),
@@ -290,7 +290,7 @@ class DisplayIpVpnInstance(Parser):
             v["address_families"].append(m["af"])
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [record("vrfs", name=k, rd=v["rd"]) for k, v in data["vpn_instances"].items()]
 
 
@@ -298,9 +298,9 @@ class DisplayIpVpnInstance(Parser):
 class DisplayIpVpnInstanceInterface(Parser):
     """Interfaces bound to each VPN instance."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
         in_list = False
         for raw in text.splitlines():
             s = raw.strip()

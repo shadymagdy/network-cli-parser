@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 from ...engines.config import parse_config
 from ...registry import Parser, register
@@ -18,7 +18,7 @@ from ...textutils import match_lines
 class ShowRunningConfig(Parser):
     """Running configuration as a nested tree (``interface -> Gi0/0/0/0 -> ...``)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         return parse_config(text, "iosxr")
 
 
@@ -26,7 +26,7 @@ class ShowRunningConfig(Parser):
 class ShowConfigurationCommitList(Parser):
     """Commit history: id, user, line, client and timestamp."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<no>\d+)\s+(?P<id>\d{10})\s+(?P<user>\S+)\s+(?P<line>\S+)\s+(?P<client>\S+(?: \S+)?)\s+(?P<ts>\w{3} \w{3}\s+\d+ \d\d:\d\d:\d\d \d{4})\s*$",

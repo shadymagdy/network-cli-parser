@@ -18,7 +18,8 @@ Anything else is kept verbatim under ``lines`` so no information is lost.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from collections.abc import Sequence
+from typing import Any
 
 from ..textutils import indent_of, is_separator, snake, to_num
 
@@ -29,13 +30,13 @@ _MULTI_KV = re.compile(
 _TIME_LIKE = re.compile(r"\d{1,2}:\d{2}")
 
 
-def parse_generic(text: str) -> Dict[str, Any]:
+def parse_generic(text: str) -> dict[str, Any]:
     """Parse arbitrary CLI output. Returns a dict with any of
     ``fields``, ``tables``, ``sections`` and ``lines``."""
-    result: Dict[str, Any] = {}
-    fields: Dict[str, Any] = {}
-    tables: List[Dict[str, Any]] = []
-    loose: List[str] = []
+    result: dict[str, Any] = {}
+    fields: dict[str, Any] = {}
+    tables: list[dict[str, Any]] = []
+    loose: list[str] = []
 
     for block in _split_blocks(text):
         head, table = _find_table(block)
@@ -58,9 +59,9 @@ def parse_generic(text: str) -> Dict[str, Any]:
 # --------------------------------------------------------------------------- #
 
 
-def _split_blocks(text: str) -> List[List[str]]:
-    out: List[List[str]] = []
-    cur: List[str] = []
+def _split_blocks(text: str) -> list[list[str]]:
+    out: list[list[str]] = []
+    cur: list[str] = []
     for ln in text.splitlines():
         if not ln.strip():
             if cur:
@@ -78,7 +79,7 @@ def _split_blocks(text: str) -> List[List[str]]:
 # --------------------------------------------------------------------------- #
 
 
-def _find_table(block: List[str]) -> Tuple[List[str], Optional[Dict[str, Any]]]:
+def _find_table(block: list[str]) -> tuple[list[str], dict[str, Any] | None]:
     """Return ``(prefix_lines, table)``; table is ``None`` if the block has none."""
     # 1) explicit separator line under a header
     for i, ln in enumerate(block):
@@ -113,7 +114,7 @@ def _find_table(block: List[str]) -> Tuple[List[str], Optional[Dict[str, Any]]]:
 
 def _is_kv_row(line: str) -> bool:
     m = _KV_SPLIT.match(line.strip())
-    return bool(m) and not re.search(r"\d$", m.group("k")) and not _TIME_LIKE.match(m.group("v"))
+    return m is not None and not re.search(r"\d$", m.group("k")) and not _TIME_LIKE.match(m.group("v"))
 
 
 def _looks_like_header(line: str) -> bool:
@@ -132,7 +133,7 @@ def _aligned_header(a: str, b: str) -> bool:
     return abs(indent_of(a) - indent_of(b)) <= 2
 
 
-def _gap_columns(lines: Sequence[str], header_count: int) -> List[Tuple[int, int]]:
+def _gap_columns(lines: Sequence[str], header_count: int) -> list[tuple[int, int]]:
     width = max(len(ln) for ln in lines)
     body = lines[header_count:]
     tolerance = max(0, len(body) // 10)
@@ -141,7 +142,7 @@ def _gap_columns(lines: Sequence[str], header_count: int) -> List[Tuple[int, int
         hdr_ok = all(p >= len(h) or h[p] == " " for h in lines[:header_count])
         misses = sum(1 for b in body if p < len(b) and b[p] != " ")
         blank.append(hdr_ok and misses <= tolerance)
-    cols: List[Tuple[int, int]] = []
+    cols: list[tuple[int, int]] = []
     start = None
     for p in range(width):
         if not blank[p] and start is None:
@@ -159,7 +160,7 @@ def _is_detail(line: str, header_indent: int) -> bool:
     return indent_of(line) > header_indent + 1 and bool(re.match(r"^\s+\S+:\s+\S", line)) and len(line.split()) <= 4
 
 
-def _build_table(header_lines: List[str], body: List[str], strict: bool = False) -> Optional[Dict[str, Any]]:
+def _build_table(header_lines: list[str], body: list[str], strict: bool = False) -> dict[str, Any] | None:
     hdr_indent = min(indent_of(h) for h in header_lines)
     details = [_is_detail(b, hdr_indent) for b in body]
     if any(details) and not all(details):
@@ -180,18 +181,18 @@ def _build_table(header_lines: List[str], body: List[str], strict: bool = False)
     if len(cols) < 2:
         return None
     # header words must start inside columns; name = words in the span
-    names: List[str] = []
-    for a, b in cols:
-        parts = [h[a:b].strip() for h in header_lines if h[a:b].strip()]
+    names: list[str] = []
+    for start, end in cols:
+        parts = [h[start:end].strip() for h in header_lines if h[start:end].strip()]
         names.append(" ".join(parts))
     # merge columns without a header title into the previous one
-    merged: List[Tuple[int, int, str]] = []
-    for (a, b), n in zip(cols, names):
+    merged: list[tuple[int, int, str]] = []
+    for (start, end), n in zip(cols, names):
         if not n and merged:
             pa, _, pn = merged[-1]
-            merged[-1] = (pa, b, pn)
+            merged[-1] = (pa, end, pn)
         else:
-            merged.append((a, b, n))
+            merged.append((start, end, n))
     if len(merged) < 2 or not merged[0][2]:
         return None
     if strict:
@@ -209,7 +210,7 @@ def _build_table(header_lines: List[str], body: List[str], strict: bool = False)
     keys = _unique_keys([snake(n) for _, _, n in merged])
     starts = [a for a, _, _ in merged]
     starts[0] = 0
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for ln in body:
         cells = _cut(ln, starts)
         if not any(cells):
@@ -227,7 +228,7 @@ def _build_table(header_lines: List[str], body: List[str], strict: bool = False)
     return {"columns": keys, "rows": rows}
 
 
-def _cut(line: str, starts: Sequence[int]) -> List[str]:
+def _cut(line: str, starts: Sequence[int]) -> list[str]:
     cells = []
     for i, a in enumerate(starts):
         b = starts[i + 1] if i + 1 < len(starts) else None
@@ -242,8 +243,8 @@ def _cut(line: str, starts: Sequence[int]) -> List[str]:
     return cells
 
 
-def _unique_keys(keys: List[str]) -> List[str]:
-    seen: Dict[str, int] = {}
+def _unique_keys(keys: list[str]) -> list[str]:
+    seen: dict[str, int] = {}
     out = []
     for k in keys:
         if k in seen:
@@ -260,9 +261,9 @@ def _unique_keys(keys: List[str]) -> List[str]:
 # --------------------------------------------------------------------------- #
 
 
-def _split_kv(line: str) -> Dict[str, Any]:
+def _split_kv(line: str) -> dict[str, Any]:
     s = line.strip()
-    out: Dict[str, Any] = {}
+    out: dict[str, Any] = {}
     if len(s) > 2000 or (":" not in s and "=" not in s and "..." not in s):
         return out
     matches = list(_MULTI_KV.finditer(s))
@@ -272,19 +273,17 @@ def _split_kv(line: str) -> Dict[str, Any]:
             if k:
                 out[k] = to_num(v) if v else None
         return out
-    m = _KV_SPLIT.match(s)
-    if m and m.group("v") and not s.startswith(("http", "ftp")):
-        out[snake(m.group("k"))] = to_num(m.group("v").strip())
+    kv = _KV_SPLIT.match(s)
+    if kv and kv.group("v") and not s.startswith(("http", "ftp")):
+        out[snake(kv.group("k"))] = to_num(kv.group("v").strip())
     return out
 
 
 MAX_DEPTH = 32
 
 
-def _parse_tree(
-    lines: List[str], loose: List[str], depth: int = 0, indents: Optional[List[int]] = None
-) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
+def _parse_tree(lines: list[str], loose: list[str], depth: int = 0, indents: list[int] | None = None) -> dict[str, Any]:
+    out: dict[str, Any] = {}
     if depth >= MAX_DEPTH:
         loose.extend(ln.strip() for ln in lines)
         return out
@@ -302,7 +301,7 @@ def _parse_tree(
         kv = _split_kv(stripped)
         if children:
             key = snake(stripped.rstrip(":")) if not kv or stripped.endswith(":") else None
-            local_loose: List[str] = []
+            local_loose: list[str] = []
             node = _parse_tree(children, local_loose, depth + 1, indents[i + 1 : j])
             if local_loose:
                 node.setdefault("lines", []).extend(local_loose)
@@ -323,7 +322,7 @@ def _parse_tree(
     return out
 
 
-def _put(d: Dict[str, Any], key: str, value: Any) -> None:
+def _put(d: dict[str, Any], key: str, value: Any) -> None:
     if key in d:
         if d[key] == value:
             return
@@ -335,6 +334,6 @@ def _put(d: Dict[str, Any], key: str, value: Any) -> None:
         d[key] = value
 
 
-def _merge(dst: Dict[str, Any], src: Dict[str, Any]) -> None:
+def _merge(dst: dict[str, Any], src: dict[str, Any]) -> None:
     for k, v in src.items():
         _put(dst, k, v)

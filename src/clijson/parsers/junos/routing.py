@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import record
 from ...registry import Parser, register
@@ -29,16 +29,16 @@ _SPECIAL_NH = re.compile(
 class ShowRoute(Parser):
     """Route tables with every path (active flag, protocol, preference, metrics, AS path, next-hops, labels)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         args = (self.params.get("args") or "").split()
         default_table = args[args.index("table") + 1] if "table" in args[:-1] else "inet.0"
         if re.search(r"^[ \t]*\S+ \(\d+ entr(?:y|ies), \d+ announced\)", text, re.M):
             return _parse_route_detail(text, default_table)
-        tables: Dict[str, Any] = {}
-        routes: List[Dict[str, Any]] = []
+        tables: dict[str, Any] = {}
+        routes: list[dict[str, Any]] = []
         table = default_table
-        cur_route: Optional[Dict[str, Any]] = None
-        cur_path: Optional[Dict[str, Any]] = None
+        cur_route: dict[str, Any] | None = None
+        cur_path: dict[str, Any] | None = None
         for raw in text.splitlines():
             if not raw.strip():
                 continue
@@ -86,7 +86,7 @@ class ShowRoute(Parser):
                 continue
             m = _NH.match(s)
             if m:
-                nh: Dict[str, Any] = {"next_hop": m["nh"], "interface": m["intf"], "selected": bool(m["sel"])}
+                nh: dict[str, Any] = {"next_hop": m["nh"], "interface": m["intf"], "selected": bool(m["sel"])}
                 if m["ops"]:
                     nh["label_operation"] = m["ops"].strip()
                 cur_path["next_hops"].append({k: v for k, v in nh.items() if v is not None})
@@ -97,10 +97,10 @@ class ShowRoute(Parser):
                     compact({"type": m["what"].split()[0].lower(), "interface": m["intf"], "selected": bool(m["sel"])})
                 )
                 continue
-        out: Dict[str, Any] = {"tables": tables, "routes": routes}
+        out: dict[str, Any] = {"tables": tables, "routes": routes}
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for r in data["routes"]:
             active = next((p for p in r["paths"] if p.get("active")), r["paths"][0] if r["paths"] else {})
@@ -122,12 +122,12 @@ class ShowRoute(Parser):
         return res
 
 
-def _parse_route_detail(text: str, table: str) -> Dict[str, Any]:
+def _parse_route_detail(text: str, table: str) -> dict[str, Any]:
     """``show route ... detail|extensive``: one block per destination, one sub-block per path."""
-    tables: Dict[str, Any] = {}
-    routes: List[Dict[str, Any]] = []
-    cur: Optional[Dict[str, Any]] = None
-    path: Optional[Dict[str, Any]] = None
+    tables: dict[str, Any] = {}
+    routes: list[dict[str, Any]] = []
+    cur: dict[str, Any] | None = None
+    path: dict[str, Any] | None = None
     for raw in text.splitlines():
         s = raw.strip()
         if not s:
@@ -205,9 +205,9 @@ def _parse_route_detail(text: str, table: str) -> Dict[str, Any]:
     return {"tables": tables, "routes": routes}
 
 
-def _new_path(m: "re.Match[str]") -> Dict[str, Any]:
+def _new_path(m: re.Match[str]) -> dict[str, Any]:
     flag = m["flag"] or ""
-    path: Dict[str, Any] = {
+    path: dict[str, Any] = {
         "active": "*" in flag or "+" in flag,
         "last_active": "-" in flag or "*" in flag,
         "protocol": m["proto"],
@@ -232,15 +232,15 @@ def _new_path(m: "re.Match[str]") -> Dict[str, Any]:
 class ShowRouteSummary(Parser):
     """Route counts per table and protocol."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"tables": {}}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"tables": {}}
         m = re.search(r"Autonomous system number:\s*(\d+)", text)
         if m:
             out["local_as"] = int(m.group(1))
         m = re.search(r"Router ID:\s*(\S+)", text)
         if m:
             out["router_id"] = m.group(1)
-        cur: Optional[Dict[str, Any]] = None
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = _TABLE_HDR.match(s)
@@ -274,8 +274,8 @@ class ShowRouteSummary(Parser):
 class ShowBgpSummary(Parser):
     """BGP peers with state, flaps, uptime and per-table prefix counters."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"tables": {}, "neighbors": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"tables": {}, "neighbors": []}
         m = re.search(r"Groups:\s*(\d+)\s+Peers:\s*(\d+)\s+Down peers:\s*(\d+)", text)
         if m:
             out["groups"], out["peers"], out["down_peers"] = int(m.group(1)), int(m.group(2)), int(m.group(3))
@@ -285,8 +285,8 @@ class ShowBgpSummary(Parser):
         lines = text.splitlines()
         i = 0
         in_tables = in_peers = False
-        pending_table: Optional[str] = None
-        last: Optional[Dict[str, Any]] = None
+        pending_table: str | None = None
+        last: dict[str, Any] | None = None
         while i < len(lines):
             s = lines[i].strip()
             i += 1
@@ -348,7 +348,7 @@ class ShowBgpSummary(Parser):
             n["uptime_seconds"] = bgp_uptime_seconds(n["up_down"])
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         res = []
         for n in data["neighbors"]:
             tables = list(n["tables"]) or [None]
@@ -369,7 +369,7 @@ class ShowBgpSummary(Parser):
         return res
 
 
-def bgp_uptime_seconds(value: str) -> Optional[int]:
+def bgp_uptime_seconds(value: str) -> int | None:
     """Junos ``Last Up/Dwn``: ``9w2d 5:23:37``, ``1d 2:03:04``, ``1:02:03``, ``4:05`` (m:s) or ``9`` (s)."""
     m = re.match(r"^\s*(?:(\d+)w)?(?:(\d+)d)?\s*(?:(\d+):)?(?:(\d+):)?(\d+)\s*$", value)
     if not m:
@@ -384,16 +384,16 @@ def bgp_uptime_seconds(value: str) -> Optional[int]:
     return int(w or 0) * 604800 + int(d or 0) * 86400 + h * 3600 + mi * 60 + int(c)
 
 
-def _table_counts(nums: List[str]) -> Dict[str, int]:
+def _table_counts(nums: list[str]) -> dict[str, int]:
     keys = ["total_paths", "active_paths", "suppressed", "history", "damp_state", "pending"]
     return {k: int(v) for k, v in zip(keys, nums)}
 
 
-def _peer_counts(c: Any) -> Dict[str, int]:
+def _peer_counts(c: Any) -> dict[str, int]:
     return {"active": int(c[0]), "received": int(c[1]), "accepted": int(c[2]), "damped": int(c[3])}
 
 
-def _table_af(table: Optional[str]) -> Optional[str]:
+def _table_af(table: str | None) -> str | None:
     if not table:
         return None
     name = table.split(".")[-2] if table.count(".") >= 1 else table
@@ -417,10 +417,10 @@ def _table_af(table: Optional[str]) -> Optional[str]:
 class ShowBgpNeighbor(Parser):
     """Detailed BGP peer information: group, state, options, NLRI, per-table prefix counts."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Dict[str, Any] = {}
-        table: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] = {}
+        table: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -560,9 +560,9 @@ class ShowBgpNeighbor(Parser):
 class ShowOspfNeighbor(Parser):
     """OSPF / OSPFv3 adjacencies."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbors": []}
-        last: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"neighbors": []}
+        last: dict[str, Any] | None = None
         v3 = "ospf3" in self.command.lower()
         for raw in text.splitlines():
             s = raw.strip()
@@ -613,7 +613,7 @@ class ShowOspfNeighbor(Parser):
                     continue
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "ospf.neighbors",
@@ -636,9 +636,9 @@ class ShowOspfNeighbor(Parser):
 class ShowOspfInterface(Parser):
     """OSPF interfaces: state, area, DR/BDR and neighbor count."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        last: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        last: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(
@@ -683,7 +683,7 @@ class ShowOspfInterface(Parser):
 class ShowIsisAdjacency(Parser):
     """IS-IS adjacencies per interface and level."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^(?P<intf>\S+)\s+(?P<sys>\S+)\s+(?P<lvl>[123])\s+(?P<state>Up|Down|Initializing|New|One-way|Rejected)\s+(?P<hold>\d+)(?:\s+(?P<snpa>\S+))?\s*$",
@@ -703,7 +703,7 @@ class ShowIsisAdjacency(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         lv = {1: "level-1", 2: "level-2", 3: "level-1-2"}
         return [
             record(
@@ -728,7 +728,7 @@ class ShowIsisAdjacency(Parser):
 class ShowLdpNeighbor(Parser):
     """LDP hello adjacencies."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<intf>\S+)\s+(?P<ls>\S+:\d+)\s+(?P<hold>\d+)\s*$", text
@@ -738,7 +738,7 @@ class ShowLdpNeighbor(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "ldp.neighbors",
@@ -756,7 +756,7 @@ class ShowLdpNeighbor(Parser):
 class ShowLdpSession(Parser):
     """LDP sessions: state, connection, hold time, label advertisement mode."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Operational|Nonexistent|Initialized|OpenRec|OpenSent|Closing|\S+)\s+(?P<conn>Open|Closed|Connecting|\S+)\s+(?P<hold>\d+)\s+(?P<mode>DU|DoD|\S+)\s*$",
@@ -773,12 +773,12 @@ class ShowLdpSession(Parser):
             )
         return out
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [record("ldp.neighbors", neighbor=n["address"], state=n["state"].lower()) for n in data]
 
 
-def _lsp_sections(text: str) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
+def _lsp_sections(text: str) -> dict[str, Any]:
+    out: dict[str, Any] = {}
     section = None
     for raw in text.splitlines():
         s = raw.strip()
@@ -847,7 +847,7 @@ def _lsp_sections(text: str) -> Dict[str, Any]:
 class ShowRsvpSession(Parser):
     """RSVP sessions grouped by ingress / egress / transit."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         return _lsp_sections(text)
 
 
@@ -859,7 +859,7 @@ class ShowRsvpSession(Parser):
 class ShowMplsLsp(Parser):
     """MPLS LSPs grouped by ingress / egress / transit."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         return _lsp_sections(text)
 
 
@@ -867,8 +867,8 @@ class ShowMplsLsp(Parser):
 class ShowRsvpInterface(Parser):
     """RSVP interfaces: state, reservations, bandwidth accounting."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"interfaces": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"interfaces": []}
         m = re.search(r"RSVP interface: (\d+) active", text)
         if m:
             out["active"] = int(m.group(1))
@@ -900,8 +900,8 @@ class ShowRsvpInterface(Parser):
 class ShowBfdSession(Parser):
     """BFD sessions with detect time, transmit interval and multiplier."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"sessions": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"sessions": []}
         for m in match_lines(
             r"^\s*(?P<addr>[0-9a-fA-F.:]+)\s+(?P<state>Up|Down|Init|AdminDown|Failing)\s+(?P<intf>\S+)?\s+(?P<detect>[\d.]+)\s+(?P<tx>[\d.]+)\s+(?P<mult>\d+)\s*$",
             text,
@@ -918,15 +918,15 @@ class ShowBfdSession(Parser):
                     }
                 )
             )
-        m = re.search(r"(\d+) sessions?, (\d+) clients?", text)
-        if m:
-            out["total_sessions"], out["total_clients"] = int(m.group(1)), int(m.group(2))
-        m = re.search(r"Cumulative transmit rate ([\d.]+) pps, cumulative receive rate ([\d.]+) pps", text)
-        if m:
-            out["transmit_rate_pps"], out["receive_rate_pps"] = float(m.group(1)), float(m.group(2))
+        mt = re.search(r"(\d+) sessions?, (\d+) clients?", text)
+        if mt:
+            out["total_sessions"], out["total_clients"] = int(mt.group(1)), int(mt.group(2))
+        mt = re.search(r"Cumulative transmit rate ([\d.]+) pps, cumulative receive rate ([\d.]+) pps", text)
+        if mt:
+            out["transmit_rate_pps"], out["receive_rate_pps"] = float(mt.group(1)), float(mt.group(2))
         return out
 
-    def normalize(self, data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "bfd.sessions",

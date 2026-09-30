@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import re
 import shlex
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from ..textutils import indent_of
 
@@ -28,7 +28,7 @@ _XR_NOISE = re.compile(
 _VRP_NOISE = re.compile(r"^(?:!Software Version.*|!Last configuration was .*|return|!.*)$")
 
 
-def _put(node: Dict[str, Any], key: str, value: Any) -> None:
+def _put(node: dict[str, Any], key: str, value: Any) -> None:
     if key not in node:
         node[key] = value
         return
@@ -51,7 +51,7 @@ def _put(node: Dict[str, Any], key: str, value: Any) -> None:
         node[key] = [cur, value]
 
 
-def _statement(words: List[str], children: Dict[str, Any]) -> Tuple[str, Any]:
+def _statement(words: list[str], children: dict[str, Any]) -> tuple[str, Any]:
     if not words:
         return "", children
     key = words[0]
@@ -69,9 +69,9 @@ def _statement(words: List[str], children: Dict[str, Any]) -> Tuple[str, Any]:
     return key, " ".join(rest)
 
 
-def parse_indented(text: str, comment: str = "!", noise: "re.Pattern[str] | None" = None) -> Dict[str, Any]:
+def parse_indented(text: str, comment: str = "!", noise: re.Pattern[str] | None = None) -> dict[str, Any]:
     """Parse an indentation based configuration (IOS XR, VRP, IOS style)."""
-    raw_lines: List[str] = []
+    raw_lines: list[str] = []
     for ln in text.splitlines():
         s = ln.rstrip()
         st = s.strip()
@@ -86,7 +86,7 @@ def parse_indented(text: str, comment: str = "!", noise: "re.Pattern[str] | None
         if st.startswith("!") or (comment == "#" and st.startswith("#")):
             continue
         raw_lines.append(s)
-    root: Dict[str, Any] = {}
+    root: dict[str, Any] = {}
     _build(raw_lines, [indent_of(ln) for ln in raw_lines], 0, len(raw_lines), root)
     return root
 
@@ -94,14 +94,14 @@ def parse_indented(text: str, comment: str = "!", noise: "re.Pattern[str] | None
 MAX_DEPTH = 64
 
 
-def _build(lines: List[str], indents: List[int], start: int, end: int, node: Dict[str, Any], depth: int = 0) -> None:
+def _build(lines: list[str], indents: list[int], start: int, end: int, node: dict[str, Any], depth: int = 0) -> None:
     i = start
     while i < end:
         ind = indents[i]
         j = i + 1
         while j < end and indents[j] > ind:
             j += 1
-        children: Dict[str, Any] = {}
+        children: dict[str, Any] = {}
         if j > i + 1 and depth < MAX_DEPTH:
             _build(lines, indents, i + 1, j, children, depth + 1)
         elif j > i + 1:
@@ -122,7 +122,7 @@ def _build(lines: List[str], indents: List[int], start: int, end: int, node: Dic
         i = j
 
 
-def _split_words(s: str) -> List[str]:
+def _split_words(s: str) -> list[str]:
     if '"' in s:
         try:
             return shlex.split(s)
@@ -138,18 +138,18 @@ def _split_words(s: str) -> List[str]:
 _JUNOS_TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|/\*.*?\*/|##[^\n]*|[{};]|\[|\]|[^\s{};\[\]"]+', re.S)
 
 
-def parse_junos_curly(text: str) -> Dict[str, Any]:
+def parse_junos_curly(text: str) -> dict[str, Any]:
     """Parse Junos curly-brace configuration."""
     body = text
     tokens = [t for t in _JUNOS_TOKEN.findall(body) if not t.startswith(("/*", "##"))]
     pos = 0
 
-    def block(depth: int = 0) -> Dict[str, Any]:
+    def block(depth: int = 0) -> dict[str, Any]:
         nonlocal pos
         if depth > MAX_DEPTH:
             raise ValueError("configuration is nested too deeply")
-        node: Dict[str, Any] = {}
-        words: List[str] = []
+        node: dict[str, Any] = {}
+        words: list[str] = []
         while pos < len(tokens):
             t = tokens[pos]
             pos += 1
@@ -183,7 +183,7 @@ def _unquote(t: str) -> str:
     return t
 
 
-def _put_path(node: Dict[str, Any], words: List[Any], child: Any) -> None:
+def _put_path(node: dict[str, Any], words: list[Any], child: Any) -> None:
     """``interfaces ge-0/0/0 { ... }`` -> ``{"interfaces": {"ge-0/0/0": {...}}}`` (via nested blocks)."""
     words = [w for w in words if w not in ("inactive:", "protect:")]
     if not words:
@@ -205,9 +205,9 @@ def _put_path(node: Dict[str, Any], words: List[Any], child: Any) -> None:
         _put(node, key, {" ".join(r if isinstance(r, str) else " ".join(r) for r in rest): child})
 
 
-def parse_junos_set(text: str) -> Dict[str, Any]:
+def parse_junos_set(text: str) -> dict[str, Any]:
     """Parse ``show configuration | display set`` into the same tree shape."""
-    root: Dict[str, Any] = {}
+    root: dict[str, Any] = {}
     for ln in text.splitlines():
         s = ln.strip()
         if not s.startswith(("set ", "deactivate ")):
@@ -235,7 +235,7 @@ def parse_junos_set(text: str) -> Dict[str, Any]:
     return root
 
 
-def parse_config(text: str, platform: str) -> Dict[str, Any]:
+def parse_config(text: str, platform: str) -> dict[str, Any]:
     """Dispatch to the right configuration parser for *platform*."""
     stripped = "\n".join(ln for ln in text.splitlines() if ln.strip())
     if platform == "junos":

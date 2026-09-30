@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, snake, to_num
@@ -17,8 +17,8 @@ _TABLE_HDR = re.compile(
 class ShowRouteAdvertisedReceived(Parser):
     """Routes advertised to / received from a BGP neighbor (prefix, next hop, MED, local-pref, AS path)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {
             "neighbor": self.params.get("neighbor"),
             "direction": "received" if "receive-protocol" in self.command.lower() else "advertised",
             "tables": {},
@@ -26,7 +26,7 @@ class ShowRouteAdvertisedReceived(Parser):
         }
         table = "inet.0"
         med_end = lp_end = None
-        pending_prefix: Optional[str] = None
+        pending_prefix: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
             if not s:
@@ -60,7 +60,7 @@ class ShowRouteAdvertisedReceived(Parser):
                 prefix = pending_prefix.lstrip("*")
                 pending_prefix = None
             rest = m["rest"]
-            route: Dict[str, Any] = {"table": table, "prefix": prefix, "active": active, "next_hop": m["nh"]}
+            route: dict[str, Any] = {"table": table, "prefix": prefix, "active": active, "next_hop": m["nh"]}
             nums = list(re.finditer(r"(?<!\()\b(\d+)\b(?![^()]*\))", rest))
             path_start = 0
             numeric = []
@@ -98,9 +98,9 @@ class ShowRouteAdvertisedReceived(Parser):
 class ShowFirewall(Parser):
     """Firewall filter counters and policers (bytes/packets)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
         section = "counters"
         for raw in text.splitlines():
             s = raw.strip()
@@ -125,9 +125,9 @@ class ShowFirewall(Parser):
 class ShowNtpStatus(Parser):
     """NTP daemon variables (stratum, offset, jitter, reference, leap, sync state)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         blob = " ".join(ln.strip() for ln in text.splitlines())
-        out: Dict[str, Any] = {}
+        out: dict[str, Any] = {}
         if "=" not in blob:
             return out
         m = re.search(r"status=(?P<status>\S+)\s+(?P<flags>[^=]+?),\s*(?=\w+=)", blob)
@@ -148,8 +148,8 @@ class ShowNtpStatus(Parser):
 class ShowSystemInformation(Parser):
     """Model, family, Junos release and hostname."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for m in match_lines(
             r"^\s*(?P<k>Model|Family|Junos|Hostname|Serial Number|Junos Release):\s*(?P<v>.+?)\s*$", text
         ):
@@ -162,8 +162,8 @@ class ShowSystemInformation(Parser):
 class ShowChassisFirmware(Parser):
     """ROM / O/S firmware versions per component."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
         part = None
         for raw in text.splitlines():
             if re.match(r"^\s*Part\s+Type\s+Version", raw) or not raw.strip():
@@ -185,9 +185,9 @@ class ShowChassisFirmware(Parser):
 class ShowRouteForwardingTableSummary(Parser):
     """Forwarding-table route counts per table and route type."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^Routing table:\s*(\S+)", s)
@@ -214,8 +214,8 @@ class ShowRouteForwardingTableSummary(Parser):
 class ShowChassisClusterInterfaces(Parser):
     """SRX cluster control/fabric links and redundant-ethernet interfaces."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"control_interfaces": [], "fabric_interfaces": [], "redundant_ethernet": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"control_interfaces": [], "fabric_interfaces": [], "redundant_ethernet": []}
         section = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -275,9 +275,9 @@ class ShowChassisClusterInterfaces(Parser):
 class ShowEthernetSwitchingInterfaces(Parser):
     """Switch ports: state, VLAN membership, tagging and blocking status."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             if not raw.strip() or raw.lstrip().startswith("Interface"):
                 continue
@@ -293,9 +293,9 @@ class ShowEthernetSwitchingInterfaces(Parser):
         return out
 
 
-def _vlan_member(vlan: str, rest: str) -> Dict[str, Any]:
+def _vlan_member(vlan: str, rest: str) -> dict[str, Any]:
     m = re.match(r"^(?P<tag>\d+)?\s*(?P<tagging>tagged|untagged)?\s*(?P<blocking>.*?)\s*$", rest)
-    out: Dict[str, Any] = {"vlan": vlan}
+    out: dict[str, Any] = {"vlan": vlan}
     if m:
         if m["tag"]:
             out["tag"] = int(m["tag"])
@@ -310,7 +310,7 @@ def _vlan_member(vlan: str, rest: str) -> Dict[str, Any]:
 class ShowSecurityPoliciesHitCount(Parser):
     """SRX security policy hit counters."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         ls = None
         for raw in text.splitlines():

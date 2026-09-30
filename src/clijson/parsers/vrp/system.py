@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ...models import record, seconds
 from ...registry import Parser, register
@@ -14,8 +14,8 @@ from ...textutils import compact, match_lines, none_if, snake, to_num
 class DisplayVersion(Parser):
     """VRP version, product, patch, uptime and per-board hardware/firmware versions."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(
             r"VRP \(R\) software, Version (?P<vrp>\S+)\s+\((?P<product>.+?)\s+(?P<release>V\d{3}R\d{3}\S*)\)", text
         )
@@ -35,8 +35,8 @@ class DisplayVersion(Parser):
         m = re.search(r"^Patch Version\s*:\s*(\S+)", text, re.M)
         if m:
             out["patch_version"] = m.group(1)
-        boards: List[Dict[str, Any]] = []
-        cur: Optional[Dict[str, Any]] = None
+        boards: list[dict[str, Any]] = []
+        cur: dict[str, Any] | None = None
         for raw in text.splitlines():
             s = raw.strip()
             bm = re.match(
@@ -85,7 +85,7 @@ class DisplayVersion(Parser):
             out["boards"] = [b for b in (compact(b) for b in boards) if len(b) > 1]
         return out
 
-    def normalize(self, d: Dict[str, Any]) -> Dict[str, Any]:
+    def normalize(self, d: dict[str, Any]) -> dict[str, Any]:
         return record(
             "system.version",
             vendor="Huawei",
@@ -101,8 +101,8 @@ class DisplayVersion(Parser):
 class DisplayDevice(Parser):
     """Boards, power supplies and fans with online/registration/alarm status."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"slots": []}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"slots": []}
         m = re.search(r"^(?P<dev>\S+)'s Device status:", text, re.M)
         if m:
             out["device"] = m["dev"]
@@ -162,8 +162,8 @@ class DisplayDevice(Parser):
 class DisplayCpuUsage(Parser):
     """CPU utilisation (current, 5 s / 1 min / 5 min, max) and top tasks."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(r"CPU Usage\s*:\s*(\d+)%\s*Max:\s*(\d+)%", text)
         if m:
             out["current_percent"], out["max_percent"] = int(m.group(1)), int(m.group(2))
@@ -207,7 +207,7 @@ class DisplayCpuUsage(Parser):
             out["tasks"] = tasks
         return out
 
-    def normalize(self, d: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, d: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "cpu",
@@ -223,8 +223,8 @@ class DisplayCpuUsage(Parser):
 class DisplayMemoryUsage(Parser):
     """Memory totals and utilisation."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(r"Memory utilization statistics at (.+?)\s*$", text, re.M)
         if m:
             out["stat_time"] = m.group(1)
@@ -246,8 +246,8 @@ class DisplayMemoryUsage(Parser):
 class DisplayClock(Parser):
     """Device date, time, weekday and time zone."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = re.search(
             r"(?P<date>\d{4}-\d\d-\d\d)\s+(?P<time>\d\d:\d\d:\d\d(?:\.\d+)?)(?P<off>[+-]\d\d:\d\d)?(?:\s+(?P<dst>DST))?",
             text,
@@ -273,9 +273,9 @@ class DisplayClock(Parser):
 class DisplayUsers(Parser):
     """Logged in users (``+`` marks the current session)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        out: List[Dict[str, Any]] = []
-        last: Optional[Dict[str, Any]] = None
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = []
+        last: dict[str, Any] | None = None
         for raw in text.splitlines():
             m = re.match(
                 r"^(?P<cur>[+*])?\s*(?P<idx>\d+)\s+(?P<intf>(?:VTY|CON|AUX|TTY|NCA)\s*\d+)\s+(?P<delay>\S+)\s+(?P<type>\S+)?\s+(?P<addr>[\d.:a-fA-F]+)?\s+(?P<auth>pass|fail|\S+)?\s*(?P<flag>yes|no)?\s*$",
@@ -306,8 +306,8 @@ class DisplayUsers(Parser):
 class DisplayStartup(Parser):
     """Current and next-startup software, configuration, license and patch files."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         board = "main"
         for raw in text.splitlines():
             s = raw.strip()
@@ -325,8 +325,8 @@ class DisplayStartup(Parser):
 class DisplayPatchInformation(Parser):
     """Installed patch package and state."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for m in match_lines(r"^\s*(?P<k>[A-Za-z][\w \-]*?)\s*:\s*(?P<v>.+?)\s*$", text):
             out[snake(m["k"])] = to_num(m["v"])
         return out
@@ -336,8 +336,8 @@ class DisplayPatchInformation(Parser):
 class DisplayEsn(Parser):
     """Equipment serial number(s)."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for m in match_lines(r"^\s*(?P<k>ESN of [\w\- ]+?|ESN|SN|Equipment serial number)\s*:\s*(?P<v>\S+)", text):
             out[snake(m["k"])] = m["v"]
         return out
@@ -347,7 +347,7 @@ class DisplayEsn(Parser):
 class DisplayAlarmActive(Parser):
     """Active / historical alarms."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?P<seq>\d+)\s+(?P<id>0x[0-9A-Fa-f]+)\s+(?P<sev>Critical|Major|Minor|Warning|Indeterminate|Cleared)\s+(?P<date>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d(?:[+-]\d\d:\d\d)?)\s*(?P<desc>.*?)\s*$",
@@ -369,7 +369,7 @@ class DisplayAlarmActive(Parser):
 class DisplayTemperature(Parser):
     """Board temperature sensors with thresholds."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         slot = None
         for raw in text.splitlines():
@@ -417,8 +417,8 @@ class DisplayTemperature(Parser):
 class DisplayNtpStatus(Parser):
     """NTP synchronisation state, stratum, reference and offsets."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for m in match_lines(r"^\s*(?P<k>[A-Za-z][\w \-]*?)\s*:\s*(?P<v>.+?)\s*$", text):
             k, v = snake(m["k"]), m["v"]
             vm = re.match(r"^(-?[\d.]+)\s*(ms|Hz)$", v)
@@ -434,7 +434,7 @@ class DisplayNtpStatus(Parser):
 class DisplayNtpSessions(Parser):
     """NTP peers: reference, stratum, reach, poll, offset, delay, dispersion."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for m in match_lines(
             r"^\s*(?:(?P<flags>[\[\]0-9]+)\s*)?(?P<src>[\d.:a-fA-F]+|LOCAL\(\d+\))\s+(?P<ref>\S+)\s+(?P<st>\d+)\s+(?P<reach>\d+)\s+(?P<poll>\d+)\s+(?P<now>\S+)\s+(?P<offset>-?[\d.]+)\s+(?P<delay>-?[\d.]+)\s+(?P<disp>-?[\d.]+)\s*$",

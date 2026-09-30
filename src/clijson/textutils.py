@@ -8,7 +8,9 @@ into blocks. Parser authors should reach for these before writing regexes.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Iterator, List, Optional, Pattern, Sequence, Tuple, Union
+from collections.abc import Iterator, Sequence
+from re import Pattern
+from typing import Any
 
 # --------------------------------------------------------------------------- #
 # Cleaning
@@ -64,7 +66,7 @@ def dedent(text: str) -> str:
     return "\n".join(ln[indent:] for ln in lines)
 
 
-def blocks(text: str, start: Union[str, Pattern[str], None] = None) -> List[str]:
+def blocks(text: str, start: str | Pattern[str] | None = None) -> list[str]:
     """Split *text* into blocks.
 
     Without *start*, blocks are separated by blank lines. With *start* (a regex),
@@ -74,7 +76,7 @@ def blocks(text: str, start: Union[str, Pattern[str], None] = None) -> List[str]
     if start is None:
         return [b.strip("\n") for b in re.split(r"\n\s*\n", text) if b.strip()]
     rx = re.compile(start) if isinstance(start, str) else start
-    out: List[List[str]] = []
+    out: list[list[str]] = []
     for ln in text.splitlines():
         if rx.search(ln):
             out.append([ln])
@@ -144,7 +146,7 @@ def snake(key: str) -> str:
     return k or "value"
 
 
-def normalize_mac(mac: Optional[str]) -> Optional[str]:
+def normalize_mac(mac: str | None) -> str | None:
     """Any MAC notation -> ``aa:bb:cc:dd:ee:ff``; returns input if it is not a MAC."""
     if not mac:
         return mac
@@ -161,7 +163,7 @@ _DURATION_PARTS = re.compile(
 _UNIT_SECONDS = {"y": 31536000, "w": 604800, "d": 86400, "h": 3600, "m": 60, "s": 1}
 
 
-def parse_duration(value: Optional[str]) -> Optional[int]:
+def parse_duration(value: str | None) -> int | None:
     """Convert vendor uptime/age strings to seconds.
 
     Handles ``01:02:03``, ``1d02h``, ``3w4d``, ``2y10w``, ``5d 01:02:03``,
@@ -206,14 +208,14 @@ def is_separator(line: str) -> bool:
     return bool(line.strip()) and bool(_SEPARATOR.match(line)) and sum(c in "-=_" for c in line) >= 3
 
 
-def header_columns(header: str, names: Optional[Sequence[str]] = None) -> List[Tuple[str, int]]:
+def header_columns(header: str, names: Sequence[str] | None = None) -> list[tuple[str, int]]:
     """Return ``[(name, start_col), ...]`` for a header line.
 
     Column names are split on 2+ spaces. When *names* is given, those exact
     strings are located in the header instead (useful for headers like
     ``Local Intf  Holdtime`` where single spaces appear inside names).
     """
-    cols: List[Tuple[str, int]] = []
+    cols: list[tuple[str, int]] = []
     if names:
         pos = 0
         for name in names:
@@ -228,9 +230,9 @@ def header_columns(header: str, names: Optional[Sequence[str]] = None) -> List[T
     return cols
 
 
-def slice_row(line: str, starts: Sequence[int]) -> List[str]:
+def slice_row(line: str, starts: Sequence[int]) -> list[str]:
     """Cut *line* at column *starts*, nudging cuts so words are never split."""
-    cells: List[str] = []
+    cells: list[str] = []
     bounds = [*list(starts[1:]), None]
     begin = 0
     for end in bounds:
@@ -253,15 +255,15 @@ def slice_row(line: str, starts: Sequence[int]) -> List[str]:
 
 def parse_table(
     text: str,
-    header: Union[str, Pattern[str], None] = None,
-    names: Optional[Sequence[str]] = None,
-    keys: Optional[Sequence[str]] = None,
-    stop: Union[str, Pattern[str], None] = None,
-    skip: Union[str, Pattern[str], None] = None,
+    header: str | Pattern[str] | None = None,
+    names: Sequence[str] | None = None,
+    keys: Sequence[str] | None = None,
+    stop: str | Pattern[str] | None = None,
+    skip: str | Pattern[str] | None = None,
     min_cells: int = 1,
     convert: bool = True,
     wrap: bool = False,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Parse a column-aligned table.
 
     :param header: regex locating the header line (default: first non-blank line)
@@ -292,7 +294,7 @@ def parse_table(
     out_keys = list(keys) if keys else [snake(c[0]) for c in cols]
     stop_rx = re.compile(stop) if isinstance(stop, str) else stop
     skip_rx = re.compile(skip) if isinstance(skip, str) else skip
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for ln in all_lines[hdr_idx + 1 :]:
         if stop_rx and stop_rx.search(ln):
             break
@@ -316,15 +318,15 @@ def parse_table(
     return rows
 
 
-def split_columns(line: str, maxsplit: int = -1) -> List[str]:
+def split_columns(line: str, maxsplit: int = -1) -> list[str]:
     """Split on runs of 2+ spaces (keeps single-spaced values together)."""
     parts = re.split(r"\s{2,}", line.strip(), maxsplit=maxsplit if maxsplit >= 0 else 0)
     return [p for p in parts if p != ""]
 
 
-def kv_pairs(text: str, sep: str = r"\s*:\s+|\s*:\s*$", key_re: str = r"[A-Za-z][\w \-/().#'&]*?") -> Dict[str, Any]:
+def kv_pairs(text: str, sep: str = r"\s*:\s+|\s*:\s*$", key_re: str = r"[A-Za-z][\w \-/().#'&]*?") -> dict[str, Any]:
     """Extract ``Key: value`` pairs (several per line allowed, split on 2+ spaces or commas)."""
-    out: Dict[str, Any] = {}
+    out: dict[str, Any] = {}
     rx = re.compile(rf"(?P<k>{key_re})(?:{sep})(?P<v>.*?)(?=\s{{2,}}{key_re}(?:{sep})|,\s+{key_re}(?:{sep})|$)")
     for ln in text.splitlines():
         for m in rx.finditer(ln.strip()):
@@ -340,7 +342,7 @@ def kv_pairs(text: str, sep: str = r"\s*:\s+|\s*:\s*$", key_re: str = r"[A-Za-z]
 # --------------------------------------------------------------------------- #
 
 
-def search(pattern: Union[str, Pattern[str]], text: str, flags: int = re.M) -> Optional[Dict[str, Any]]:
+def search(pattern: str | Pattern[str], text: str, flags: int = re.M) -> dict[str, Any] | None:
     """Regex search returning a dict of converted named groups (``None`` values dropped)."""
     rx = re.compile(pattern, flags) if isinstance(pattern, str) else pattern
     m = rx.search(text)
@@ -349,7 +351,7 @@ def search(pattern: Union[str, Pattern[str]], text: str, flags: int = re.M) -> O
     return {k: to_num(v.strip()) for k, v in m.groupdict().items() if v is not None}
 
 
-def match_lines(pattern: Union[str, Pattern[str]], text: str, flags: int = 0) -> Iterator["re.Match[str]"]:
+def match_lines(pattern: str | Pattern[str], text: str, flags: int = 0) -> Iterator[re.Match[str]]:
     """Like ``re.finditer`` with ``re.M`` but a match can never span lines.
 
     Prefer this over ``re.finditer(r"^...$", text, re.M)``: with ``\\s+``

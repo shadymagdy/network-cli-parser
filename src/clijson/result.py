@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -22,18 +23,18 @@ class ParseResult:
     """
 
     data: Any
-    platform: Optional[str]
-    command: Optional[str]
+    platform: str | None
+    command: str | None
     engine: str
-    parser: Optional[str] = None
+    parser: str | None = None
     confidence: float = 1.0
-    intent: Optional[str] = None
-    params: Dict[str, str] = field(default_factory=dict)
-    warnings: List[str] = field(default_factory=list)
+    intent: str | None = None
+    params: dict[str, str] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
     normalized: Any = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
     #: The original text that was parsed (not included in ``to_dict``/``to_json``).
-    raw: Optional[str] = field(default=None, repr=False, compare=False)
+    raw: str | None = field(default=None, repr=False, compare=False)
 
     # -- convenience --------------------------------------------------------
     def __getitem__(self, key: Any) -> Any:
@@ -57,10 +58,11 @@ class ParseResult:
     def ok(self) -> bool:
         return self.data not in (None, {}, [])
 
-    def to_dict(self, meta: bool = True) -> Dict[str, Any]:
+    def to_dict(self, meta: bool = True) -> Any:
+        """Data plus provenance; with ``meta=False`` just the (normalized, if available) data."""
         if not meta:
             return self.normalized if self.normalized is not None else self.data
-        out: Dict[str, Any] = {
+        out: dict[str, Any] = {
             "platform": self.platform,
             "command": self.command,
             "engine": self.engine,
@@ -80,7 +82,7 @@ class ParseResult:
             out["normalized"] = self.normalized
         return out
 
-    def records(self) -> List[Dict[str, Any]]:
+    def records(self) -> list[dict[str, Any]]:
         """The most table-like view of the result as a list of flat dicts.
 
         Uses the normalized view when available, otherwise the largest list of records
@@ -96,7 +98,7 @@ class ParseResult:
             raise ImportError("to_dataframe() needs pandas: pip install pandas") from exc
         return pd.DataFrame(self.records())
 
-    def to_json(self, indent: Optional[int] = 2, meta: bool = False, **kwargs: Any) -> str:
+    def to_json(self, indent: int | None = 2, meta: bool = False, **kwargs: Any) -> str:
         """JSON string. ``meta=True`` wraps the data with provenance fields."""
         return json.dumps(self.to_dict(meta=meta), indent=indent, default=str, **kwargs)
 
@@ -114,7 +116,7 @@ class ParseResult:
         )
 
 
-def _rows(obj: Any) -> Optional[List[Dict[str, Any]]]:
+def _rows(obj: Any) -> list[dict[str, Any]] | None:
     """Find the most table-like list of dicts in *obj* (flattening one level of nesting)."""
     if isinstance(obj, list) and obj and all(isinstance(r, dict) for r in obj):
         return [_flat(r) for r in obj]
@@ -123,7 +125,7 @@ def _rows(obj: Any) -> Optional[List[Dict[str, Any]]]:
             isinstance(v, dict) and any(not isinstance(x, (dict, list)) for x in v.values()) for v in obj.values()
         ):
             return [{"name": k, **_flat(v)} for k, v in obj.items()]
-        best: Optional[List[Dict[str, Any]]] = None
+        best: list[dict[str, Any]] | None = None
         for v in obj.values():
             r = _rows(v)
             if r and (best is None or len(r) > len(best)):
@@ -132,8 +134,8 @@ def _rows(obj: Any) -> Optional[List[Dict[str, Any]]]:
     return None
 
 
-def _flat(row: Dict[str, Any]) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
+def _flat(row: dict[str, Any]) -> dict[str, Any]:
+    out: dict[str, Any] = {}
     for k, v in row.items():
         if isinstance(v, dict) and v and all(not isinstance(x, (dict, list)) for x in v.values()):
             for kk, vv in v.items():

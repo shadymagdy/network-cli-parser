@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List
+from typing import Any
 
 from ...models import record, seconds
 from ...registry import Parser, register
@@ -14,8 +14,8 @@ from ...textutils import blocks, compact, match_lines, parse_table, search, to_n
 class ShowVersion(Parser):
     """Software version, platform, uptime and packages."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = search(
             r"Cisco IOS XR Software, Version (?P<version>[^\s\[]+)(?:\[(?P<label>[^\]]+)\])?[ \t]*(?P<train>[^\s\[]+)?[ \t]*$",
             text,
@@ -49,17 +49,17 @@ class ShowVersion(Parser):
         m = search(r'^System image file is "(?P<image>[^"]+)"', text)
         if m:
             out["system_image"] = m["image"]
-        m = re.search(
+        hw = re.search(
             r"^cisco (?P<chassis>\S+(?: \S+)*?) \((?P<processor>.*)\) processor(?: with (?P<memory>\S+?(?: bytes)?) of memory)?",
             text,
             re.M | re.I,
         )
-        if m:
-            out["chassis"] = m["chassis"]
-            if m["processor"]:
-                out["processor"] = m["processor"]
-            if m["memory"]:
-                out["memory"] = m["memory"]
+        if hw:
+            out["chassis"] = hw["chassis"]
+            if hw["processor"]:
+                out["processor"] = hw["processor"]
+            if hw["memory"]:
+                out["memory"] = hw["memory"]
         m = search(
             r"^(?P<desc>(?:ASR|NCS|Cisco|CRS|XRv|IOS-XRv)[^\n]*(?:Chassis|RU|w/IOS XR[^\n]*|Slot[^\n]*))\s*$", text
         )
@@ -82,7 +82,7 @@ class ShowVersion(Parser):
             out["packages"] = packages
         return out
 
-    def normalize(self, d: Dict[str, Any]) -> Dict[str, Any]:
+    def normalize(self, d: dict[str, Any]) -> dict[str, Any]:
         return record(
             "system.version",
             hostname=d.get("hostname"),
@@ -104,9 +104,9 @@ class ShowVersion(Parser):
 class ShowInventory(Parser):
     """Hardware inventory (NAME/DESCR/PID/VID/SN)."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
-        items: List[Dict[str, Any]] = []
-        cur: Dict[str, Any] = {}
+    def parse(self, text: str) -> list[dict[str, Any]]:
+        items: list[dict[str, Any]] = []
+        cur: dict[str, Any] = {}
         for ln in text.splitlines():
             m = re.match(r'^\s*NAME:\s*"(?P<name>[^"]*)"\s*,\s*DESCR:\s*"(?P<descr>[^"]*)"', ln)
             if m:
@@ -120,7 +120,7 @@ class ShowInventory(Parser):
                 cur["sn"] = m["sn"] or None
         return items
 
-    def normalize(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return [
             record(
                 "inventory",
@@ -138,14 +138,14 @@ class ShowInventory(Parser):
 class ShowPlatform(Parser):
     """Line cards, RPs, fans and PSUs with their state."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         rows = parse_table(text, header=r"^\s*(?:Node|Location)\s+(?:Type|Card Type)\s", convert=False)
         out = []
         for r in rows:
             node = r.pop("node", None) or r.pop("location", None)
             if not node or not re.match(r"^\d+/", node):
                 continue
-            item: Dict[str, Any] = {"node": node}
+            item: dict[str, Any] = {"node": node}
             typ = r.pop("type", None) or r.pop("card_type", None)
             if typ:
                 m = re.match(r"^(.*?)\((Active|Standby)\)$", typ)
@@ -162,10 +162,10 @@ class ShowPlatform(Parser):
 class ShowPlatformSummaryLocation(Parser):
     """Detailed per-node platform summary."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         out = []
         for b in blocks(text, start=r"^\s*Platform Node\s*:"):
-            item: Dict[str, Any] = {}
+            item: dict[str, Any] = {}
             last = None
             for ln in b.splitlines():
                 m = re.match(r"^\s*([A-Za-z][\w /]*?)\s*:\s*(.*)$", ln)
@@ -193,14 +193,14 @@ class ShowPlatformSummaryLocation(Parser):
 class ShowRedundancySummary(Parser):
     """RP redundancy pairs and NSR readiness."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         pairs = []
         for m in match_lines(
             r"^\s*(?P<active>\d+/\S+?)\((?P<ar>\w)\)\s+(?P<standby>\S+?)(?:\((?P<sr>\w)\))?\s*(?:\((?P<status>[^)]*)\))?\s*$",
             text,
         ):
             status = m["status"] or ""
-            item: Dict[str, Any] = {
+            item: dict[str, Any] = {
                 "active": m["active"],
                 "active_role": {"A": "active", "P": "primary"}.get(m["ar"], m["ar"]),
                 "standby": None if m["standby"] in ("N/A", "n/a") else m["standby"],
@@ -214,10 +214,10 @@ class ShowRedundancySummary(Parser):
                     k, _, v = p.partition(":")
                     item[k.strip().lower()] = v.strip()
             pairs.append(item)
-        out: Dict[str, Any] = {"pairs": pairs}
-        m = search(r"Redundancy information for node (?P<node>\S+):", text)
-        if m:
-            out["node"] = m["node"]
+        out: dict[str, Any] = {"pairs": pairs}
+        node = search(r"Redundancy information for node (?P<node>\S+):", text)
+        if node:
+            out["node"] = node["node"]
         return out
 
 
@@ -225,8 +225,8 @@ class ShowRedundancySummary(Parser):
 class ShowProcessesCpu(Parser):
     """CPU utilisation (1/5/15 minutes) and per-process usage."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = search(
             r"CPU utilization for one minute: (?P<one>\d+)%; five minutes: (?P<five>\d+)%; fifteen minutes: (?P<fifteen>\d+)%",
             text,
@@ -249,7 +249,7 @@ class ShowProcessesCpu(Parser):
         out["processes"] = procs
         return out
 
-    def normalize(self, d: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def normalize(self, d: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "cpu",
@@ -264,9 +264,9 @@ class ShowProcessesCpu(Parser):
 class ShowMemorySummary(Parser):
     """Physical/application memory per node."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        nodes: Dict[str, Any] = {}
-        cur: Dict[str, Any] = nodes.setdefault("default", {})
+    def parse(self, text: str) -> dict[str, Any]:
+        nodes: dict[str, Any] = {}
+        cur: dict[str, Any] = nodes.setdefault("default", {})
         for ln in text.splitlines():
             m = re.match(r"^node:\s+node(\S+)", ln)
             if m:
@@ -292,7 +292,7 @@ class ShowMemorySummary(Parser):
 class ShowClock(Parser):
     """Device clock."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         m = re.search(
             r"(?P<time>\d{1,2}:\d{2}:\d{2}(?:\.\d+)?)\s+(?P<tz>\S+)\s+(?P<dow>\w{3})\s+(?P<month>\w{3})\s+(?P<day>\d+)\s+(?P<year>\d{4})",
             text,
@@ -306,7 +306,7 @@ class ShowClock(Parser):
 class ShowUsers(Parser):
     """Logged in users."""
 
-    def parse(self, text: str) -> List[Dict[str, Any]]:
+    def parse(self, text: str) -> list[dict[str, Any]]:
         rows = parse_table(text, header=r"Line\s+User\s+Service", convert=False)
         out = []
         for r in rows:
@@ -322,8 +322,8 @@ class ShowUsers(Parser):
 class ShowInstallActive(Parser):
     """Active software packages per node."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = search(r"^[ \t]*Label\s*:\s*(?P<label>\S+)", text)
         if m:
             out["label"] = str(m["label"])
@@ -333,9 +333,9 @@ class ShowInstallActive(Parser):
         m = search(r"Active Packages:\s+XR:\s*(?P<xr>\d+)\s+All:\s*(?P<all>\d+)", text)
         if m:
             out["package_counts"] = {"xr": m["xr"], "all": m["all"]}
-        nodes: Dict[str, Any] = {}
+        nodes: dict[str, Any] = {}
         node = None
-        packages: List[Dict[str, Any]] = []
+        packages: list[dict[str, Any]] = []
         in_pkgs = in_table = False
         for ln in text.splitlines():
             s = ln.strip()
@@ -370,7 +370,7 @@ class ShowInstallActive(Parser):
                 continue
             m4 = re.match(r"^(?:disk\d:|harddisk:)?(\S+?)(?:\s+version=(\S+))?(?:\s+\[(.+)\])?$", s)
             if in_pkgs and m4:
-                pkg: Dict[str, Any] = {"name": m4.group(1)}
+                pkg: dict[str, Any] = {"name": m4.group(1)}
                 if m4.group(2):
                     pkg["version"] = m4.group(2)
                 if m4.group(3):
@@ -387,7 +387,7 @@ class ShowInstallActive(Parser):
 class ShowNtpAssociations(Parser):
     """NTP peers with stratum, reach, delay/offset/dispersion."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
+    def parse(self, text: str) -> dict[str, Any]:
         peers = []
         for m in match_lines(
             r"^(?P<flags>[*#+\-~ox ]{0,3})(?P<address>[\d.:a-fA-F]+|\S+)\s+(?P<ref>\S+)\s+(?P<st>\d+)\s+(?P<when>\S+)\s+(?P<poll>\d+)\s+(?P<reach>\d+)\s+(?P<delay>[-\d.]+)\s+(?P<offset>[-\d.]+)\s+(?P<disp>[-\d.]+)\s*$",
@@ -417,8 +417,8 @@ class ShowNtpAssociations(Parser):
 class ShowLogging(Parser):
     """Syslog configuration counters and buffered log entries."""
 
-    def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         m = search(r"Syslog logging: (?P<state>\w+)", text)
         if m:
             out["syslog_logging"] = m["state"]
