@@ -12,6 +12,8 @@ First release.
 * Configuration trees for IOS XR / VRP (indented) and Junos (curly braces and `| display set`).
 * Vendor-neutral normalized models for 18 concepts.
 * Session logs with many commands (`parse_session`).
+* Structural `diff` of two captures, matched by natural key, with volatile fields ignored by default.
+* Device error detection (`engine="device-error"`), bytes input, `records()` and `to_dataframe()`.
 * Optional ntc-templates and Genie fallback engines.
 * CLI (`clijson`), HTTP API (`clijson serve`) and live collection (`clijson run`, scrapli/netmiko).
 * 230 regression fixtures from real devices.

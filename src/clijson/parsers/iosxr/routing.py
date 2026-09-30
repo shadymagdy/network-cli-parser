@@ -28,6 +28,10 @@ _NH = re.compile(
     r"^\s*\[(?P<ad>\d+)/(?P<metric>\d+)\]\s+via\s+(?P<nh>[^\s,]+)(?:\s+\(nexthop in vrf (?P<nhvrf>[^)]+)\))?"
     r"(?:,\s*(?P<age>[^,\s]+))?(?:,\s*(?P<intf>[^,\s]+))?(?:\s+\((?P<flag>[!>])\))?"
 )
+_VRF_LINE = re.compile(r"^\s*VRF:\s*(?P<vrf>\S+)")
+_GW_LINE = re.compile(r"^\s*Gateway of last resort is (?P<gw>.+?)\s*$")
+_CODES_LINE = re.compile(r"^\s*(Codes:|[A-Za-z0-9]{1,3} - |\s+[A-Za-z]{1,3}\s+-\s)")
+_CODE_SPLIT = re.compile(r"[\s*+%>]+")
 _CONNECTED = re.compile(r"^is directly connected,\s*(?P<age>[^,\s]+)?(?:,\s*(?P<intf>\S+))?")
 
 
@@ -40,22 +44,22 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
     for raw in text.splitlines():
         if not raw.strip():
             continue
-        m = re.match(r"^\s*VRF:\s*(?P<vrf>\S+)", raw)
+        m = _VRF_LINE.match(raw) if "VRF" in raw else None
         if m:
             vrf = m["vrf"]
             continue
-        m = re.match(r"^\s*Gateway of last resort is (?P<gw>.+?)\s*$", raw)
+        m = _GW_LINE.match(raw) if "Gateway" in raw else None
         if m:
             g = m["gw"]
             gm = re.match(r"(?P<nh>\S+) to network (?P<net>\S+)", g)
             out.setdefault("gateway_of_last_resort", {})[vrf] = {"next_hop": gm["nh"], "network": gm["net"]} if gm else None
             continue
-        if re.match(r"^\s*(Codes:|[A-Za-z0-9]{1,3} - |\s+[A-Za-z]{1,3}\s+-\s)", raw) and " - " in raw and "via" not in raw:
+        if " - " in raw and "via" not in raw and _CODES_LINE.match(raw):
             continue
         m = _ROUTE_LINE.match(raw.lstrip() if raw.startswith(("   ", "\t")) is False else raw)
         if m and not raw.startswith(" "):
             star = "*" in m["codes"]
-            code_words = [c for c in re.split(r"[\s*+%>]+", m["codes"]) if c]
+            code_words = [c for c in _CODE_SPLIT.split(m["codes"]) if c]
             proto = CISCO_ROUTE_CODES.get(code_words[0], code_words[0]) if code_words else None
             cur = {
                 "prefix": m["prefix"],
@@ -93,7 +97,7 @@ def parse_cisco_routes(text: str) -> Dict[str, Any]:
         if r["next_hops"]:
             r["distance"] = r["next_hops"][0].get("distance")
             r["metric"] = r["next_hops"][0].get("metric")
-        r["next_hops"] = [compact(nh) for nh in r["next_hops"]]
+        r["next_hops"] = [{k: v for k, v in nh.items() if v is not None} for nh in r["next_hops"]]
     return out
 
 

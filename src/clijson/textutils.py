@@ -8,7 +8,6 @@ into blocks. Parser authors should reach for these before writing regexes.
 from __future__ import annotations
 
 import re
-import textwrap
 from typing import Any, Dict, Iterator, List, Optional, Pattern, Sequence, Tuple, Union
 
 # --------------------------------------------------------------------------- #
@@ -17,7 +16,7 @@ from typing import Any, Dict, Iterator, List, Optional, Pattern, Sequence, Tuple
 
 _ANSI = re.compile(r"\x1b\[[0-9;?]*[ -/]*[@-~]|\x1b[()][A-Z0-9]|\x1b[=>]")
 _MORE = re.compile(
-    r"\s*(?:-{2,}\s*\(?more(?:\s+\d+%)?\)?\s*-{2,}|---- More ----|<--- More --->|\(END\)|--More--)\s*",
+    r"[ \t]*(?:-{2,}[ \t]*\(?more(?:[ \t]+\d+%)?\)?[ \t]*-{2,}|<--- More --->|\(END\))[ \t]*",
     re.I,
 )
 _BACKSPACE_RUN = re.compile(r"[^\n]\x08")
@@ -33,19 +32,36 @@ def clean_output(text: str) -> str:
     if not text:
         return ""
     text = text.replace("\r\n", "\n").replace("\r", "\n")
-    text = _ANSI.sub("", text)
+    if "\x1b" in text:
+        text = _ANSI.sub("", text)
     while "\x08" in text:
         new = _BACKSPACE_RUN.sub("", text)
         if new == text:
             text = text.replace("\x08", "")
             break
         text = new
-    text = _MORE.sub("\n", text)
+    if "ore" in text or "(END)" in text:
+        text = _MORE.sub("\n", text)
     text = text.replace("\t", "    ")
-    text = "\n".join(line.rstrip() for line in text.split("\n"))
     # Output pasted from logs/docs is often uniformly indented; remove that.
-    text = textwrap.dedent(text)
+    text = dedent("\n".join(line.rstrip() for line in text.split("\n")))
     return text.strip("\n")
+
+
+def dedent(text: str) -> str:
+    """Fast ``textwrap.dedent`` for right-stripped lines (spaces only)."""
+    lines = text.split("\n")
+    indent = None
+    for ln in lines:
+        if ln:
+            n = len(ln) - len(ln.lstrip(" "))
+            if indent is None or n < indent:
+                indent = n
+                if indent == 0:
+                    return text
+    if not indent:
+        return text
+    return "\n".join(ln[indent:] for ln in lines)
 
 
 

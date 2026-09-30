@@ -5,6 +5,7 @@
     clijson parse session.log                      # every command in a terminal log
     clijson parse out.txt -c "dis int br" --normalize -f table
     clijson commands -p vrp --search bgp
+    clijson diff pre.txt post.txt -c "show bgp summary"   # what changed?
     clijson detect out.txt
     clijson serve --port 8080                      # tiny HTTP API
     clijson run 10.0.0.1 -p iosxr -c "show version" -u admin   # live device (netmiko/scrapli)
@@ -23,9 +24,9 @@ from .api import parse, parse_session, split_session, supported_commands
 from .engines.external import available_engines
 from .exceptions import CliJsonError
 from .platforms import detect_platform, list_platforms
-from .result import ParseResult
+from .result import ParseResult, _rows
 
-SUBCOMMANDS = {"parse", "commands", "detect", "platforms", "serve", "run", "version"}
+SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "serve", "run", "version"}
 
 
 def _rich_console():  # pragma: no cover - cosmetic
@@ -67,23 +68,6 @@ def _emit(obj: Any, fmt: str, stream=None) -> None:
         console.print(Syntax(text, "json", theme="ansi_dark", word_wrap=True, background_color="default"))
     else:
         stream.write(text + "\n")
-
-
-def _rows(obj: Any) -> Optional[List[dict]]:
-    """Find the most table-like list of dicts in *obj*."""
-    if isinstance(obj, list) and obj and all(isinstance(r, dict) for r in obj):
-        return obj
-    if isinstance(obj, dict):
-        # dict of dicts keyed by name -> rows
-        if obj and all(isinstance(v, dict) for v in obj.values()) and len(obj) > 1:
-            return [{"name": k, **{kk: vv for kk, vv in v.items() if not isinstance(vv, (dict, list))}} for k, v in obj.items()]
-        best = None
-        for v in obj.values():
-            r = _rows(v)
-            if r and (best is None or len(r) > len(best)):
-                best = r
-        return best
-    return None
 
 
 def _print_table(obj: Any) -> bool:
@@ -142,6 +126,22 @@ def cmd_parse(args: argparse.Namespace) -> int:
             if r.engine == "generic" and not r.warnings:
                 print("note: parsed with the heuristic generic engine", file=sys.stderr)
     return 0 if all(r.ok or r.data == [] or r.data == {} for r in results) else 1
+
+
+def cmd_diff(args: argparse.Namespace) -> int:
+    from .diff import diff
+
+    before = parse(_read_input(args.before), args.command, args.platform, normalize=not args.native)
+    after = parse(_read_input(args.after), args.command or before.command, args.platform or before.platform, normalize=not args.native)
+    changes = diff(before, after, ignore=None if args.all else diff.__defaults__[0], normalized=not args.native)
+    if args.format == "text":
+        if not changes:
+            print("no differences")
+        for c in changes:
+            print(c)
+    else:
+        _emit([{"path": c.path, "kind": c.kind, "before": c.before, "after": c.after} for c in changes], args.format)
+    return 1 if changes else 0
 
 
 def cmd_commands(args: argparse.Namespace) -> int:
@@ -229,6 +229,16 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--strict", action="store_true", help="fail unless a dedicated parser exists")
     sp.add_argument("-q", "--quiet", action="store_true", help="suppress warnings on stderr")
     sp.set_defaults(func=cmd_parse)
+
+    sdf = sub.add_parser("diff", help="structural diff of two captures (pre/post change check)")
+    sdf.add_argument("before")
+    sdf.add_argument("after")
+    sdf.add_argument("-c", "--command")
+    sdf.add_argument("-p", "--platform")
+    sdf.add_argument("--native", action="store_true", help="compare native output instead of the normalized view")
+    sdf.add_argument("--all", action="store_true", help="also report counters, timers and uptimes")
+    sdf.add_argument("-f", "--format", default="text", choices=["text", "json", "yaml", "json-compact"])
+    sdf.set_defaults(func=cmd_diff)
 
     sc = sub.add_parser("commands", help="list commands with dedicated parsers")
     sc.add_argument("-p", "--platform")

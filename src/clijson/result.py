@@ -78,6 +78,22 @@ class ParseResult:
             out["normalized"] = self.normalized
         return out
 
+    def records(self) -> List[Dict[str, Any]]:
+        """The most table-like view of the result as a list of flat dicts.
+
+        Uses the normalized view when available, otherwise the largest list of records
+        found in ``data`` (a dict keyed by name becomes rows with a ``name`` column).
+        """
+        return _rows(self.normalized if self.normalized is not None else self.data) or []
+
+    def to_dataframe(self) -> Any:
+        """``records()`` as a pandas DataFrame (requires pandas)."""
+        try:
+            import pandas as pd
+        except ImportError as exc:  # pragma: no cover - optional dependency
+            raise ImportError("to_dataframe() needs pandas: pip install pandas") from exc
+        return pd.DataFrame(self.records())
+
     def to_json(self, indent: Optional[int] = 2, meta: bool = False, **kwargs: Any) -> str:
         """JSON string. ``meta=True`` wraps the data with provenance fields."""
         return json.dumps(self.to_dict(meta=meta), indent=indent, default=str, **kwargs)
@@ -94,3 +110,32 @@ class ParseResult:
             f"ParseResult(platform={self.platform!r}, command={self.command!r}, "
             f"engine={self.engine!r}, parser={self.parser!r}, confidence={self.confidence})"
         )
+
+
+def _rows(obj: Any) -> Optional[List[Dict[str, Any]]]:
+    """Find the most table-like list of dicts in *obj* (flattening one level of nesting)."""
+    if isinstance(obj, list) and obj and all(isinstance(r, dict) for r in obj):
+        return [_flat(r) for r in obj]
+    if isinstance(obj, dict):
+        if obj and all(isinstance(v, dict) and any(not isinstance(x, (dict, list)) for x in v.values()) for v in obj.values()):
+            return [{"name": k, **_flat(v)} for k, v in obj.items()]
+        best: Optional[List[Dict[str, Any]]] = None
+        for v in obj.values():
+            r = _rows(v)
+            if r and (best is None or len(r) > len(best)):
+                best = r
+        return best
+    return None
+
+
+def _flat(row: Dict[str, Any]) -> Dict[str, Any]:
+    out: Dict[str, Any] = {}
+    for k, v in row.items():
+        if isinstance(v, dict) and v and all(not isinstance(x, (dict, list)) for x in v.values()):
+            for kk, vv in v.items():
+                out[f"{k}.{kk}"] = vv
+        elif isinstance(v, list) and all(not isinstance(x, (dict, list)) for x in v):
+            out[k] = ", ".join(map(str, v))
+        elif not isinstance(v, (dict, list)):
+            out[k] = v
+    return out

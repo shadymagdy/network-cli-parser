@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import re
-import textwrap
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
@@ -16,7 +15,7 @@ from .exceptions import ParseError, ParserNotFound, PlatformDetectionError
 from .platforms import Platform, detect_platform, get_platform, match_prompt
 from .registry import REGISTRY, Resolution
 from .result import ParseResult
-from .textutils import XR_TIMESTAMP, clean_output
+from .textutils import XR_TIMESTAMP, clean_output, dedent
 
 DEFAULT_ENGINES: Tuple[str, ...] = ("native", "ntc", "genie", "generic")
 PathLike = Union[str, "os.PathLike[str]"]
@@ -53,6 +52,8 @@ def parse(
     :param raise_on_error: re-raise exceptions from dedicated parsers instead
                      of falling back to the next engine.
     """
+    if isinstance(output, (bytes, bytearray)):
+        output = output.decode("utf-8", errors="replace")
     text = clean_output(output or "")
     warnings: List[str] = []
     metadata: Dict[str, Any] = {}
@@ -70,7 +71,11 @@ def parse(
 
     if command:
         text = _strip_command_echo(text, command)
-    text = textwrap.dedent(text)
+    device_error = _device_error(text)
+    if device_error:
+        plat_hint = get_platform(platform) if platform else prompt_platform
+        return ParseResult(None, _name(plat_hint), command, "device-error", None, 0.0, warnings=[f"device returned an error: {device_error}"], metadata={**metadata, "device_error": device_error})
+    text = dedent(text)
     cmdline: Optional[CommandLine] = split_command(command) if command else None
     if cmdline and cmdline.filtered:
         warnings.append(f"output was filtered by '| {' | '.join(cmdline.pipes)}'; some fields may be missing")
@@ -240,6 +245,23 @@ def _strip_prompts(text: str) -> Tuple[str, Optional[str], Optional[Platform], O
         else:
             break
     return "\n".join(ls), cmd, plat, host
+
+
+_DEVICE_ERRORS = re.compile(
+    r"^\s*(?:\^\s*)?(%\s*(?:Invalid input detected|Incomplete command|Ambiguous command|Bad IP address|Unknown command|No such)[^\n]*"
+    r"|syntax error[^\n]*|error: [^\n]*|unknown command\.?[^\n]*"
+    r"|Error: (?:Unrecognized command|Wrong parameter|Incomplete command|Too many parameters|Ambiguous command|Unrecognized)[^\n]*)\s*$",
+    re.I | re.M,
+)
+
+
+def _device_error(text: str) -> Optional[str]:
+    """Short output consisting of a CLI error message (``% Invalid input``, ``syntax error``, ``Error: ...``)."""
+    lines = [ln for ln in text.split("\n") if ln.strip()]
+    if not lines or len(lines) > 6:
+        return None
+    m = _DEVICE_ERRORS.search(text)
+    return m.group(1).strip() if m else None
 
 
 def _strip_command_echo(text: str, command: str) -> str:

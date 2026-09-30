@@ -11,6 +11,7 @@ trees and falls back to a heuristic engine that structures *any* output.
 """
 
 from .api import find_parser, parse, parse_file, parse_session, split_session, supported_commands
+from .diff import Change, diff
 from .exceptions import CliJsonError, ParseError, ParserNotFound, PlatformDetectionError, UnknownPlatformError
 from .platforms import Platform, detect_platform, get_platform, list_platforms
 from .registry import Parser, register
@@ -25,6 +26,8 @@ __all__ = [
     "split_session",
     "supported_commands",
     "find_parser",
+    "diff",
+    "Change",
     "detect_platform",
     "get_platform",
     "list_platforms",

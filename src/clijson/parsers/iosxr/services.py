@@ -140,7 +140,7 @@ class ShowMplsForwarding(Parser):
             if m["flag"]:
                 entry["backup" if "(!)" in m["flag"] else "flags"] = True if "(!)" in m["flag"] else m["flag"]
             if not entry["prefix_or_id"] and out:
-                entry["prefix_or_id"] = out[-1]["prefix_or_id"]
+                entry["prefix_or_id"] = out[-1].get("prefix_or_id")
             out.append(compact(entry))
         return out
 

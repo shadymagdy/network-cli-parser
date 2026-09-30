@@ -26,6 +26,8 @@ It has **no runtime dependencies**.
 | **Structured output is native** | Junos `| display json` / `| display xml` output is recognised and flattened into clean snake_case JSON. |
 | **Config as data** | `show running-config`, `show configuration` (curly braces or `| display set`) and `display current-configuration` become nested trees. |
 | **Whole sessions** | Paste a terminal log with 20 commands and get 20 results (`parse_session`). |
+| **Pre/post change checks** | `clijson.diff(before, after)` (or `clijson diff pre.txt post.txt`) matches records by their natural key (neighbor, interface, prefix, …) and ignores counters and timers by default, so only real changes are reported. |
+| **Clear about failures** | Device errors (`% Invalid input`, `syntax error`, `Error: Unrecognized command`) come back as `engine="device-error"` with the message, instead of garbage data. |
 | **Stands on giants' shoulders** | If you have [ntc-templates](https://github.com/networktocode/ntc-templates) or [Cisco Genie](https://github.com/CiscoTestAutomation/genieparser) installed, their templates become extra fallback engines automatically. |
 | **Tells you how it got the answer** | Every result carries `engine`, `parser`, `confidence`, `warnings` (for example "output was filtered by `| include`") and metadata such as the hostname and timestamp. |
 | **Tested on real output** | 230 regression fixtures captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices. |
@@ -58,6 +60,20 @@ r.data                 # structured data (dict / list)
 r.to_json()            # JSON string
 r.to_yaml()            # needs PyYAML
 r.to_dict()            # data + provenance (engine, parser, confidence, warnings, metadata)
+r.records()            # the most table-like view as flat rows
+r.to_dataframe()       # the same rows as a pandas DataFrame (needs pandas)
+```
+
+**Pre/post maintenance check**:
+
+```python
+before = clijson.parse(pre_capture, "show bgp summary", "iosxr", normalize=True)
+after = clijson.parse(post_capture, "show bgp summary", "iosxr", normalize=True)
+for change in clijson.diff(before, after):
+    print(change)
+# ~ [neighbor=10.255.0.2].state: 'Established' -> 'Idle'
+# - [neighbor=10.255.0.4]: {...}
+# + [neighbor=10.255.0.5]: {...}
 ```
 
 **Same code for every vendor** with the normalized view:
@@ -97,6 +113,7 @@ ssh mx1 "show interfaces terse" | clijson parse -p junos -c "show interfaces ter
 clijson session.log                              # every command in a log (shorthand for `parse`)
 clijson parse out.txt -c "dis bgp peer" -n -f table   # normalized, as a table
 clijson parse out.txt -m                         # include engine/parser/confidence/warnings
+clijson diff pre.txt post.txt -c "show bgp summary"   # what changed? (exit code 1 if anything did)
 clijson commands -p vrp --search lldp            # what is supported?
 clijson detect mystery.txt                       # which OS produced this?
 clijson run 10.0.0.1 -p iosxr -c "show version" -c "show bgp summary" -u admin

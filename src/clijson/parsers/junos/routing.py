@@ -77,7 +77,7 @@ class ShowRoute(Parser):
                 nh: Dict[str, Any] = {"next_hop": m["nh"], "interface": m["intf"], "selected": bool(m["sel"])}
                 if m["ops"]:
                     nh["label_operation"] = m["ops"].strip()
-                cur_path["next_hops"].append(compact(nh))
+                cur_path["next_hops"].append({k: v for k, v in nh.items() if v is not None})
                 continue
             m = _SPECIAL_NH.match(s)
             if m:

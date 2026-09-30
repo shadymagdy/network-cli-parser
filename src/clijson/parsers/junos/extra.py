@@ -16,7 +16,7 @@ class ShowRouteAdvertisedReceived(Parser):
     """Routes advertised to / received from a BGP neighbor (prefix, next hop, MED, local-pref, AS path)."""
 
     def parse(self, text: str) -> Dict[str, Any]:
-        out: Dict[str, Any] = {"neighbor": self.params.get("neighbor"), "direction": "advertised" if "adv" in self.command.split()[2] else "received", "tables": {}, "routes": []}
+        out: Dict[str, Any] = {"neighbor": self.params.get("neighbor"), "direction": "received" if "receive-protocol" in self.command.lower() else "advertised", "tables": {}, "routes": []}
         table = "inet.0"
         med_end = lp_end = None
         pending_prefix: Optional[str] = None
