@@ -99,10 +99,8 @@ def _parse(
     if plat is None and cmdline is not None and cmdline.tokens and not strict:
         plat = _trial_platform(cmdline, text, metadata)
 
-    if plat is None:
-        if strict:
-            raise PlatformDetectionError()
-        warnings.append("platform could not be detected; using the generic engine")
+    if plat is None and strict:
+        raise PlatformDetectionError()
 
     # Device already produced structured output (| display json / xml)
     fmt = cmdline.output_format if cmdline else None
@@ -122,6 +120,8 @@ def _parse(
     order = tuple(engines) if engines else DEFAULT_ENGINES
     if strict:
         order = ("native",)
+    if plat is None:
+        warnings.append("platform could not be detected; using the generic engine")
 
     resolution: Optional[Resolution] = None
     if plat is not None and cmdline is not None and cmdline.tokens:

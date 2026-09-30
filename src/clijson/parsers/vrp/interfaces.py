@@ -374,7 +374,7 @@ class DisplayPortVlan(Parser):
             if m:
                 out.append({"interface": m["p"], "link_type": m["lt"], "pvid": to_num(m["pvid"]) if m["pvid"] != "-" else None, "vlans": _vlan_list(m["vl"])})
                 continue
-            m = re.match(r"^\s{20,}(?P<vl>[\d\- ]+)$", raw)
+            m = re.match(r"^ {20,}(?P<vl>[\d\-][\d\- ]*)$", raw)
             if m and out:
                 out[-1]["vlans"].extend(_vlan_list(m["vl"]))
         return out

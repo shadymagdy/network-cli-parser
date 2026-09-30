@@ -280,7 +280,7 @@ class ShowChassisFpc(Parser):
     """FPC state, temperature, CPU and memory utilisation (or PIC status)."""
 
     def parse(self, text: str) -> Any:
-        if re.search(r"^\s*Slot \d+\s+(Online|Offline|Empty)\s+\S", text, re.M) and "PIC" in text and "Temp" not in text:
+        if re.search(r"^[ \t]*Slot \d+\s+(Online|Offline|Empty)\s+\S", text, re.M) and "PIC" in text and "Temp" not in text:
             return self._pic_status(text)
         out = []
         for m in match_lines(

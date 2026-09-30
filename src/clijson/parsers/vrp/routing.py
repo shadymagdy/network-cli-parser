@@ -30,9 +30,9 @@ class DisplayIpRoutingTable(Parser):
     """IPv4/IPv6 routing table (brief or verbose) including ECMP next-hops."""
 
     def parse(self, text: str) -> Dict[str, Any]:
-        if re.search(r"^\s*Destination\s*:\s*\S+", text, re.M):
+        if re.search(r"^[ \t]*Destination\s*:\s*\S+", text, re.M):
             return self._verbose(text)
-        if re.search(r"^\s*Destination\s*:\s*\S+\s+PrefixLength", text, re.M):
+        if re.search(r"^[ \t]*Destination\s*:\s*\S+\s+PrefixLength", text, re.M):
             return self._verbose(text)
         out: Dict[str, Any] = {"tables": {}, "routes": []}
         table = self.params.get("vrf") or "_public_"

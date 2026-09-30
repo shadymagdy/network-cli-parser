@@ -28,7 +28,7 @@ class ShowVersion(Parser):
         if m:
             out["label"] = str(m["label"])
         build = {}
-        for k, v in re.findall(r"^\s+(Built By|Built On|Build Host|Built Host|Workspace|Version|Location|Label)\s*:\s*(.+)$", text, re.M):
+        for k, v in re.findall(r"^[ \t]+(Built By|Built On|Build Host|Built Host|Workspace|Version|Location|Label)\s*:\s*(.+)$", text, re.M):
             build[k.lower().replace(" ", "_").replace("built_host", "build_host")] = v.strip()
         if build:
             out["build_information"] = build
@@ -62,7 +62,7 @@ class ShowVersion(Parser):
             interfaces[name] = int(count)
         if interfaces:
             out["interface_counts"] = interfaces
-        packages = re.findall(r"^\s{4,}(\S+-\S+)$", text, re.M)
+        packages = re.findall(r"^[ \t]{4,}(\S+-\S+)$", text, re.M)
         if packages:
             out["packages"] = packages
         return out
@@ -269,10 +269,10 @@ class ShowInstallActive(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {}
-        m = search(r"^\s*Label\s*:\s*(?P<label>\S+)", text)
+        m = search(r"^[ \t]*Label\s*:\s*(?P<label>\S+)", text)
         if m:
             out["label"] = str(m["label"])
-        m = search(r"^\s*Software Hash:\s*(?P<h>\S+)", text)
+        m = search(r"^[ \t]*Software Hash:\s*(?P<h>\S+)", text)
         if m:
             out["software_hash"] = m["h"]
         m = search(r"Active Packages:\s+XR:\s*(?P<xr>\d+)\s+All:\s*(?P<all>\d+)", text)

@@ -83,20 +83,25 @@ def parse_indented(text: str, comment: str = "!", noise: "re.Pattern[str] | None
             continue
         raw_lines.append(s)
     root: Dict[str, Any] = {}
-    _build(raw_lines, 0, len(raw_lines), root)
+    _build(raw_lines, [indent_of(ln) for ln in raw_lines], 0, len(raw_lines), root)
     return root
 
 
-def _build(lines: List[str], start: int, end: int, node: Dict[str, Any]) -> None:
+MAX_DEPTH = 64
+
+
+def _build(lines: List[str], indents: List[int], start: int, end: int, node: Dict[str, Any], depth: int = 0) -> None:
     i = start
     while i < end:
-        ind = indent_of(lines[i])
+        ind = indents[i]
         j = i + 1
-        while j < end and indent_of(lines[j]) > ind:
+        while j < end and indents[j] > ind:
             j += 1
         children: Dict[str, Any] = {}
-        if j > i + 1:
-            _build(lines, i + 1, j, children)
+        if j > i + 1 and depth < MAX_DEPTH:
+            _build(lines, indents, i + 1, j, children, depth + 1)
+        elif j > i + 1:
+            j = i + 1  # too deep: treat the remaining lines as siblings
         words = _split_words(lines[i].strip())
         if lines[i].strip().endswith("-exit") or lines[i].strip() in ("exit", "quit", "end-policy", "end-set", "end-group"):
             i = j
@@ -129,15 +134,17 @@ def parse_junos_curly(text: str) -> Dict[str, Any]:
     tokens = [t for t in _JUNOS_TOKEN.findall(body) if not t.startswith(("/*", "##"))]
     pos = 0
 
-    def block() -> Dict[str, Any]:
+    def block(depth: int = 0) -> Dict[str, Any]:
         nonlocal pos
+        if depth > MAX_DEPTH:
+            raise ValueError("configuration is nested too deeply")
         node: Dict[str, Any] = {}
         words: List[str] = []
         while pos < len(tokens):
             t = tokens[pos]
             pos += 1
             if t == "{":
-                child = block()
+                child = block(depth + 1)
                 _put_path(node, words, child)
                 words = []
             elif t == "}":
@@ -222,7 +229,7 @@ def parse_config(text: str, platform: str) -> Dict[str, Any]:
     """Dispatch to the right configuration parser for *platform*."""
     stripped = "\n".join(ln for ln in text.splitlines() if ln.strip())
     if platform == "junos":
-        if re.search(r"^\s*set ", stripped, re.M) and "{" not in stripped:
+        if re.search(r"^[ \t]*set ", stripped, re.M) and "{" not in stripped:
             return parse_junos_set(stripped)
         return parse_junos_curly(stripped)
     if platform == "vrp":

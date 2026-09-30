@@ -113,7 +113,7 @@ class ShowMplsForwarding(Parser):
         out: List[Dict[str, Any]] = []
         last_local: Any = None
         rx = re.compile(
-            r"^(?P<local>\d+|\s{2,})\s+(?P<out>\S+(?: \S+)?)\s+(?P<prefix>.+?)\s{2,}(?P<intf>\S+)\s+(?P<nh>\S+)\s+(?P<bytes>\d+)(?:\s+(?P<flag>\([^)]*\)|\S))?\s*$"
+            r"^(?P<local>\d+)?[ \t]+(?P<out>\S+(?: \S+)?)[ \t]+(?P<prefix>\S.*?)[ \t]{2,}(?P<intf>\S+)[ \t]+(?P<nh>\S+)[ \t]+(?P<bytes>\d+)(?:[ \t]+(?P<flag>\([^)]*\)|\S))?[ \t]*$"
         )
         for raw in text.splitlines():
             if not raw.strip() or raw.lstrip().startswith(("Local", "Label", "---")):
@@ -126,7 +126,7 @@ class ShowMplsForwarding(Parser):
                     last_local = int(m2["local"])
                     out.append(compact({"local_label": last_local, "outgoing_label": to_num(m2["out"]), "prefix_or_id": m2["prefix"].strip(), "outgoing_interface": m2["intf"], "bytes_switched": int(m2["bytes"])}))
                 continue
-            local = m["local"].strip()
+            local = (m["local"] or "").strip()
             if local:
                 last_local = int(local)
             entry = {
@@ -195,7 +195,7 @@ class ShowLldpNeighbors(Parser):
 
 def _lldp_detail_blocks(text: str) -> List[Dict[str, Any]]:
     out = []
-    for b in re.split(r"^\s*-{10,}\s*$", text, flags=re.M):
+    for b in re.split(r"^[ \t]*-{10,}\s*$", text, flags=re.M):
         if "Local Interface" not in b and "Local Intf" not in b:
             continue
         item: Dict[str, Any] = {}
@@ -640,7 +640,7 @@ class ShowL2vpnXconnectSummary(Parser):
                 section = re.sub(r"[^a-z0-9]+", "_", m["what"].lower()).strip("_")
                 out.setdefault(section, {})["total"] = int(m["n"])
                 continue
-            for k, v in re.findall(r"([A-Z][\w\- ]*?):\s*(\d+)", s):
+            for k, v in re.findall(r"([A-Z][\w\- ]{0,40}?):\s*(\d+)", s[:500]):
                 out.setdefault(section, {})[re.sub(r"[^a-z0-9]+", "_", k.lower()).strip("_")] = int(v)
         return out
 

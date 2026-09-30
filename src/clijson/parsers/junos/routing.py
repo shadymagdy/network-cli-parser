@@ -26,7 +26,7 @@ class ShowRoute(Parser):
     def parse(self, text: str) -> Dict[str, Any]:
         args = (self.params.get("args") or "").split()
         default_table = args[args.index("table") + 1] if "table" in args[:-1] else "inet.0"
-        if re.search(r"^\s*\S+ \(\d+ entr(?:y|ies), \d+ announced\)", text, re.M):
+        if re.search(r"^[ \t]*\S+ \(\d+ entr(?:y|ies), \d+ announced\)", text, re.M):
             return _parse_route_detail(text, default_table)
         tables: Dict[str, Any] = {}
         routes: List[Dict[str, Any]] = []

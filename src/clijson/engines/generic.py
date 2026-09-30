@@ -24,7 +24,7 @@ from ..textutils import indent_of, is_separator, snake, to_num
 
 _KV_SPLIT = re.compile(r"^(?P<k>[A-Za-z*][\w \-/().#'&,+]*?)\s*(?::|=|\.{3,})\s*(?P<v>.*)$")
 _MULTI_KV = re.compile(
-    r"(?P<k>[A-Za-z][\w\-/().#']*(?: [A-Za-z][\w\-/().#']*){0,5})\s*(?::|=)\s*(?P<v>[^,;]*?)\s*(?=(?:[,;]\s*|\s{2,})[A-Za-z][\w\-/().#' ]{0,40}\s*(?::|=)|$)"
+    r"(?P<k>[A-Za-z][\w\-/().#']{0,39}(?: [A-Za-z][\w\-/().#']{0,39}){0,5})\s*(?::|=)\s*(?P<v>[^,;]*?)\s*(?=(?:[,;]\s*|\s{2,})[A-Za-z][\w\-/().#' ]{0,40}\s*(?::|=)|$)"
 )
 _TIME_LIKE = re.compile(r"\d{1,2}:\d{2}")
 
@@ -258,6 +258,8 @@ def _unique_keys(keys: List[str]) -> List[str]:
 def _split_kv(line: str) -> Dict[str, Any]:
     s = line.strip()
     out: Dict[str, Any] = {}
+    if len(s) > 2000 or (":" not in s and "=" not in s and "..." not in s):
+        return out
     matches = list(_MULTI_KV.finditer(s))
     if len(matches) > 1:
         for m in matches:
@@ -271,14 +273,22 @@ def _split_kv(line: str) -> Dict[str, Any]:
     return out
 
 
-def _parse_tree(lines: List[str], loose: List[str]) -> Dict[str, Any]:
+MAX_DEPTH = 32
+
+
+def _parse_tree(lines: List[str], loose: List[str], depth: int = 0, indents: Optional[List[int]] = None) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
+    if depth >= MAX_DEPTH:
+        loose.extend(ln.strip() for ln in lines)
+        return out
+    if indents is None:
+        indents = [indent_of(ln) for ln in lines]
     i, n = 0, len(lines)
     while i < n:
         ln = lines[i]
-        ind = indent_of(ln)
+        ind = indents[i]
         j = i + 1
-        while j < n and indent_of(lines[j]) > ind:
+        while j < n and indents[j] > ind:
             j += 1
         children = lines[i + 1 : j]
         stripped = ln.strip()
@@ -286,7 +296,7 @@ def _parse_tree(lines: List[str], loose: List[str]) -> Dict[str, Any]:
         if children:
             key = snake(stripped.rstrip(":")) if not kv or stripped.endswith(":") else None
             local_loose: List[str] = []
-            node = _parse_tree(children, local_loose)
+            node = _parse_tree(children, local_loose, depth + 1, indents[i + 1 : j])
             if local_loose:
                 node.setdefault("lines", []).extend(local_loose)
             if key is None:

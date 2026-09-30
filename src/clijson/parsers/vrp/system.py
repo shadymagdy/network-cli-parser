@@ -291,6 +291,6 @@ class DisplayNtpSessions(Parser):
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
         out = []
-        for m in match_lines(r"^\s*(?P<flags>[\[\]0-9]*)\s*(?P<src>[\d.:a-fA-F]+|LOCAL\(\d+\))\s+(?P<ref>\S+)\s+(?P<st>\d+)\s+(?P<reach>\d+)\s+(?P<poll>\d+)\s+(?P<now>\S+)\s+(?P<offset>-?[\d.]+)\s+(?P<delay>-?[\d.]+)\s+(?P<disp>-?[\d.]+)\s*$", text):
+        for m in match_lines(r"^\s*(?:(?P<flags>[\[\]0-9]+)\s*)?(?P<src>[\d.:a-fA-F]+|LOCAL\(\d+\))\s+(?P<ref>\S+)\s+(?P<st>\d+)\s+(?P<reach>\d+)\s+(?P<poll>\d+)\s+(?P<now>\S+)\s+(?P<offset>-?[\d.]+)\s+(?P<delay>-?[\d.]+)\s+(?P<disp>-?[\d.]+)\s*$", text):
             out.append({"source": m["src"], "reference": m["ref"], "stratum": int(m["st"]), "reach": int(m["reach"]), "poll": int(m["poll"]), "now": to_num(m["now"]), "offset": float(m["offset"]), "delay": float(m["delay"]), "dispersion": float(m["disp"]), "flags": m["flags"] or None})
         return out

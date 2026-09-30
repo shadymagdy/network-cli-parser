@@ -209,7 +209,7 @@ class ShowRoute(Parser):
     """Routing table (RIB) with next-hops, distance/metric and flags."""
 
     def parse(self, text: str) -> Dict[str, Any]:
-        if re.search(r"^\s*Routing entry for ", text, re.M):
+        if re.search(r"^[ \t]*Routing entry for ", text, re.M):
             return _parse_route_detail(text)
         data = parse_cisco_routes(text)
         vrf = self.params.get("vrf")

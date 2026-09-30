@@ -180,7 +180,7 @@ class ShowRouteInstance(Parser):
 
     def parse(self, text: str) -> Dict[str, Any]:
         out: Dict[str, Any] = {}
-        if not re.search(r"^\s*\S+:\s*$", text, re.M):
+        if not re.search(r"^[ \t]*\S+:\s*$", text, re.M):
             # summary/brief table: Instance  Type  Primary RIB  Active/holddown/hidden
             cur = None
             for raw in text.splitlines():

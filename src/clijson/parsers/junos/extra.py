@@ -112,13 +112,15 @@ class ShowNtpStatus(Parser):
     def parse(self, text: str) -> Dict[str, Any]:
         blob = " ".join(ln.strip() for ln in text.splitlines())
         out: Dict[str, Any] = {}
+        if "=" not in blob:
+            return out
         m = re.search(r"status=(?P<status>\S+)\s+(?P<flags>[^=]+?),\s*(?=\w+=)", blob)
         if m:
             out["status"] = m["status"]
             flags = [f.strip() for f in m["flags"].split(",") if f.strip()]
             out["flags"] = flags
             out["synchronized"] = any(f.startswith("sync_") and f != "sync_unspec" for f in flags)
-        for k, v in re.findall(r"(\w+)=(\"[^\"]*\"|[^,\s]+(?:\s+[A-Z][a-z]{2},[^,=]+?(?=,|\s*$))?)", blob):
+        for k, v in re.findall(r"(\w{1,40})=(\"[^\"]*\"|[^,\s]+(?:\s+[A-Z][a-z]{2},[^,=]{1,60}?(?=,|\s*$))?)", blob):
             if k == "status":
                 continue
             v = v.strip().strip('"')

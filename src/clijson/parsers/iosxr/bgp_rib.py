@@ -202,7 +202,7 @@ class ShowBgp(Parser):
     """BGP table (status codes, next hop, metric, local-pref, weight, AS path, origin) or per-prefix path detail."""
 
     def parse(self, text: str) -> Dict[str, Any]:
-        if re.search(r"^\s*BGP routing table entry for ", text, re.M):
+        if re.search(r"^[ \t]*BGP routing table entry for ", text, re.M):
             return _parse_prefix_detail(text)
         vrf = self.params.get("vrf")
         return parse_bgp_table(text, None if vrf in (None, "all") else vrf, af_from_command(self.command))

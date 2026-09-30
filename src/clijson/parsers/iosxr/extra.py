@@ -157,10 +157,10 @@ class ShowL2vpnBridgeDomainSummary(Parser):
             if m:
                 section = snake(m.group(1))
                 out.setdefault(section, {})["total"] = int(m.group(2))
-                for k, v in re.findall(r"([A-Za-z][\w\- ]*?):\s*(\d+)", m.group(3)):
+                for k, v in re.findall(r"([A-Za-z][\w\- ]{0,40}?):\s*(\d+)", m.group(3)[:500]):
                     out[section][snake(k)] = int(v)
                 continue
-            for k, v in re.findall(r"([A-Za-z][\w\- ]*?):\s*(\d+)", s):
+            for k, v in re.findall(r"([A-Za-z][\w\- ]{0,40}?):\s*(\d+)", s[:500]):
                 out.setdefault(section, {})[snake(k)] = int(v)
         return out
 
