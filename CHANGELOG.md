@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.2.0 - 2026-10-01
+
 ### Added
 
 * Typed normalized models: every intent is a `TypedDict` in `clijson.models` (`BgpNeighbor`, `Route`, `Interface`,
