@@ -717,7 +717,7 @@ class ShowOspfNeighbor(Parser):
                 state=n["state"].lower(),
                 address=n["address"],
                 interface=n["interface"],
-                dead_time=n["dead_time"],
+                dead_time=seconds(n["dead_time"]),
             )
             for n in data["neighbors"]
         ]

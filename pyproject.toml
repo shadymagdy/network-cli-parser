@@ -51,7 +51,12 @@ Changelog = "https://github.com/shadymagdy/network-cli-parser/blob/main/CHANGELO
 
 # PEP 735 dependency groups: `uv sync` installs `dev` by default.
 [dependency-groups]
-test = ["pytest>=8", "pytest-cov>=5", "PyYAML>=6"]
+test = [
+    "jsonschema>=4.23",
+    "pytest>=8",
+    "pytest-cov>=5",
+    "PyYAML>=6",
+]
 lint = [
     "ruff>=0.16",
     "pre-commit>=4",

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/ipv6.neighbors.json",
+  "title": "clijson ipv6.neighbors",
+  "description": "IPv6 neighbor discovery cache.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "IPv6 neighbor discovery cache.",
+    "properties": {
+      "ip_address": {
+        "type": "string"
+      },
+      "mac_address": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff)"
+      },
+      "interface": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "state": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "reach, stale, delay, probe, ... (lowercase)"
+      },
+      "age": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Seconds since last reachability confirmation (or remaining lifetime)"
+      }
+    },
+    "required": [
+      "ip_address",
+      "mac_address",
+      "interface",
+      "state",
+      "age"
+    ],
+    "additionalProperties": false
+  }
+}

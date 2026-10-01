@@ -88,35 +88,35 @@
       "ip_address": "192.0.2.1",
       "mac_address": "ca:01:1d:8b:00:08",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:31:14",
+      "age": 5474,
       "type": "dynamic"
     },
     {
       "ip_address": "192.0.2.2",
       "mac_address": "ca:02:1d:99:00:08",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:46:18",
+      "age": 6378,
       "type": "dynamic"
     },
     {
       "ip_address": "192.0.2.3",
       "mac_address": "ca:03:1d:a7:00:08",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:46:16",
+      "age": 6376,
       "type": "dynamic"
     },
     {
       "ip_address": "192.0.2.4",
       "mac_address": "ca:04:1d:b5:00:08",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:46:15",
+      "age": 6375,
       "type": "dynamic"
     },
     {
       "ip_address": "192.0.2.5",
       "mac_address": "ca:05:1d:c3:00:08",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:46:13",
+      "age": 6373,
       "type": "dynamic"
     },
     {
@@ -130,14 +130,14 @@
       "ip_address": "192.0.2.11",
       "mac_address": "0c:a1:f3:ee:0b:a0",
       "interface": "GigabitEthernet0/0/0/0",
-      "age": "01:43:41",
+      "age": 6221,
       "type": "dynamic"
     },
     {
       "ip_address": "192.168.57.1",
       "mac_address": "52:54:00:4e:11:56",
       "interface": "MgmtEth0/RP0/CPU0/0",
-      "age": "00:00:02",
+      "age": 2,
       "type": "dynamic"
     },
     {

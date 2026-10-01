@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/interfaces.detail.json",
+  "title": "clijson interfaces.detail",
+  "description": "Per-interface state, addressing and counters.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "Per-interface state, addressing and counters.",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "admin_status": {
+        "type": "string",
+        "description": "up | down | admin-down (vendor word if unrecognised)"
+      },
+      "oper_status": {
+        "type": "string",
+        "description": "up | down | admin-down (vendor word if unrecognised)"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mac_address": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff)"
+      },
+      "mtu": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "MTU in bytes"
+      },
+      "bandwidth_kbps": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Configured / negotiated bandwidth in kbit/s"
+      },
+      "ipv4_addresses": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "IPv4 addresses with prefix length"
+      },
+      "input_rate_bps": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Input rate in bit/s"
+      },
+      "output_rate_bps": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Output rate in bit/s"
+      },
+      "input_packets": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "output_packets": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "input_errors": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "output_errors": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "admin_status",
+      "oper_status",
+      "description",
+      "mac_address",
+      "mtu",
+      "bandwidth_kbps",
+      "ipv4_addresses",
+      "input_rate_bps",
+      "output_rate_bps",
+      "input_packets",
+      "output_packets",
+      "input_errors",
+      "output_errors"
+    ],
+    "additionalProperties": false
+  }
+}

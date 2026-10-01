@@ -3,7 +3,7 @@
 import pytest
 
 import clijson
-from clijson.models import SCHEMAS
+from clijson.models import SCHEMAS, json_schema, validate
 
 from .conftest import fixture_cases, read_json
 
@@ -35,6 +35,9 @@ def test_normalized_schema(txt, js):
     records = res.normalized if isinstance(res.normalized, list) else [res.normalized]
     for rec in records:
         assert list(rec) == keys
+    assert validate(res.intent, res.normalized) == []
+    jsonschema = pytest.importorskip("jsonschema")
+    jsonschema.Draft202012Validator(json_schema(res.intent)).validate(res.normalized)
 
 
 def test_corpus_covers_every_platform():

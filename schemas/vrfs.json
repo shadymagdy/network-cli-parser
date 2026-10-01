@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/vrfs.json",
+  "title": "clijson vrfs",
+  "description": "VRFs / routing instances.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "VRFs / routing instances.",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "rd": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Route distinguisher"
+      },
+      "interfaces": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "rd",
+      "interfaces"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -62,11 +62,12 @@ jobs:
           enable-cache: true
       - run: uv sync --group test
       - run: uv run --no-sync pytest --cov --cov-report=term --cov-report=xml
-      - name: Generated docs are up to date
+      - name: Generated docs and schemas are up to date
         if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
         run: |
           uv run --no-sync python scripts/gen_docs.py
-          git diff --exit-code docs/
+          git add -N docs/ schemas/
+          git diff --exit-code docs/ schemas/
 
   optional-engines:
     name: Test with optional engines

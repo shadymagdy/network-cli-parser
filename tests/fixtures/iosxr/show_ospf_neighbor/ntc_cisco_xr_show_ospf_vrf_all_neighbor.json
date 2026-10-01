@@ -86,7 +86,7 @@
       "state": "full",
       "address": "192.0.2.2",
       "interface": "Bundle-Ether10.10",
-      "dead_time": "00:00:39"
+      "dead_time": 39
     },
     {
       "neighbor_id": "192.0.2.3",
@@ -94,7 +94,7 @@
       "state": "full",
       "address": "192.0.2.4",
       "interface": "TenGigE0/0/0/10.10",
-      "dead_time": "00:00:39"
+      "dead_time": 39
     },
     {
       "neighbor_id": "192.0.2.5",
@@ -102,7 +102,7 @@
       "state": "full",
       "address": "192.0.2.6",
       "interface": "Bundle-Ether10.20",
-      "dead_time": "00:00:34"
+      "dead_time": 34
     },
     {
       "neighbor_id": "192.0.2.7",
@@ -110,7 +110,7 @@
       "state": "full",
       "address": "192.0.2.8",
       "interface": "TenGigE0/0/0/10.20",
-      "dead_time": "00:00:38"
+      "dead_time": 38
     },
     {
       "neighbor_id": "192.0.2.9",
@@ -118,7 +118,7 @@
       "state": "full",
       "address": "192.0.2.10",
       "interface": "Bundle-Ether10.30",
-      "dead_time": "00:00:39"
+      "dead_time": 39
     },
     {
       "neighbor_id": "192.0.2.11",
@@ -126,7 +126,7 @@
       "state": "full",
       "address": "192.0.2.12",
       "interface": "GigabitEthernet100/0/0/0",
-      "dead_time": "00:00:39"
+      "dead_time": 39
     }
   ]
 }

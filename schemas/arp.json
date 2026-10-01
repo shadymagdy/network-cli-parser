@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/arp.json",
+  "title": "clijson arp",
+  "description": "IPv4 ARP entries.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "IPv4 ARP entries.",
+    "properties": {
+      "ip_address": {
+        "type": "string"
+      },
+      "mac_address": {
+        "type": "string",
+        "description": "MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff)"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "age": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Seconds since learned (or remaining lifetime when that is all the device shows)"
+      },
+      "type": {
+        "type": "string",
+        "description": "dynamic, static, interface, ... (vendor word)"
+      }
+    },
+    "required": [
+      "ip_address",
+      "mac_address",
+      "interface",
+      "age",
+      "type"
+    ],
+    "additionalProperties": false
+  }
+}

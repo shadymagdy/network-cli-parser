@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ...models import mac, record
+from ...models import mac, record, seconds
 from ...registry import Parser, register
 from ...textutils import compact, match_lines, none_if, snake, to_num
 
@@ -176,7 +176,7 @@ class ShowIpv6Neighbors(Parser):
                 mac_address=mac(e["mac_address"]),
                 interface=e["interface"],
                 state=e["state"],
-                age=e["expire"],
+                age=seconds(e["expire"]),
             )
             for e in data["entries"]
         ]

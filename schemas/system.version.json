@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/system.version.json",
+  "title": "clijson system.version",
+  "type": "object",
+  "description": "Device identity and software release.",
+  "properties": {
+    "hostname": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Configured hostname"
+    },
+    "vendor": {
+      "type": "string",
+      "description": "cisco | juniper | huawei"
+    },
+    "os": {
+      "type": "string",
+      "description": "iosxr | junos | vrp"
+    },
+    "version": {
+      "type": "string",
+      "description": "Software release, e.g. 7.9.2, 23.4R1.9, V800R021C10SPC600"
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Chassis / platform model"
+    },
+    "serial_number": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Chassis serial number"
+    },
+    "uptime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Uptime as printed by the device"
+    },
+    "uptime_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Uptime in seconds"
+    }
+  },
+  "required": [
+    "hostname",
+    "vendor",
+    "os",
+    "version",
+    "model",
+    "serial_number",
+    "uptime",
+    "uptime_seconds"
+  ],
+  "additionalProperties": false
+}

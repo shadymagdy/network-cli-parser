@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/isis.adjacency.json",
+  "title": "clijson isis.adjacency",
+  "description": "IS-IS adjacencies.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "IS-IS adjacencies.",
+    "properties": {
+      "system_id": {
+        "type": "string",
+        "description": "Neighbor system ID or hostname"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "level": {
+        "type": "string",
+        "description": "L1, L2 or L1L2"
+      },
+      "hold_time": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Seconds of hold time left"
+      },
+      "snpa": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Subnetwork point of attachment (MAC)"
+      }
+    },
+    "required": [
+      "system_id",
+      "interface",
+      "state",
+      "level",
+      "hold_time",
+      "snpa"
+    ],
+    "additionalProperties": false
+  }
+}

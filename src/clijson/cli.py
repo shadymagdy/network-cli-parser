@@ -7,6 +7,7 @@ clijson parse out.txt -c "dis int br" --normalize -f table
 clijson commands -p vrp --search bgp
 clijson diff pre.txt post.txt -c "show bgp summary"   # what changed?
 clijson detect out.txt
+clijson schema bgp.summary                     # JSON Schema of a normalized model
 clijson serve --port 8080                      # tiny HTTP API
 clijson run 10.0.0.1 -p iosxr -c "show version" -u admin   # live device (netmiko/scrapli)
 """
@@ -27,7 +28,7 @@ from .exceptions import CliJsonError
 from .platforms import detect_platform, list_platforms
 from .result import ParseResult, _rows
 
-SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "serve", "run", "version"}
+SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "schema", "serve", "run", "version"}
 
 
 def _rich_console() -> Any:  # pragma: no cover - cosmetic
@@ -221,6 +222,39 @@ def cmd_platforms(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_schema(args: argparse.Namespace) -> int:
+    from .models import INTENTS, json_schema, validate
+
+    if args.out:
+        from pathlib import Path
+
+        out = Path(args.out)
+        out.mkdir(parents=True, exist_ok=True)
+        for name in args.intent or INTENTS:
+            (out / f"{name}.json").write_text(json.dumps(json_schema(name), indent=2) + "\n", encoding="utf-8")
+        print(f"wrote {len(args.intent or INTENTS)} schema(s) to {out}", file=sys.stderr)
+        return 0
+    if not args.intent:
+        rows = [{"intent": name, "description": (cls.__doc__ or "").strip()} for name, cls in INTENTS.items()]
+        _emit(rows, args.format)
+        return 0
+    if len(args.intent) > 1 and not args.check:
+        raise SystemExit("error: give one intent (or use --out DIR to write several)")
+    try:
+        schema = json_schema(args.intent[0])
+    except KeyError as exc:
+        raise SystemExit(f"error: {exc.args[0]}") from None
+    if args.check:
+        data = json.loads(_read_input(args.check))
+        problems = validate(args.intent[0], data)
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        print(f"{'invalid' if problems else 'valid'}: {len(problems)} problem(s)", file=sys.stderr)
+        return 1 if problems else 0
+    _emit(schema, "json" if args.format == "table" else args.format)
+    return 0
+
+
 def cmd_serve(args: argparse.Namespace) -> int:  # pragma: no cover - network server
     from .server import serve
 
@@ -312,6 +346,13 @@ def build_parser() -> argparse.ArgumentParser:
     spl = sub.add_parser("platforms", help="list supported platforms and aliases")
     spl.add_argument("-f", "--format", default="table", choices=["table", "json", "yaml"])
     spl.set_defaults(func=cmd_platforms)
+
+    ssc = sub.add_parser("schema", help="JSON Schema of the normalized models (list, print, export, validate)")
+    ssc.add_argument("intent", nargs="*", help="model name, e.g. bgp.summary (omit to list them)")
+    ssc.add_argument("-o", "--out", metavar="DIR", help="write <intent>.json files for the given (or all) models")
+    ssc.add_argument("--check", metavar="FILE", help="validate normalized JSON from FILE ('-' = stdin) instead")
+    ssc.add_argument("-f", "--format", default="table", choices=["table", "json", "yaml", "json-compact"])
+    ssc.set_defaults(func=cmd_schema)
 
     ss = sub.add_parser("serve", help="run a small HTTP API (POST /parse)")
     ss.add_argument("--host", default="127.0.0.1")

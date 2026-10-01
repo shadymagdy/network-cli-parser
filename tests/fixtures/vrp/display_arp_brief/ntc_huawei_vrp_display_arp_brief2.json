@@ -55,7 +55,7 @@
       "ip_address": "192.168.1.118",
       "mac_address": "a0:78:17:b2:7b:c0",
       "interface": "Wlan-Bss7",
-      "age": 20,
+      "age": 1200,
       "type": "dynamic"
     },
     {

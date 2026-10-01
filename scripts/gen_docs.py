@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Regenerate docs/commands.md and docs/models.md from the parser registry (run after adding parsers)."""
+"""Regenerate docs/commands.md, docs/models.md and schemas/*.json from the registry (run after adding parsers)."""
 
 from __future__ import annotations
 
+import json
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -11,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from clijson import supported_commands  # noqa: E402
-from clijson.models import SCHEMAS  # noqa: E402
+from clijson.models import INTENTS, SINGLE_RECORD, json_schema  # noqa: E402
 from clijson.platforms import list_platforms  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
@@ -68,7 +69,36 @@ def main() -> int:
     out.write_text("\n".join(lines), encoding="utf-8")
     print(f"wrote {out.relative_to(ROOT)}: {len(parsers)} parsers, {len(rows)} patterns")
     write_models(rows)
+    write_schemas()
     return 0
+
+
+def write_schemas() -> None:
+    out = ROOT / "schemas"
+    out.mkdir(exist_ok=True)
+    for old in out.glob("*.json"):
+        old.unlink()
+    for intent in INTENTS:
+        (out / f"{intent}.json").write_text(json.dumps(json_schema(intent), indent=2) + "\n", encoding="utf-8")
+    print(f"wrote schemas/: {len(INTENTS)} JSON Schemas")
+
+
+def _type_text(prop: dict) -> str:
+    if "$ref" in prop:
+        return prop["$ref"].rsplit("/", 1)[-1]
+    if "anyOf" in prop:
+        return " \\| ".join(_type_text(p) for p in prop["anyOf"])
+    t = prop.get("type")
+    if t == "array":
+        return f"array of {_type_text(prop.get('items', {}))}"
+    return " \\| ".join(t) if isinstance(t, list) else str(t)
+
+
+def _field_table(obj: dict) -> list[str]:
+    lines = ["| field | type | description |", "|---|---|---|"]
+    for name, prop in obj["properties"].items():
+        lines.append(f"| `{name}` | {_type_text(prop)} | {prop.get('description', '')} |")
+    return lines
 
 
 def write_models(rows) -> None:
@@ -88,21 +118,39 @@ def write_models(rows) -> None:
         "models below. Each record has **exactly** these keys, in this order, on every vendor. A value is `None`",
         "when the device doesn't report it.",
         "",
+        "Every model is a `TypedDict` in `clijson.models` (for editors and type checkers) and has a",
+        "[JSON Schema](https://json-schema.org/) (draft 2020-12) in [`schemas/`](../schemas/). Print one with",
+        "`clijson schema <model>` or `clijson.models.json_schema(model)`. Check output with",
+        "`clijson schema <model> --check out.json` or `clijson.models.validate(model, data)`.",
+        "",
         "Values are standardised:",
         "",
         "* statuses become `up` / `down` / `admin-down`",
         "* MAC addresses become `aa:bb:cc:dd:ee:ff`",
         "* uptimes are given as text and also in seconds where the schema has `*_seconds`",
+        "* ages, dead timers and hold times are integer seconds",
         "* the protocol in `routes` is always lower case (`bgp`, `ospf`, `isis`, `static`, `connected`, `local`, …)",
         "* `vrf` is `default` for the global table",
         "",
     ]
-    for intent, fields in SCHEMAS.items():
-        lines += [f"## `{intent}`", "", "Fields: " + ", ".join(f"`{f}`" for f in fields), "", "Produced by:", ""]
+    for intent, cls in INTENTS.items():
+        schema = json_schema(intent)
+        obj = schema if intent in SINGLE_RECORD else schema["items"]
+        shape = "one object" if intent in SINGLE_RECORD else "a list of records"
+        lines += [
+            f"## `{intent}`",
+            "",
+            f"{obj['description']} Python type: `clijson.models.{cls.__name__}` ({shape}).",
+            "",
+        ]
+        lines += [*_field_table(obj), ""]
+        for name, sub in schema.get("$defs", {}).items():
+            lines += [f"`{name}`: {sub['description']}", "", *_field_table(sub), ""]
+        lines += ["Produced by:", ""]
         lines += [f"* {p}" for p in producers.get(intent, [])] + [""]
     out = ROOT / "docs" / "models.md"
     out.write_text("\n".join(lines), encoding="utf-8")
-    print(f"wrote {out.relative_to(ROOT)}: {len(SCHEMAS)} models")
+    print(f"wrote {out.relative_to(ROOT)}: {len(INTENTS)} models")
 
 
 if __name__ == "__main__":

@@ -161,6 +161,7 @@ clijson parse out.txt -m                         # include engine/parser/confide
 clijson diff pre.txt post.txt -c "show bgp summary"   # what changed? (exit code 1 if anything did)
 clijson commands -p vrp --search lldp            # what is supported?
 clijson detect mystery.txt                       # which OS produced this?
+clijson schema bgp.summary                       # JSON Schema of a normalized model
 clijson run 10.0.0.1 -p iosxr -c "show version" -c "show bgp summary" -u admin
 clijson serve --port 8080                        # HTTP API for other languages/tools
 ```
@@ -237,7 +238,29 @@ every vendor:
 | `ospf.neighbors`, `isis.adjacency`, `ldp.neighbors`, `bfd.sessions`, `arp`, `ipv6.neighbors`, `mac.table`, `lag`, `vrfs`, `inventory`, `cpu`, `interfaces.description` | see [docs/models.md](docs/models.md) |
 
 Normalized values are standardised too. Statuses become `up` / `down` / `admin-down`, MACs become
-`aa:bb:cc:dd:ee:ff`, and uptimes are also given in seconds.
+`aa:bb:cc:dd:ee:ff`, and uptimes, ages and timers are also given in seconds.
+
+**Typed and schema'd.** Every model is a `TypedDict` (`clijson.models.BgpNeighbor`, `Route`, `Interface`, ...), so
+editors autocomplete fields and mypy/pyright check your code. Every model also has a JSON Schema (draft 2020-12)
+for consumers in other languages, API contracts or data pipelines:
+
+```python
+from typing import cast
+from clijson.models import BgpNeighbor, json_schema, validate
+
+peers = cast(list[BgpNeighbor], clijson.parse(text, "show bgp summary", "iosxr", normalize=True).normalized)
+json_schema("bgp.summary")          # dict, ready for json.dump / OpenAPI / pydantic / jsonschema
+validate("bgp.summary", peers)      # [] when the data matches the model
+```
+
+```bash
+clijson schema                                  # list the models
+clijson schema routes > routes.schema.json      # print one
+clijson schema --out schemas/                   # export all of them
+clijson parse out.txt -c "show arp" -n | clijson schema arp --check -   # validate output in CI
+```
+
+The generated schemas are also committed under [`schemas/`](schemas/).
 
 ## Extending
 

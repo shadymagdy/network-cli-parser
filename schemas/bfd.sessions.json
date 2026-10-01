@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/bfd.sessions.json",
+  "title": "clijson bfd.sessions",
+  "description": "BFD sessions.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "BFD sessions.",
+    "properties": {
+      "neighbor": {
+        "type": "string"
+      },
+      "interface": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "state": {
+        "type": "string",
+        "description": "up, down, init, admindown (lowercase)"
+      },
+      "local_discriminator": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "remote_discriminator": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "detect_time_ms": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Detection time in milliseconds"
+      }
+    },
+    "required": [
+      "neighbor",
+      "interface",
+      "state",
+      "local_discriminator",
+      "remote_discriminator",
+      "detect_time_ms"
+    ],
+    "additionalProperties": false
+  }
+}

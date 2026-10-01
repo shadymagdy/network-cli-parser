@@ -473,7 +473,7 @@ class DisplayOspfPeer(Parser):
                 state=(n.get("state") or "").lower() or None,
                 address=n.get("address"),
                 interface=n.get("interface"),
-                dead_time=n.get("dead_time"),
+                dead_time=seconds(n.get("dead_time")),
             )
             for n in data["neighbors"]
         ]
