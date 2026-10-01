@@ -7,7 +7,7 @@ models below. Each record has **exactly** these keys, in this order, on every ve
 when the device doesn't report it.
 
 Every model is a `TypedDict` in `clijson.models` (for editors and type checkers) and has a
-[JSON Schema](https://json-schema.org/) (draft 2020-12) in [`schemas/`](../schemas/). Print one with
+[JSON Schema](https://json-schema.org/) (draft 2020-12) in [`schemas/`](https://github.com/shadymagdy/network-cli-parser/tree/main/schemas). Print one with
 `clijson schema <model>` or `clijson.models.json_schema(model)`. Check output with
 `clijson schema <model> --check out.json` or `clijson.models.validate(model, data)`.
 
