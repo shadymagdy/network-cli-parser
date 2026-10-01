@@ -9,6 +9,10 @@ is on the [Normalized models](../models.md) page.
 
 ::: clijson.models.record
 
+::: clijson.checks.pseudowire_redundancy
+
+::: clijson.checks.RedundancyReport
+
 ::: clijson.models.INTENTS
     options:
       show_source: false

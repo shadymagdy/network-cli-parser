@@ -13,6 +13,7 @@ trees and falls back to a heuristic engine that structures *any* output.
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _dist_version
 
+from . import checks
 from .api import find_parser, parse, parse_file, parse_session, split_session, supported_commands
 from .diff import Change, diff
 from .exceptions import CliJsonError, ParseError, ParserNotFound, PlatformDetectionError, UnknownPlatformError
@@ -36,6 +37,7 @@ __all__ = [
     "PlatformDetectionError",
     "UnknownPlatformError",
     "__version__",
+    "checks",
     "detect_platform",
     "diff",
     "find_parser",

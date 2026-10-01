@@ -28,6 +28,7 @@ them without extra confirmation.
 | `diff_outputs` | Structural pre/post comparison. Counters and timers are ignored unless asked. | `before`, `after`, `command`?, `platform`?, `include_counters` |
 | `list_commands` | Commands with dedicated parsers | `platform`?, `search`? |
 | `get_model_schema` | JSON Schema of a normalized model | `intent` (e.g. `bgp.summary`) |
+| `check_pseudowire_redundancy` | Verdict on L2VPN PW redundancy: one forwarding PW per service, backups in standby, nothing down. With `before`, it also checks the pre-change capture and lists the changes. | `output`, `command`?, `platform`?, `before`?, `require_backup` |
 
 Large results are capped at 500 records per list and flagged with `truncated`, so a full BGP table doesn't flood
 the model's context.
@@ -92,6 +93,12 @@ your usual reverse proxy or VPN before exposing it beyond localhost.
 >
 > **Assistant** calls `parse_output(output=..., command="show bgp summary")` for each capture. It then reads
 > `normalized[*].established` and answers from the exact data, whatever the vendor.
+
+> **You:** here's `show l2vpn bridge-domain detail` from before and after adding the backup PW. Did it work?
+>
+> **Assistant** calls `check_pseudowire_redundancy(output=<after>, before=<before>, require_backup=true)`. Before the
+> change it finds "no backup pseudowire". After the change it gets `ok: true`: one forwarding PW and the new backup
+> in standby. The `changes` list shows the backup that was added.
 
 ## Embedding the server
 
