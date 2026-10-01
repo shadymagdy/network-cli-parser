@@ -26,6 +26,7 @@ Plain pip also works: `pip install -e . pytest pytest-cov PyYAML ruff`.
 | Build wheel + sdist | `uv build` |
 | Add a dependency | `uv add <pkg>` (runtime) or `uv add --group test <pkg>` |
 | Test another Python | `uv run --python 3.10 pytest` |
+| Preview the docs site | `uv run --group docs zensical serve` (http://127.0.0.1:8000) |
 
 ## Improving or adding a parser
 

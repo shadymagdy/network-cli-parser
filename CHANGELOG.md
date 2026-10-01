@@ -20,6 +20,10 @@ All notable changes to this project are documented here. The format follows
   exposes `clijson://commands` and `clijson://models/{intent}` resources, supports stdio and Streamable HTTP,
   and is built on the official `mcp` SDK v2. See [docs/mcp.md](docs/mcp.md).
 
+* Documentation site built with [Zensical](https://zensical.org), the successor of Material for MkDocs. It has
+  getting started, CLI and MCP guides, the generated command and model catalogs, and an API reference generated
+  from docstrings (mkdocstrings). It is built on every PR and deployed to GitHub Pages from `main`.
+
 ### Changed
 
 * Build and packaging moved to [uv](https://docs.astral.sh/uv/). The `uv_build` backend replaces setuptools,

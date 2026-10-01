@@ -347,8 +347,10 @@ def json_schema(intent: str) -> dict[str, Any]:
 
     Most intents normalize to an array of records; those in :data:`SINGLE_RECORD` to one object.
 
+    ```python
     >>> json_schema("bgp.summary")["items"]["properties"]["remote_as"]
     {'type': ['integer', 'string'], 'description': 'Peer AS; asdot notation (65000.1) stays a string'}
+    ```
     """
     try:
         cls = INTENTS[intent]

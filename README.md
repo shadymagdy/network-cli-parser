@@ -1,5 +1,15 @@
 # clijson — router CLI output → JSON
 
+[![CI](https://github.com/shadymagdy/network-cli-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/shadymagdy/network-cli-parser/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-zensical-indigo)](https://shadymagdy.github.io/network-cli-parser/)
+[![Python](https://img.shields.io/badge/python-3.10%20%E2%80%93%203.14-blue)](pyproject.toml)
+[![Typed](https://img.shields.io/badge/typing-mypy%20strict-informational)](pyproject.toml)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+📖 **Documentation: <https://shadymagdy.github.io/network-cli-parser/>**
+
 **clijson** (repo: `network-cli-parser`) turns the output of `show` / `display` commands from
 **Cisco IOS XR**, **Juniper Junos** and **Huawei VRP** routers into clean, predictable JSON.
 It has **no runtime dependencies**.
@@ -312,10 +322,12 @@ The project is managed with [uv](https://docs.astral.sh/uv/) (`uv.lock` pins eve
 ```bash
 uv sync                                 # create .venv with the dev dependency group
 uv run pre-commit install               # ruff lint + format on every commit
-uv run pytest                           # ~1050 tests incl. 238 fixtures
+uv run pytest                           # ~1100 tests incl. 238 fixtures
 uv run ruff check . && uv run ruff format .
+uv run mypy                             # strict type check
 uv run scripts/fixture.py check         # or `update` after an intentional parser change
-uv run scripts/gen_docs.py              # refresh docs/commands.md and docs/models.md
+uv run scripts/gen_docs.py              # refresh docs/commands.md, docs/models.md and schemas/
+uv run --group docs zensical serve      # preview the documentation site
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).

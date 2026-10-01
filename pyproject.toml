@@ -65,6 +65,10 @@ lint = [
     "types-pyyaml>=6.0.12.20260906",
 ]
 dev = [{ include-group = "test" }, { include-group = "lint" }]
+docs = [
+    "mkdocstrings-python>=2",
+    "zensical>=0.0.67",
+]
 
 [tool.uv.build-backend]
 module-name = "clijson"
