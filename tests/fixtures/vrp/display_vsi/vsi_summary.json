@@ -1,0 +1,39 @@
+{
+  "command": "display vsi",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "vsis": [
+      {
+        "name": "3100",
+        "member_discovery": null,
+        "pw_signaling": "ldp",
+        "mac_learning": "unqualify",
+        "encapsulation": "vlan",
+        "mtu": 1500,
+        "state": "up"
+      },
+      {
+        "name": "3200",
+        "member_discovery": null,
+        "pw_signaling": "ldp",
+        "mac_learning": "unqualify",
+        "encapsulation": "vlan",
+        "mtu": 1500,
+        "state": "up"
+      },
+      {
+        "name": "LAB-999",
+        "member_discovery": null,
+        "pw_signaling": "ldp",
+        "mac_learning": "unqualify",
+        "encapsulation": "ethernet",
+        "mtu": 1500,
+        "state": "down"
+      }
+    ],
+    "total": 3,
+    "up": 2,
+    "down": 1
+  }
+}

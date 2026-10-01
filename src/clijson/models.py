@@ -37,11 +37,13 @@ __all__ = [
     "MacEntry",
     "NextHop",
     "OspfNeighbor",
+    "Pseudowire",
     "Route",
     "SystemVersion",
     "Vrf",
     "json_schema",
     "mac",
+    "pw_state",
     "record",
     "seconds",
     "status",
@@ -243,7 +245,7 @@ class MacEntry(TypedDict):
     """MAC address table entries."""
 
     mac_address: Mac
-    vlan: Annotated[int | str, "VLAN ID, or VLAN / bridge-domain name where the device shows one"]
+    vlan: Annotated[int | str | None, "VLAN ID, or VLAN / bridge-domain name where the device shows one"]
     interface: str
     type: Annotated[str, "dynamic, static, ... (vendor word)"]
 
@@ -254,6 +256,21 @@ class Lag(TypedDict):
     name: str
     status: str
     members: Annotated[list[str], "Member interfaces"]
+
+
+class Pseudowire(TypedDict):
+    """L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) with redundancy role."""
+
+    service: Annotated[str | None, "VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to"]
+    neighbor: Annotated[str, "Remote PE address"]
+    pw_id: Annotated[int | None, "PW / VC ID"]
+    state: Annotated[str, "up, down or standby (vendor word lowercased if unrecognised)"]
+    role: Annotated[str | None, "primary or backup, when PW redundancy is configured"]
+    active: Annotated[bool | None, "True when the PW is forwarding, False when standby / inactive"]
+    vc_type: Annotated[str | None, "PW type, e.g. ethernet, ethernet-vlan"]
+    mtu: Annotated[int | None, "Negotiated / local PW MTU"]
+    local_label: int | None
+    remote_label: int | None
 
 
 #: Intent name -> record type.
@@ -276,6 +293,7 @@ INTENTS: dict[str, type[Any]] = {
     "vrfs": Vrf,
     "mac.table": MacEntry,
     "lag": Lag,
+    "l2vpn.pseudowires": Pseudowire,
 }
 
 #: Intents whose normalized output is a single record rather than a list of records.
@@ -460,6 +478,27 @@ def status(value: str | None) -> str | None:
     if "admin" in v and "down" in v:
         return "admin-down"
     if v.startswith("down"):
+        return "down"
+    return v
+
+
+_PW_UP = {"up", "established", "active", "operational", "forwarding"}
+_PW_STANDBY = {"standby", "hs", "st", "bk", "rs", "inactive", "hot-standby", "backup", "all ready"}
+
+
+def pw_state(value: str | None) -> str | None:
+    """Map vendor pseudowire states to ``up`` / ``standby`` / ``down`` (Junos codes such as ``HS``/``Dn`` included)."""
+    if value is None:
+        return None
+    v = str(value).strip().lower()
+    if v in _PW_UP:
+        return "up"
+    if v in _PW_STANDBY or "standby" in v:
+        return "standby"
+    if (
+        v in {"dn", "down", "vc-dn", "ld", "rd", "mm", "em", "cm", "vm", "ol", "np", "ei", "nc", "unresolved"}
+        or "down" in v
+    ):
         return "down"
     return v
 

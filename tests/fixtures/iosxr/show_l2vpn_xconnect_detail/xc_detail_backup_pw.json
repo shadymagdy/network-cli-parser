@@ -1,0 +1,178 @@
+{
+  "command": "show l2vpn xconnect detail",
+  "platform": "iosxr",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "xconnects": [
+      {
+        "group": "CUST-XC",
+        "xconnect": "PE1-CE1-200",
+        "state": "up",
+        "interworking": "none",
+        "acs": [
+          {
+            "interface": "TenGigE0/0/0/6.200",
+            "state": "up",
+            "type": "VLAN",
+            "vlan_range": [
+              200,
+              200
+            ],
+            "mtu": 1504,
+            "xc_id": "0x1080002",
+            "interworking": "none",
+            "statistics": {
+              "packets": {
+                "received": 10442,
+                "sent": 9981
+              },
+              "bytes": {
+                "received": 1082311,
+                "sent": 1010487
+              }
+            }
+          }
+        ],
+        "pws": [
+          {
+            "neighbor": "192.0.2.11",
+            "pw_id": 200,
+            "state": "up",
+            "state_detail": "established",
+            "pw_class": null,
+            "xc_id": "0xa0000003",
+            "encapsulation": "MPLS",
+            "protocol": "LDP",
+            "source_address": "192.0.2.1",
+            "pw_type": "Ethernet VLAN",
+            "control_word": "disabled",
+            "interworking": "none",
+            "backup_disable_delay": 0,
+            "pw_status_tlv": true,
+            "mpls": {
+              "label": {
+                "local": 24010,
+                "remote": 300160
+              },
+              "group_id": {
+                "local": "0x5",
+                "remote": "0x8"
+              },
+              "interface": {
+                "local": "TenGigE0/0/0/6.200",
+                "remote": "ae4.200"
+              },
+              "mtu": {
+                "local": 1500,
+                "remote": 1500
+              },
+              "pw_type": {
+                "local": "Ethernet VLAN",
+                "remote": "Ethernet VLAN"
+              }
+            },
+            "incoming_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "outgoing_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "create_time": "10/03/2026 22:01:44",
+            "last_status_change": "10/03/2026 22:01:51",
+            "statistics": {
+              "packets": {
+                "received": 9981,
+                "sent": 10442
+              },
+              "bytes": {
+                "received": 1010487,
+                "sent": 1082311
+              }
+            }
+          },
+          {
+            "neighbor": "198.51.100.21",
+            "pw_id": 200,
+            "state": "standby",
+            "state_detail": "all ready",
+            "backup": true,
+            "backup_for": {
+              "neighbor": "192.0.2.11",
+              "pw_id": 200
+            },
+            "backup_state": "inactive",
+            "pw_class": null,
+            "xc_id": "0xa0000004",
+            "encapsulation": "MPLS",
+            "protocol": "LDP",
+            "source_address": "192.0.2.1",
+            "pw_type": "Ethernet VLAN",
+            "control_word": "disabled",
+            "interworking": "none",
+            "pw_status_tlv": true,
+            "mpls": {
+              "label": {
+                "local": 24011,
+                "remote": 24019
+              },
+              "group_id": {
+                "local": "0x5",
+                "remote": "0x3"
+              },
+              "interface": {
+                "local": "TenGigE0/0/0/6.200",
+                "remote": "ae24.200"
+              },
+              "mtu": {
+                "local": 1500,
+                "remote": 1500
+              },
+              "pw_type": {
+                "local": "Ethernet VLAN",
+                "remote": "Ethernet VLAN"
+              }
+            },
+            "incoming_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "outgoing_status": {
+              "code": "0x20",
+              "text": "Standby"
+            },
+            "create_time": "10/03/2026 22:01:44",
+            "last_status_change": "10/03/2026 22:01:51"
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "PE1-CE1-200",
+      "neighbor": "192.0.2.11",
+      "pw_id": 200,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 24010,
+      "remote_label": 300160
+    },
+    {
+      "service": "PE1-CE1-200",
+      "neighbor": "198.51.100.21",
+      "pw_id": 200,
+      "state": "standby",
+      "role": "backup",
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 24011,
+      "remote_label": 24019
+    }
+  ]
+}

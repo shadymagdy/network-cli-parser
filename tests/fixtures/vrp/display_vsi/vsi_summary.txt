@@ -1,0 +1,8 @@
+Total VSI number is 3, 2 is up, 1 is down, 3 is LDP mode, 0 is BGP mode, 0 is BGPAD mode, 0 is mixed mode, 0 is unspecified mode
+--------------------------------------------------------------------------
+Vsi                    Mem    PW   Mac       Encap     Mtu   Vsi
+Name                   Disc   Type Learn     Type      Value State
+--------------------------------------------------------------------------
+3100                   --     ldp  unqualify vlan      1500  up
+3200                   --     ldp  unqualify vlan      1500  up
+LAB-999                --     ldp  unqualify ethernet  1500  down

@@ -1,0 +1,114 @@
+
+ ***VSI Name               : 3100
+    Work Mode              : bd-mode
+    Administrator VSI      : no
+    Isolate Spoken         : disable
+    VSI Index              : 1
+    PW Signaling           : ldp
+    Member Discovery Style : --
+    Bridge-domain Mode     : enable
+    PW MAC Learn Style     : unqualify
+    Encapsulation Type     : vlan
+    MTU                    : 1500
+    Diffserv Mode          : uniform
+    Service Class          : --
+    Color                  : --
+    DomainId               : 255
+    Domain Name            :
+    Ignore AcState         : disable
+    P2P VSI                : disable
+    Multicast Fast Switch  : disable
+    Create Time            : 2 days, 3 hours, 10 minutes, 12 seconds
+    VSI State              : up
+    Resource Status        : --
+
+    VSI ID                 : 3100
+   *Peer Router ID         : 192.0.2.11
+    Negotiation-vc-id      : 3100
+    Encapsulation Type     : vlan
+    primary or secondary   : primary
+    ignore-standby-state   : no
+    VC Label               : 48122
+    Peer Type              : dynamic
+    Session                : up
+    Tunnel ID              : 0x0000000001004c4b42
+    Broadcast Tunnel ID    : --
+    Broad BackupTunnel ID  : --
+    CKey                   : 1
+    NKey                   : 16777371
+    Stp Enable             : 0
+    PwIndex                : 1
+    Control Word           : disable
+    BFD for PW             : unavailable
+   *Peer Router ID         : 198.51.100.21
+    Negotiation-vc-id      : 3100
+    Encapsulation Type     : vlan
+    primary or secondary   : secondary
+    ignore-standby-state   : no
+    VC Label               : 48123
+    Peer Type              : dynamic
+    Session                : up
+    Tunnel ID              : 0x0000000001004c4b43
+    Broadcast Tunnel ID    : --
+    Broad BackupTunnel ID  : --
+    CKey                   : 2
+    NKey                   : 16777372
+    Stp Enable             : 0
+    PwIndex                : 2
+    Control Word           : disable
+    BFD for PW             : unavailable
+
+    Interface Name         : GigabitEthernet1/0/2.3100
+    State                  : up
+    Access Port            : false
+    Last Up Time           : 2026/03/11 09:14:02
+    Total Up Time          : 2 days, 3 hours, 10 minutes, 5 seconds
+
+  **PW Information:
+
+   *Peer Ip Address        : 192.0.2.11
+    PW State               : up
+    Local VC Label         : 48122
+    Remote VC Label        : 299872
+    Remote Control Word    : disable
+    PW Type                : label
+    Local  VCCV            : alert lsp-ping bfd
+    Remote VCCV            : alert lsp-ping bfd
+    Tunnel ID              : 0x0000000001004c4b42
+    Broadcast Tunnel ID    : --
+    Broad BackupTunnel ID  : --
+    Ckey                   : 1
+    Nkey                   : 16777371
+    Main PW Token          : 0x0
+    Slave PW Token         : 0x0
+    Tnl Type               : ldp
+    OutInterface           : LDP LSP
+    Backup OutInterface    : --
+    Stp Enable             : 0
+    Mac Flapping           : 0
+    Monitor Group Name     : --
+    PW Last Up Time        : 2026/03/11 09:14:05
+    PW Total Up Time       : 2 days, 3 hours, 10 minutes, 2 seconds
+   *Peer Ip Address        : 198.51.100.21
+    PW State               : standby
+    Local VC Label         : 48123
+    Remote VC Label        : 299904
+    Remote Control Word    : disable
+    PW Type                : label
+    Local  VCCV            : alert lsp-ping bfd
+    Remote VCCV            : alert lsp-ping bfd
+    Tunnel ID              : 0x0000000001004c4b43
+    Broadcast Tunnel ID    : --
+    Broad BackupTunnel ID  : --
+    Ckey                   : 2
+    Nkey                   : 16777372
+    Main PW Token          : 0x0
+    Slave PW Token         : 0x0
+    Tnl Type               : ldp
+    OutInterface           : LDP LSP
+    Backup OutInterface    : --
+    Stp Enable             : 0
+    Mac Flapping           : 0
+    Monitor Group Name     : --
+    PW Last Up Time        : 2026/03/11 09:14:06
+    PW Total Up Time       : 2 days, 3 hours, 10 minutes, 1 seconds

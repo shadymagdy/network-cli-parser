@@ -1,0 +1,35 @@
+Layer-2 Circuit Connections:
+
+Legend for connection status (St)
+EI -- encapsulation invalid      NP -- interface h/w not present
+MM -- mtu mismatch               Dn -- down
+EM -- encapsulation mismatch     VC-Dn -- Virtual circuit Down
+CM -- control-word mismatch      Up -- operational
+VM -- vlan id mismatch           CF -- Call admission control failure
+OL -- no outgoing label          IB -- TDM incompatible bitrate
+NC -- intf encaps not CCC/TCC    TM -- TDM misconfiguration
+BK -- Backup Connection          ST -- Standby Connection
+CB -- rcvd cell-bundle size bad  SP -- Static Pseudowire
+LD -- local site signaled down   RS -- remote site standby
+RD -- remote site signaled down  HS -- Hot-standby Connection
+XX -- unknown
+
+Legend for interface status
+Up -- operational
+Dn -- down
+Neighbor: 192.0.2.11
+    Interface                 Type  St     Time last up          # Up trans
+    ae4.3100(vc 3100)         rmt   Up     Mar 11 09:14:27 2026           1
+      Remote PE: 192.0.2.11, Negotiated control-word: No
+      Incoming label: 299872, Outgoing label: 300112
+      Negotiated PW status TLV: Yes
+      local PW status code: 0x00000000, Neighbor PW status code: 0x00000000
+      Local interface: ae4.3100, Status: Up, Encapsulation: VLAN
+        Description: CUSTOMER-A access circuit
+      Flow Label Transmit: Yes, Flow Label Receive: Yes
+      Connection History:
+        Mar 11 09:14:27 2026  status update timer
+        Mar 11 09:14:27 2026  PE route changed
+        Mar 11 09:14:26 2026  Out lbl Update                     300112
+        Mar 11 09:14:26 2026  In lbl Update                      299872
+        Mar 11 09:14:26 2026  loc intf up                  ae4.3100

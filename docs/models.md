@@ -370,12 +370,13 @@ MAC address table entries. Python type: `clijson.models.MacEntry` (a list of rec
 | field | type | description |
 |---|---|---|
 | `mac_address` | string | MAC address, lowercase colon-separated (aa:bb:cc:dd:ee:ff) |
-| `vlan` | integer \| string | VLAN ID, or VLAN / bridge-domain name where the device shows one |
+| `vlan` | integer \| string \| null | VLAN ID, or VLAN / bridge-domain name where the device shows one |
 | `interface` | string |  |
 | `type` | string | dynamic, static, ... (vendor word) |
 
 Produced by:
 
+* iosxr: `show l2vpn forwarding bridge-domain`
 * junos: `show ethernet-switching table`
 * junos: `show ethernet-switching table vlan-id <vlan>`
 * vrp: `display mac-address`
@@ -397,3 +398,30 @@ Produced by:
 * iosxr: `show bundle <bundle>`
 * junos: `show lacp interfaces`
 * vrp: `display eth-trunk`
+
+## `l2vpn.pseudowires`
+
+L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) with redundancy role. Python type: `clijson.models.Pseudowire` (a list of records).
+
+| field | type | description |
+|---|---|---|
+| `service` | string \| null | VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to |
+| `neighbor` | string | Remote PE address |
+| `pw_id` | integer \| null | PW / VC ID |
+| `state` | string | up, down or standby (vendor word lowercased if unrecognised) |
+| `role` | string \| null | primary or backup, when PW redundancy is configured |
+| `active` | boolean \| null | True when the PW is forwarding, False when standby / inactive |
+| `vc_type` | string \| null | PW type, e.g. ethernet, ethernet-vlan |
+| `mtu` | integer \| null | Negotiated / local PW MTU |
+| `local_label` | integer \| null |  |
+| `remote_label` | integer \| null |  |
+
+Produced by:
+
+* iosxr: `show l2vpn bridge-domain`
+* iosxr: `show l2vpn xconnect`
+* junos: `show l2circuit connections`
+* junos: `show vpls connections`
+* vrp: `display vsi`
+* vrp: `display vsi verbose`
+* vrp: `display mpls l2vc`

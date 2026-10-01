@@ -1,0 +1,25 @@
+Group Type: External                               AS: 64510          Local AS: 65000
+  Name: CUST-EBGP       Index: 3                   Flags: <Export Eval>
+  Export: [ CUST-EXPORT ]
+  Import: [ CUST-IMPORT ]
+  Holdtime: 0
+  Total peers: 2        Established: 1
+  198.51.100.2+179
+  198.51.100.6
+  inet.0: 4/6/5/0
+  inet6.0: 1/1/1/0
+
+Group Type: Internal    AS: 65000                  Local AS: 65000
+  Name: IBGP-RR         Index: 0                   Flags: <Export Eval>
+  Export: [ NHS ]
+  Holdtime: 0
+  Total peers: 1        Established: 1
+  192.0.2.1+51392
+  inet.0: 120/240/240/0
+
+Groups: 2  Peers: 3    External: 2    Internal: 1    Down peers: 1   Flaps: 2
+Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+inet.0
+                     246        124          0          0          0          0
+inet6.0
+                       1          1          0          0          0          0

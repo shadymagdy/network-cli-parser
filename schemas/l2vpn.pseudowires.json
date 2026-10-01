@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/l2vpn.pseudowires.json",
+  "title": "clijson l2vpn.pseudowires",
+  "description": "L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) with redundancy role.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) with redundancy role.",
+    "properties": {
+      "service": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to"
+      },
+      "neighbor": {
+        "type": "string",
+        "description": "Remote PE address"
+      },
+      "pw_id": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "PW / VC ID"
+      },
+      "state": {
+        "type": "string",
+        "description": "up, down or standby (vendor word lowercased if unrecognised)"
+      },
+      "role": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "primary or backup, when PW redundancy is configured"
+      },
+      "active": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "True when the PW is forwarding, False when standby / inactive"
+      },
+      "vc_type": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "PW type, e.g. ethernet, ethernet-vlan"
+      },
+      "mtu": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Negotiated / local PW MTU"
+      },
+      "local_label": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "remote_label": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "service",
+      "neighbor",
+      "pw_id",
+      "state",
+      "role",
+      "active",
+      "vc_type",
+      "mtu",
+      "local_label",
+      "remote_label"
+    ],
+    "additionalProperties": false
+  }
+}

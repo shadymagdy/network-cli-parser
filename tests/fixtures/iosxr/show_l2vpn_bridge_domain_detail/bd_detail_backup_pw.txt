@@ -1,0 +1,154 @@
+Legend: pp = Partially Programmed.
+Bridge group: BG-CUST, bridge-domain: BD3100, id: 0, state: up, ShgId: 0, MSTi: 0
+  Coupled state: disabled
+  VINE state: Default
+  MAC learning: enabled
+  MAC withdraw: enabled
+    MAC withdraw for Access PW: enabled
+    MAC withdraw sent on: bridge port up
+    MAC withdraw relaying (access to access): disabled
+  Flooding:
+    Broadcast & Multicast: enabled
+    Unknown unicast: enabled
+  MAC aging time: 300 s, Type: inactivity
+  MAC limit: 64000, Action: none, Notification: syslog
+  MAC limit reached: no, threshold: 75%
+  MAC port down flush: enabled
+  MAC Secure: disabled, Logging: disabled
+  Split Horizon Group: none
+  Dynamic ARP Inspection: disabled, Logging: disabled
+  IP Source Guard: disabled, Logging: disabled
+  DHCPv4 Snooping: disabled
+  DHCPv4 Snooping profile: none
+  IGMP Snooping: disabled
+  IGMP Snooping profile: none
+  MLD Snooping profile: none
+  Storm Control: disabled
+  Bridge MTU: 1500
+  MIB cvplsConfigIndex: 1
+  Filter MAC addresses:
+  P2MP PW: disabled
+  Multicast Source: Not Set
+  Create time: 11/03/2026 09:14:18 (2d03h ago)
+  No status change since creation
+  ACs: 1 (1 up), VFIs: 0, PWs: 2 (1 up), PBBs: 0 (0 up), VNIs: 0 (0 up)
+  List of ACs:
+    AC: TenGigE0/0/0/5.3100, state is up
+      Type VLAN; Num Ranges: 1
+      Rewrite Tags: []
+      VLAN ranges: [3100, 3100]
+      MTU 1504; XC ID 0x1080001; interworking none
+      MAC learning: enabled
+      Flooding:
+        Broadcast & Multicast: enabled
+        Unknown unicast: enabled
+      MAC aging time: 300 s, Type: inactivity
+      MAC limit: 64000, Action: none, Notification: syslog
+      MAC limit reached: no, threshold: 75%
+      MAC port down flush: enabled
+      Split Horizon Group: none
+      Statistics:
+        packets: received 18342 (multicast 0, broadcast 12, unknown unicast 4, unicast 18326), sent 17905
+        bytes: received 2241850 (multicast 0, broadcast 768, unknown unicast 256, unicast 2240826), sent 2187310
+        MAC move: 0
+      Storm control drop counters:
+        packets: broadcast 0, multicast 0, unknown unicast 0
+        bytes: broadcast 0, multicast 0, unknown unicast 0
+      Dynamic ARP inspection drop counters:
+        packets: 0, bytes: 0
+      IP source guard drop counters:
+        packets: 0, bytes: 0
+  List of Access PWs:
+    PW: neighbor 192.0.2.11, PW ID 3100, state is up ( established )
+      PW class PW-ETH-VLAN, XC ID 0xa0000001
+      Encapsulation MPLS, protocol LDP
+      Source address 192.0.2.1
+      PW type Ethernet VLAN, control word disabled, interworking none
+      PW backup disable delay 0 sec
+      Sequencing not set
+      PW Status TLV in use
+        MPLS         Local                          Remote
+        ------------ ------------------------------ ---------------------------
+        Label        24005                          300112
+        Group ID     0x2                            0x6
+        Interface    Access PW                      Access PW
+        MTU          1500                           1500
+        Control word disabled                       disabled
+        PW type      Ethernet VLAN                  Ethernet VLAN
+        VCCV CV type 0x2                            0x2
+                     (LSP ping verification)        (LSP ping verification)
+        VCCV CC type 0x6                            0x6
+                     (router alert label)           (router alert label)
+                     (TTL expiry)                   (TTL expiry)
+        ------------ ------------------------------ ---------------------------
+      Incoming Status (PW Status TLV):
+        Status code: 0x0 (Up) in Notification message
+      Outgoing Status (PW Status TLV):
+        Status code: 0x0 (Up) in Notification message
+      MIB cpwVcIndex: 3221225473
+      Create time: 11/03/2026 09:14:20 (2d03h ago)
+      Last time status changed: 11/03/2026 09:14:27 (2d03h ago)
+      MAC withdraw messages: sent 0, received 0
+      Forward-class: 0
+      Static MAC addresses:
+      Statistics:
+        packets: received 17905, sent 18342
+        bytes: received 2187310, sent 2241850
+      Storm control drop counters:
+        packets: broadcast 0, multicast 0, unknown unicast 0
+        bytes: broadcast 0, multicast 0, unknown unicast 0
+      MAC learning: enabled
+      Flooding:
+        Broadcast & Multicast: enabled
+        Unknown unicast: enabled
+      MAC aging time: 300 s, Type: inactivity
+      MAC limit: 64000, Action: none, Notification: syslog
+      MAC limit reached: no, threshold: 75%
+      MAC port down flush: enabled
+      MAC Secure: disabled, Logging: disabled
+      Split Horizon Group: none
+      DHCPv4 Snooping: disabled
+      DHCPv4 Snooping profile: none
+      IGMP Snooping: disabled
+      IGMP Snooping profile: none
+      MLD Snooping profile: none
+      Storm Control: bridge-domain policer
+      Backup PW for neighbor 198.51.100.21 PW ID 3100
+    Backup PW:
+    PW: neighbor 198.51.100.21, PW ID 3100, state is standby ( all ready )
+      Backup for neighbor 192.0.2.11 PW ID 3100 ( inactive )
+      PW class PW-ETH-VLAN, XC ID 0xa0000002
+      Encapsulation MPLS, protocol LDP
+      Source address 192.0.2.1
+      PW type Ethernet VLAN, control word disabled, interworking none
+      Sequencing not set
+      PW Status TLV in use
+        MPLS         Local                          Remote
+        ------------ ------------------------------ ---------------------------
+        Label        24006                          24017
+        Group ID     0x2                            0x4
+        Interface    Access PW                      Access PW
+        MTU          1500                           1500
+        Control word disabled                       disabled
+        PW type      Ethernet VLAN                  Ethernet VLAN
+        VCCV CV type 0x2                            0x2
+                     (LSP ping verification)        (LSP ping verification)
+        VCCV CC type 0x6                            0x6
+                     (router alert label)           (router alert label)
+                     (TTL expiry)                   (TTL expiry)
+        ------------ ------------------------------ ---------------------------
+      Incoming Status (PW Status TLV):
+        Status code: 0x0 (Up) in Notification message
+      Outgoing Status (PW Status TLV):
+        Status code: 0x20 (Standby) in Notification message
+      MIB cpwVcIndex: 3221225474
+      Create time: 11/03/2026 09:14:20 (2d03h ago)
+      Last time status changed: 11/03/2026 09:14:27 (2d03h ago)
+      MAC withdraw messages: sent 0, received 0
+      Forward-class: 0
+      Static MAC addresses:
+      Statistics:
+        packets: received 0, sent 0
+        bytes: received 0, sent 0
+  List of VFIs:
+  List of Access VFIs:

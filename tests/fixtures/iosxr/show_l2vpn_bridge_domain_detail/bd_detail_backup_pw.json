@@ -1,0 +1,207 @@
+{
+  "command": "show l2vpn bridge-domain detail",
+  "platform": "iosxr",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "bridge_domains": [
+      {
+        "group": "BG-CUST",
+        "bridge_domain": "BD3100",
+        "id": 0,
+        "state": "up",
+        "shg_id": 0,
+        "msti": 0,
+        "acs": [
+          {
+            "interface": "TenGigE0/0/0/5.3100",
+            "state": "up",
+            "type": "VLAN",
+            "vlan_range": [
+              3100,
+              3100
+            ],
+            "mtu": 1504,
+            "xc_id": "0x1080001",
+            "interworking": "none",
+            "statistics": {
+              "packets": {
+                "received": 18342,
+                "sent": 17905
+              },
+              "bytes": {
+                "received": 2241850,
+                "sent": 2187310
+              }
+            }
+          }
+        ],
+        "pws": [
+          {
+            "neighbor": "192.0.2.11",
+            "pw_id": 3100,
+            "state": "up",
+            "state_detail": "established",
+            "kind": "access",
+            "pw_class": "PW-ETH-VLAN",
+            "xc_id": "0xa0000001",
+            "encapsulation": "MPLS",
+            "protocol": "LDP",
+            "source_address": "192.0.2.1",
+            "pw_type": "Ethernet VLAN",
+            "control_word": "disabled",
+            "interworking": "none",
+            "backup_disable_delay": 0,
+            "pw_status_tlv": true,
+            "mpls": {
+              "label": {
+                "local": 24005,
+                "remote": 300112
+              },
+              "group_id": {
+                "local": "0x2",
+                "remote": "0x6"
+              },
+              "interface": {
+                "local": "Access PW",
+                "remote": "Access PW"
+              },
+              "mtu": {
+                "local": 1500,
+                "remote": 1500
+              },
+              "pw_type": {
+                "local": "Ethernet VLAN",
+                "remote": "Ethernet VLAN"
+              }
+            },
+            "incoming_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "outgoing_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "create_time": "11/03/2026 09:14:20",
+            "last_status_change": "11/03/2026 09:14:27",
+            "statistics": {
+              "packets": {
+                "received": 17905,
+                "sent": 18342
+              },
+              "bytes": {
+                "received": 2187310,
+                "sent": 2241850
+              }
+            },
+            "backup_pw": {
+              "neighbor": "198.51.100.21",
+              "pw_id": 3100
+            }
+          },
+          {
+            "neighbor": "198.51.100.21",
+            "pw_id": 3100,
+            "state": "standby",
+            "state_detail": "all ready",
+            "kind": "access",
+            "backup": true,
+            "backup_for": {
+              "neighbor": "192.0.2.11",
+              "pw_id": 3100
+            },
+            "backup_state": "inactive",
+            "pw_class": "PW-ETH-VLAN",
+            "xc_id": "0xa0000002",
+            "encapsulation": "MPLS",
+            "protocol": "LDP",
+            "source_address": "192.0.2.1",
+            "pw_type": "Ethernet VLAN",
+            "control_word": "disabled",
+            "interworking": "none",
+            "pw_status_tlv": true,
+            "mpls": {
+              "label": {
+                "local": 24006,
+                "remote": 24017
+              },
+              "group_id": {
+                "local": "0x2",
+                "remote": "0x4"
+              },
+              "interface": {
+                "local": "Access PW",
+                "remote": "Access PW"
+              },
+              "mtu": {
+                "local": 1500,
+                "remote": 1500
+              },
+              "pw_type": {
+                "local": "Ethernet VLAN",
+                "remote": "Ethernet VLAN"
+              }
+            },
+            "incoming_status": {
+              "code": "0x0",
+              "text": "Up"
+            },
+            "outgoing_status": {
+              "code": "0x20",
+              "text": "Standby"
+            },
+            "create_time": "11/03/2026 09:14:20",
+            "last_status_change": "11/03/2026 09:14:27",
+            "statistics": {
+              "packets": {
+                "received": 0,
+                "sent": 0
+              },
+              "bytes": {
+                "received": 0,
+                "sent": 0
+              }
+            }
+          }
+        ],
+        "coupled_state": "disabled",
+        "mac_learning": "enabled",
+        "split_horizon_group": "none",
+        "bridge_mtu": 1500,
+        "counts": {
+          "acs": 1,
+          "acs_up": 1,
+          "vfis": 0,
+          "pws": 2,
+          "pws_up": 1
+        }
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "BD3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3100,
+      "state": "up",
+      "role": "primary",
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 24005,
+      "remote_label": 300112
+    },
+    {
+      "service": "BD3100",
+      "neighbor": "198.51.100.21",
+      "pw_id": 3100,
+      "state": "standby",
+      "role": "backup",
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 24006,
+      "remote_label": 24017
+    }
+  ]
+}

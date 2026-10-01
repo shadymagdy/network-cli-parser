@@ -1,0 +1,48 @@
+ Total LDP VC : 2     1 up       1 down
+
+ *Client Interface     : GigabitEthernet1/0/3.200
+  Administrator PW     : no
+  AC status            : up
+  VC State             : up
+  Label state          : 0
+  Token state          : 0
+  VC ID                : 200
+  VC Type              : VLAN
+  session state        : up
+  Destination          : 192.0.2.11
+  link state           : up
+  local VC label       : 48140
+  remote VC label      : 300160
+  local VC MTU         : 1500
+  remote VC MTU        : 1500
+  local control word   : disable
+  remote control word  : disable
+  tunnel policy name   : --
+  PW template name     : --
+  primary or secondary : primary
+  load balance type    : flow
+  Access-port          : false
+  Switchover Flag      : false
+  VC tunnel info       : 1 tunnels
+    NO.0  TNL type     : ldp   , TNL ID : 0x0000000001004c4b42
+  create time          : 2 days, 14 hours, 1 minutes, 44 seconds
+  up time              : 2 days, 14 hours, 1 minutes, 37 seconds
+  last change time     : 2 days, 14 hours, 1 minutes, 37 seconds
+  VC last up time      : 2026/03/10 22:01:51
+  VC total up time     : 2 days, 14 hours, 1 minutes, 37 seconds
+
+ *Client Interface     : GigabitEthernet1/0/3.201
+  Administrator PW     : no
+  AC status            : up
+  VC State             : down
+  Label state          : 0
+  Token state          : 0
+  VC ID                : 201
+  VC Type              : VLAN
+  session state        : up
+  Destination          : 192.0.2.11
+  link state           : down
+  local VC label       : 48141
+  remote VC label      : 0
+  local VC MTU         : 1500
+  remote VC MTU        : 1600

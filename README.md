@@ -29,10 +29,10 @@ It has **no runtime dependencies**.
 
 | | |
 |---|---|
-| **Works on any command** | 161 dedicated parsers (237 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
+| **Works on any command** | 173 dedicated parsers (251 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Huawei accepts `show` as well as `display`. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from the prompt, the command verb or fingerprints in the output. If those don't settle it, **trial parsing** lets each vendor's parser try and keeps the one that understands the output. Echoed prompts, `--More--` pagers, ANSI codes, timestamps and `{master}` lines are removed. |
-| **One model for all vendors** | `normalize=True` adds a **vendor-neutral view** for 18 common concepts (BGP peers, interfaces, routes, LLDP, OSPF/IS-IS/LDP, ARP/ND, BFD, LAG, VRFs, …), so one script can handle all three vendors. |
+| **One model for all vendors** | `normalize=True` adds a **vendor-neutral view** for 19 common concepts (BGP peers, interfaces, routes, LLDP, OSPF/IS-IS/LDP, ARP/ND, BFD, LAG, VRFs, L2VPN pseudowires, …), so one script can handle all three vendors. |
 | **Structured output is native** | Junos `| display json` / `| display xml` output is recognised and flattened into clean snake_case JSON. |
 | **Config as data** | `show running-config`, `show configuration` (curly braces or `| display set`) and `display current-configuration` become nested trees. |
 | **Whole sessions** | Paste a terminal log with 20 commands and get 20 results (`parse_session`). |
@@ -40,7 +40,7 @@ It has **no runtime dependencies**.
 | **Clear about failures** | Device errors (`% Invalid input`, `syntax error`, `Error: Unrecognized command`) come back as `engine="device-error"` with the message, instead of garbage data. |
 | **Stands on giants' shoulders** | If you have [ntc-templates](https://github.com/networktocode/ntc-templates) or [Cisco Genie](https://github.com/CiscoTestAutomation/genieparser) installed, their templates become extra fallback engines automatically. |
 | **Tells you how it got the answer** | Every result carries `engine`, `parser`, `confidence`, `warnings` (for example "output was filtered by `| include`") and metadata such as the hostname and timestamp. |
-| **Tested on real output** | 238 regression fixtures: 217 captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices, plus 21 written from vendor documentation formats. |
+| **Tested on real output** | 254 regression fixtures: 217 captured from real ASR9K, NCS5500, 8000, CRS, XRv, MX, PTX, QFX, EX, SRX, NE40E, CX600, ATN, CE, S and AR devices, plus 37 written from vendor documentation formats. |
 | **Easy to use from any language** | Python API, a full CLI (`clijson`), and a zero-dependency HTTP API (`clijson serve`). |
 | **Built for AI assistants** | `clijson mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server. Claude, Cursor, VS Code and any agent can call clijson as a tool and reason over exact, schema'd data. |
 
@@ -259,6 +259,7 @@ every vendor:
 | `bgp.summary` | neighbor, remote_as, state, established, uptime, uptime_seconds, prefixes_received, vrf, address_family |
 | `routes` | prefix, protocol, next_hops, distance, metric, vrf, age |
 | `lldp.neighbors` | local_interface, neighbor, neighbor_interface, chassis_id, capabilities, ttl |
+| `l2vpn.pseudowires` | service, neighbor, pw_id, state, role (primary/backup), active, vc_type, mtu, local_label, remote_label. See the [pseudowire checks guide](docs/guides/pseudowire-checks.md). |
 | `ospf.neighbors`, `isis.adjacency`, `ldp.neighbors`, `bfd.sessions`, `arp`, `ipv6.neighbors`, `mac.table`, `lag`, `vrfs`, `inventory`, `cpu`, `interfaces.description` | see [docs/models.md](docs/models.md) |
 
 Normalized values are standardised too. Statuses become `up` / `down` / `admin-down`, MACs become
@@ -322,7 +323,7 @@ The project is managed with [uv](https://docs.astral.sh/uv/) (`uv.lock` pins eve
 ```bash
 uv sync                                 # create .venv with the dev dependency group
 uv run pre-commit install               # ruff lint + format on every commit
-uv run pytest                           # ~1100 tests incl. 238 fixtures
+uv run pytest                           # ~1200 tests incl. 254 fixtures
 uv run ruff check . && uv run ruff format .
 uv run mypy                             # strict type check
 uv run scripts/fixture.py check         # or `update` after an intentional parser change

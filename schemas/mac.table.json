@@ -15,7 +15,8 @@
       "vlan": {
         "type": [
           "integer",
-          "string"
+          "string",
+          "null"
         ],
         "description": "VLAN ID, or VLAN / bridge-domain name where the device shows one"
       },

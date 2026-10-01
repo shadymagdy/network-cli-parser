@@ -106,11 +106,18 @@ def _identity(a: list[Any], b: list[Any]) -> str | None:
         if _unique((a, b), lambda i, k=key: i.get(k)):
             return key
     # composite keys, e.g. neighbor + vrf / address family / level
-    for extra in ("vrf", "address_family", "instance", "table", "level", "family"):
+    for extra in ("vrf", "address_family", "instance", "table", "level", "family", "pw_id", "service"):
         for key in IDENTITY_KEYS:
             if _unique((a, b), lambda i, k=key, e=extra: (i.get(k), i.get(e))):
                 return f"{key}+{extra}"
     return None
+
+
+def _ident_ok(a: list[Any], b: list[Any], ident: str) -> bool:
+    if not all(isinstance(i, dict) for i in a + b):
+        return False
+    keys = ident.split("+")
+    return _unique((a, b), lambda i: tuple(i.get(k) for k in keys))
 
 
 def _key_of(item: dict[str, Any], ident: str) -> str:
@@ -118,6 +125,10 @@ def _key_of(item: dict[str, Any], ident: str) -> str:
         a, b = ident.split("+")
         return f"{a}={item.get(a)},{b}={item.get(b)}"
     return f"{ident}={item.get(ident)}"
+
+
+#: Natural keys for normalized models whose records have no single unique field (labels change, names repeat).
+INTENT_IDENTITY: dict[str, str] = {"l2vpn.pseudowires": "neighbor+pw_id"}
 
 
 def diff(
@@ -129,11 +140,19 @@ def diff(
     """Compare two parse results (or plain data) and list what changed."""
     rx = re.compile(ignore) if isinstance(ignore, str) else ignore
     changes: list[Change] = []
-    _walk(_data(before, normalized), _data(after, normalized), "", changes, rx)
+    ident = None
+    if (
+        normalized
+        and isinstance(before, ParseResult)
+        and isinstance(after, ParseResult)
+        and before.intent == after.intent
+    ):
+        ident = INTENT_IDENTITY.get(before.intent or "")
+    _walk(_data(before, normalized), _data(after, normalized), "", changes, rx, ident)
     return changes
 
 
-def _walk(a: Any, b: Any, path: str, out: list[Change], rx: Pattern[str] | None) -> None:
+def _walk(a: Any, b: Any, path: str, out: list[Change], rx: Pattern[str] | None, root_ident: str | None = None) -> None:
     if isinstance(a, dict) and isinstance(b, dict):
         for k in list(a) + [k for k in b if k not in a]:
             if rx is not None and rx.search(str(k)):
@@ -147,7 +166,7 @@ def _walk(a: Any, b: Any, path: str, out: list[Change], rx: Pattern[str] | None)
                 _walk(a[k], b[k], p, out, rx)
         return
     if isinstance(a, list) and isinstance(b, list):
-        ident = _identity(a, b) if (a or b) else None
+        ident = root_ident if root_ident and _ident_ok(a, b, root_ident) else _identity(a, b) if (a or b) else None
         if ident:
             ka = {_key_of(i, ident): i for i in a}
             kb = {_key_of(i, ident): i for i in b}

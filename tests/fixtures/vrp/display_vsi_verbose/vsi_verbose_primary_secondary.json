@@ -1,0 +1,161 @@
+{
+  "command": "display vsi verbose",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "vsis": [
+      {
+        "name": "3100",
+        "peers": [
+          {
+            "peer": "192.0.2.11",
+            "negotiation_vc_id": 3100,
+            "encapsulation_type": "vlan",
+            "primary_or_secondary": "primary",
+            "ignore_standby_state": "no",
+            "vc_label": 48122,
+            "peer_type": "dynamic",
+            "session": "up",
+            "tunnel_id": "0x0000000001004c4b42",
+            "broadcast_tunnel_id": null,
+            "broad_backup_tunnel_id": null,
+            "ckey": 1,
+            "nkey": 16777371,
+            "stp_enable": 0,
+            "pw_index": 1,
+            "control_word": "disable",
+            "bfd_for_pw": "unavailable"
+          },
+          {
+            "peer": "198.51.100.21",
+            "negotiation_vc_id": 3100,
+            "encapsulation_type": "vlan",
+            "primary_or_secondary": "secondary",
+            "ignore_standby_state": "no",
+            "vc_label": 48123,
+            "peer_type": "dynamic",
+            "session": "up",
+            "tunnel_id": "0x0000000001004c4b43",
+            "broadcast_tunnel_id": null,
+            "broad_backup_tunnel_id": null,
+            "ckey": 2,
+            "nkey": 16777372,
+            "stp_enable": 0,
+            "pw_index": 2,
+            "control_word": "disable",
+            "bfd_for_pw": "unavailable"
+          }
+        ],
+        "interfaces": [
+          {
+            "interface": "GigabitEthernet1/0/2.3100",
+            "state": "up",
+            "access_port": "false",
+            "last_up_time": "2026/03/11 09:14:02",
+            "total_up_time": "2 days, 3 hours, 10 minutes, 5 seconds"
+          }
+        ],
+        "pws": [
+          {
+            "peer": "192.0.2.11",
+            "pw_state": "up",
+            "local_vc_label": 48122,
+            "remote_vc_label": 299872,
+            "remote_control_word": "disable",
+            "pw_type": "label",
+            "local_vccv": "alert lsp-ping bfd",
+            "remote_vccv": "alert lsp-ping bfd",
+            "tunnel_id": "0x0000000001004c4b42",
+            "broadcast_tunnel_id": null,
+            "broad_backup_tunnel_id": null,
+            "ckey": 1,
+            "nkey": 16777371,
+            "main_pw_token": "0x0",
+            "slave_pw_token": "0x0",
+            "tnl_type": "ldp",
+            "out_interface": "LDP LSP",
+            "backup_out_interface": null,
+            "stp_enable": 0,
+            "mac_flapping": 0,
+            "monitor_group_name": null,
+            "pw_last_up_time": "2026/03/11 09:14:05",
+            "pw_total_up_time": "2 days, 3 hours, 10 minutes, 2 seconds"
+          },
+          {
+            "peer": "198.51.100.21",
+            "pw_state": "standby",
+            "local_vc_label": 48123,
+            "remote_vc_label": 299904,
+            "remote_control_word": "disable",
+            "pw_type": "label",
+            "local_vccv": "alert lsp-ping bfd",
+            "remote_vccv": "alert lsp-ping bfd",
+            "tunnel_id": "0x0000000001004c4b43",
+            "broadcast_tunnel_id": null,
+            "broad_backup_tunnel_id": null,
+            "ckey": 2,
+            "nkey": 16777372,
+            "main_pw_token": "0x0",
+            "slave_pw_token": "0x0",
+            "tnl_type": "ldp",
+            "out_interface": "LDP LSP",
+            "backup_out_interface": null,
+            "stp_enable": 0,
+            "mac_flapping": 0,
+            "monitor_group_name": null,
+            "pw_last_up_time": "2026/03/11 09:14:06",
+            "pw_total_up_time": "2 days, 3 hours, 10 minutes, 1 seconds"
+          }
+        ],
+        "work_mode": "bd-mode",
+        "administrator_vsi": "no",
+        "isolate_spoken": "disable",
+        "vsi_index": 1,
+        "pw_signaling": "ldp",
+        "member_discovery_style": null,
+        "bridge_domain_mode": "enable",
+        "pw_mac_learn_style": "unqualify",
+        "encapsulation_type": "vlan",
+        "mtu": 1500,
+        "diffserv_mode": "uniform",
+        "service_class": null,
+        "color": null,
+        "domain_id": 255,
+        "domain_name": null,
+        "ignore_ac_state": "disable",
+        "p2p_vsi": "disable",
+        "multicast_fast_switch": "disable",
+        "create_time": "2 days, 3 hours, 10 minutes, 12 seconds",
+        "vsi_state": "up",
+        "resource_status": null,
+        "vsi_id": 3100
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3100,
+      "state": "up",
+      "role": "primary",
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 48122,
+      "remote_label": 299872
+    },
+    {
+      "service": "3100",
+      "neighbor": "198.51.100.21",
+      "pw_id": 3100,
+      "state": "standby",
+      "role": "backup",
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 48123,
+      "remote_label": 299904
+    }
+  ]
+}

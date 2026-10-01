@@ -1,0 +1,24 @@
+Legend: pp = Partially Programmed.
+Bridge group: BG-CUST, bridge-domain: BD3100, id: 0, state: up, ShgId: 0, MSTi: 0
+  Aging: 300 s, MAC limit: 64000, Action: none, Notification: syslog
+  Filter MAC addresses: 0
+  ACs: 1 (1 up), VFIs: 0, PWs: 2 (1 up), PBBs: 0 (0 up), VNIs: 0 (0 up)
+  List of ACs:
+    Te0/0/0/5.3100, state: up, Static MAC addresses: 0
+  List of Access PWs:
+    Neighbor 192.0.2.11 pw-id 3100, state: up, Static MAC addresses: 0
+    Neighbor 198.51.100.21 pw-id 3100, state: standby, Static MAC addresses: 0
+  List of VFIs:
+  List of Access VFIs:
+Bridge group: BG-CUST, bridge-domain: BD3200, id: 1, state: up, ShgId: 0, MSTi: 0
+  Aging: 300 s, MAC limit: 64000, Action: none, Notification: syslog
+  Filter MAC addresses: 0
+  ACs: 1 (1 up), VFIs: 1, PWs: 2 (2 up), PBBs: 0 (0 up), VNIs: 0 (0 up)
+  List of ACs:
+    Te0/0/0/5.3200, state: up, Static MAC addresses: 0
+  List of Access PWs:
+  List of VFIs:
+    VFI VFI-3200 (up)
+      Neighbor 192.0.2.11 pw-id 3200, state: up, Static MAC addresses: 0
+      Neighbor 192.0.2.12 pw-id 3200, state: up, Static MAC addresses: 0
+  List of Access VFIs:

@@ -1,0 +1,54 @@
+{
+  "command": "show l2vpn forwarding bridge-domain mac-address location 0/0/CPU0",
+  "platform": "iosxr",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "0050.56a1.0b01",
+        "type": "dynamic",
+        "learned_from": "Te0/0/0/5.3100",
+        "location": "0/0/CPU0",
+        "interface": "Te0/0/0/5.3100",
+        "age": "0d 0h 0m 14s"
+      },
+      {
+        "mac_address": "0050.56a1.0b02",
+        "type": "dynamic",
+        "learned_from": "(192.0.2.11, 3100)",
+        "location": "0/0/CPU0",
+        "neighbor": "192.0.2.11",
+        "pw_id": 3100,
+        "age": "0d 0h 1m 2s"
+      },
+      {
+        "mac_address": "0050.56a1.0b03",
+        "type": "static",
+        "learned_from": "Te0/0/0/5.3100",
+        "location": "N/A",
+        "interface": "Te0/0/0/5.3100",
+        "age": null
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "mac_address": "00:50:56:a1:0b:01",
+      "vlan": null,
+      "interface": "Te0/0/0/5.3100",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "00:50:56:a1:0b:02",
+      "vlan": null,
+      "interface": "192.0.2.11:3100",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "00:50:56:a1:0b:03",
+      "vlan": null,
+      "interface": "Te0/0/0/5.3100",
+      "type": "static"
+    }
+  ]
+}
