@@ -9,6 +9,7 @@ clijson diff pre.txt post.txt -c "show bgp summary"   # what changed?
 clijson detect out.txt
 clijson schema bgp.summary                     # JSON Schema of a normalized model
 clijson serve --port 8080                      # tiny HTTP API
+clijson mcp                                    # MCP server for AI assistants (needs clijson[mcp])
 clijson run 10.0.0.1 -p iosxr -c "show version" -u admin   # live device (netmiko/scrapli)
 """
 
@@ -28,7 +29,7 @@ from .exceptions import CliJsonError
 from .platforms import detect_platform, list_platforms
 from .result import ParseResult, _rows
 
-SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "schema", "serve", "run", "version"}
+SUBCOMMANDS = {"parse", "diff", "commands", "detect", "platforms", "schema", "serve", "mcp", "run", "version"}
 
 
 def _rich_console() -> Any:  # pragma: no cover - cosmetic
@@ -262,6 +263,16 @@ def cmd_serve(args: argparse.Namespace) -> int:  # pragma: no cover - network se
     return 0
 
 
+def cmd_mcp(args: argparse.Namespace) -> int:  # pragma: no cover - blocking server
+    from .mcp_server import run
+
+    try:
+        run(args.transport, args.host, args.port)
+    except ImportError as exc:
+        raise SystemExit(f"error: {exc}") from None
+    return 0
+
+
 def cmd_run(args: argparse.Namespace) -> int:  # pragma: no cover - needs a device
     from .live import collect
 
@@ -358,6 +369,12 @@ def build_parser() -> argparse.ArgumentParser:
     ss.add_argument("--host", default="127.0.0.1")
     ss.add_argument("--port", type=int, default=8080)
     ss.set_defaults(func=cmd_serve)
+
+    sm = sub.add_parser("mcp", help="run a Model Context Protocol server for AI assistants (needs clijson[mcp])")
+    sm.add_argument("-t", "--transport", default="stdio", choices=["stdio", "http"], help="stdio (default) or http")
+    sm.add_argument("--host", default="127.0.0.1", help="bind address for --transport http")
+    sm.add_argument("--port", type=int, default=8000, help="port for --transport http (endpoint: /mcp)")
+    sm.set_defaults(func=cmd_mcp)
 
     sr = sub.add_parser("run", help="run commands on a live device and parse them (needs netmiko or scrapli)")
     sr.add_argument("host")
