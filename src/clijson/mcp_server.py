@@ -11,6 +11,7 @@ Tools (all read-only, no network access):
 ``detect_platform``     which OS produced this output?
 ``diff_outputs``        structural pre/post comparison of two captures
 ``list_commands``       commands with dedicated parsers (filterable)
+``check_pseudowire_redundancy``  verdict on L2VPN PW redundancy, optionally comparing before/after captures
 ``get_model_schema``    JSON Schema of a normalized model
 
 Resources: ``clijson://commands`` (the catalog) and ``clijson://models/{intent}`` (JSON Schemas).
@@ -26,6 +27,7 @@ from typing import Any
 
 from . import __version__
 from .api import parse, parse_session, supported_commands
+from .checks import pseudowire_redundancy
 from .diff import VOLATILE, diff
 from .exceptions import CliJsonError
 from .models import INTENTS, json_schema
@@ -36,7 +38,14 @@ clijson turns the text output of router show/display commands (Cisco IOS XR, Jun
 structured JSON. Pass the raw output exactly as captured; prompts, pagers and ANSI codes are handled. Give the
 command when you know it (abbreviations such as "sh bgp summ" work) and the platform when you know it
 (iosxr, junos, vrp); both are auto-detected otherwise. Set normalize=true to get a vendor-neutral model
-(same field names on every vendor) for BGP peers, interfaces, routes, LLDP, OSPF, IS-IS, ARP and more.
+(same field names on every vendor) for BGP peers, interfaces, routes, LLDP, OSPF, IS-IS, ARP, L2VPN
+pseudowires and more.
+
+For change verification, capture the same command before and after the change and use diff_outputs. For L2VPN
+pseudowire redundancy (VSI / bridge-domain / xconnect / l2circuit), check_pseudowire_redundancy gives a verdict
+directly: one forwarding pseudowire per service, backups in standby, nothing down. Pseudowire commands include
+"display vsi verbose", "display vsi protect-group" and "display mpls l2vc" (vrp), "show l2vpn bridge-domain
+detail" and "show l2vpn xconnect detail" (iosxr), and "show l2circuit connections" (junos).
 """
 
 #: Keep tool responses a sensible size for a model's context window.
@@ -149,6 +158,50 @@ def tool_list_commands(platform: str | None = None, search: str | None = None) -
     }
 
 
+def tool_check_pseudowire_redundancy(
+    output: str,
+    command: str | None = None,
+    platform: str | None = None,
+    before: str | None = None,
+    require_backup: bool = False,
+) -> dict[str, Any]:
+    """Check L2VPN pseudowire redundancy: one forwarding PW per service, backups in standby, nothing down.
+
+    Give the current capture as *output*; add the capture taken before a change as *before* to also get the
+    pre-change verdict and the list of changes (pseudowires matched by neighbor + PW ID).
+    """
+    try:
+        res = parse(output, command, platform, normalize=True)
+    except CliJsonError as exc:
+        return {"error": str(exc)}
+    if res.intent != "l2vpn.pseudowires":
+        return {
+            "error": f"{res.command or 'this output'} is not a pseudowire command (parsed by {res.parser or res.engine})",
+            "pseudowire_commands": [c["command"] for c in supported_commands() if c["intent"] == "l2vpn.pseudowires"],
+        }
+    report = pseudowire_redundancy(res.normalized, require_backup=require_backup)
+    out: dict[str, Any] = {
+        "platform": res.platform,
+        "command": res.command,
+        "ok": report.ok,
+        "problems": report.problems,
+        "services": report.to_dict()["services"],
+        "pseudowires": res.normalized,
+    }
+    if before is not None:
+        try:
+            pre = parse(before, res.command, res.platform, normalize=True)
+        except CliJsonError as exc:
+            return {**out, "before_error": str(exc)}
+        pre_report = pseudowire_redundancy(pre.normalized, require_backup=require_backup)
+        out["before"] = {"ok": pre_report.ok, "problems": pre_report.problems}
+        out["changes"] = [
+            {"path": c.path, "kind": c.kind, "before": c.before, "after": c.after}
+            for c in diff(pre, res, ignore=VOLATILE)
+        ]
+    return out
+
+
 def tool_get_model_schema(intent: str) -> dict[str, Any]:
     """JSON Schema of a normalized model (e.g. bgp.summary, interfaces.brief, routes)."""
     try:
@@ -227,6 +280,19 @@ def build_server(name: str = "clijson") -> Any:
     ) -> dict[str, Any]:
         return tool_list_commands(platform, search)
 
+    def check_redundancy(
+        output: Annotated[str, Field(description="Current output of a pseudowire command (after the change)")],
+        command: Command = None,
+        platform: Plat = None,
+        before: Annotated[
+            str | None, Field(description="Optional: output of the same command captured before the change")
+        ] = None,
+        require_backup: Annotated[
+            bool, Field(description="Also report services that have no backup pseudowire")
+        ] = False,
+    ) -> dict[str, Any]:
+        return tool_check_pseudowire_redundancy(output, command, platform, before, require_backup)
+
     def get_model_schema(
         intent: Annotated[str, Field(description=f"Normalized model name: {', '.join(INTENTS)}")],
     ) -> dict[str, Any]:
@@ -239,6 +305,12 @@ def build_server(name: str = "clijson") -> Any:
         (diff_outputs, "diff_outputs", "Compare two captures", tool_diff_outputs),
         (list_commands, "list_commands", "List supported commands", tool_list_commands),
         (get_model_schema, "get_model_schema", "Get a model's JSON Schema", tool_get_model_schema),
+        (
+            check_redundancy,
+            "check_pseudowire_redundancy",
+            "Check pseudowire redundancy",
+            tool_check_pseudowire_redundancy,
+        ),
     ]
     for fn, tool_name, title, impl in tools:
         server.add_tool(fn, name=tool_name, title=title, description=impl.__doc__, annotations=annotations(title))

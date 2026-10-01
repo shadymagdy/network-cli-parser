@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from clijson.mcp_server import (
+    tool_check_pseudowire_redundancy,
     tool_detect_platform,
     tool_diff_outputs,
     tool_get_model_schema,
@@ -109,6 +110,7 @@ def test_sdk_lists_read_only_tools():
         "diff_outputs",
         "list_commands",
         "get_model_schema",
+        "check_pseudowire_redundancy",
     }
     parse_tool = tools["parse_output"]
     assert parse_tool.input_schema["required"] == ["output"]
@@ -138,3 +140,60 @@ def test_sdk_reads_resources():
     commands, schema = asyncio.run(go())
     assert len(json.loads(commands.contents[0].text)) > 200
     assert json.loads(schema.contents[0].text)["title"] == "clijson bgp.summary"
+
+
+# --------------------------------------------------------------------------- #
+# Pseudowire redundancy check
+# --------------------------------------------------------------------------- #
+
+PW = (FIX / "junos" / "show_l2circuit_connections" / "l2circuit_primary_backup.txt").read_text(encoding="utf-8")
+BD = (FIX / "iosxr" / "show_l2vpn_bridge_domain_detail" / "bd_detail_backup_pw.txt").read_text(encoding="utf-8")
+
+
+def test_redundancy_healthy_service():
+    out = tool_check_pseudowire_redundancy(BD, "show l2vpn bridge-domain detail", "iosxr")
+    assert out["ok"] is True
+    assert out["problems"] == []
+    (svc,) = out["services"]
+    assert svc["active"] == ["192.0.2.11"]
+    assert svc["standby"] == ["198.51.100.21"]
+    assert svc["redundant"] is True
+
+
+def test_redundancy_reports_down_pseudowire():
+    # the Junos sample also has an MTU-mismatched circuit (vc 3200) that is down
+    out = tool_check_pseudowire_redundancy(PW, "show l2circuit connections", "junos")
+    assert out["ok"] is False
+    assert any("ae4.3200" in p and "no forwarding pseudowire" in p for p in out["problems"])
+
+
+def test_redundancy_compares_before_and_after():
+    before = BD.replace("Backup PW for neighbor 198.51.100.21 PW ID 3100", "")
+    before = before[: before.index("    Backup PW:")]  # pre-change: no backup yet
+    out = tool_check_pseudowire_redundancy(
+        BD, "show l2vpn bridge-domain detail", "iosxr", before=before, require_backup=True
+    )
+    assert out["before"]["ok"] is False
+    assert any("no backup" in p for p in out["before"]["problems"])
+    assert out["ok"] is True
+    assert any(c["kind"] == "added" and "198.51.100.21" in c["path"] for c in out["changes"])
+
+
+def test_redundancy_rejects_non_pseudowire_commands():
+    out = tool_check_pseudowire_redundancy(ARP, "show arp", "iosxr")
+    assert "error" in out
+    assert "show l2circuit connections [<args...>]" in out["pseudowire_commands"]
+
+
+def test_sdk_exposes_redundancy_tool():
+    async def go():
+        async with _client() as client:
+            tools = {t.name: t for t in (await client.list_tools()).tools}
+            result = await client.call_tool(
+                "check_pseudowire_redundancy", {"output": BD, "command": "show l2vpn bridge-domain detail"}
+            )
+            return tools, result
+
+    tools, result = asyncio.run(go())
+    assert tools["check_pseudowire_redundancy"].annotations.read_only_hint is True
+    assert _structured(result)["ok"] is True

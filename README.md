@@ -195,7 +195,7 @@ claude mcp add clijson -- uvx --from "clijson[mcp]" clijson mcp     # Claude Cod
 
 For Claude Desktop, Cursor or VS Code, add the same command (`uvx --from clijson[mcp] clijson mcp`) to the
 client's MCP config. The assistant gets read-only tools: `parse_output`, `parse_session`, `detect_platform`,
-`diff_outputs`, `list_commands` and `get_model_schema`. Setup for each client and the HTTP transport are
+`diff_outputs`, `list_commands`, `get_model_schema` and `check_pseudowire_redundancy`. Setup for each client and the HTTP transport are
 covered in **[docs/mcp.md](docs/mcp.md)**.
 
 ## How it works

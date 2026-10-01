@@ -6,6 +6,18 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.3.1 - 2026-10-01
+
+### Added
+
+* `clijson.checks.pseudowire_redundancy()` gives a verdict on normalized pseudowires: one forwarding PW per
+  service, backups in standby, nothing down, and optionally "every service has a backup". It returns a
+  `RedundancyReport` with the problems and a per-service status.
+* MCP tool `check_pseudowire_redundancy`. It runs that check on a capture and, given the pre-change capture as
+  `before`, also returns the pre-change verdict and the changes.
+* The MCP server instructions now tell assistants about the pseudowire commands and the change-verification
+  workflow.
+
 ## 0.3.0 - 2026-10-01
 
 ### Added

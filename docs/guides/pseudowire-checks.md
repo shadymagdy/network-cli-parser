@@ -81,26 +81,16 @@ def pseudowires(capture: str, command: str, platform: str) -> list[dict]:
     return clijson.parse(capture, command, platform, normalize=True).normalized or []
 
 
-def redundancy_problems(pws: list[dict]) -> list[str]:
-    """Every service needs exactly one active PW and its backups in standby."""
-    problems = []
-    for key in {(pw["service"], pw["pw_id"]) for pw in pws}:
-        group = [pw for pw in pws if (pw["service"], pw["pw_id"]) == key]
-        active = [pw for pw in group if pw["active"]]
-        if len(active) != 1:
-            problems.append(f"{key}: {len(active)} active pseudowires")
-        for pw in group:
-            if pw["role"] == "backup" and pw["state"] != "standby":
-                problems.append(f"{key}: backup {pw['neighbor']} is {pw['state']}, expected standby")
-            if pw["state"] == "down":
-                problems.append(f"{key}: {pw['neighbor']} is down")
-    return problems
+# one forwarding PW per service, backups in standby, nothing down
+report = clijson.checks.pseudowire_redundancy(pseudowires(capture, "show l2circuit connections", "junos"))
+print(report.ok, report.problems)
 ```
 
-**Pre-check.** Capture the commands above and save the results. If `redundancy_problems()` already reports
-something, stop: the change would build on a broken service.
+**Pre-check.** Capture the commands above and save the results. If `clijson.checks.pseudowire_redundancy()`
+already reports problems, stop: the change would build on a broken service. Pass `require_backup=True` to list the
+services that don't have a backup yet.
 
-**Post-check.** Capture again, then run `redundancy_problems()` and `clijson.diff()`:
+**Post-check.** Capture again, then run `clijson.checks.pseudowire_redundancy()` and `clijson.diff()`:
 
 ```python
 before = clijson.parse(pre_capture, "show l2circuit connections", "junos", normalize=True)
@@ -121,6 +111,10 @@ configured revert timer.
 ```bash
 clijson diff pre.txt failover.txt -c "show l2circuit connections" -p junos
 ```
+
+**From an AI assistant.** The [MCP server](../mcp.md) has a `check_pseudowire_redundancy` tool. Give it the
+post-change capture as `output` and the pre-change capture as `before`, and it returns both verdicts plus the
+changes in one call.
 
 ## Common findings
 
