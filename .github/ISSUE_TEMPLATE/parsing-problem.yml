@@ -1,0 +1,50 @@
+name: Parsing problem
+description: A command parses wrongly, partially, or falls back to the generic engine
+labels: ["parser"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! A sanitised capture is the most useful thing you can give us. Please replace hostnames,
+        public IPs, serial numbers and customer descriptions before pasting.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: [Cisco IOS XR, Juniper Junos, Huawei VRP, Other]
+    validations:
+      required: true
+  - type: input
+    id: release
+    attributes:
+      label: OS release and hardware
+      placeholder: "e.g. IOS XR 7.11.2 on NCS-5501, Junos 23.4R2 on MX204, VRP V800R022 on NE40E"
+  - type: input
+    id: command
+    attributes:
+      label: Command
+      placeholder: show bgp vrf all summary
+    validations:
+      required: true
+  - type: textarea
+    id: capture
+    attributes:
+      label: Device output (sanitised)
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: got
+    attributes:
+      label: What clijson returned
+      description: Output of `clijson parse capture.txt -p <platform> -c "<command>" -m`
+      render: json
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: input
+    id: version
+    attributes:
+      label: clijson version
+      placeholder: output of `clijson version`

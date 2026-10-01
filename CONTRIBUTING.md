@@ -57,3 +57,8 @@ Guidelines:
 
 Open an issue with the platform, OS release, the exact command and a sanitised capture. Include what you
 expected to get.
+
+## Security and conduct
+
+Report vulnerabilities privately (see [SECURITY.md](SECURITY.md)). Everyone taking part is expected to follow
+the [code of conduct](CODE_OF_CONDUCT.md). Maintainers cut releases as described in [RELEASING.md](RELEASING.md).

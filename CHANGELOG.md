@@ -24,6 +24,11 @@ All notable changes to this project are documented here. The format follows
   getting started, CLI and MCP guides, the generated command and model catalogs, and an API reference generated
   from docstrings (mkdocstrings). It is built on every PR and deployed to GitHub Pages from `main`.
 
+* Release automation: pushing a `vX.Y.Z` tag builds, attests and publishes to PyPI with trusted publishing, then
+  creates a GitHub release from the changelog ([RELEASING.md](RELEASING.md)).
+* CodeQL code scanning, issue forms (parsing problem, feature request), a PR template, CODEOWNERS, `SECURITY.md`
+  and `CODE_OF_CONDUCT.md`.
+
 ### Changed
 
 * Build and packaging moved to [uv](https://docs.astral.sh/uv/). The `uv_build` backend replaces setuptools,
