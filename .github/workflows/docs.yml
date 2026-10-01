@@ -33,8 +33,6 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
-    # Needs Settings -> Pages -> Source: "GitHub Actions"; until then the deploy is skipped without failing main.
-    continue-on-error: true
     permissions:
       pages: write
       id-token: write
