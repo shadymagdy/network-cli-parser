@@ -1,0 +1,15 @@
+name: Feature request
+description: A new command, platform, model or capability
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help?
+      description: For a new command, include a sample capture if you can.
