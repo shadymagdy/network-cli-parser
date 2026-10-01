@@ -1,0 +1,56 @@
+{
+  "command": "display vsi protect-group",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "groups": [
+      {
+        "vsi": "3100",
+        "name": "3100",
+        "members": [
+          {
+            "peer": "192.0.2.11",
+            "pw_id": 3100,
+            "preference": 1,
+            "state": "Active"
+          },
+          {
+            "peer": "198.51.100.21",
+            "pw_id": 3100,
+            "preference": 2,
+            "state": "Inactive"
+          }
+        ],
+        "protect_mode": "pw-redundancy master",
+        "reroute_policy": "immediately",
+        "reroute_delay_time": null
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3100,
+      "state": "up",
+      "role": "primary",
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": null,
+      "remote_label": null
+    },
+    {
+      "service": "3100",
+      "neighbor": "198.51.100.21",
+      "pw_id": 3100,
+      "state": "standby",
+      "role": "backup",
+      "active": false,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": null,
+      "remote_label": null
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "command": "show l2circuit connections",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "connections": [
+      {
+        "neighbor": "192.0.2.11",
+        "pw_id": 3100,
+        "type": "remote",
+        "status": "Up",
+        "status_text": "operational",
+        "last_up": "Mar 11 09:14:27 2026",
+        "up_transitions": 1,
+        "interface": "ae4.3100",
+        "remote_pe": "192.0.2.11",
+        "negotiated_control_word": false,
+        "incoming_label": 299872,
+        "outgoing_label": 300112,
+        "negotiated_pw_status_tlv": true,
+        "local_pw_status_code": "0x00000000",
+        "neighbor_pw_status_code": "0x00000000",
+        "local_interface": "ae4.3100",
+        "encapsulation": "VLAN",
+        "local_interface_status": "Up",
+        "flow_label_transmit": true,
+        "flow_label_receive": true
+      },
+      {
+        "neighbor": "192.0.2.11",
+        "pw_id": 3200,
+        "type": "remote",
+        "status": "MM",
+        "status_text": "mtu mismatch",
+        "last_up": null,
+        "up_transitions": 0,
+        "interface": "ae4.3200",
+        "remote_pe": "192.0.2.11",
+        "negotiated_control_word": false,
+        "incoming_label": 299888,
+        "outgoing_label": 300128,
+        "negotiated_pw_status_tlv": true,
+        "local_pw_status_code": "0x00000000",
+        "neighbor_pw_status_code": "0x00000000",
+        "local_interface": "ae4.3200",
+        "encapsulation": "VLAN",
+        "local_interface_status": "Up"
+      },
+      {
+        "neighbor": "198.51.100.21",
+        "pw_id": 3100,
+        "type": "remote",
+        "status": "HS",
+        "status_text": "hot-standby connection",
+        "last_up": null,
+        "up_transitions": 0,
+        "interface": "ae4.3100",
+        "remote_pe": "198.51.100.21",
+        "negotiated_control_word": false,
+        "incoming_label": 299904,
+        "outgoing_label": 24017,
+        "negotiated_pw_status_tlv": true,
+        "local_pw_status_code": "0x00000020",
+        "neighbor_pw_status_code": "0x00000000",
+        "local_interface": "ae4.3100",
+        "encapsulation": "VLAN",
+        "local_interface_status": "Up",
+        "flow_label_transmit": true,
+        "flow_label_receive": true
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "ae4.3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3100,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": null,
+      "local_label": 299872,
+      "remote_label": 300112
+    },
+    {
+      "service": "ae4.3200",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3200,
+      "state": "down",
+      "role": null,
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": null,
+      "local_label": 299888,
+      "remote_label": 300128
+    },
+    {
+      "service": "ae4.3100",
+      "neighbor": "198.51.100.21",
+      "pw_id": 3100,
+      "state": "standby",
+      "role": "backup",
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": null,
+      "local_label": 299904,
+      "remote_label": 24017
+    }
+  ]
+}

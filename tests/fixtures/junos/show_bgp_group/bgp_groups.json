@@ -1,0 +1,83 @@
+{
+  "command": "show bgp group",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "groups": [
+      {
+        "type": "external",
+        "peer_as": 64510,
+        "local_as": 65000,
+        "peers": [
+          "198.51.100.2",
+          "198.51.100.6"
+        ],
+        "name": "CUST-EBGP",
+        "index": 3,
+        "flags": [
+          "Export",
+          "Eval"
+        ],
+        "export": [
+          "CUST-EXPORT"
+        ],
+        "import": [
+          "CUST-IMPORT"
+        ],
+        "holdtime": 0,
+        "total_peers": 2,
+        "established": 1,
+        "tables": {
+          "inet.0": {
+            "active": 4,
+            "received": 6,
+            "accepted": 5,
+            "damped": 0
+          },
+          "inet6.0": {
+            "active": 1,
+            "received": 1,
+            "accepted": 1,
+            "damped": 0
+          }
+        }
+      },
+      {
+        "type": "internal",
+        "peer_as": 65000,
+        "local_as": 65000,
+        "peers": [
+          "192.0.2.1"
+        ],
+        "name": "IBGP-RR",
+        "index": 0,
+        "flags": [
+          "Export",
+          "Eval"
+        ],
+        "export": [
+          "NHS"
+        ],
+        "holdtime": 0,
+        "total_peers": 1,
+        "established": 1,
+        "tables": {
+          "inet.0": {
+            "active": 120,
+            "received": 240,
+            "accepted": 240,
+            "damped": 0
+          }
+        }
+      }
+    ],
+    "totals": {
+      "groups": 2,
+      "peers": 3,
+      "external": 2,
+      "internal": 1,
+      "down_peers": 1,
+      "flaps": 2
+    }
+  }
+}

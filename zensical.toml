@@ -23,6 +23,9 @@ nav = [
     { "Normalized models" = "models.md" },
     { "AI assistants (MCP)" = "mcp.md" },
   ] },
+  { "Guides" = [
+    { "Pseudowire redundancy checks" = "guides/pseudowire-checks.md" },
+  ] },
   { "Developer guide" = [
     { "Architecture" = "architecture.md" },
     { "Writing parsers" = "writing-parsers.md" },

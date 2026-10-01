@@ -220,7 +220,7 @@ class DisplayIpv6Neighbors(Parser):
 
 @register(
     "vrp",
-    "display mac-address [(dynamic|static|black-hole|summary|vlan <vlan>|interface <interface>|<mac>)]",
+    "display mac-address [(dynamic|static|black-hole|summary)] [(vlan <vlan>|vsi <vsi>|bridge-domain <bd>|interface <interface>|<mac>)]",
     intent="mac.table",
 )
 class DisplayMacAddress(Parser):

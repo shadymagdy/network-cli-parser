@@ -1,0 +1,12 @@
+The total number of bridge-domains is : 3
+--------------------------------------------------------------------------------
+MAC_LRN: MAC learning;      STAT: Statistics;    SPLIT: Split-horizon;
+BC: Broadcast;              MC: Unknown multicast;    UC: Unknown unicast;
+*down: Administratively down;  FWD: Forward;   DSD: Discard;
+--------------------------------------------------------------------------------
+
+BDID  State MAC-LRN STAT    BC  MC  UC  SPLIT   Description
+--------------------------------------------------------------------------------
+3100  up    enable  enable  FWD FWD FWD enable  CUSTOMER-A
+3200  up    enable  disable FWD FWD FWD enable
+999   *down enable  disable FWD FWD DSD disable lab

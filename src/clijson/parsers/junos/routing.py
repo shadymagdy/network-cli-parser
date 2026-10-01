@@ -937,3 +937,132 @@ class ShowBfdSession(Parser):
             )
             for s in data["sessions"]
         ]
+
+
+# --------------------------------------------------------------------------- #
+# BGP groups and the forwarding table
+# --------------------------------------------------------------------------- #
+
+
+@register("junos", "show bgp group [<args...>]")
+class ShowBgpGroup(Parser):
+    """BGP groups: type, AS, local AS, flags, export/import policies, peer counts, peers and per-table path counts."""
+
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"groups": []}
+        cur: dict[str, Any] | None = None
+        for raw in text.splitlines():
+            s = raw.strip()
+            if not s:
+                continue
+            m = re.match(r"^Group Type:\s*(?P<type>\S+)(?:\s+AS:\s*(?P<as>\S+))?(?:\s+Local AS:\s*(?P<las>\S+))?", s)
+            if m:
+                cur = {"type": m["type"].lower(), "peer_as": to_num(m["as"]), "local_as": to_num(m["las"]), "peers": []}
+                out["groups"].append(cur)
+                continue
+            m = re.match(
+                r"^Groups:\s*(\d+)\s+Peers:\s*(\d+)\s+External:\s*(\d+)\s+Internal:\s*(\d+)\s+Down peers:\s*(\d+)\s+Flaps:\s*(\d+)",
+                s,
+            )
+            if m:
+                out["totals"] = dict(
+                    zip(("groups", "peers", "external", "internal", "down_peers", "flaps"), map(int, m.groups()))
+                )
+                cur = None
+                continue
+            if cur is None:
+                continue
+            m = re.match(r"^Name:\s*(?P<name>\S+)(?:\s+Index:\s*(?P<idx>\d+))?(?:\s+Flags:\s*<(?P<flags>[^>]*)>)?", s)
+            if m:
+                cur["name"] = m["name"]
+                if m["idx"]:
+                    cur["index"] = int(m["idx"])
+                if m["flags"] is not None:
+                    cur["flags"] = m["flags"].split()
+                continue
+            m = re.match(r"^(Export|Import):\s*\[\s*(.*?)\s*\]", s)
+            if m:
+                cur[m.group(1).lower()] = m.group(2).split()
+                continue
+            m = re.match(r"^Total peers:\s*(\d+)\s+Established:\s*(\d+)", s)
+            if m:
+                cur["total_peers"], cur["established"] = int(m.group(1)), int(m.group(2))
+                continue
+            m = re.match(r"^(?P<addr>[0-9a-fA-F.:]+)(?:\+(?P<port>\d+))?$", s)
+            if m and ("." in m["addr"] or ":" in m["addr"]):
+                cur["peers"].append(m["addr"])
+                continue
+            m = re.match(r"^(?P<table>[\w.\-]+):\s*(?P<a>\d+)/(?P<r>\d+)/(?P<b>\d+)/(?P<c>\d+)$", s)
+            if m:
+                cur.setdefault("tables", {})[m["table"]] = {
+                    "active": int(m["a"]),
+                    "received": int(m["r"]),
+                    "accepted": int(m["b"]),
+                    "damped": int(m["c"]),
+                }
+                continue
+            m = re.match(r"^(Holdtime|Local Address|Route Queue Timer|Route Queue):\s*(.+)$", s)
+            if m:
+                cur[snake(m.group(1))] = to_num(m.group(2).strip())
+        return out
+
+
+_FT_ROW = re.compile(
+    r"^(?P<dest>\S+)\s+(?P<type>user|perm|intf|dest|rslv|clon|iddn|ifdn|perm|sock|caching|recv|locl|ecmp|\w+)\s+"
+    r"(?P<rtref>\d+)\s+(?:(?P<nh>[0-9a-fA-F.:]+|[0-9a-fA-F]{1,2}(?::[0-9a-fA-F]{1,2}){5})\s+)?"
+    r"(?P<nhtype>ucst|ulst|indr|rjct|dscd|locl|mcst|bcst|mdsc|recv|resp|hold|deny|comp|intf|rslv|chain|\w+)\s+"
+    r"(?P<index>\d+)\s+(?P<nhref>\d+)(?:\s+(?P<netif>\S+))?\s*$"
+)
+_FT_CONT = re.compile(
+    r"^\s+(?:(?P<nh>[0-9a-fA-F.:]+)\s+)?(?P<nhtype>ucst|ulst|indr|rjct|dscd|locl|\w+)\s+(?P<index>\d+)\s+(?P<nhref>\d+)(?:\s+(?P<netif>\S+))?\s*$"
+)
+
+
+@register("junos", "show route forwarding-table [<args...>]")
+class ShowRouteForwardingTable(Parser):
+    """Forwarding table (PFE view): destination, route type, next hop, next-hop type and index, outgoing interface."""
+
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"routes": []}
+        table, family = None, None
+        last: dict[str, Any] | None = None
+        for raw in text.splitlines():
+            if not raw.strip():
+                continue
+            m = re.match(r"^Routing table:\s*(\S+)", raw)
+            if m:
+                table = m.group(1)
+                continue
+            m = re.match(r"^(Internet6?|MPLS|Bridging|VPLS|ISO|Internet):\s*$", raw.strip())
+            if m:
+                family = m.group(1).lower()
+                continue
+            if raw.lstrip().startswith("Destination"):
+                continue
+            m = _FT_ROW.match(raw)
+            if m and not raw[0].isspace():
+                last = {
+                    "table": table,
+                    "family": family,
+                    "destination": m["dest"],
+                    "route_type": m["type"],
+                    "route_references": int(m["rtref"]),
+                    "next_hops": [],
+                }
+                last["next_hops"].append(_ft_nh(m))
+                out["routes"].append(last)
+                continue
+            m = _FT_CONT.match(raw)
+            if m and last is not None:
+                last["next_hops"].append(_ft_nh(m))
+        return out
+
+
+def _ft_nh(m: re.Match[str]) -> dict[str, Any]:
+    return {
+        "next_hop": m["nh"],
+        "type": m["nhtype"],
+        "index": int(m["index"]),
+        "references": int(m["nhref"]),
+        "interface": m["netif"],
+    }

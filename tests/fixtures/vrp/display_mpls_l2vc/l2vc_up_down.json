@@ -1,0 +1,92 @@
+{
+  "command": "display mpls l2vc",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "vcs": [
+      {
+        "interface": "GigabitEthernet1/0/3.200",
+        "administrator_pw": "no",
+        "ac_status": "up",
+        "vc_state": "up",
+        "label_state": 0,
+        "token_state": 0,
+        "vc_id": 200,
+        "vc_type": "VLAN",
+        "session_state": "up",
+        "destination": "192.0.2.11",
+        "link_state": "up",
+        "local_vc_label": 48140,
+        "remote_vc_label": 300160,
+        "local_vc_mtu": 1500,
+        "remote_vc_mtu": 1500,
+        "local_control_word": "disable",
+        "remote_control_word": "disable",
+        "tunnel_policy_name": null,
+        "pw_template_name": null,
+        "primary_or_secondary": "primary",
+        "load_balance_type": "flow",
+        "access_port": "false",
+        "switchover_flag": "false",
+        "vc_tunnel_info": "1 tunnels",
+        "tunnels": [
+          {
+            "type": "ldp",
+            "tunnel_id": "0x0000000001004c4b42"
+          }
+        ],
+        "create_time": "2 days, 14 hours, 1 minutes, 44 seconds",
+        "up_time": "2 days, 14 hours, 1 minutes, 37 seconds",
+        "last_change_time": "2 days, 14 hours, 1 minutes, 37 seconds",
+        "vc_last_up_time": "2026/03/10 22:01:51",
+        "vc_total_up_time": "2 days, 14 hours, 1 minutes, 37 seconds"
+      },
+      {
+        "interface": "GigabitEthernet1/0/3.201",
+        "administrator_pw": "no",
+        "ac_status": "up",
+        "vc_state": "down",
+        "label_state": 0,
+        "token_state": 0,
+        "vc_id": 201,
+        "vc_type": "VLAN",
+        "session_state": "up",
+        "destination": "192.0.2.11",
+        "link_state": "down",
+        "local_vc_label": 48141,
+        "remote_vc_label": 0,
+        "local_vc_mtu": 1500,
+        "remote_vc_mtu": 1600
+      }
+    ],
+    "total": 2,
+    "up": 1,
+    "down": 1
+  },
+  "normalized": [
+    {
+      "service": "GigabitEthernet1/0/3.200",
+      "neighbor": "192.0.2.11",
+      "pw_id": 200,
+      "state": "up",
+      "role": "primary",
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 48140,
+      "remote_label": 300160
+    },
+    {
+      "service": "GigabitEthernet1/0/3.201",
+      "neighbor": "192.0.2.11",
+      "pw_id": 201,
+      "state": "down",
+      "role": null,
+      "active": false,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": 48141,
+      "remote_label": 0
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "command": "show vpls connections",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "connections": [
+      {
+        "instance": "VPLS-CUST-B",
+        "pw_id": 4100,
+        "type": "remote",
+        "status": "Up",
+        "status_text": "operational",
+        "last_up": "Mar 11 09:20:02 2026",
+        "up_transitions": 1,
+        "neighbor": "192.0.2.11",
+        "vpls_id": 4100,
+        "remote_pe": "192.0.2.11",
+        "negotiated_control_word": false,
+        "incoming_label": 262145,
+        "outgoing_label": 262161,
+        "negotiated_pw_status_tlv": false,
+        "local_interface": "lsi.1048832",
+        "encapsulation": "ETHERNET",
+        "local_interface_status": "Up",
+        "description": "Intf - vpls VPLS-CUST-B neighbor 192.0.2.11 vpls-id 4100"
+      },
+      {
+        "instance": "VPLS-CUST-B",
+        "pw_id": 4100,
+        "type": "remote",
+        "status": "Dn",
+        "status_text": "down",
+        "last_up": null,
+        "up_transitions": 0,
+        "neighbor": "198.51.100.21",
+        "vpls_id": 4100
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "VPLS-CUST-B",
+      "neighbor": "192.0.2.11",
+      "pw_id": 4100,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": "ethernet",
+      "mtu": null,
+      "local_label": 262145,
+      "remote_label": 262161
+    },
+    {
+      "service": "VPLS-CUST-B",
+      "neighbor": "198.51.100.21",
+      "pw_id": 4100,
+      "state": "down",
+      "role": null,
+      "active": false,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": null,
+      "remote_label": null
+    }
+  ]
+}

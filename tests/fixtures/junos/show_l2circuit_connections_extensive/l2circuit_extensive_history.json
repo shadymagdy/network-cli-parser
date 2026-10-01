@@ -1,0 +1,68 @@
+{
+  "command": "show l2circuit connections extensive",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "connections": [
+      {
+        "neighbor": "192.0.2.11",
+        "pw_id": 3100,
+        "type": "remote",
+        "status": "Up",
+        "status_text": "operational",
+        "last_up": "Mar 11 09:14:27 2026",
+        "up_transitions": 1,
+        "interface": "ae4.3100",
+        "remote_pe": "192.0.2.11",
+        "negotiated_control_word": false,
+        "incoming_label": 299872,
+        "outgoing_label": 300112,
+        "negotiated_pw_status_tlv": true,
+        "local_pw_status_code": "0x00000000",
+        "neighbor_pw_status_code": "0x00000000",
+        "local_interface": "ae4.3100",
+        "encapsulation": "VLAN",
+        "local_interface_status": "Up",
+        "description": "CUSTOMER-A access circuit",
+        "flow_label_transmit": true,
+        "flow_label_receive": true,
+        "history": [
+          {
+            "time": "Mar 11 09:14:27 2026",
+            "event": "status update timer"
+          },
+          {
+            "time": "Mar 11 09:14:27 2026",
+            "event": "PE route changed"
+          },
+          {
+            "time": "Mar 11 09:14:26 2026",
+            "event": "Out lbl Update                     300112"
+          },
+          {
+            "time": "Mar 11 09:14:26 2026",
+            "event": "In lbl Update                      299872"
+          },
+          {
+            "time": "Mar 11 09:14:26 2026",
+            "event": "loc intf up                  ae4.3100"
+          }
+        ]
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "ae4.3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": 3100,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": null,
+      "local_label": 299872,
+      "remote_label": 300112
+    }
+  ]
+}

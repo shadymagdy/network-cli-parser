@@ -1,0 +1,30 @@
+{
+  "command": "display vsi peer-info",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "vsis": [
+      {
+        "name": "3100",
+        "peers": [
+          {
+            "peer": "192.0.2.11",
+            "vc_label": 48122,
+            "peer_type": "dynamic",
+            "session": "up",
+            "tunnel_id": "0x0000000001004c4b42",
+            "status": "up"
+          },
+          {
+            "peer": "198.51.100.21",
+            "vc_label": 48123,
+            "peer_type": "dynamic",
+            "session": "up",
+            "tunnel_id": "0x0000000001004c4b43",
+            "status": "up"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+Layer-2 VPN connections:
+
+Legend for connection status (St)
+EI -- encapsulation invalid      NC -- interface encapsulation not CCC/TCC/VPLS
+EM -- encapsulation mismatch     WE -- interface and instance encaps not same
+VC-Dn -- Virtual circuit down    NP -- interface hardware not present
+CM -- control-word mismatch      -> -- only outbound connection is up
+CN -- circuit not provisioned    <- -- only inbound connection is up
+OR -- out of range               Up -- operational
+OL -- no outgoing label          Dn -- down
+LD -- local site signaled down   CF -- call admission control failure
+RD -- remote site signaled down  SC -- local and remote site ID collision
+LN -- local site not designated  LM -- local site ID not minimum designated
+RN -- remote site not designated RM -- remote site ID not minimum designated
+XX -- unknown connection status  IL -- no incoming label
+MM -- MTU mismatch               MI -- Mesh-Group ID not available
+BK -- Backup connection          ST -- Standby connection
+PF -- Profile parse failure      PB -- Profile busy
+RS -- remote site standby        SN -- Static Neighbor
+LB -- Local site not best-site   RB -- Remote site not best-site
+VM -- VLAN ID mismatch           HS -- Hot-standby Connection
+
+Legend for interface status
+Up -- operational
+Dn -- down
+
+Instance: VPLS-CUST-B
+  VPLS-id: 4100
+    Neighbor                  Type  St     Time last up          # Up trans
+    192.0.2.11(vpls-id 4100)  rmt   Up     Mar 11 09:20:02 2026           1
+      Remote PE: 192.0.2.11, Negotiated control-word: No
+      Incoming label: 262145, Outgoing label: 262161
+      Negotiated PW status TLV: No
+      Local interface: lsi.1048832, Status: Up, Encapsulation: ETHERNET
+        Description: Intf - vpls VPLS-CUST-B neighbor 192.0.2.11 vpls-id 4100
+    198.51.100.21(vpls-id 4100) rmt   Dn     -----                          0

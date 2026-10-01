@@ -1,0 +1,10 @@
+ VSI Name            : 3100
+ Protect Group       : 3100
+ Protect Mode        : pw-redundancy master
+ Reroute Policy      : immediately
+ Reroute Delay Time  : --
+ -----------------------------------------------------------
+ Peer                Pw-Id       Preference   Active-State
+ -----------------------------------------------------------
+ 192.0.2.11          3100        1            Active
+ 198.51.100.21       3100        2            Inactive

@@ -1,0 +1,66 @@
+Group CUST-XC, XC PE1-CE1-200, state is up; Interworking none
+  AC: TenGigE0/0/0/6.200, state is up
+    Type VLAN; Num Ranges: 1
+    Rewrite Tags: []
+    VLAN ranges: [200, 200]
+    MTU 1504; XC ID 0x1080002; interworking none
+    Statistics:
+      packets: received 10442, sent 9981
+      bytes: received 1082311, sent 1010487
+      drops: illegal VLAN 0, illegal length 0
+  PW: neighbor 192.0.2.11, PW ID 200, state is up ( established )
+    PW class not set, XC ID 0xa0000003
+    Encapsulation MPLS, protocol LDP
+    Source address 192.0.2.1
+    PW type Ethernet VLAN, control word disabled, interworking none
+    PW backup disable delay 0 sec
+    Sequencing not set
+    PW Status TLV in use
+      MPLS         Local                          Remote
+      ------------ ------------------------------ -----------------------------
+      Label        24010                          300160
+      Group ID     0x5                            0x8
+      Interface    TenGigE0/0/0/6.200             ae4.200
+      MTU          1500                           1500
+      Control word disabled                       disabled
+      PW type      Ethernet VLAN                  Ethernet VLAN
+      VCCV CV type 0x2                            0x2
+                   (LSP ping verification)        (LSP ping verification)
+      VCCV CC type 0x6                            0x6
+                   (router alert label)           (router alert label)
+                   (TTL expiry)                   (TTL expiry)
+      ------------ ------------------------------ -----------------------------
+    Incoming Status (PW Status TLV):
+      Status code: 0x0 (Up) in Notification message
+    Outgoing Status (PW Status TLV):
+      Status code: 0x0 (Up) in Notification message
+    MIB cpwVcIndex: 3221225475
+    Create time: 10/03/2026 22:01:44 (2d14h ago)
+    Last time status changed: 10/03/2026 22:01:51 (2d14h ago)
+    Statistics:
+      packets: received 9981, sent 10442
+      bytes: received 1010487, sent 1082311
+  Backup PW:
+  PW: neighbor 198.51.100.21, PW ID 200, state is standby ( all ready )
+    Backup for neighbor 192.0.2.11 PW ID 200 ( inactive )
+    PW class not set, XC ID 0xa0000004
+    Encapsulation MPLS, protocol LDP
+    Source address 192.0.2.1
+    PW type Ethernet VLAN, control word disabled, interworking none
+    Sequencing not set
+    PW Status TLV in use
+      MPLS         Local                          Remote
+      ------------ ------------------------------ -----------------------------
+      Label        24011                          24019
+      Group ID     0x5                            0x3
+      Interface    TenGigE0/0/0/6.200             ae24.200
+      MTU          1500                           1500
+      Control word disabled                       disabled
+      PW type      Ethernet VLAN                  Ethernet VLAN
+      ------------ ------------------------------ -----------------------------
+    Incoming Status (PW Status TLV):
+      Status code: 0x0 (Up) in Notification message
+    Outgoing Status (PW Status TLV):
+      Status code: 0x20 (Standby) in Notification message
+    Create time: 10/03/2026 22:01:44 (2d14h ago)
+    Last time status changed: 10/03/2026 22:01:51 (2d14h ago)

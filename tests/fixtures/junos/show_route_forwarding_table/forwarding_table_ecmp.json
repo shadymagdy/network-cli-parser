@@ -1,0 +1,151 @@
+{
+  "command": "show route forwarding-table",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "routes": [
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "default",
+        "route_type": "user",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": "192.0.2.1",
+            "type": "ucst",
+            "index": 612,
+            "references": 4,
+            "interface": "ae1.0"
+          }
+        ]
+      },
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "default",
+        "route_type": "perm",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": null,
+            "type": "rjct",
+            "index": 36,
+            "references": 1,
+            "interface": null
+          }
+        ]
+      },
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "192.0.2.0/30",
+        "route_type": "intf",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": null,
+            "type": "rslv",
+            "index": 598,
+            "references": 1,
+            "interface": "ae1.0"
+          }
+        ]
+      },
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "198.51.100.0/24",
+        "route_type": "user",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": null,
+            "type": "ulst",
+            "index": 1048575,
+            "references": 2,
+            "interface": null
+          },
+          {
+            "next_hop": "192.0.2.1",
+            "type": "ucst",
+            "index": 612,
+            "references": 4,
+            "interface": "ae1.0"
+          },
+          {
+            "next_hop": "192.0.2.5",
+            "type": "ucst",
+            "index": 615,
+            "references": 4,
+            "interface": "ae2.0"
+          }
+        ]
+      },
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "203.0.113.0/24",
+        "route_type": "user",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": "198.51.100.2",
+            "type": "ucst",
+            "index": 640,
+            "references": 3,
+            "interface": "ae4.3100"
+          }
+        ]
+      },
+      {
+        "table": "default.inet",
+        "family": "internet",
+        "destination": "224.0.0.0/4",
+        "route_type": "perm",
+        "route_references": 1,
+        "next_hops": [
+          {
+            "next_hop": null,
+            "type": "mdsc",
+            "index": 37,
+            "references": 1,
+            "interface": null
+          }
+        ]
+      },
+      {
+        "table": "CUST-B.inet",
+        "family": "internet",
+        "destination": "default",
+        "route_type": "perm",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": null,
+            "type": "rjct",
+            "index": 710,
+            "references": 1,
+            "interface": null
+          }
+        ]
+      },
+      {
+        "table": "CUST-B.inet",
+        "family": "internet",
+        "destination": "203.0.113.128/25",
+        "route_type": "user",
+        "route_references": 0,
+        "next_hops": [
+          {
+            "next_hop": "198.51.100.10",
+            "type": "ucst",
+            "index": 722,
+            "references": 2,
+            "interface": "ae24.3100"
+          }
+        ]
+      }
+    ]
+  }
+}

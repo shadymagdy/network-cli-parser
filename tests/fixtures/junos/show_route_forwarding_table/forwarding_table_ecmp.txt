@@ -1,0 +1,17 @@
+Routing table: default.inet
+Internet:
+Destination        Type RtRef Next hop           Type Index    NhRef Netif
+default            user     0 192.0.2.1          ucst      612     4 ae1.0
+default            perm     0                    rjct       36     1
+192.0.2.0/30       intf     0                    rslv      598     1 ae1.0
+198.51.100.0/24    user     0                    ulst  1048575     2
+                              192.0.2.1          ucst      612     4 ae1.0
+                              192.0.2.5          ucst      615     4 ae2.0
+203.0.113.0/24     user     0 198.51.100.2       ucst      640     3 ae4.3100
+224.0.0.0/4        perm     1                    mdsc       37     1
+
+Routing table: CUST-B.inet
+Internet:
+Destination        Type RtRef Next hop           Type Index    NhRef Netif
+default            perm     0                    rjct      710     1
+203.0.113.128/25   user     0 198.51.100.10      ucst      722     2 ae24.3100

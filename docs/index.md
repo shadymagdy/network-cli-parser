@@ -40,7 +40,7 @@ hide:
 
     ---
 
-    18 typed, schema'd models (BGP peers, interfaces, routes, LLDP, ...) with the same fields on every vendor.
+    19 typed, schema'd models (BGP peers, interfaces, routes, LLDP, pseudowires, ...) with the same fields on every vendor.
 
     [:octicons-arrow-right-24: Normalized models](models.md)
 
@@ -58,9 +58,9 @@ hide:
 
 | | |
 |---|---|
-| **Works on any command** | 161 dedicated parsers (237 command patterns). A generic engine structures *any* other output, so you always get JSON back. |
+| **Works on any command** | 173 dedicated parsers (251 command patterns). A generic engine structures *any* other output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from prompts, command verbs or fingerprints in the output, with trial parsing as a last resort. Pagers, ANSI codes and timestamps are removed. |
 | **Typed and schema'd** | Normalized models are `TypedDict`s with JSON Schemas (draft 2020-12). `py.typed` is included and the codebase is checked with `mypy --strict`. |
 | **Pre/post change checks** | `clijson.diff()` matches records by natural key and ignores counters and timers by default. |
-| **Tested on real output** | 238 regression fixtures from ASR9K, NCS5500, 8000, MX, PTX, QFX, EX, SRX, NE40E, CX600, CE and more. |
+| **Tested on real output** | 254 regression fixtures from ASR9K, NCS5500, 8000, MX, PTX, QFX, EX, SRX, NE40E, CX600, CE and more. |

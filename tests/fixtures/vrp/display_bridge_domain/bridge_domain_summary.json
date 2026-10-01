@@ -1,0 +1,43 @@
+{
+  "command": "display bridge-domain",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "bridge_domains": [
+      {
+        "bd_id": 3100,
+        "state": "up",
+        "mac_learning": "enable",
+        "statistics": "enable",
+        "broadcast": "FWD",
+        "unknown_multicast": "FWD",
+        "unknown_unicast": "FWD",
+        "split_horizon": "enable",
+        "description": "CUSTOMER-A"
+      },
+      {
+        "bd_id": 3200,
+        "state": "up",
+        "mac_learning": "enable",
+        "statistics": "disable",
+        "broadcast": "FWD",
+        "unknown_multicast": "FWD",
+        "unknown_unicast": "FWD",
+        "split_horizon": "enable",
+        "description": null
+      },
+      {
+        "bd_id": 999,
+        "state": "admin-down",
+        "mac_learning": "enable",
+        "statistics": "disable",
+        "broadcast": "FWD",
+        "unknown_multicast": "FWD",
+        "unknown_unicast": "DSD",
+        "split_horizon": "disable",
+        "description": "lab"
+      }
+    ],
+    "total": 3
+  }
+}

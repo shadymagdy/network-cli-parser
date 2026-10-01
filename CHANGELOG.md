@@ -6,6 +6,31 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+### Added
+
+* L2VPN / pseudowire redundancy verification commands:
+  * Huawei VRP: `display vsi` (summary and `verbose`), `display vsi peer-info`, `display vsi protect-group`,
+    `display mpls l2vc`, `display bridge-domain`, and `display mac-address` filtered by `vsi` or `bridge-domain`.
+  * Cisco IOS XR: `show l2vpn bridge-domain` (default and `detail`, filtered by bd-name, group, interface or
+    neighbor), `show l2vpn xconnect detail` and `show l2vpn forwarding bridge-domain mac-address`.
+  * Juniper Junos: `show l2circuit connections` (all variants, with status codes decoded), `show vpls connections`,
+    `show bgp group` and `show route forwarding-table`.
+* New vendor-neutral model `l2vpn.pseudowires` (service, neighbor, PW ID, state, primary/backup role, active
+  flag, VC type, MTU, labels), produced by all of the above.
+* `clijson.diff()` matches pseudowires by neighbor + PW ID, so new labels or reordered output aren't reported
+  as changes.
+* Guide: [Pseudowire redundancy pre/post change checks](docs/guides/pseudowire-checks.md).
+
+### Fixed
+
+* Junos `show route forwarding-table` was handled by the generic `show route` parser. It now has a dedicated
+  parser.
+
+### Changed
+
+* `mac.table` normalized records allow `vlan: null` when the device reports a bridge-domain or PW instead of
+  a VLAN.
+
 ## 0.2.0 - 2026-10-01
 
 ### Added

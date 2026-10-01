@@ -1,0 +1,39 @@
+{
+  "command": "display mac-address bridge-domain 3100",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "0050-56a1-0b01",
+        "vlan": null,
+        "interface": "GE1/0/2.3100",
+        "type": "dynamic",
+        "bd": 3100,
+        "age": "14"
+      },
+      {
+        "mac_address": "0050-56a1-0b02",
+        "vlan": null,
+        "interface": "192.0.2.11",
+        "type": "dynamic",
+        "bd": 3100,
+        "age": "62"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "mac_address": "00:50:56:a1:0b:01",
+      "vlan": null,
+      "interface": "GE1/0/2.3100",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "00:50:56:a1:0b:02",
+      "vlan": null,
+      "interface": "192.0.2.11",
+      "type": "dynamic"
+    }
+  ]
+}
