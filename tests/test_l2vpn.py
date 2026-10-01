@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 
 import clijson
-from clijson import find_parser
 from clijson.models import SCHEMAS, validate
 
 FIX = Path(__file__).parent / "fixtures"
@@ -110,7 +109,7 @@ def test_failover_is_visible_in_a_pre_post_diff():
     ],
 )
 def test_pre_post_check_commands_resolve(platform, typed, parser):
-    res = find_parser(platform, typed)
+    res = clijson.find_parser(platform, typed)
     assert res is not None, typed
     assert res.parser.name == parser
 
