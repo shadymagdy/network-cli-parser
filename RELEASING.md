@@ -4,7 +4,10 @@ Releases are fully automated by [`.github/workflows/release.yml`](.github/workfl
 
 1. Move the *Unreleased* entries in `CHANGELOG.md` under a new `## X.Y.Z` heading.
 2. Bump the version: `uv version X.Y.Z` (this updates `pyproject.toml` and `uv.lock`).
-3. Merge that change to `main`, then tag it: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+3. Merge that change to `main`, then tag it, either:
+   * from a terminal: `git tag vX.Y.Z && git push origin vX.Y.Z`, or
+   * from the browser or phone: **Releases → Draft a new release → Choose a tag → type `vX.Y.Z` → Create new
+     tag on publish** (target `main`) → **Publish release**. The workflow fills in the files and the notes.
 
 The workflow then:
 
