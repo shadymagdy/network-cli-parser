@@ -165,3 +165,13 @@ def test_show_many_and_errors():
     no_exec = SimpleNamespace(name="nc2", live_status=SimpleNamespace())
     with pytest.raises(clijson.nso.NsoError, match="exec any"):
         clijson.nso.exec_any(no_exec, "show version")
+
+
+def test_result_header_detection_is_linear_on_hostile_input():
+    """A "result" line followed by huge runs of tabs/spaces must not trigger regex backtracking."""
+    import time
+
+    for hostile in ("result\t" + "\t" * 200_000, "result " + " " * 200_000 + "x"):
+        start = time.perf_counter()
+        clijson.parse(hostile, "show version", "iosxr")
+        assert time.perf_counter() - start < 1

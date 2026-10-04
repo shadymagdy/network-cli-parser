@@ -72,9 +72,6 @@ def parse(
     return result
 
 
-_NSO_RESULT_LINE = re.compile(r"^\s*result(?:[ \t]+(?P<rest>[^\r\n]*))?\r?\n")
-
-
 def _nso_result_from_json(obj: Any) -> str | None:
     """``{"<ned>-stats:output": {"result": "..."}}`` (RESTCONF), ``{"result": "..."}`` or a JSON-RPC envelope."""
     if not isinstance(obj, dict):
@@ -105,10 +102,13 @@ def _unwrap_nso(text: str) -> tuple[str, str | None]:
             inner = None
         if inner is not None:
             return inner, "nso-live-status"
-    m = _NSO_RESULT_LINE.match(text)
-    if m and len(m.group(0)) < 200:
-        rest = (m["rest"] or "").strip()
-        return (rest + "\n" if rest else "") + text[m.end() :], "nso-live-status"
+    # ``ncs_cli`` prints "result" (alone or followed by the first output line) before the text; plain string
+    # handling keeps this linear on any input
+    head, sep, tail = text.lstrip().partition("\n")
+    line = head.rstrip("\r")
+    if sep and len(line) < 200 and (line.rstrip() == "result" or line.startswith(("result ", "result\t"))):
+        rest = line[len("result") :].strip()
+        return (rest + "\n" if rest else "") + tail, "nso-live-status"
     return text, None
 
 
