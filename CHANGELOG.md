@@ -6,6 +6,21 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.4.0 - 2026-10-04
+
+### Added
+
+* Cisco NSO integration, `clijson.nso`:
+  * `show(device, command)` runs the command through the device's `live-status exec any` action and parses the
+    result, taking the platform from the device's NED.
+  * Also `show_many()`, `exec_any()`, `platform_of()` and `NsoError`.
+  * It works with any CLI NED (the exec action is discovered) and doesn't import `ncs`.
+* `clijson.parse()` unwraps NSO `live-status` output: the RESTCONF response, JSON-RPC envelopes and the `result`
+  header printed by `ncs_cli`. With an echoed command, the command and platform are detected too.
+* Platform aliases `cisco-iosxr`, `cisco-ios-xr`, `huawei-vrp` and `juniper-junos`, as used in NED names.
+* Guide: [Using clijson inside Cisco NSO](docs/guides/cisco-nso.md), with installation, an action package
+  example, service pre/post checks and RESTCONF usage.
+
 ## 0.3.1 - 2026-10-01
 
 ### Added

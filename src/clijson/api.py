@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from collections.abc import Sequence
@@ -55,8 +56,9 @@ def parse(
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
+    text, nso = _unwrap_nso(output or "")
     result = _parse(
-        output or "",
+        text,
         command,
         platform,
         normalize=normalize,
@@ -65,7 +67,49 @@ def parse(
         raise_on_error=raise_on_error,
     )
     result.raw = output
+    if nso:
+        result.metadata["source"] = nso
     return result
+
+
+_NSO_RESULT_LINE = re.compile(r"^\s*result(?:[ \t]+(?P<rest>[^\r\n]*))?\r?\n")
+
+
+def _nso_result_from_json(obj: Any) -> str | None:
+    """``{"<ned>-stats:output": {"result": "..."}}`` (RESTCONF), ``{"result": "..."}`` or a JSON-RPC envelope."""
+    if not isinstance(obj, dict):
+        return None
+    result = obj.get("result")
+    if isinstance(result, str) and len(obj) <= 2:
+        return result
+    if "jsonrpc" in obj:
+        return _nso_result_from_json(obj.get("result"))
+    if len(obj) == 1:
+        ((key, val),) = obj.items()
+        if str(key).split(":")[-1] in ("output", "exec", "any") and isinstance(val, dict):
+            return _nso_result_from_json(val)
+    return None
+
+
+def _unwrap_nso(text: str) -> tuple[str, str | None]:
+    """Strip Cisco NSO ``live-status exec`` wrappers so the device's CLI text is parsed.
+
+    Handles the RESTCONF / JSON-RPC JSON response and the ``result`` header that ``ncs_cli`` prints before the
+    output. The raw ``result`` string from the Python API needs no unwrapping.
+    """
+    stripped = text.lstrip()
+    if stripped.startswith("{") and '"result"' in stripped[:2000]:
+        try:
+            inner = _nso_result_from_json(json.loads(stripped))
+        except ValueError:
+            inner = None
+        if inner is not None:
+            return inner, "nso-live-status"
+    m = _NSO_RESULT_LINE.match(text)
+    if m and len(m.group(0)) < 200:
+        rest = (m["rest"] or "").strip()
+        return (rest + "\n" if rest else "") + text[m.end() :], "nso-live-status"
+    return text, None
 
 
 def _parse(
