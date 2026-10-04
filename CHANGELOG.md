@@ -6,6 +6,37 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.5.0 - 2026-10-04
+
+### Added
+
+* `ping` on IOS XR, Junos and Huawei VRP. The new `ping` model gives target, sent, received, loss, success and
+  min/avg/max round-trip time, so reachability can be compared before and after a change.
+* Junos `show vpls mac-table` (also `show bridge mac-table` and `show evpn mac-table`): MACs per routing instance
+  and bridging domain, normalized to `mac.table`.
+* Huawei VRP `display vsi remote ldp [pw-id <id>]`: the remote side of each PW (label, encapsulation, MTU, state
+  code), normalized to `l2vpn.pseudowires`.
+* IOS XR `show l2vpn bridge-domain pw-id <id>`.
+* Junos `show bgp summary instance <instance> group <group>`.
+
+### Fixed
+
+* Junos `show l2circuit connections ... | match rmt`, `show vpls connections ... | match rmt` and
+  `show bgp summary | match <peer>` returned nothing. The matching rows are now parsed; the VPLS instance or
+  l2circuit neighbor comes from the command when the output no longer shows it.
+* Junos `show route advertising-protocol` / `receive-protocol`: an AS path with a single AS was read as the
+  local preference. The header columns now decide when they line up with the rows.
+* Huawei VRP `display vsi peer-info`: the layout with transport VC ID, local / remote VC labels and VC state was
+  mapped to the wrong fields.
+* Huawei VRP `display mac-address`: the per-slot layout (`MAC address table of slot ...`, PEVLAN / CEVLAN
+  columns) returned no entries. Rows wrapped by a narrow terminal are joined, and the normalized view lists each
+  MAC once instead of once per slot.
+
+### Changed
+
+* `l2vpn.pseudowires`: `neighbor` may be `null` when the output doesn't show it (a row filtered with `| match`).
+* `FORWARD` is recognised as an up pseudowire state.
+
 ## 0.4.0 - 2026-10-04
 
 ### Added

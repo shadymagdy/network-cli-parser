@@ -29,7 +29,7 @@ It has **no runtime dependencies**.
 
 | | |
 |---|---|
-| **Works on any command** | 173 dedicated parsers (251 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
+| **Works on any command** | 178 dedicated parsers (259 command patterns). Anything else goes through a **generic engine** that finds tables, `key: value` pairs and indented sections in *any* output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Huawei accepts `show` as well as `display`. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from the prompt, the command verb or fingerprints in the output. If those don't settle it, **trial parsing** lets each vendor's parser try and keeps the one that understands the output. Echoed prompts, `--More--` pagers, ANSI codes, timestamps and `{master}` lines are removed. |
 | **One model for all vendors** | `normalize=True` adds a **vendor-neutral view** for 19 common concepts (BGP peers, interfaces, routes, LLDP, OSPF/IS-IS/LDP, ARP/ND, BFD, LAG, VRFs, L2VPN pseudowires, …), so one script can handle all three vendors. |
@@ -245,16 +245,16 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 | Platform | Aliases (any of these work) | Dedicated parsers |
 |---|---|---:|
-| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 65 |
-| Juniper Junos / Junos Evolved (MX, PTX, ACX, QFX, EX, SRX, vMX, cRPD) | `junos`, `juniper`, `juniper_junos`, `evo`, … | 48 |
-| Huawei VRP (NE40E/NE8000, CX600, ATN, CE, S, AR) | `vrp`, `huawei`, `huawei_vrp`, `vrpv8`, … | 48 |
+| Cisco IOS XR (ASR9K, NCS 540/5500/5700, 8000, CRS, XRv 9000, XRd) | `iosxr`, `xr`, `cisco_xr`, `ios-xr`, … | 69 |
+| Juniper Junos / Junos Evolved (MX, PTX, ACX, QFX, EX, SRX, vMX, cRPD) | `junos`, `juniper`, `juniper_junos`, `evo`, … | 54 |
+| Huawei VRP (NE40E/NE8000, CX600, ATN, CE, S, AR) | `vrp`, `huawei`, `huawei_vrp`, `vrpv8`, … | 55 |
 
 They cover the commands you run every day: version and inventory, platform and RE/FPC state, CPU, memory,
 power, fans and temperature, interfaces (brief, detail, description, counters, optics/DOM), LAG/LACP, IPv4/IPv6
 addressing, ARP/ND and MAC tables, VLANs, LLDP/CDP, RIB (brief and detail/extensive), BGP (summary, neighbor detail,
 advertised/received routes and BGP RIB, including VRF, instance and address family), OSPF/OSPFv3, IS-IS, MPLS LDP,
-RSVP-TE tunnels and LSPs, LFIB, BFD, HSRP/VRRP, PIM, VRFs and VPN instances, L2VPN xconnects and bridge domains,
-EVPN, firewall filters, ACLs, SRX cluster and policies, NTP, users, alarms, logging, licenses, file systems,
+RSVP-TE tunnels and LSPs, LFIB, BFD, HSRP/VRRP, PIM, VRFs and VPN instances, L2VPN xconnects, bridge domains,
+VPLS/VSI pseudowires and their MAC tables, EVPN, ping, firewall filters, ACLs, SRX cluster and policies, NTP, users, alarms, logging, licenses, file systems,
 commit history, startup/patch info and running configuration.
 
 The full, generated list is in **[docs/commands.md](docs/commands.md)**. You can also run `clijson commands`.
@@ -273,6 +273,7 @@ every vendor:
 | `routes` | prefix, protocol, next_hops, distance, metric, vrf, age |
 | `lldp.neighbors` | local_interface, neighbor, neighbor_interface, chassis_id, capabilities, ttl |
 | `l2vpn.pseudowires` | service, neighbor, pw_id, state, role (primary/backup), active, vc_type, mtu, local_label, remote_label. See the [pseudowire checks guide](docs/guides/pseudowire-checks.md). |
+| `ping` | target, sent, received, loss_percent, success, rtt_min, rtt_avg, rtt_max |
 | `ospf.neighbors`, `isis.adjacency`, `ldp.neighbors`, `bfd.sessions`, `arp`, `ipv6.neighbors`, `mac.table`, `lag`, `vrfs`, `inventory`, `cpu`, `interfaces.description` | see [docs/models.md](docs/models.md) |
 
 Normalized values are standardised too. Statuses become `up` / `down` / `admin-down`, MACs become

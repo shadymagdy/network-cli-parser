@@ -27,11 +27,13 @@ Each pseudowire becomes one record. The fields are the same whatever the vendor:
     |---|---|
     | `display vsi name <vsi> verbose` | VSI state, peers, `primary or secondary`, PW state and labels |
     | `display vsi name <vsi> protect-group` | protect mode, reroute policy, preference 1 **Active** / preference 2 **Inactive** |
-    | `display vsi name <vsi> peer-info` | LDP session and tunnel per peer |
+    | `display vsi name <vsi> peer-info` | per peer: transport VC ID, local and remote VC labels and VC state (or LDP session and tunnel, depending on the release) |
+    | `display vsi remote ldp [pw-id <id>]` | what the remote PE signalled for the PW: remote label, encapsulation, MTU and state code (`FORWARD`) |
     | `display vsi` | summary: signaling, encapsulation, MTU and state of every VSI |
     | `display mpls l2vc [brief]` | VLL (point-to-point) VCs: AC and VC state, VC type, MTU, labels |
     | `display bridge-domain [<bd>]` | bridge-domain state and bound VSI |
-    | `display mac-address bridge-domain <bd>` | MACs learned from the AC and from the PW |
+    | `display mac-address bridge-domain <bd>`, `display mac-address vsi <vsi>` | MACs learned from the AC and from the PW (per-slot tables are merged in the normalized view) |
+    | `display interface description \| include <text>` | find the customer's interface by its description |
     | `display mpls ldp session` | LDP sessions to both aggregation routers |
 
 === "Access node: Cisco IOS XR"
@@ -40,6 +42,7 @@ Each pseudowire becomes one record. The fields are the same whatever the vendor:
     |---|---|
     | `show l2vpn bridge-domain bd-name <bd> detail` | AC and PW state, `Backup PW for neighbor ...`, backup PW `standby`, PW class, MTU, labels, PW status TLV |
     | `show l2vpn bridge-domain [brief]` | quick state of all bridge-domains (`Num PWs/up`) |
+    | `show l2vpn bridge-domain (pw-id <id>\|group <group>\|bd-name <bd>)` | the bridge-domain carrying one PW, or one group / bridge-domain |
     | `show l2vpn xconnect detail` | the same for point-to-point cross-connects |
     | `show l2vpn forwarding bridge-domain mac-address location <loc>` | MACs learned from the AC and from `(neighbor, pw-id)` |
     | `show mpls ldp neighbor [brief]` | LDP sessions to both aggregation routers |
@@ -49,7 +52,8 @@ Each pseudowire becomes one record. The fields are the same whatever the vendor:
     | Command | What to look at |
     |---|---|
     | `show l2circuit connections [interface <ifl>] [extensive]` | primary `Up`, backup `HS` (hot-standby), PW status TLV, flow labels, labels, connection history |
-    | `show vpls connections` | LDP-VPLS pseudowires per instance |
+    | `show vpls connections [instance <instance>]` | LDP-VPLS pseudowires per instance |
+    | `show vpls mac-table instance <instance>` | MACs learned from the AC and from the LSI (PW) interface |
     | `show ldp session` | LDP sessions to both aggregation routers |
     | `show interfaces <ifl> extensive` | the attachment circuit, its MTU and counters |
 
@@ -57,13 +61,25 @@ Each pseudowire becomes one record. The fields are the same whatever the vendor:
 
     | Command | What to look at |
     |---|---|
-    | `show l2circuit connections` | the circuit terminating the PW exists on **both** primary and backup aggregation routers |
+    | `show l2circuit connections [interface <ifl>]` | the circuit terminating the PW exists on **both** primary and backup aggregation routers |
+    | `show interfaces descriptions` | find the customer's IFL by its description |
+    | `show configuration \| display set \| match <ifl>` | the IFL, its l2circuit and the routing instance it belongs to |
+    | `show arp no-resolve interface <ifl>` | the customer's next hop is learned |
     | `show interfaces <ae>.<unit>`, `show lacp interfaces <ae>` | the customer IFL and its bundle are up |
     | `show route instance [<instance>] [detail]` | the backup routing instance contains the customer interface |
     | `show route <prefix> table <table> extensive` | customer routes are present in the right table, with the right communities |
-    | `show bgp summary [instance <instance>]`, `show bgp group <group>` | customer BGP sessions and their export/import policies |
-    | `show route advertising-protocol bgp <peer> <prefix>` | the customer prefix is advertised upstream |
+    | `show bgp summary [instance <instance>] [group <group>]`, `show bgp group <group>` | customer BGP sessions and their export/import policies |
+    | `show route advertising-protocol bgp <peer> [table <table>]` | what is advertised to the customer, or the customer prefix upstream |
+    | `show route receive-protocol bgp <peer> [table <table>]` | the prefixes the customer announces |
+    | `show configuration policy-options (policy-statement\|prefix-list) <name> \| display set` | the customer's import/export policy and prefix list |
     | `show route forwarding-table destination <prefix> [table <table>]` | what the forwarding plane will actually use |
+    | `ping <address> rapid count <n>` | the customer's next hop answers (`clijson` returns sent / received / loss / RTT on every platform) |
+
+!!! tip "Filtered output"
+    Lines kept by `| match` still parse: `show l2circuit connections ... | match rmt`, `show vpls connections ... |
+    match rmt` and `show bgp summary | match <peer>` return the matching circuits or peers (the instance comes from
+    the command when the output no longer shows it). A pseudowire whose neighbor was filtered out has
+    `neighbor: null`.
 
 ## Running the checks
 
