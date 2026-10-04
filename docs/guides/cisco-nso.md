@@ -161,6 +161,58 @@ for cmd in COMMANDS:
 Store the `before` results, for example as JSON in an operational leaf or a log, so the post-check can run in a
 separate action or a later nano-service step.
 
+## Check commands through NSO
+
+Every command in the [pseudowire checks guide](pseudowire-checks.md) can be sent through `live-status exec any`,
+and its result parses exactly like a capture taken on the device. That includes filtered commands and `ping`.
+The test suite runs every regression capture through `clijson.nso.show()` on mock IOS XR, Junos and VRP NED
+devices.
+
+```python
+CHECKS = {
+    "iosxr": [
+        "show l2vpn bridge-domain pw-id 5000",
+        "show l2vpn bridge-domain bd-name 100 detail",
+        "show l2vpn forwarding bridge-domain GRP-A:100 mac-address location 0/0/CPU0",
+        "ping 192.0.2.18 count 5",
+    ],
+    "junos": [
+        "show interfaces descriptions | match CUST-A",
+        "show l2circuit connections interface ae2.100",
+        "show vpls connections instance VPLS-A",
+        "show vpls mac-table instance VPLS-A",
+        "show arp no-resolve interface ae4.100",
+        "show route 198.51.100.100 table inet.0",
+        "show bgp summary instance VRF-B.inet.0 group GRP-A",
+        "show route receive-protocol bgp 198.51.100.125 table VRF-B.inet.0",
+        "ping 198.51.100.101 rapid count 5",
+    ],
+    "vrp": [
+        "display vsi name V200 peer-info",
+        "display vsi name V200 protect-group",
+        "display vsi remote ldp pw-id 6000",
+        "display mac-address vsi V200",
+        "ping -c 5 192.0.2.18",
+    ],
+}
+
+platform = clijson.nso.platform_of(device)
+results = clijson.nso.show_many(device, CHECKS[platform], normalize=True)
+```
+
+Things to know when you send these through NSO:
+
+- **Pipes.** In Python and RESTCONF the whole string goes to the device, so `show bgp summary | match 198.51.100.125`
+  is filtered by the device. In `ncs_cli`, put the pipe **inside** the quotes to have the device filter
+  (`exec any "show l2circuit connections | match rmt"`). A pipe after the quotes is NSO's own filter. clijson
+  handles both and marks the result as filtered.
+- **Quotes inside the command.** Escape them in `ncs_cli`: `exec any "show interfaces descriptions | match \"CUST A\""`.
+  In Python, pass the string as is.
+- **Ping.** Always give a count (`rapid count 5` on Junos, `count 5` on IOS XR, `-c 5` on VRP), or the command
+  will not return before the NED's read timeout. The `ping` model gives `sent`, `received`, `loss_percent`,
+  `success` and the round-trip times, so pre and post results are easy to compare.
+- **Paging.** The CLI NEDs turn off paging when they connect, so `| no-more` is optional. It's harmless if you keep it.
+
 ## Output from RESTCONF, JSON-RPC or `ncs_cli`
 
 `clijson.parse()` removes NSO's wrapping, so output collected outside Python parses the same way:
@@ -181,7 +233,7 @@ Every way NSO hands back the `result` is recognised:
 | RESTCONF (JSON) or `ncs_cli ... \| display json` | `{"<ned>-stats:output": {"result": "..."}}` |
 | RESTCONF (XML), NETCONF, or `ncs_cli ... \| display xml` | `<result xmlns="...">...</result>`, XML-escaped, possibly inside `<rpc-reply>` |
 | JSON-RPC `run_action` | `{"jsonrpc": "2.0", "result": {...}}` or `"result": [{"name": "result", "value": "..."}]` |
-| `ncs_cli` transcript (C-style or J-style) | NSO's prompt and `devices device X live-status exec any "..."` line, `result`, the text, `[ok][...]` and NSO's prompt again |
+| `ncs_cli` transcript (C-style or J-style) | NSO's prompt and `devices device X live-status exec any "..."` line, `result`, the text, `[ok][...]` and NSO's prompt again (also with NSO's own `\| match` after the command, which removes the `result` line) |
 | copied out of a log or JSON string | the same text with literal `\r\n` instead of line breaks |
 
 For a transcript, the device name and the command are read from NSO's command line, so

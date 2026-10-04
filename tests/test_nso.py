@@ -206,3 +206,63 @@ def test_nso_command_line_variants(line):
     xr = (FIX / "iosxr" / "show_arp" / "ntc_cisco_xr_show_arp.txt").read_text(encoding="utf-8")
     res = clijson.parse(f"{line}\nresult \n{xr}\nadmin@ncs# ")
     assert (res.command, res.metadata["device"], res.parser) == ("show arp", "pe1", "iosxr.show_arp")
+
+
+L2C_RMT = "    ae2.100(vc 5000)          rmt   Up     Apr 17 05:43:09 2025           1\n"
+BGP_ROW = "198.51.100.125        64500     711028     681994       0      29 32w2d 5:03:14 Establ\n"
+
+
+@pytest.mark.parametrize(
+    ("transcript", "command"),
+    [
+        # device-side pipe inside the quotes, with escaped quotes
+        (
+            (
+                'admin@ncs# devices device pe1 live-status exec any "show l2circuit connections | match \\"rmt\\""\n'
+                f"result \n{L2C_RMT}admin@pe1> \nadmin@ncs# "
+            ),
+            'show l2circuit connections | match "rmt"',
+        ),
+        # NSO's own pipe after the quotes: NSO filters the `result` header away
+        (
+            (
+                f'admin@ncs# devices device pe1 live-status exec any "show bgp summary" | match 198.51.100.125\n{BGP_ROW}'
+                "admin@ncs# "
+            ),
+            "show bgp summary | match 198.51.100.125",
+        ),
+        # the same in J-style, after the args list
+        (
+            (
+                'admin@ncs> request devices device pe1 live-status exec any args [ "show l2circuit connections" ]'
+                f" | match rmt\n{L2C_RMT}admin@ncs> "
+            ),
+            "show l2circuit connections | match rmt",
+        ),
+    ],
+    ids=["escaped-quotes", "nso-pipe-c-style", "nso-pipe-j-style"],
+)
+def test_filtered_check_commands_from_ncs_cli(transcript, command):
+    res = clijson.parse(transcript, normalize=True)
+    assert (res.platform, res.command, res.metadata["device"]) == ("junos", command, "pe1")
+    assert res.engine == "native"
+    assert len(res.normalized) == 1
+
+
+def test_ping_through_live_status():
+    out = "PING 192.0.2.18 (192.0.2.18): 56 data bytes\r\n!!!!!\r\n--- 192.0.2.18 ping statistics ---\r\n"
+    out += "5 packets transmitted, 5 packets received, 0% packet loss\r\n"
+    out += "round-trip min/avg/max/stddev = 0.4/0.6/0.9/0.1 ms\r\n\r\nadmin@pe1> "
+    dev, action = device(platform="junos", outputs={"ping 192.0.2.18 rapid count 5": out})
+    res = clijson.nso.show(dev, "ping 192.0.2.18 rapid count 5", normalize=True)
+    assert action.calls == ["ping 192.0.2.18 rapid count 5"]
+    assert res.normalized["success"] and res.normalized["loss_percent"] == 0.0
+
+
+def test_quoted_arguments_are_linear_on_hostile_input():
+    import time
+
+    hostile = 'admin@ncs# devices device pe1 live-status exec any "' + "\\" * 200_001 + "\nresult \nx\n"
+    start = time.perf_counter()
+    clijson.parse(hostile, "show version", "iosxr")
+    assert time.perf_counter() - start < 1

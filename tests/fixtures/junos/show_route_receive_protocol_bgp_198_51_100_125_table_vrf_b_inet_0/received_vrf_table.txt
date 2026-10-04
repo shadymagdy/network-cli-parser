@@ -1,0 +1,5 @@
+Sep 17 07:04:14
+
+VRF-B.inet.0: 7 destinations, 9 routes (8 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+  203.0.113.0/24          198.51.100.125                          64500 I

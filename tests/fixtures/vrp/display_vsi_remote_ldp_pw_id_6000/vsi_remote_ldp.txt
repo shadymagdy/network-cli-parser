@@ -1,0 +1,3 @@
+Vsi        Peer            VC      Group      Encap    MTU    Vsi    State
+ID         RouterID        Label   ID         Type     Value  Index  Code
+6000       192.0.2.18      8189    0          vlan     1500   377    FORWARD

@@ -1,0 +1,5 @@
+Sep 17 07:04:07
+
+inet.0: 50918 destinations, 89653 routes (50521 active, 0 holddown, 401 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 0.0.0.0/0               Self                                    64496 I

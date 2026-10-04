@@ -1,0 +1,26 @@
+{
+  "command": "ping rapid count 10 198.51.100.100",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "target": "198.51.100.100",
+    "sent": 10,
+    "received": 10,
+    "loss_percent": 0.0,
+    "rtt_min": 0.029,
+    "rtt_avg": 0.061,
+    "rtt_max": 0.129,
+    "rtt_stddev": 0.031,
+    "replies": "!!!!!!!!!!"
+  },
+  "normalized": {
+    "target": "198.51.100.100",
+    "sent": 10,
+    "received": 10,
+    "loss_percent": 0.0,
+    "success": true,
+    "rtt_min": 0.029,
+    "rtt_avg": 0.061,
+    "rtt_max": 0.129
+  }
+}

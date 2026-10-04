@@ -6,11 +6,13 @@ either CLI style, `| display json/xml`, or copied with escaped line breaks), the
 """
 
 import json
+from types import SimpleNamespace
 from xml.sax.saxutils import escape
 
 import pytest
 
 import clijson
+import clijson.nso
 
 from .conftest import fixture_cases, read_json
 
@@ -110,3 +112,48 @@ def test_ncs_cli_transcript_needs_no_hints(txt, js, wrap):
     assert res.metadata["device"] == "pe1"
     assert res.platform == meta["platform"]
     assert res.data == meta["expected"]
+
+
+# what each CLI NED's device looks like to clijson.nso: maagic exec container and NED-id
+NED = {
+    "iosxr": ("cisco_ios_xr_stats__exec", "cisco-iosxr-cli-7.61:cisco-iosxr-cli-7.61"),
+    "junos": ("junos_stats__exec", "juniper-junos-cli-4.9:juniper-junos-cli-4.9"),
+    "vrp": ("vrp_stats__exec", "huawei-vrp-cli-6.48:huawei-vrp-cli-6.48"),
+}
+
+
+class _Exec:
+    """A maagic ``exec any`` action that answers one command the way the NED does."""
+
+    def __init__(self, command, result):
+        self.command, self.result = command, result
+
+    def get_input(self):
+        return SimpleNamespace(args=None)
+
+    def __call__(self, inp):
+        assert inp.args == [self.command]
+        return SimpleNamespace(result=self.result)
+
+
+@pytest.mark.parametrize(("txt", "js"), CASES)
+def test_nso_show_runs_every_command(txt, js):
+    """`clijson.nso.show(device, command)` on each platform's CLI NED gives what the plain capture gives.
+
+    The platform comes from the NED-id alone, so this also proves every command resolves to its parser from NSO.
+    """
+    meta = read_json(js)
+    platform, command = meta["platform"], meta["command"]
+    exec_name, ned_id = NED[platform]
+    action = _Exec(command, python_api(txt.read_text(encoding="utf-8"), command, platform))
+    device = SimpleNamespace(
+        name="pe1",
+        live_status=SimpleNamespace(**{exec_name: SimpleNamespace(any=action)}),
+        platform=SimpleNamespace(name=None),
+        device_type=SimpleNamespace(cli=SimpleNamespace(ned_id=ned_id)),
+    )
+    res = clijson.nso.show(device, command, normalize=True)
+    assert (res.platform, res.engine, res.metadata["device"]) == (platform, "native", "pe1")
+    assert res.data == meta["expected"]
+    if "normalized" in meta:
+        assert res.normalized == meta["normalized"]

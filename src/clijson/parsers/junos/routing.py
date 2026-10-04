@@ -269,6 +269,8 @@ class ShowRouteSummary(Parser):
     "junos",
     "show bgp summary [(instance <instance>|group <group>|logical-system <ls>)]",
     "show bgp summary (instance <instance>|group <group>)",
+    "show bgp summary instance <instance> group <group>",
+    "show bgp summary group <group> instance <instance>",
     intent="bgp.summary",
 )
 class ShowBgpSummary(Parser):
@@ -312,7 +314,7 @@ class ShowBgpSummary(Parser):
                     out["tables"][pending_table] = _table_counts(s.split())
                     pending_table = None
                     continue
-            if in_peers:
+            if in_peers or not in_tables:  # peer rows also arrive without their header (`| match <peer>`)
                 m = re.match(
                     r"^(?P<peer>[0-9a-fA-F.:]+)(?:\+\d+)?\s+(?P<as>[\d.]+)\s+(?P<inpkt>\d+)\s+(?P<outpkt>\d+)\s+(?P<outq>\d+)\s+(?P<flaps>\d+)\s+(?P<updown>\d[\dwdhms:]*(?:\s+\d+:\d\d:\d\d)?)\s+(?P<state>.+?)\s*$",
                     s,

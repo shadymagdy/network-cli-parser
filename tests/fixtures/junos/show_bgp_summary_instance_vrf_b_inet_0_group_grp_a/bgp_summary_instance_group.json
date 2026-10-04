@@ -1,0 +1,95 @@
+{
+  "command": "show bgp summary instance VRF-B.inet.0 group GRP-A",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "tables": {
+      "inet.0": {
+        "total_paths": 77964,
+        "active_paths": 77525,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      },
+      "inet6.0": {
+        "total_paths": 15538,
+        "active_paths": 15528,
+        "suppressed": 0,
+        "history": 0,
+        "damp_state": 0,
+        "pending": 0
+      }
+    },
+    "neighbors": [
+      {
+        "neighbor": "198.51.100.125",
+        "remote_as": 64500,
+        "input_messages": 711028,
+        "output_messages": 681994,
+        "output_queue": 0,
+        "flaps": 29,
+        "up_down": "32w2d 5:03:14",
+        "state": "Established",
+        "tables": {
+          "inet.0": {
+            "active": 1,
+            "received": 1,
+            "accepted": 1,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 1,
+        "uptime_seconds": 19544594
+      },
+      {
+        "neighbor": "198.51.100.201",
+        "remote_as": 64500,
+        "input_messages": 770425,
+        "output_messages": 737227,
+        "output_queue": 0,
+        "flaps": 35,
+        "up_down": "34w6d 12:15:42",
+        "state": "Established",
+        "tables": {
+          "inet.0": {
+            "active": 1,
+            "received": 1,
+            "accepted": 1,
+            "damped": 0
+          }
+        },
+        "prefixes_received": 1,
+        "uptime_seconds": 21125742
+      }
+    ],
+    "groups": 97,
+    "peers": 154,
+    "down_peers": 85,
+    "threading_mode": "BGP I/O"
+  },
+  "normalized": [
+    {
+      "neighbor": "198.51.100.125",
+      "remote_as": 64500,
+      "state": "Established",
+      "established": true,
+      "uptime": "32w2d 5:03:14",
+      "uptime_seconds": 19544594,
+      "prefixes_received": 1,
+      "vrf": "VRF-B.inet.0",
+      "address_family": "ipv4 unicast"
+    },
+    {
+      "neighbor": "198.51.100.201",
+      "remote_as": 64500,
+      "state": "Established",
+      "established": true,
+      "uptime": "34w6d 12:15:42",
+      "uptime_seconds": 21125742,
+      "prefixes_received": 1,
+      "vrf": "VRF-B.inet.0",
+      "address_family": "ipv4 unicast"
+    }
+  ]
+}

@@ -273,6 +273,7 @@ def _pseudowires(services: list[dict[str, Any]], key: str) -> list[dict[str, Any
 @register(
     "iosxr",
     "show l2vpn bridge-domain [(bd-name <bd>|group <group>|interface <interface>|neighbor <neighbor> [pw-id <pwid>])] [(detail|private)]",
+    "show l2vpn bridge-domain pw-id <pwid> [(detail|private)]",
     intent="l2vpn.pseudowires",
 )
 class ShowL2vpnBridgeDomain(Parser):

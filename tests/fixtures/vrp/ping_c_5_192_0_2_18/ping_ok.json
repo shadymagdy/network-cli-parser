@@ -1,0 +1,24 @@
+{
+  "command": "ping -c 5 192.0.2.18",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "target": "192.0.2.18",
+    "sent": 5,
+    "received": 5,
+    "loss_percent": 0.0,
+    "rtt_min": 1.0,
+    "rtt_avg": 1.0,
+    "rtt_max": 3.0
+  },
+  "normalized": {
+    "target": "192.0.2.18",
+    "sent": 5,
+    "received": 5,
+    "loss_percent": 0.0,
+    "success": true,
+    "rtt_min": 1.0,
+    "rtt_avg": 1.0,
+    "rtt_max": 3.0
+  }
+}

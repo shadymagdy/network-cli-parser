@@ -25,7 +25,7 @@ class ShowRouteAdvertisedReceived(Parser):
             "routes": [],
         }
         table = "inet.0"
-        med_end = lp_end = None
+        med_end = lp_end = nh_col = None
         pending_prefix: str | None = None
         for raw in text.splitlines():
             s = raw.strip()
@@ -43,6 +43,7 @@ class ShowRouteAdvertisedReceived(Parser):
             if s.startswith("Prefix") and "Nexthop" in s:
                 med_end = raw.index("MED") + 3 if "MED" in raw else None
                 lp_end = raw.index("Lclpref") + 7 if "Lclpref" in raw else None
+                nh_col = raw.index("Nexthop")
                 continue
             m = re.match(r"^(?P<act>[*+\-])?\s*(?P<prefix>[0-9a-fA-F.:]+/\d+)\s*$", s)
             if m:
@@ -60,12 +61,17 @@ class ShowRouteAdvertisedReceived(Parser):
                 prefix = pending_prefix.lstrip("*")
                 pending_prefix = None
             rest = m["rest"]
+            base = raw.find(s) + len(s) - len(rest)  # column of `rest` in the raw line
+            # trust the header's columns only when the next hop sits under "Nexthop"
+            aligned = nh_col is not None and raw.find(m["nh"], raw.find(s)) == nh_col
             route: dict[str, Any] = {"table": table, "prefix": prefix, "active": active, "next_hop": m["nh"]}
             nums = list(re.finditer(r"(?<!\()\b(\d+)\b(?![^()]*\))", rest))
             path_start = 0
             numeric = []
             for n in nums:
                 if rest[path_start : n.start()].strip():
+                    break
+                if aligned and lp_end is not None and base + n.start() >= lp_end:  # under "AS path": an AS number
                     break
                 numeric.append(n)
                 path_start = n.end()

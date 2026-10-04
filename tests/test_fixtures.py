@@ -13,7 +13,8 @@ def test_fixture(txt, js):
     meta = read_json(js)
     res = clijson.parse(txt.read_text(encoding="utf-8"), meta["command"], meta["platform"], normalize=True)
     assert res.engine == "native", res.warnings
-    assert res.warnings == []
+    # a capture taken with `| match ...` only carries the (expected) note that it was filtered
+    assert [w for w in res.warnings if not w.startswith("output was filtered by")] == []
     assert res.data == meta["expected"]
     if "normalized" in meta:
         assert res.normalized == meta["normalized"]

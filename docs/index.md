@@ -58,7 +58,7 @@ hide:
 
 | | |
 |---|---|
-| **Works on any command** | 173 dedicated parsers (251 command patterns). A generic engine structures *any* other output, so you always get JSON back. |
+| **Works on any command** | 178 dedicated parsers (259 command patterns). A generic engine structures *any* other output, so you always get JSON back. |
 | **Understands you like a router does** | `sh ip int br`, `dis int br` and `show interfaces brief` all resolve. Parameters such as a VRF or interface are captured. |
 | **Zero configuration** | The platform is detected from prompts, command verbs or fingerprints in the output, with trial parsing as a last resort. Pagers, ANSI codes and timestamps are removed. |
 | **Typed and schema'd** | Normalized models are `TypedDict`s with JSON Schemas (draft 2020-12). `py.typed` is included and the codebase is checked with `mypy --strict`. |

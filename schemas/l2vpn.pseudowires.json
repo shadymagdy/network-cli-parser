@@ -16,8 +16,11 @@
         "description": "VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to"
       },
       "neighbor": {
-        "type": "string",
-        "description": "Remote PE address"
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Remote PE address (null when the output omits it, e.g. a row filtered with | match)"
       },
       "pw_id": {
         "type": [
