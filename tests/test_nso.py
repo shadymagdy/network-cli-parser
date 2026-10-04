@@ -175,3 +175,10 @@ def test_result_header_detection_is_linear_on_hostile_input():
         start = time.perf_counter()
         clijson.parse(hostile, "show version", "iosxr")
         assert time.perf_counter() - start < 1
+
+
+def test_config_mode_prefixes_resolve():
+    assert clijson.find_parser("iosxr", "do show bgp summary").parser.name == "iosxr.show_bgp_summary"
+    assert (
+        clijson.find_parser("junos", "run show l2circuit connections").parser.name == "junos.show_l2circuit_connections"
+    )

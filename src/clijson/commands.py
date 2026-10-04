@@ -302,7 +302,11 @@ def split_command(command: str) -> CommandLine:
     """Split ``show bgp summary | i Estab`` into base command and modifiers."""
     raw = command.strip()
     parts = [p.strip() for p in re.split(r"\s\|\s?|\|\s", raw)]
-    base = " ".join(parts[0].split())
+    words = parts[0].split()
+    # "do show ..." (IOS XR config mode) and "run show ..." (Junos config mode) run the same show command
+    if len(words) > 1 and words[0].lower() in ("do", "run") and words[1].lower() not in ("do", "run"):
+        words = words[1:]
+    base = " ".join(words)
     return CommandLine(raw=raw, base=base, tokens=base.split(), pipes=[p for p in parts[1:] if p])
 
 

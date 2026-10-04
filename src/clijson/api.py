@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import json
 import os
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any, Union
 
+from ._nso_wrap import unwrap as unwrap_nso
 from .commands import CommandLine, split_command
 from .engines import external
 from .engines.generic import parse_generic
@@ -56,9 +56,11 @@ def parse(
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
-    text, nso = _unwrap_nso(output or "")
+    unwrapped = unwrap_nso(output or "")
+    if command is None and unwrapped.command:
+        command = unwrapped.command
     result = _parse(
-        text,
+        unwrapped.text,
         command,
         platform,
         normalize=normalize,
@@ -67,49 +69,11 @@ def parse(
         raise_on_error=raise_on_error,
     )
     result.raw = output
-    if nso:
-        result.metadata["source"] = nso
+    if unwrapped.source:
+        result.metadata["source"] = unwrapped.source
+    if unwrapped.device:
+        result.metadata.setdefault("device", unwrapped.device)
     return result
-
-
-def _nso_result_from_json(obj: Any) -> str | None:
-    """``{"<ned>-stats:output": {"result": "..."}}`` (RESTCONF), ``{"result": "..."}`` or a JSON-RPC envelope."""
-    if not isinstance(obj, dict):
-        return None
-    result = obj.get("result")
-    if isinstance(result, str) and len(obj) <= 2:
-        return result
-    if "jsonrpc" in obj:
-        return _nso_result_from_json(obj.get("result"))
-    if len(obj) == 1:
-        ((key, val),) = obj.items()
-        if str(key).split(":")[-1] in ("output", "exec", "any") and isinstance(val, dict):
-            return _nso_result_from_json(val)
-    return None
-
-
-def _unwrap_nso(text: str) -> tuple[str, str | None]:
-    """Strip Cisco NSO ``live-status exec`` wrappers so the device's CLI text is parsed.
-
-    Handles the RESTCONF / JSON-RPC JSON response and the ``result`` header that ``ncs_cli`` prints before the
-    output. The raw ``result`` string from the Python API needs no unwrapping.
-    """
-    stripped = text.lstrip()
-    if stripped.startswith("{") and '"result"' in stripped[:2000]:
-        try:
-            inner = _nso_result_from_json(json.loads(stripped))
-        except ValueError:
-            inner = None
-        if inner is not None:
-            return inner, "nso-live-status"
-    # ``ncs_cli`` prints "result" (alone or followed by the first output line) before the text; plain string
-    # handling keeps this linear on any input
-    head, sep, tail = text.lstrip().partition("\n")
-    line = head.rstrip("\r")
-    if sep and len(line) < 200 and (line.rstrip() == "result" or line.startswith(("result ", "result\t"))):
-        rest = line[len("result") :].strip()
-        return (rest + "\n" if rest else "") + tail, "nso-live-status"
-    return text, None
 
 
 def _parse(

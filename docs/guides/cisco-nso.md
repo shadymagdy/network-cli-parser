@@ -173,11 +173,25 @@ curl -s -u admin:admin -X POST \
   | clijson parse -c "show bgp summary" -n
 ```
 
-These forms are all recognised:
-- the RESTCONF response (`{"tailf-ned-cisco-ios-xr-stats:output": {"result": "..."}}`);
-- a JSON-RPC envelope;
-- text copied from `ncs_cli`. It starts with `result` and may carry the echoed command, in which case even the
-  command and platform are detected.
+Every way NSO hands back the `result` is recognised:
+
+| How the output was collected | What clijson receives |
+|---|---|
+| Python API: `action(inp).result` | the text, usually with CRLF line endings and the device prompt at the end |
+| RESTCONF (JSON) or `ncs_cli ... \| display json` | `{"<ned>-stats:output": {"result": "..."}}` |
+| RESTCONF (XML), NETCONF, or `ncs_cli ... \| display xml` | `<result xmlns="...">...</result>`, XML-escaped, possibly inside `<rpc-reply>` |
+| JSON-RPC `run_action` | `{"jsonrpc": "2.0", "result": {...}}` or `"result": [{"name": "result", "value": "..."}]` |
+| `ncs_cli` transcript (C-style or J-style) | NSO's prompt and `devices device X live-status exec any "..."` line, `result`, the text, `[ok][...]` and NSO's prompt again |
+| copied out of a log or JSON string | the same text with literal `\r\n` instead of line breaks |
+
+For a transcript, the device name and the command are read from NSO's command line, so
+`clijson.parse(transcript)` needs no hints at all. NSO's own prompt (`admin@ncs>`) is never mistaken for a Junos
+prompt. Commands sent from configuration mode (`do show ...` on IOS XR, `run show ...` on Junos) resolve to
+the same parsers.
+
+!!! success "Tested on the whole corpus"
+    Every regression capture of every supported platform is parsed through each of the forms above. The test
+    suite requires the result to be identical to parsing the plain capture.
 
 ## Tips
 
