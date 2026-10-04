@@ -18,18 +18,19 @@ from __future__ import annotations
 
 import html
 import json
-import re
 from dataclasses import dataclass
 from typing import Any
 
 SOURCE = "nso-live-status"
 
-# NSO's own CLI prompt followed by a live-status exec command (one line, anchored, no nested quantifiers)
-_NSO_EXEC_LINE = re.compile(
-    r"^(?P<prompt>[\w.\-]+@[\w.\-]+[#>])[ \t]*(?:request[ \t]+)?devices[ \t]+device[ \t]+(?P<device>\S+)"
-    r"[ \t]+live-status[ \t]+(?:\S+[ \t]+)??exec[ \t]+\w+(?P<args>.*)$"
-)
-_BARE_PROMPT = re.compile(r"^[\w.\-]+@[\w.\-]+[#>]$")
+
+def _is_bare_prompt(token: str) -> bool:
+    """``admin@ncs#`` / ``user@host>``: user@host followed by # or >, nothing else (no regex)."""
+    if len(token) < 4 or token[-1] not in "#>":
+        return False
+    user, at, host = token[:-1].partition("@")
+    ok = set("._-")
+    return bool(at and user and host) and all(c.isalnum() or c in ok for c in user + host)
 
 
 @dataclass
@@ -146,6 +147,43 @@ def _from_xml(stripped: str) -> str | None:
 # --------------------------------------------------------------------------- #
 
 
+def _nso_exec_line(line: str) -> tuple[str, str, str | None] | None:
+    """``admin@ncs# [request] devices device pe1 live-status exec any "show arp"`` -> (prompt, device, command).
+
+    Token-based (no regex), so it is linear on any input.
+    """
+    tokens = line.split()
+    if len(tokens) < 7 or "live-status" not in tokens[:8]:
+        return None
+    prompt = tokens[0]
+    if not _is_bare_prompt(prompt):
+        return None
+    k = 1
+    if tokens[k] == "request":
+        k += 1
+    if tokens[k : k + 2] != ["devices", "device"] or len(tokens) < k + 6:
+        return None
+    device = tokens[k + 2]
+    k += 3
+    if tokens[k] != "live-status":
+        return None
+    k += 1
+    # "exec" or "<ned>-stats:exec", optionally preceded by one more container
+    for _ in range(2):
+        if k < len(tokens) and (tokens[k] == "exec" or tokens[k].endswith(":exec")):
+            break
+        k += 1
+    else:
+        return None
+    if k + 1 >= len(tokens):
+        return prompt, device, None
+    # the arguments are everything after the action name ("any", "show", ...), kept verbatim
+    pos = 0
+    for tok in tokens[: k + 2]:
+        pos = line.find(tok, pos) + len(tok)
+    return prompt, device, _command_from_args(line[pos:])
+
+
 def _command_from_args(args: str) -> str | None:
     s = args.strip()
     if s.startswith("args"):
@@ -170,10 +208,9 @@ def _from_transcript(text: str) -> Unwrapped | None:
         line = raw.strip().rstrip("\r")
         if not line:
             continue
-        m = _NSO_EXEC_LINE.match(line)
-        if m:
-            nso_prompt, device = m["prompt"], m["device"]
-            command = _command_from_args(m["args"])
+        parsed = _nso_exec_line(line)
+        if parsed:
+            nso_prompt, device, command = parsed
             continue
         if _is_result_header(line):
             start = i
@@ -193,7 +230,7 @@ def _from_transcript(text: str) -> Unwrapped | None:
         elif last.startswith(("[ok]", "[error]")):
             saw_ok = True
             body.pop()
-        elif _BARE_PROMPT.match(last) and (saw_ok or last == nso_prompt):
+        elif _is_bare_prompt(last) and (saw_ok or (nso_prompt is not None and last[:-1] == nso_prompt[:-1])):
             body.pop()
             nso_prompt = None  # only the final prompt belongs to NSO
         else:

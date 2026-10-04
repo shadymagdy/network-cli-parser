@@ -182,3 +182,27 @@ def test_config_mode_prefixes_resolve():
     assert (
         clijson.find_parser("junos", "run show l2circuit connections").parser.name == "junos.show_l2circuit_connections"
     )
+
+
+def test_nso_command_line_parsing_is_linear_on_hostile_input():
+    import time
+
+    hostile = "-@-# devices device ! live-status exec a" + "a" * 200_000 + "\nresult \nx\n"
+    start = time.perf_counter()
+    clijson.parse(hostile, "show version", "iosxr")
+    assert time.perf_counter() - start < 1
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        'admin@ncs# devices device pe1 live-status exec any "show arp"',
+        "admin@ncs> request devices device pe1 live-status exec any show arp",
+        'admin@ncs> request devices device pe1 live-status exec any args [ "show arp" ]',
+        "admin@ncs# devices device pe1 live-status cisco-ios-xr-stats:exec any 'show arp'",
+    ],
+)
+def test_nso_command_line_variants(line):
+    xr = (FIX / "iosxr" / "show_arp" / "ntc_cisco_xr_show_arp.txt").read_text(encoding="utf-8")
+    res = clijson.parse(f"{line}\nresult \n{xr}\nadmin@ncs# ")
+    assert (res.command, res.metadata["device"], res.parser) == ("show arp", "pe1", "iosxr.show_arp")
