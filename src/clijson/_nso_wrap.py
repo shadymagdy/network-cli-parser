@@ -185,15 +185,46 @@ def _nso_exec_line(line: str) -> tuple[str, str, str | None] | None:
 
 
 def _command_from_args(args: str) -> str | None:
+    """The device command in ``exec any`` arguments: ``"show x | match \\"y\\""``, ``args [ "show x" ]``, ``show x``.
+
+    A pipe after the closing quote or bracket is NSO's own filter (``exec any "show x" | match y``); it is kept on
+    the command so the result is marked as filtered.
+    """
     s = args.strip()
     if s.startswith("args"):
         s = s[4:].strip()
-    if s.startswith("[") and s.endswith("]"):
-        s = s[1:-1].strip()
-    if len(s) >= 2 and s[0] == s[-1] and s[0] in "\"'":
-        s = s[1:-1]
-    s = s.strip()
-    return s or None
+    closing = None
+    if s.startswith("["):
+        s = s[1:].strip()
+        closing = "]"
+    command, rest = _split_quoted(s) if s[:1] in ("'", '"') else (None, s)
+    if command is None:
+        end = rest.find(closing) if closing else -1
+        command, rest = (rest[:end], rest[end + 1 :]) if end >= 0 else (rest, "")
+    elif closing:
+        rest = rest.strip()
+        rest = rest[1:] if rest.startswith(closing) else rest
+    command, rest = command.strip(), rest.strip()
+    if command and rest.startswith("|"):
+        command = f"{command} {rest}"
+    return command or None
+
+
+def _split_quoted(s: str) -> tuple[str, str]:
+    """``"show x \\"y\\"" | match z`` -> (``show x "y"``, ``| match z``), honouring backslash escapes."""
+    quote, i = s[0], 1
+    out: list[str] = []
+    while i < len(s):
+        c = s[i]
+        if c == "\\" and i + 1 < len(s):
+            out.append(s[i + 1])
+            i += 2
+            continue
+        if c == quote:
+            return "".join(out), s[i + 1 :]
+        out.append(c)
+        i += 1
+    return "".join(out), ""
 
 
 def _is_result_header(line: str) -> bool:
@@ -204,6 +235,7 @@ def _from_transcript(text: str) -> Unwrapped | None:
     lines = text.split("\n")
     nso_prompt = command = device = None
     start = None
+    header = True
     for i, raw in enumerate(lines[:20]):  # NSO's command line and the result header come first
         line = raw.strip().rstrip("\r")
         if not line:
@@ -212,15 +244,19 @@ def _from_transcript(text: str) -> Unwrapped | None:
         if parsed:
             nso_prompt, device, command = parsed
             continue
-        if _is_result_header(line):
-            start = i
-            break
-        if nso_prompt is None:
-            return None  # device output that merely mentions "result" later on
+        start = i
+        if not _is_result_header(line):
+            if nso_prompt is None:
+                return None  # plain device output (that may mention "result" further down)
+            header = False  # NSO's own `| match` filtered the result header away
+        break
     if start is None:
         return None
-    first = lines[start].strip().rstrip("\r")[len("result") :].strip()
-    body = ([first] if first else []) + lines[start + 1 :]
+    if header:
+        first = lines[start].strip().rstrip("\r")[len("result") :].strip()
+        body = ([first] if first else []) + lines[start + 1 :]
+    else:
+        body = lines[start:]
     # trailing NSO noise: blank lines, J-style "[ok][timestamp]" and NSO's own prompt
     saw_ok = False
     while body:

@@ -37,6 +37,16 @@ All notable changes to this project are documented here. The format follows
 * `l2vpn.pseudowires`: `neighbor` may be `null` when the output doesn't show it (a row filtered with `| match`).
 * `FORWARD` is recognised as an up pseudowire state.
 
+### Cisco NSO
+
+* Every new and fixed check command, `ping` included, has been verified to work through `live-status exec any`.
+  A new test runs every regression capture through `clijson.nso.show()` on mock IOS XR, Junos and VRP NED
+  devices, with the platform taken from the NED-id alone.
+* `ncs_cli` transcripts: escaped quotes inside the command (`exec any "... | match \"x\""`) are unescaped.
+  NSO's own pipe after the command (`exec any "show bgp summary" | match <peer>`), which removes the `result`
+  line, is understood, and the result is marked as filtered.
+* Guide: [Check commands through NSO](docs/guides/cisco-nso.md#check-commands-through-nso).
+
 ## 0.4.0 - 2026-10-04
 
 ### Added
