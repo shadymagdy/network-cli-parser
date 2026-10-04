@@ -1,0 +1,13 @@
+MAC address table of slot 1:
+-------------------------------------------------------------------------------
+MAC Address    VLAN/BD/                        PEVLAN CEVLAN Port/Peerip
+Type      LSP/LSR-ID
+               VSI/SI/EVPN
+MAC-Tunnel
+-------------------------------------------------------------------------------
+00e0-fc00-6690 V200                            200    -      GE1/8/0/12
+dynamic       1/-
+00e0-fc00-1111 V200                            -      -      192.0.2.18
+dynamic       1/48178
+-------------------------------------------------------------------------------
+Total matching items on slot 1 displayed = 2

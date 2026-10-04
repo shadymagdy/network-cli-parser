@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ...models import pw_state, record
+from ...models import mac, pw_state, record
 from ...registry import Parser, register
 from ...textutils import snake, to_num
 
@@ -38,7 +38,7 @@ STATUS_CODES = {
 _BACKUP_CODES = {"HS", "ST", "BK"}
 
 _ROW = re.compile(
-    r"^\s+(?P<name>\S+?)\((?P<kind>vc|vpls-id|vpls) (?P<id>\d+)\)\s+(?P<type>rmt|loc)\s+(?P<st>\S+)"
+    r"^\s*(?P<name>\S+?)\((?P<kind>vc|vpls-id|vpls) (?P<id>\d+)\)\s+(?P<type>rmt|loc)\s+(?P<st>\S+)"
     r"(?:\s+(?P<last_up>.+?))?\s+(?P<trans>\d+)\s*$"
 )
 _ENCAP = {"VLAN": "ethernet-vlan", "ETHERNET": "ethernet", "VLAN-CCC": "ethernet-vlan"}
@@ -59,10 +59,23 @@ def _kv_line(line: str) -> dict[str, Any]:
     return out
 
 
-def parse_connections(text: str, section: str) -> dict[str, Any]:
-    """Shared parser: *section* is ``neighbor`` (l2circuit) or ``instance`` (vpls)."""
+def _command_arg(command: str, keyword: str) -> str | None:
+    """``show vpls connections instance VPLS-A | match rmt`` -> ``VPLS-A`` for *keyword* ``instance``."""
+    words = command.split("|", 1)[0].split()
+    for i, word in enumerate(words[:-1]):
+        if word == keyword:
+            return words[i + 1]
+    return None
+
+
+def parse_connections(text: str, section: str, command: str = "") -> dict[str, Any]:
+    """Shared parser: *section* is ``neighbor`` (l2circuit) or ``instance`` (vpls).
+
+    Rows filtered out of their section (``| match rmt``) still parse; the section then comes from the command
+    (``neighbor X`` / ``instance X``) when it names one.
+    """
     out: dict[str, Any] = {"connections": []}
-    group: str | None = None
+    group: str | None = _command_arg(command, section)
     vpls_id: Any = None
     cur: dict[str, Any] | None = None
     in_history = False
@@ -78,7 +91,7 @@ def parse_connections(text: str, section: str) -> dict[str, Any]:
             vpls_id = to_num(m.group(1))
             continue
         m = _ROW.match(raw)
-        if m and group is not None:
+        if m:
             st = m["st"]
             cur = {
                 section: group,
@@ -149,7 +162,7 @@ class ShowL2circuitConnections(Parser):
     """Layer-2 circuits per neighbor: status code (Up, HS hot-standby, MM, ...), labels, PW status TLV, flow labels."""
 
     def parse(self, text: str) -> dict[str, Any]:
-        return parse_connections(text, "neighbor")
+        return parse_connections(text, "neighbor", self.command)
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return _normalize(data, "neighbor")
@@ -160,7 +173,66 @@ class ShowVplsConnections(Parser):
     """VPLS pseudowires per instance: neighbor, VPLS-id, status code, labels and local LSI interface."""
 
     def parse(self, text: str) -> dict[str, Any]:
-        return parse_connections(text, "instance")
+        return parse_connections(text, "instance", self.command)
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return _normalize(data, "instance")
+
+
+_MAC_ROW = re.compile(r"^(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<flags>\S+)\s+(?P<intf>\S+)(?P<rest>.*)$")
+
+
+@register(
+    "junos",
+    "show (vpls|bridge|evpn) mac-table [<args...>]",
+    intent="mac.table",
+)
+class ShowVplsMacTable(Parser):
+    """MAC table per routing instance and bridging domain (VPLS, bridge domains, EVPN): flags, interface, source."""
+
+    def parse(self, text: str) -> dict[str, Any]:
+        out: dict[str, Any] = {"entries": []}
+        instance = _command_arg(self.command, "instance")
+        domain: str | None = None
+        vlan: Any = None
+        for raw in text.splitlines():
+            s = raw.strip()
+            m = re.match(r"^Routing instance\s*:\s*(\S+)", s)
+            if m:
+                instance, domain, vlan = m.group(1), None, None
+                continue
+            m = re.match(r"^Bridging domain\s*:\s*([^,\s]+)(?:,\s*VLAN\s*:\s*(\S+))?", s)
+            if m:
+                domain = m.group(1)
+                vlan = None if not m.group(2) or m.group(2) == "none" else to_num(m.group(2))
+                continue
+            m = _MAC_ROW.match(s)
+            if not m:
+                continue
+            rest = m["rest"].split()
+            entry: dict[str, Any] = {
+                "mac_address": m["mac"].lower(),
+                "flags": m["flags"].split(","),
+                "interface": m["intf"],
+                "routing_instance": instance,
+                "bridging_domain": domain,
+                "vlan": vlan,
+            }
+            if rest and rest[0].isdigit():
+                entry["nh_index"] = int(rest.pop(0))
+            if rest:
+                entry["active_source"] = rest[-1]
+            out["entries"].append(entry)
+        return out
+
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+        return [
+            record(
+                "mac.table",
+                mac_address=mac(e["mac_address"]),
+                vlan=e["vlan"] if e["vlan"] is not None else e["routing_instance"],
+                interface=e["interface"],
+                type="static" if "S" in e["flags"] else "dynamic",
+            )
+            for e in data["entries"]
+        ]

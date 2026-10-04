@@ -1,0 +1,26 @@
+{
+  "command": "show route advertising-protocol bgp 198.51.100.125",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "neighbor": "198.51.100.125",
+    "direction": "advertised",
+    "tables": {
+      "inet.0": {
+        "destinations": 50918,
+        "routes": 89653,
+        "active": 50521
+      }
+    },
+    "routes": [
+      {
+        "table": "inet.0",
+        "prefix": "0.0.0.0/0",
+        "active": true,
+        "next_hop": "Self",
+        "as_path": "64496",
+        "origin": "igp"
+      }
+    ]
+  }
+}

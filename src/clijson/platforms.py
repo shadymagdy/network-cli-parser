@@ -92,6 +92,7 @@ IOSXR = Platform(
         (_rx(r"\b0/(?:RS?P)?\d+/CPU0\b"), 15),
         (_rx(r"^\w{3} \w{3} +\d+ \d\d:\d\d:\d\d\.\d{3} \w+\s*$"), 10),
         (_rx(r"\basr9k|\bncs5[05]\d{2}|\bNCS-?5[05]\d{2}|\bXRd\b|\bXRv", re.M | re.I), 20),
+        (_rx(r"^Success rate is \d+ percent"), 20),
     ),
 )
 
@@ -138,6 +139,7 @@ JUNOS = Platform(
         (_rx(r"^[ \t]*Logical interface ", re.M), 10),
         (_rx(r"<rpc-reply|junos:style|xmlns:junos", re.M), 50),
         (_rx(r"Routing Engine \d|FPC \d+|PIC \d+", re.M), 10),
+        (_rx(r"^\d+ packets transmitted, \d+ packets received"), 20),
     ),
 )
 
@@ -186,6 +188,7 @@ VRP = Platform(
         (_rx(r"^[ \t]*Interface\s+PHY\s+Protocol\b", re.M), 40),
         (_rx(r"\b(?:GE|XGE|MEth)\d+/\d+/\d+\b"), 15),
         (_rx(r"\b[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}\b"), 15),
+        (_rx(r"press CTRL_C to break|\d+ packet\(s\) transmitted"), 20),
     ),
     verb_aliases=("show",),
 )

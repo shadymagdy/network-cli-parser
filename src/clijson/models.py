@@ -37,6 +37,7 @@ __all__ = [
     "MacEntry",
     "NextHop",
     "OspfNeighbor",
+    "Ping",
     "Pseudowire",
     "Route",
     "SystemVersion",
@@ -262,7 +263,9 @@ class Pseudowire(TypedDict):
     """L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) with redundancy role."""
 
     service: Annotated[str | None, "VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to"]
-    neighbor: Annotated[str, "Remote PE address"]
+    neighbor: Annotated[
+        str | None, "Remote PE address (null when the output omits it, e.g. a row filtered with | match)"
+    ]
     pw_id: Annotated[int | None, "PW / VC ID"]
     state: Annotated[str, "up, down or standby (vendor word lowercased if unrecognised)"]
     role: Annotated[str | None, "primary or backup, when PW redundancy is configured"]
@@ -271,6 +274,19 @@ class Pseudowire(TypedDict):
     mtu: Annotated[int | None, "Negotiated / local PW MTU"]
     local_label: int | None
     remote_label: int | None
+
+
+class Ping(TypedDict):
+    """Result of a ping: packets sent and received, loss and round-trip times."""
+
+    target: Annotated[str | None, "Destination address or name"]
+    sent: Annotated[int | None, "Echo requests sent"]
+    received: Annotated[int | None, "Echo replies received"]
+    loss_percent: Annotated[float | None, "Packet loss, 0-100"]
+    success: Annotated[bool | None, "True when at least one reply came back"]
+    rtt_min: Annotated[float | None, "Minimum round-trip time in milliseconds"]
+    rtt_avg: Annotated[float | None, "Average round-trip time in milliseconds"]
+    rtt_max: Annotated[float | None, "Maximum round-trip time in milliseconds"]
 
 
 #: Intent name -> record type.
@@ -294,10 +310,11 @@ INTENTS: dict[str, type[Any]] = {
     "mac.table": MacEntry,
     "lag": Lag,
     "l2vpn.pseudowires": Pseudowire,
+    "ping": Ping,
 }
 
 #: Intents whose normalized output is a single record rather than a list of records.
-SINGLE_RECORD = frozenset({"system.version"})
+SINGLE_RECORD = frozenset({"system.version", "ping"})
 
 #: Intent name -> ordered field names (derived from :data:`INTENTS`).
 SCHEMAS: dict[str, list[str]] = {name: list(get_type_hints(cls)) for name, cls in INTENTS.items()}
@@ -482,7 +499,7 @@ def status(value: str | None) -> str | None:
     return v
 
 
-_PW_UP = {"up", "established", "active", "operational", "forwarding"}
+_PW_UP = {"up", "established", "active", "operational", "forwarding", "forward"}
 _PW_STANDBY = {"standby", "hs", "st", "bk", "rs", "inactive", "hot-standby", "backup", "all ready"}
 
 

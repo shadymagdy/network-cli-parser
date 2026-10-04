@@ -1,0 +1,33 @@
+{
+  "command": "display vsi remote ldp pw-id 6000",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "remotes": [
+      {
+        "vsi_id": 6000,
+        "peer": "192.0.2.18",
+        "vc_label": 8189,
+        "group_id": 0,
+        "encapsulation": "vlan",
+        "mtu": 1500,
+        "vsi_index": 377,
+        "state": "FORWARD"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": null,
+      "neighbor": "192.0.2.18",
+      "pw_id": 6000,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": "ethernet-vlan",
+      "mtu": 1500,
+      "local_label": null,
+      "remote_label": 8189
+    }
+  ]
+}

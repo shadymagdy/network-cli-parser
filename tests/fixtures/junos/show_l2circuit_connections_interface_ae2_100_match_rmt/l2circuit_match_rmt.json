@@ -1,0 +1,33 @@
+{
+  "command": "show l2circuit connections interface ae2.100 | match rmt",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "connections": [
+      {
+        "neighbor": null,
+        "pw_id": 5000,
+        "type": "remote",
+        "status": "Up",
+        "status_text": "operational",
+        "last_up": "Apr 17 05:43:09 2025",
+        "up_transitions": 1,
+        "interface": "ae2.100"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "ae2.100",
+      "neighbor": null,
+      "pw_id": 5000,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": null,
+      "remote_label": null
+    }
+  ]
+}

@@ -227,6 +227,8 @@ class DisplayMacAddress(Parser):
     """MAC address table."""
 
     def parse(self, text: str) -> dict[str, Any]:
+        if "PEVLAN" in text:
+            return _parse_mac_slots(text)
         out: dict[str, Any] = {"entries": []}
         for m in match_lines(
             r"^\s*(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4})\s+(?P<vlan>\S+)\s+(?P<intf>\S+)\s+(?P<type>\S+)(?:\s+(?P<age>\S+))?\s*$",
@@ -253,16 +255,69 @@ class DisplayMacAddress(Parser):
         return out
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
-        return [
-            record(
+        rows: list[dict[str, Any]] = []
+        seen: set[tuple[Any, ...]] = set()
+        for e in data["entries"]:
+            row = record(
                 "mac.table",
                 mac_address=mac(e["mac_address"]),
                 vlan=e.get("vlan"),
                 interface=e["interface"],
                 type=e["type"],
             )
-            for e in data["entries"]
-        ]
+            key = tuple(row.values())
+            if key not in seen:  # the per-slot tables repeat the same entry on every line card
+                seen.add(key)
+                rows.append(row)
+        return rows
+
+
+_MAC_RE = re.compile(r"^[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}$")
+
+
+def _parse_mac_slots(text: str) -> dict[str, Any]:
+    """Newer layout, one table per slot: ``MAC Address  VLAN/BD/VSI/SI/EVPN  PEVLAN CEVLAN Port/Peerip  Type  LSP/LSR-ID``.
+
+    A row wrapped onto a second line by a narrow terminal is joined back together.
+    """
+    out: dict[str, Any] = {"entries": []}
+    slot: str | None = None
+    lines = [ln.strip() for ln in text.splitlines()]
+    i = 0
+    while i < len(lines):
+        s = lines[i]
+        i += 1
+        m = re.match(r"^MAC address table of slot (\S+?):?$", s)
+        if m:
+            slot = m.group(1)
+            continue
+        tokens = s.split()
+        if not tokens or not _MAC_RE.match(tokens[0]):
+            continue
+        while len(tokens) < 7 and i < len(lines) and lines[i] and not set(lines[i]) <= {"-"}:
+            nxt = lines[i].split()
+            if _MAC_RE.match(nxt[0]) or lines[i].startswith(("Total", "MAC")):
+                break
+            tokens += nxt
+            i += 1
+        if len(tokens) < 6:
+            continue
+        mac_addr, where, pevlan, cevlan, port, mac_type = tokens[:6]
+        e: dict[str, Any] = {"mac_address": mac_addr}
+        pe, ce = to_num(pevlan) if pevlan != "-" else None, to_num(cevlan) if cevlan != "-" else None
+        e["vlan"] = int(where) if where.isdigit() else where  # a VLAN, or the VSI / BD / EVPN name
+        if not where.isdigit():
+            e["vsi"] = where
+        e.update({"pe_vlan": pe, "ce_vlan": ce, "interface": port, "type": mac_type})
+        if len(tokens) > 6 and tokens[6] != "-":
+            e["lsp"] = tokens[6]
+        if slot:
+            e["slot"] = slot
+        out["entries"].append(e)
+    totals = [int(t) for t in re.findall(r"Total (?:items displayed|matching items[^=\n]*?)\s*=\s*(\d+)", text)]
+    if totals:
+        out["total"] = sum(totals)
+    return out
 
 
 @register("vrp", "display ip vpn-instance [(verbose|<vrf>)]", intent="vrfs")

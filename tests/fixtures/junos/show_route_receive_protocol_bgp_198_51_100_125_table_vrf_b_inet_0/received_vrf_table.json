@@ -1,0 +1,26 @@
+{
+  "command": "show route receive-protocol bgp 198.51.100.125 table VRF-B.inet.0",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "neighbor": "198.51.100.125",
+    "direction": "received",
+    "tables": {
+      "VRF-B.inet.0": {
+        "destinations": 7,
+        "routes": 9,
+        "active": 8
+      }
+    },
+    "routes": [
+      {
+        "table": "VRF-B.inet.0",
+        "prefix": "203.0.113.0/24",
+        "active": false,
+        "next_hop": "198.51.100.125",
+        "as_path": "64500",
+        "origin": "igp"
+      }
+    ]
+  }
+}

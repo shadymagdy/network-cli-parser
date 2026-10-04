@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shadymagdy/network-cli-parser/main/schemas/ping.json",
+  "title": "clijson ping",
+  "type": "object",
+  "description": "Result of a ping: packets sent and received, loss and round-trip times.",
+  "properties": {
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Destination address or name"
+    },
+    "sent": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Echo requests sent"
+    },
+    "received": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Echo replies received"
+    },
+    "loss_percent": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Packet loss, 0-100"
+    },
+    "success": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "True when at least one reply came back"
+    },
+    "rtt_min": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Minimum round-trip time in milliseconds"
+    },
+    "rtt_avg": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Average round-trip time in milliseconds"
+    },
+    "rtt_max": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Maximum round-trip time in milliseconds"
+    }
+  },
+  "required": [
+    "target",
+    "sent",
+    "received",
+    "loss_percent",
+    "success",
+    "rtt_min",
+    "rtt_avg",
+    "rtt_max"
+  ],
+  "additionalProperties": false
+}

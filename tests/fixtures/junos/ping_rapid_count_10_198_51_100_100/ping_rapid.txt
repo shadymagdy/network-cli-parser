@@ -1,0 +1,6 @@
+Sep 17 06:09:21
+PING 198.51.100.100 (198.51.100.100): 56 data bytes
+!!!!!!!!!!
+--- 198.51.100.100 ping statistics ---
+10 packets transmitted, 10 packets received, 0% packet loss
+round-trip min/avg/max/stddev = 0.029/0.061/0.129/0.031 ms

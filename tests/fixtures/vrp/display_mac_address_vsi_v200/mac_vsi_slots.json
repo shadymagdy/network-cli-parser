@@ -1,0 +1,51 @@
+{
+  "command": "display mac-address vsi V200",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "00e0-fc00-6690",
+        "vlan": "V200",
+        "vsi": "V200",
+        "pe_vlan": 200,
+        "ce_vlan": null,
+        "interface": "GE1/8/0/12",
+        "type": "dynamic",
+        "lsp": "clc1/1/-",
+        "slot": "clc1/1"
+      },
+      {
+        "mac_address": "00e0-fc00-6690",
+        "vlan": "V200",
+        "vsi": "V200",
+        "pe_vlan": 200,
+        "ce_vlan": null,
+        "interface": "GE1/8/0/12",
+        "type": "dynamic",
+        "lsp": "clc1/2/-",
+        "slot": "clc1/2"
+      },
+      {
+        "mac_address": "00e0-fc00-6690",
+        "vlan": "V200",
+        "vsi": "V200",
+        "pe_vlan": 200,
+        "ce_vlan": null,
+        "interface": "GE1/8/0/12",
+        "type": "dynamic",
+        "lsp": "clc1/3/-",
+        "slot": "clc1/3"
+      }
+    ],
+    "total": 3
+  },
+  "normalized": [
+    {
+      "mac_address": "00:e0:fc:00:66:90",
+      "vlan": "V200",
+      "interface": "GE1/8/0/12",
+      "type": "dynamic"
+    }
+  ]
+}

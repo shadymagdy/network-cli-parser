@@ -1,0 +1,11 @@
+Thu Sep 17 06:02:33.222 UTC
+Legend: pp = Partially Programmed.
+Bridge group: CUST-GRP-A, bridge-domain: 100, id: 920, state: up, ShgId: 0, MSTi: 0
+  Aging: 300 s, MAC limit: 4000, Action: none, Notification: syslog
+  Filter MAC addresses: 0
+  ACs: 1 (1 up), VFIs: 0, PWs: 2 (1 up), PBBs: 0 (0 up), VNIs: 0 (0 up)
+  List of Access PWs:
+      Neighbor 192.0.2.18 pw-id 5000, state: up, Static MAC addresses: 0
+      Neighbor 192.0.2.204 pw-id 5000, state: standby, Static MAC addresses: 0, backup
+  List of VFIs:
+  List of Access VFIs:

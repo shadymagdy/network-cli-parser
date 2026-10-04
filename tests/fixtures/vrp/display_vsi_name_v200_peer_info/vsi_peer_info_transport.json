@@ -1,0 +1,22 @@
+{
+  "command": "display vsi name V200 peer-info",
+  "platform": "vrp",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "vsis": [
+      {
+        "name": "V200",
+        "peers": [
+          {
+            "peer": "192.0.2.18",
+            "vc_id": 6000,
+            "local_vc_label": 48178,
+            "remote_vc_label": 8189,
+            "state": "up"
+          }
+        ],
+        "signaling": "ldp"
+      }
+    ]
+  }
+}

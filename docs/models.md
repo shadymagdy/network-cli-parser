@@ -137,6 +137,8 @@ Produced by:
 * iosxr: `show ip bgp`
 * iosxr: `show bgp summary`
 * junos: `show bgp summary`
+* junos: `show bgp summary instance <instance> group <group>`
+* junos: `show bgp summary group <group> instance <instance>`
 * vrp: `display bgp`
 * vrp: `display bgp vpnv4 vpn-instance <vrf> peer`
 * vrp: `display bgp instance <instance> peer`
@@ -377,6 +379,7 @@ MAC address table entries. Python type: `clijson.models.MacEntry` (a list of rec
 Produced by:
 
 * iosxr: `show l2vpn forwarding bridge-domain`
+* junos: `show`
 * junos: `show ethernet-switching table`
 * junos: `show ethernet-switching table vlan-id <vlan>`
 * vrp: `display mac-address`
@@ -406,7 +409,7 @@ L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) wit
 | field | type | description |
 |---|---|---|
 | `service` | string \| null | VSI, bridge-domain, xconnect or attachment-circuit name the PW belongs to |
-| `neighbor` | string | Remote PE address |
+| `neighbor` | string \| null | Remote PE address (null when the output omits it, e.g. a row filtered with | match) |
 | `pw_id` | integer \| null | PW / VC ID |
 | `state` | string | up, down or standby (vendor word lowercased if unrecognised) |
 | `role` | string \| null | primary or backup, when PW redundancy is configured |
@@ -419,9 +422,32 @@ L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) wit
 Produced by:
 
 * iosxr: `show l2vpn bridge-domain`
+* iosxr: `show l2vpn bridge-domain pw-id <pwid>`
 * iosxr: `show l2vpn xconnect`
 * junos: `show l2circuit connections`
 * junos: `show vpls connections`
 * vrp: `display vsi`
 * vrp: `display vsi verbose`
 * vrp: `display mpls l2vc`
+* vrp: `display vsi remote`
+
+## `ping`
+
+Result of a ping: packets sent and received, loss and round-trip times. Python type: `clijson.models.Ping` (one object).
+
+| field | type | description |
+|---|---|---|
+| `target` | string \| null | Destination address or name |
+| `sent` | integer \| null | Echo requests sent |
+| `received` | integer \| null | Echo replies received |
+| `loss_percent` | number \| null | Packet loss, 0-100 |
+| `success` | boolean \| null | True when at least one reply came back |
+| `rtt_min` | number \| null | Minimum round-trip time in milliseconds |
+| `rtt_avg` | number \| null | Average round-trip time in milliseconds |
+| `rtt_max` | number \| null | Maximum round-trip time in milliseconds |
+
+Produced by:
+
+* iosxr: `ping`
+* junos: `ping`
+* vrp: `ping`

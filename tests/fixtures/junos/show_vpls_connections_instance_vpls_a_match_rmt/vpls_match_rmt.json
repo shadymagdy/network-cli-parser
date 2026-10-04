@@ -1,0 +1,33 @@
+{
+  "command": "show vpls connections instance VPLS-A | match rmt",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "connections": [
+      {
+        "instance": "VPLS-A",
+        "pw_id": 7000,
+        "type": "remote",
+        "status": "Up",
+        "status_text": "operational",
+        "last_up": "Apr 28 11:06:51 2026",
+        "up_transitions": 1,
+        "neighbor": "192.0.2.204"
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "service": "VPLS-A",
+      "neighbor": "192.0.2.204",
+      "pw_id": 7000,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": null,
+      "remote_label": null
+    }
+  ]
+}

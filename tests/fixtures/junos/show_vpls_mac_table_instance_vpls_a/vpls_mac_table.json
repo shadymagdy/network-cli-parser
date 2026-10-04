@@ -1,0 +1,45 @@
+{
+  "command": "show vpls mac-table instance VPLS-A",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "entries": [
+      {
+        "mac_address": "00:1d:b5:00:8f:c3",
+        "flags": [
+          "DP",
+          "SE"
+        ],
+        "interface": "lsi.1048824",
+        "routing_instance": "VPLS-A",
+        "bridging_domain": "__VPLS-A__",
+        "vlan": null
+      },
+      {
+        "mac_address": "bc:07:1d:00:46:5a",
+        "flags": [
+          "DP",
+          "SE"
+        ],
+        "interface": "ae190.200",
+        "routing_instance": "VPLS-A",
+        "bridging_domain": "__VPLS-A__",
+        "vlan": null
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "mac_address": "00:1d:b5:00:8f:c3",
+      "vlan": "VPLS-A",
+      "interface": "lsi.1048824",
+      "type": "dynamic"
+    },
+    {
+      "mac_address": "bc:07:1d:00:46:5a",
+      "vlan": "VPLS-A",
+      "interface": "ae190.200",
+      "type": "dynamic"
+    }
+  ]
+}

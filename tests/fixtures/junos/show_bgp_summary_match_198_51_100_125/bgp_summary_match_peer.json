@@ -1,0 +1,36 @@
+{
+  "command": "show bgp summary | match 198.51.100.125",
+  "platform": "junos",
+  "source": "clijson (written from vendor documentation formats)",
+  "expected": {
+    "tables": {},
+    "neighbors": [
+      {
+        "neighbor": "198.51.100.125",
+        "remote_as": 64500,
+        "input_messages": 711029,
+        "output_messages": 681995,
+        "output_queue": 0,
+        "flaps": 29,
+        "up_down": "32w2d 5:03:20",
+        "state": "Established",
+        "tables": {},
+        "prefixes_received": null,
+        "uptime_seconds": 19544600
+      }
+    ]
+  },
+  "normalized": [
+    {
+      "neighbor": "198.51.100.125",
+      "remote_as": 64500,
+      "state": "Established",
+      "established": true,
+      "uptime": "32w2d 5:03:20",
+      "uptime_seconds": 19544600,
+      "prefixes_received": null,
+      "vrf": "default",
+      "address_family": null
+    }
+  ]
+}

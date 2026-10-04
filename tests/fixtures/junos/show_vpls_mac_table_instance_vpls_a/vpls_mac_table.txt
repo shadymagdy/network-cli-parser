@@ -1,0 +1,11 @@
+Sep 17 06:55:28
+
+MAC flags       (S -static MAC, D -dynamic MAC, L -locally learned, C -Control MAC
+    O -OVSDB MAC, SE -Statistics enabled, NM -Non configured MAC, R -Remote PE MAC, P -Pinned MAC)
+
+Routing instance : VPLS-A
+ Bridging domain : __VPLS-A__, VLAN : none
+   MAC                 MAC      Logical          NH     MAC         active
+   address             flags    interface        Index  property    source
+   00:1d:b5:00:8f:c3   DP,SE    lsi.1048824
+   bc:07:1d:00:46:5a   DP,SE    ae190.200
