@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any, Union
 
+from ._nso_wrap import unwrap as unwrap_nso
 from .commands import CommandLine, split_command
 from .engines import external
 from .engines.generic import parse_generic
@@ -55,8 +56,11 @@ def parse(
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
+    unwrapped = unwrap_nso(output or "")
+    if command is None and unwrapped.command:
+        command = unwrapped.command
     result = _parse(
-        output or "",
+        unwrapped.text,
         command,
         platform,
         normalize=normalize,
@@ -65,6 +69,10 @@ def parse(
         raise_on_error=raise_on_error,
     )
     result.raw = output
+    if unwrapped.source:
+        result.metadata["source"] = unwrapped.source
+    if unwrapped.device:
+        result.metadata.setdefault("device", unwrapped.device)
     return result
 
 

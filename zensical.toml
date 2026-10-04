@@ -25,6 +25,7 @@ nav = [
   ] },
   { "Guides" = [
     { "Pseudowire redundancy checks" = "guides/pseudowire-checks.md" },
+    { "Using clijson in Cisco NSO" = "guides/cisco-nso.md" },
   ] },
   { "Developer guide" = [
     { "Architecture" = "architecture.md" },
@@ -36,6 +37,7 @@ nav = [
     { "Models" = "reference/models.md" },
     { "Parser helpers" = "reference/textutils.md" },
     { "MCP server" = "reference/mcp.md" },
+    { "Cisco NSO" = "reference/nso.md" },
   ] },
   { "Changelog" = "changelog.md" },
 ]

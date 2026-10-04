@@ -187,6 +187,19 @@ curl -s localhost:8080/parse -d '{"platform":"vrp","command":"display interface 
 curl -s "localhost:8080/commands?platform=junos"
 ```
 
+### Cisco NSO
+
+Use it inside NSO services and actions to turn `live-status exec` output into data:
+
+```python
+import clijson.nso
+
+res = clijson.nso.show(root.devices.device["pe1"], "show bgp summary", normalize=True)
+```
+
+The platform comes from the device's NED. RESTCONF, JSON-RPC and `ncs_cli` output can also go straight to
+`clijson.parse()`. See **[docs/guides/cisco-nso.md](docs/guides/cisco-nso.md)**.
+
 ### AI assistants (MCP)
 
 ```bash
