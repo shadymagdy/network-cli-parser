@@ -125,8 +125,13 @@ JUNOS = Platform(
     netmiko_name="juniper_junos",
     scrapli_name="juniper_junos",
     prompts=(
+        # user@host> ; also "@host>" when the capture tool blanked the user
         _rx(
-            r"^(?:\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*)?(?P<prompt>(?P<user>[\w.\-]+)@(?P<host>[\w.\-]+)[>#%])\s*(?P<cmd>.*)$"
+            r"^(?:\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*)?(?P<prompt>(?P<user>[\w.\-]*)@(?P<host>[\w.\-]+)[>#%])\s*(?P<cmd>.*)$"
+        ),
+        # bare routing-engine host name: "PE2-re0>"
+        _rx(
+            r"^(?:\{(?:master|backup|primary|secondary|linecard)(?::\d+)?\}\s*)?(?P<prompt>(?P<host>[\w.]+(?:-[\w.]+)*?-re\d)[>#%])\s*(?P<cmd>.*)$"
         ),
     ),
     fingerprints=(

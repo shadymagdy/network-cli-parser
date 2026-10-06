@@ -143,7 +143,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 48122,
-      "remote_label": 299872
+      "remote_label": 299872,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": false,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "3100",
@@ -155,7 +162,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 48123,
-      "remote_label": 299904
+      "remote_label": 299904,
+      "status_code": "standby",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": false,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     }
   ]
 }

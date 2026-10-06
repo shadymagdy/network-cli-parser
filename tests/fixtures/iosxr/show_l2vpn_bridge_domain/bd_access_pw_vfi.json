@@ -111,7 +111,14 @@
       "vc_type": null,
       "mtu": null,
       "local_label": null,
-      "remote_label": null
+      "remote_label": null,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "BD3100",
@@ -123,7 +130,14 @@
       "vc_type": null,
       "mtu": null,
       "local_label": null,
-      "remote_label": null
+      "remote_label": null,
+      "status_code": "standby",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "BD3200",
@@ -135,7 +149,14 @@
       "vc_type": null,
       "mtu": null,
       "local_label": null,
-      "remote_label": null
+      "remote_label": null,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "BD3200",
@@ -147,7 +168,14 @@
       "vc_type": null,
       "mtu": null,
       "local_label": null,
-      "remote_label": null
+      "remote_label": null,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     }
   ]
 }

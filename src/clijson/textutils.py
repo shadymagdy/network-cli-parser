@@ -376,3 +376,10 @@ def compact(obj: Any) -> Any:
     if isinstance(obj, list):
         return [compact(v) for v in obj if v is not None]
     return obj
+
+
+def unwrap_nso(payload: str | bytes) -> str:
+    """Alias of :func:`clijson.nso.unwrap`: the device text inside any Cisco NSO ``live-status`` wrapping."""
+    from .nso import unwrap
+
+    return unwrap(payload)

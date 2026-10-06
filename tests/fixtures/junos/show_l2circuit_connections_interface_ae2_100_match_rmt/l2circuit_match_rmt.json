@@ -22,12 +22,19 @@
       "neighbor": null,
       "pw_id": 5000,
       "state": "up",
-      "role": null,
+      "role": "primary",
       "active": true,
       "vc_type": null,
       "mtu": null,
       "local_label": null,
-      "remote_label": null
+      "remote_label": null,
+      "status_code": "Up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     }
   ]
 }

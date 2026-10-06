@@ -228,7 +228,7 @@ class DisplayMacAddress(Parser):
 
     def parse(self, text: str) -> dict[str, Any]:
         if "PEVLAN" in text:
-            return _parse_mac_slots(text)
+            return _parse_mac_slots(text, self)
         out: dict[str, Any] = {"entries": []}
         for m in match_lines(
             r"^\s*(?P<mac>[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4})\s+(?P<vlan>\S+)\s+(?P<intf>\S+)\s+(?P<type>\S+)(?:\s+(?P<age>\S+))?\s*$",
@@ -275,7 +275,12 @@ class DisplayMacAddress(Parser):
 _MAC_RE = re.compile(r"^[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}$")
 
 
-def _parse_mac_slots(text: str) -> dict[str, Any]:
+def _mac_slots_header(s: str) -> bool:
+    """Column headers (two or four lines, depending on the terminal width), slot titles and totals."""
+    return s.startswith(("MAC Address", "MAC address table", "Type", "VSI/SI", "MAC-Tunnel", "Total ", "Info:"))
+
+
+def _parse_mac_slots(text: str, parser: Parser | None = None) -> dict[str, Any]:
     """Newer layout, one table per slot: ``MAC Address  VLAN/BD/VSI/SI/EVPN  PEVLAN CEVLAN Port/Peerip  Type  LSP/LSR-ID``.
 
     A row wrapped onto a second line by a narrow terminal is joined back together.
@@ -293,6 +298,8 @@ def _parse_mac_slots(text: str) -> dict[str, Any]:
             continue
         tokens = s.split()
         if not tokens or not _MAC_RE.match(tokens[0]):
+            if parser is not None and tokens and not set(s) <= {"-"} and not _mac_slots_header(s):
+                parser.note_unparsed(s)
             continue
         while len(tokens) < 7 and i < len(lines) and lines[i] and not set(lines[i]) <= {"-"}:
             nxt = lines[i].split()

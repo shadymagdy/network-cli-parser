@@ -72,6 +72,55 @@
           "integer",
           "null"
         ]
+      },
+      "status_code": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Native status as printed: Junos Up / RS / HS ..., VRP FORWARD / up, IOS XR up / standby"
+      },
+      "local_status_code": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Local PW status code (hex string, e.g. 0x00000000)"
+      },
+      "remote_status_code": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Remote (neighbor) PW status code (hex string, e.g. 0x00000020)"
+      },
+      "control_word": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Control word negotiated / in use"
+      },
+      "pw_status_tlv": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "PW status TLV negotiated / in use"
+      },
+      "flow_label_tx": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Flow label (FAT) transmit"
+      },
+      "flow_label_rx": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Flow label (FAT) receive"
       }
     },
     "required": [
@@ -84,7 +133,14 @@
       "vc_type",
       "mtu",
       "local_label",
-      "remote_label"
+      "remote_label",
+      "status_code",
+      "local_status_code",
+      "remote_status_code",
+      "control_word",
+      "pw_status_tlv",
+      "flow_label_tx",
+      "flow_label_rx"
     ],
     "additionalProperties": false
   }

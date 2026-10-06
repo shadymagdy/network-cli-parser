@@ -26,5 +26,45 @@
         ]
       }
     ]
-  }
+  },
+  "normalized": [
+    {
+      "service": "3100",
+      "neighbor": "192.0.2.11",
+      "pw_id": null,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": 48122,
+      "remote_label": null,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
+    },
+    {
+      "service": "3100",
+      "neighbor": "198.51.100.21",
+      "pw_id": null,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": 48123,
+      "remote_label": null,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
+    }
+  ]
 }

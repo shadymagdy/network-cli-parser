@@ -418,6 +418,13 @@ L2VPN pseudowires (VPLS/VSI peers, bridge-domain PWs, xconnects, l2circuits) wit
 | `mtu` | integer \| null | Negotiated / local PW MTU |
 | `local_label` | integer \| null |  |
 | `remote_label` | integer \| null |  |
+| `status_code` | string \| null | Native status as printed: Junos Up / RS / HS ..., VRP FORWARD / up, IOS XR up / standby |
+| `local_status_code` | string \| null | Local PW status code (hex string, e.g. 0x00000000) |
+| `remote_status_code` | string \| null | Remote (neighbor) PW status code (hex string, e.g. 0x00000020) |
+| `control_word` | boolean \| null | Control word negotiated / in use |
+| `pw_status_tlv` | boolean \| null | PW status TLV negotiated / in use |
+| `flow_label_tx` | boolean \| null | Flow label (FAT) transmit |
+| `flow_label_rx` | boolean \| null | Flow label (FAT) receive |
 
 Produced by:
 

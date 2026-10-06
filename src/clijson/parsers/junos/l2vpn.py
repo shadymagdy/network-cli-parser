@@ -35,11 +35,12 @@ STATUS_CODES = {
     "HS": "hot-standby connection",
     "XX": "unknown",
 }
-_BACKUP_CODES = {"HS", "ST", "BK"}
+_BACKUP_CODES = {"HS", "ST", "BK", "RS"}
 
+# the row up to the status code; "Time last up" and "# Up trans" are parsed from the rest by hand (both are
+# missing on a standby or never-up circuit: "ae22.100(vc 7000)  rmt  RS")
 _ROW = re.compile(
-    r"^\s*(?P<name>\S+?)\((?P<kind>vc|vpls-id|vpls) (?P<id>\d+)\)\s+(?P<type>rmt|loc)\s+(?P<st>\S+)"
-    r"(?:\s+(?P<last_up>.+?))?\s+(?P<trans>\d+)\s*$"
+    r"^\s*(?P<name>[^\s(]+)\((?P<kind>vc|vpls-id|vpls) (?P<id>\d+)\)\s+(?P<type>rmt|loc)\s+(?P<st>\S+)(?P<rest>.*)$"
 )
 _ENCAP = {"VLAN": "ethernet-vlan", "ETHERNET": "ethernet", "VLAN-CCC": "ethernet-vlan"}
 
@@ -68,39 +69,74 @@ def _command_arg(command: str, keyword: str) -> str | None:
     return None
 
 
-def parse_connections(text: str, section: str, command: str = "") -> dict[str, Any]:
+def _time_and_transitions(rest: str) -> tuple[str | None, int | None]:
+    """``"Apr 17 05:43:09 2025           1"`` -> (``"Apr 17 05:43:09 2025"``, 1); ``""`` -> (None, None).
+
+    The count is the last number, when it follows the year or a ``-----`` placeholder (or stands alone), so a time
+    without a count never loses its year.
+    """
+    tokens = rest.split()
+    trans = None
+    if tokens and tokens[-1].isdigit() and (len(tokens) == 1 or tokens[-2].isdigit() or set(tokens[-2]) <= {"-"}):
+        trans = int(tokens.pop())
+    last_up = " ".join(tokens) or None
+    if last_up and set(last_up) <= {"-"}:
+        last_up = None
+    return last_up, trans
+
+
+def _is_header(s: str) -> bool:
+    """Section titles, the legend and the column header line."""
+    return (
+        " -- " in s
+        or s.startswith(
+            ("Legend for", "Layer-2 Circuit Connections", "Layer-2 VPN connections", "Layer-2 VPN Connections")
+        )
+        or (s.startswith(("Interface ", "Neighbor ")) and " Type " in f" {s} " and " St" in s)
+    )
+
+
+def parse_connections(text: str, section: str, command: str = "", parser: Parser | None = None) -> dict[str, Any]:
     """Shared parser: *section* is ``neighbor`` (l2circuit) or ``instance`` (vpls).
 
     Rows filtered out of their section (``| match rmt``) still parse; the section then comes from the command
-    (``neighbor X`` / ``instance X``) when it names one.
+    (``neighbor X`` / ``instance X``) when it names one. Lines that are neither header, legend, row nor detail are
+    reported to *parser* (``note_unparsed``) instead of being dropped silently.
     """
     out: dict[str, Any] = {"connections": []}
     group: str | None = _command_arg(command, section)
     vpls_id: Any = None
     cur: dict[str, Any] | None = None
     in_history = False
+
+    def unparsed(line: str) -> None:
+        if parser is not None:
+            parser.note_unparsed(line)
+
     for raw in text.splitlines():
-        if not raw.strip():
+        s = raw.strip()
+        if not s:
             continue
-        m = re.match(r"^\s*(Neighbor|Instance):\s*(\S+)\s*$", raw)
+        m = re.match(r"^(Neighbor|Instance):\s*(\S+)$", s)
         if m:
             group, cur, in_history = m.group(2), None, False
             continue
-        m = re.match(r"^\s*VPLS-id:\s*(\S+)", raw)
+        m = re.match(r"^VPLS-id:\s*(\S+)", s)
         if m:
             vpls_id = to_num(m.group(1))
             continue
         m = _ROW.match(raw)
         if m:
             st = m["st"]
+            last_up, trans = _time_and_transitions(m["rest"])
             cur = {
                 section: group,
                 "pw_id": int(m["id"]),
                 "type": "remote" if m["type"] == "rmt" else "local",
                 "status": st,
                 "status_text": STATUS_CODES.get(st),
-                "last_up": None if not m["last_up"] or set(m["last_up"].strip()) <= {"-"} else m["last_up"].strip(),
-                "up_transitions": int(m["trans"]),
+                "last_up": last_up,
+                "up_transitions": trans,
             }
             if section == "neighbor":
                 cur["interface"] = m["name"]
@@ -111,9 +147,11 @@ def parse_connections(text: str, section: str, command: str = "") -> dict[str, A
             out["connections"].append(cur)
             in_history = False
             continue
-        if cur is None:
+        if _is_header(s):
             continue
-        s = raw.strip()
+        if cur is None:
+            unparsed(s)
+            continue
         if s.startswith("Connection History"):
             in_history = True
             cur["history"] = []
@@ -124,13 +162,23 @@ def parse_connections(text: str, section: str, command: str = "") -> dict[str, A
                 cur["history"].append({"time": hm["time"], "event": hm["event"]})
                 continue
             in_history = False
-        if ":" in s and not s.startswith(("Legend", "Layer-2", "Interface ", "Neighbor ")):
+        if ":" in s:
             kv = _kv_line(s)
             # "Status" belongs to the local interface, not the PW status code shown in the table
             if "local_interface" in kv and "status" in kv:
                 kv["local_interface_status"] = kv.pop("status")
             cur.update(kv)
+            continue
+        unparsed(s)
     return out
+
+
+def _bool(value: Any) -> bool | None:
+    return value if isinstance(value, bool) else None
+
+
+def _hex(value: Any) -> str | None:
+    return value if isinstance(value, str) and value.lower().startswith("0x") else None
 
 
 def _normalize(data: dict[str, Any], section: str) -> list[dict[str, Any]]:
@@ -139,6 +187,12 @@ def _normalize(data: dict[str, Any], section: str) -> list[dict[str, Any]]:
         code = c["status"]
         state = pw_state(code) or "down"
         encap = str(c.get("encapsulation") or "").upper()
+        if code in _BACKUP_CODES:
+            role: str | None = "backup"
+        elif section == "neighbor" and state == "up":
+            role = "primary"  # l2circuit: the forwarding circuit; standby ones are RS / ST / HS / BK
+        else:
+            role = None
         rows.append(
             record(
                 "l2vpn.pseudowires",
@@ -146,12 +200,19 @@ def _normalize(data: dict[str, Any], section: str) -> list[dict[str, Any]]:
                 neighbor=c.get("remote_pe") or c.get("neighbor"),
                 pw_id=c["pw_id"],
                 state=state,
-                role="backup" if code in _BACKUP_CODES else None,
+                role=role,
                 active=state == "up",
                 vc_type=_ENCAP.get(encap) if encap else None,
                 mtu=c.get("mtu") if isinstance(c.get("mtu"), int) else None,
                 local_label=c.get("incoming_label") if isinstance(c.get("incoming_label"), int) else None,
                 remote_label=c.get("outgoing_label") if isinstance(c.get("outgoing_label"), int) else None,
+                status_code=code,
+                local_status_code=_hex(c.get("local_pw_status_code")),
+                remote_status_code=_hex(c.get("neighbor_pw_status_code")),
+                control_word=_bool(c.get("negotiated_control_word")),
+                pw_status_tlv=_bool(c.get("negotiated_pw_status_tlv")),
+                flow_label_tx=_bool(c.get("flow_label_transmit")),
+                flow_label_rx=_bool(c.get("flow_label_receive")),
             )
         )
     return rows
@@ -162,7 +223,7 @@ class ShowL2circuitConnections(Parser):
     """Layer-2 circuits per neighbor: status code (Up, HS hot-standby, MM, ...), labels, PW status TLV, flow labels."""
 
     def parse(self, text: str) -> dict[str, Any]:
-        return parse_connections(text, "neighbor", self.command)
+        return parse_connections(text, "neighbor", self.command, self)
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return _normalize(data, "neighbor")
@@ -173,10 +234,20 @@ class ShowVplsConnections(Parser):
     """VPLS pseudowires per instance: neighbor, VPLS-id, status code, labels and local LSI interface."""
 
     def parse(self, text: str) -> dict[str, Any]:
-        return parse_connections(text, "instance", self.command)
+        return parse_connections(text, "instance", self.command, self)
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return _normalize(data, "instance")
+
+
+def _mac_table_header(s: str) -> bool:
+    """The flags legend (two lines), column headers and per-instance counters."""
+    return (
+        s.startswith(("MAC flags", "MAC ", "address ", "O -", "Routing instance", "Bridging domain"))
+        or s.endswith("P -Pinned MAC)")
+        or "MAC address learned" in s
+        or "MAC addresses learned" in s
+    )
 
 
 _MAC_ROW = re.compile(r"^(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2})\s+(?P<flags>\S+)\s+(?P<intf>\S+)(?P<rest>.*)$")
@@ -208,6 +279,8 @@ class ShowVplsMacTable(Parser):
                 continue
             m = _MAC_ROW.match(s)
             if not m:
+                if s and not _mac_table_header(s):
+                    self.note_unparsed(s)
                 continue
             rest = m["rest"].split()
             entry: dict[str, Any] = {

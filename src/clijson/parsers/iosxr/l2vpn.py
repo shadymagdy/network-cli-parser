@@ -265,9 +265,21 @@ def _pseudowires(services: list[dict[str, Any]], key: str) -> list[dict[str, Any
                     mtu=(mpls.get("mtu") or {}).get("local"),
                     local_label=(mpls.get("label") or {}).get("local"),
                     remote_label=(mpls.get("label") or {}).get("remote"),
+                    status_code=pw["state"],
+                    # the status this PE sends is the local one; the status it receives comes from the neighbor
+                    local_status_code=(pw.get("outgoing_status") or {}).get("code"),
+                    remote_status_code=(pw.get("incoming_status") or {}).get("code"),
+                    control_word=_word_bool(pw.get("control_word")),
+                    pw_status_tlv=pw["pw_status_tlv"] if isinstance(pw.get("pw_status_tlv"), bool) else None,
                 )
             )
     return rows
+
+
+def _word_bool(value: Any) -> bool | None:
+    """``enabled`` / ``disabled`` -> bool."""
+    word = str(value or "").strip().lower()
+    return True if word in ("enabled", "enable") else False if word in ("disabled", "disable") else None
 
 
 @register(

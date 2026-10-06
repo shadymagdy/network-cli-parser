@@ -41,10 +41,21 @@ class Parser:
     intent: str | None = None
     name: str = ""
     description: str = ""
+    #: Keys of a nested table for :meth:`ParseResult.records`, e.g. ``("vsis", "peers")``: one row per child,
+    #: carrying the parent's scalar fields. ``None`` keeps the default (largest list of records).
+    record_path: tuple[str, str] | None = None
 
     def __init__(self, params: dict[str, str] | None = None, command: str = "") -> None:
         self.params: dict[str, str] = params or {}
         self.command = command
+        #: Lines the parser saw but could not place (neither header, legend, row nor detail).
+        #: :func:`clijson.parse` turns them into an ``unparsed line(s)`` warning and lowers the confidence,
+        #: so dropped data never looks like a clean result.
+        self.unparsed: list[str] = []
+
+    def note_unparsed(self, line: str) -> None:
+        """Record a line the parser could not place (see :attr:`unparsed`)."""
+        self.unparsed.append(line.strip())
 
     def parse(self, text: str) -> Any:  # pragma: no cover - abstract
         raise NotImplementedError

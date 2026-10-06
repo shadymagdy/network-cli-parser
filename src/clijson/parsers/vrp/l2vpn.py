@@ -36,6 +36,18 @@ def _int(value: Any) -> int | None:
     return value if isinstance(value, int) and not isinstance(value, bool) else None
 
 
+def _enabled(*values: Any) -> bool | None:
+    """``enable`` / ``disable`` words -> bool; several values (local, remote) must all be enabled."""
+    words = [str(v).strip().lower() for v in values if v is not None]
+    if not words or any(w not in ("enable", "enabled", "disable", "disabled") for w in words):
+        return None
+    return all(w.startswith("enable") for w in words)
+
+
+def _code(value: Any) -> str | None:
+    return None if value is None else str(value)
+
+
 # --------------------------------------------------------------------------- #
 # display vsi
 # --------------------------------------------------------------------------- #
@@ -154,14 +166,21 @@ class DisplayVsi(Parser):
                         mtu=_int(vsi.get("mtu")),
                         local_label=_int(pw.get("local_vc_label")),
                         remote_label=_int(pw.get("remote_vc_label")),
+                        status_code=_code(pw.get("pw_state")),
+                        control_word=_enabled(
+                            *(v for v in (peer.get("control_word"), pw.get("remote_control_word")) if v is not None)
+                        ),
                     )
                 )
         return rows
 
 
-@register("vrp", "display vsi [name <vsi>] peer-info")
+@register("vrp", "display vsi [name <vsi>] peer-info", intent="l2vpn.pseudowires")
 class DisplayVsiPeerInfo(Parser):
-    """VSI peers: peer router ID, VC label, peer type, LDP session and tunnel, per VSI."""
+    """VSI peers per VSI: transport VC ID, local / remote VC label and VC state, or peer type, session and tunnel."""
+
+    #: ``records()`` gives one row per peer, carrying the VSI's name and signaling
+    record_path = ("vsis", "peers")
 
     def parse(self, text: str) -> dict[str, Any]:
         out: dict[str, Any] = {"vsis": []}
@@ -188,6 +207,8 @@ class DisplayVsiPeerInfo(Parser):
                 m = re.match(
                     rf"^(?P<peer>{_IP})\s+(?P<vc>\d+)\s+(?P<local>\S+)\s+(?P<remote>\S+)\s+(?P<state>\S+)\s*$", s
                 )
+                if not m and not s.startswith("Addr "):
+                    self.note_unparsed(s)
                 if m:
                     cur["peers"].append(
                         {
@@ -225,7 +246,31 @@ class DisplayVsiPeerInfo(Parser):
                     peer[key] = val
                 else:
                     cur[key] = val
+                continue
+            if not s.startswith("Peer "):  # the column header
+                self.note_unparsed(s)
         return out
+
+    def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
+        rows = []
+        for vsi in data["vsis"]:
+            for p in vsi["peers"]:
+                native = p.get("state") or p.get("status") or p.get("session")
+                state = pw_state(str(native)) if native is not None else None
+                rows.append(
+                    record(
+                        "l2vpn.pseudowires",
+                        service=vsi["name"],
+                        neighbor=None if p.get("peer") is None else str(p.get("peer")),
+                        pw_id=_int(p.get("vc_id")),
+                        state=state or "down",
+                        active=state == "up",
+                        local_label=_int(p.get("local_vc_label")) or _int(p.get("vc_label")),
+                        remote_label=_int(p.get("remote_vc_label")),
+                        status_code=_code(native),
+                    )
+                )
+        return rows
 
 
 @register(
@@ -296,6 +341,7 @@ class DisplayVsiProtectGroup(Parser):
                         state="up" if active else pw_state(word) or word,
                         role="primary" if mbr["preference"] == best else "backup",
                         active=active,
+                        status_code=mbr["state"],
                     )
                 )
         return rows
@@ -358,6 +404,10 @@ class DisplayMplsL2vc(Parser):
                     mtu=_int(vc.get("local_vc_mtu")),
                     local_label=_int(vc.get("local_vc_label")),
                     remote_label=_int(vc.get("remote_vc_label")),
+                    status_code=_code(vc.get("vc_state")),
+                    control_word=_enabled(
+                        *(v for v in (vc.get("local_control_word"), vc.get("remote_control_word")) if v is not None)
+                    ),
                 )
             )
         return rows
@@ -382,27 +432,31 @@ class DisplayVsiRemote(Parser):
     def parse(self, text: str) -> dict[str, Any]:
         out: dict[str, Any] = {"remotes": []}
         for raw in text.splitlines():
-            m = _REMOTE_ROW.match(raw.strip())
-            if m:
-                out["remotes"].append(
-                    {
-                        "vsi_id": int(m["vsi_id"]),
-                        "peer": m["peer"],
-                        "vc_label": _val(m["label"]),
-                        "group_id": _val(m["group"]),
-                        "encapsulation": m["encap"],
-                        "mtu": _val(m["mtu"]),
-                        "vsi_index": _val(m["index"]),
-                        "state": m["state"],
-                    }
-                )
+            s = raw.strip()
+            m = _REMOTE_ROW.match(s)
+            if not m:
+                if s and not set(s) <= {"-"} and not s.startswith(("Vsi ", "ID ")):
+                    self.note_unparsed(s)
+                continue
+            out["remotes"].append(
+                {
+                    "vsi_id": int(m["vsi_id"]),
+                    "peer": m["peer"],
+                    "vc_label": _val(m["label"]),
+                    "group_id": _val(m["group"]),
+                    "encapsulation": m["encap"],
+                    "mtu": _val(m["mtu"]),
+                    "vsi_index": _val(m["index"]),
+                    "state": m["state"],
+                }
+            )
         return out
 
     def normalize(self, data: dict[str, Any]) -> list[dict[str, Any]]:
         return [
             record(
                 "l2vpn.pseudowires",
-                service=None,
+                service=str(r["vsi_id"]),  # the table only shows the VSI ID
                 neighbor=r["peer"],
                 pw_id=r["vsi_id"],
                 state=pw_state(r["state"]) or "down",
@@ -412,6 +466,7 @@ class DisplayVsiRemote(Parser):
                 mtu=_int(r["mtu"]),
                 local_label=None,
                 remote_label=_int(r["vc_label"]),
+                status_code=r["state"],
             )
             for r in data["remotes"]
         ]

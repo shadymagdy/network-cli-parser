@@ -189,7 +189,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 24005,
-      "remote_label": 300112
+      "remote_label": 300112,
+      "status_code": "up",
+      "local_status_code": "0x0",
+      "remote_status_code": "0x0",
+      "control_word": false,
+      "pw_status_tlv": true,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "BD3100",
@@ -201,7 +208,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 24006,
-      "remote_label": 24017
+      "remote_label": 24017,
+      "status_code": "standby",
+      "local_status_code": "0x20",
+      "remote_status_code": "0x0",
+      "control_word": false,
+      "pw_status_tlv": true,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     }
   ]
 }

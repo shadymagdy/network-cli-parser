@@ -12,6 +12,9 @@ NSO hands the device's CLI text back in a ``result`` leaf. Depending on how it w
 * with literal ``\\r\\n`` sequences instead of line breaks, when copied out of a log or JSON string.
 
 Everything here uses plain string operations (no backtracking regexes) so it stays linear on any input.
+
+The public, stable entry point is :func:`clijson.nso.unwrap` (also ``clijson.textutils.unwrap_nso``), which returns
+the text. :func:`unwrap` here keeps its name and its :class:`Unwrapped` return value for existing callers.
 """
 
 from __future__ import annotations
