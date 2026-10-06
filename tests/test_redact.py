@@ -7,7 +7,7 @@ import pytest
 
 import clijson
 import clijson.nso
-from clijson import textutils
+import clijson.textutils
 
 SECRETS = ("$9$abcDEF123", "$6$salt$hash", "$1$aa$bb", "0822455D0A16", "public", "s3cr3t", "%^%#xyz%^%#", "$9$psk")
 
@@ -195,7 +195,7 @@ BGP_ROW = "198.51.100.125        64500     711028     681994       0      29 32w
 )
 def test_public_unwrap_returns_the_device_text(payload):
     assert clijson.nso.unwrap(payload).strip() == BGP_ROW
-    assert textutils.unwrap_nso(payload).strip() == BGP_ROW
+    assert clijson.textutils.unwrap_nso(payload).strip() == BGP_ROW
 
 
 def test_unwrap_leaves_plain_text_alone_and_private_alias_still_works():
