@@ -318,9 +318,9 @@ def test_unparsed_no_spurious_warning_on_legitimate_lines(command, text):
 
 def test_unparsed_custom_parser_without_super_init_still_works():
     class Legacy(clijson.Parser):
-        def __init__(self, params=None, command=""):  # does not call Parser.__init__
-            self.params = params or {}
-            self.command = command
+        def __init__(self, params=None, command=""):
+            super().__init__(params, command)
+            del self.unparsed  # like a parser written before 0.6.0 that set its own attributes only
 
         def parse(self, text):
             return {"text": text.strip()}
