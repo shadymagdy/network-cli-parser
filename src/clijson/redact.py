@@ -47,20 +47,18 @@ _TYPES = r"(?:\d+|encrypted|clear|cipher|irreversible-cipher|simple|plain|hash|a
 _CRYPT = re.compile(r"\$(?:9|1|5|6|8)\$[^\s\";'\\]+")
 _HUAWEI_CIPHER_MARKS = ("%^%#", "%$%$", "@%@%", "%@%@")
 
-# values that are always secrets
-_ALWAYS = re.compile(
-    r"(?P<keep>(?<![\w-])(?:authentication-key|encrypted-password|pre-shared-key|key-string)"
-    rf"[ \t]+(?:(?:{_TYPES}|password)[ \t]+)*)" + _VALUE  # IOS XR: "key-string password 7 <hash>"
+# a secret keyword, optional key types (IOS XR "7" / "10" / "encrypted", Huawei "cipher", Junos "ascii-text") and a
+# value. The value is masked only when it is quoted, ends the statement or looks like a hash, so keywords that
+# follow a key id ("authentication-key 1 type md5", "key 0 start-time ...") are never taken for secrets.
+_KEYWORD = re.compile(
+    r"(?P<keep>(?<![\w-])(?:password|secret|authentication-key|encrypted-password|pre-shared-key|key-string)"
+    rf"[ \t]+(?:(?:{_TYPES}|password)[ \t]+)*)" + _VALUE
 )
 _ENCRYPTED = re.compile(r"(?P<keep>(?<![\w-])encrypted[ \t]+)" + _VALUE)
-# password / secret: with a key type, or a quoted value, or the statement's only value (checked in _mask_if_last)
-_TYPED = re.compile(rf"(?P<keep>(?<![\w-])(?:password|secret)[ \t]+(?:{_TYPES}[ \t]+)+)" + _VALUE)
-_QUOTED = re.compile(r'(?P<keep>(?<![\w-])(?:password|secret)[ \t]+)(?P<value>"[^"\n]*")')
-_BARE = re.compile(rf"(?P<keep>(?<![\w-])(?:password|secret)[ \t]+)(?P<value>{_BARE_VALUE})")
-# Huawei: "authentication-mode md5 cipher X", "ospf authentication-mode md5 1 cipher X", "community read cipher X"
+# Huawei: "authentication-mode md5 cipher X", "ospf authentication-mode md5 1 plain X", "community read cipher X"
 _HUAWEI = re.compile(
-    r"(?P<keep>(?<![\w-])(?:md5|hmac-md5|hmac-sha256|sha256|hmac-sha1|keychain|read|write|\d+)[ \t]+"
-    r"(?:irreversible-cipher|cipher)[ \t]+)" + _VALUE
+    r"(?P<keep>(?<![\w-])(?:md5|hmac-md5|hmac-sha256|sha256|hmac-sha1|keychain|simple|read|write|\d+)[ \t]+"
+    r"(?:irreversible-cipher|cipher|plain)[ \t]+)" + _VALUE
 )
 _XR_KEY = re.compile(r"(?P<keep>(?<![\w-])key[ \t]+\d+[ \t]+)" + _VALUE)
 _SNMP = re.compile(
@@ -69,6 +67,7 @@ _SNMP = re.compile(
 )
 # Junos `{ }` format: "community <name> {" / "community <name>;" inside the snmp block
 _SNMP_BLOCK_COMMUNITY = re.compile(r"(?P<keep>^[ \t]*community[ \t]+)" + _VALUE)
+_HEXISH = re.compile(r"[0-9A-Fa-f]{6,}")
 
 
 def _mask(m: re.Match[str]) -> str:
@@ -80,22 +79,33 @@ def _mask(m: re.Match[str]) -> str:
 
 
 def _ends_statement(rest: str) -> bool:
-    """Nothing but ``;`` and/or a comment follows."""
-    rest = rest.strip().lstrip(";").strip()
+    """Nothing but ``;``, a comment or a JSON line escape follows."""
+    rest = rest.strip().removesuffix("\\r").strip().lstrip(";").strip()
     return not rest or rest.startswith("#")
 
 
-def _mask_last_bare(line: str) -> str:
-    """Mask a bare ``password x`` / ``secret x`` only when *x* ends the statement (``;``, comment or line end).
+def _looks_secret(value: str) -> bool:
+    """A crypt string, an IOS XR type 7 / hex hash, or text already masked."""
+    return value.startswith("$") or bool(_HEXISH.fullmatch(value)) or REDACTED in value
 
-    Only the last match on a line can end the statement, so the rest of the line is examined once.
-    """
-    last = None
-    for last in _BARE.finditer(line):  # noqa: B007 - we want the final match
-        pass
-    if last is None or not _ends_statement(line[last.end() :]):
-        return line  # more words follow: a setting such as "password minimum-length 8"
-    return line[: last.start()] + _mask(last) + line[last.end() :]
+
+def _mask_when_secret(pattern: re.Pattern[str], line: str, *, hash_only: bool = False) -> str:
+    """Mask each match whose value is quoted, ends the statement or looks like a hash (``hash_only``: the latter)."""
+    out: list[str] = []
+    pos = 0
+    for m in pattern.finditer(line):
+        value = m["value"]
+        secret = _looks_secret(value) or (
+            not hash_only and (value.startswith('"') or _ends_statement(line[m.end() : m.end() + 200]))
+        )
+        if secret:
+            out.append(line[pos : m.start()])
+            out.append(_mask(m))
+            pos = m.end()
+    if not out:
+        return line
+    out.append(line[pos:])
+    return "".join(out)
 
 
 def _huawei_cipher_text(line: str) -> str:
@@ -127,25 +137,31 @@ def redact(text: str) -> str:
     """Return *text* with every recognised secret replaced by :data:`REDACTED` (see the module docs)."""
     if not text:
         return text
-    out = []
     blocks: list[str] = []  # Junos `{ }` hierarchy, to know when we are inside `snmp { ... }`
+    out = []
     for line in text.split("\n"):
-        stripped = line.strip()
-        if "snmp" in blocks:
-            line = _SNMP_BLOCK_COMMUNITY.sub(_mask, line)
-        line = _huawei_cipher_text(line)
-        line = _CRYPT.sub(REDACTED, line)
-        line = _ALWAYS.sub(_mask, line)
-        line = _ENCRYPTED.sub(_mask, line)
-        line = _TYPED.sub(_mask, line)
-        line = _QUOTED.sub(_mask, line)
-        line = _mask_last_bare(line)
-        line = _HUAWEI.sub(_mask, line)
-        line = _XR_KEY.sub(_mask, line)
-        line = _SNMP.sub(_mask, line)
-        if stripped.endswith("{"):
-            blocks.append(stripped.split()[0])
-        elif stripped.startswith("}") and blocks:
-            blocks.pop()
-        out.append(line)
+        # a JSON-escaped payload (NSO RESTCONF / JSON-RPC) keeps its line breaks as literal "\n"
+        out.append("\\n".join(_redact_line(part, blocks) for part in line.split("\\n")))
     return "\n".join(out)
+
+
+def _redact_line(line: str, blocks: list[str]) -> str:
+    stripped = line.strip().removesuffix("\\r").strip()
+    if "snmp" in blocks:
+        line = _SNMP_BLOCK_COMMUNITY.sub(_mask, line)
+    line = _huawei_cipher_text(line)
+    line = _CRYPT.sub(REDACTED, line)
+    line = _mask_when_secret(_KEYWORD, line)
+    line = _mask_when_secret(_ENCRYPTED, line, hash_only=True)
+    line = _HUAWEI.sub(_mask, line)
+    line = _mask_when_secret(_XR_KEY, line)
+    line = _SNMP.sub(_mask, line)
+    if stripped.endswith("{"):
+        # the first line of a wrapped payload starts with the wrapper: `{"result": "snmp {`, `<result>snmp {`
+        statement = stripped.rsplit('": "', 1)[-1]
+        if statement.startswith("<"):
+            statement = statement.rsplit(">", 1)[-1]
+        blocks.append((statement.split() or [""])[0])
+    elif stripped.startswith("}") and blocks:
+        blocks.pop()
+    return line

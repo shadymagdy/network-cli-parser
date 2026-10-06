@@ -66,6 +66,17 @@ def _leaks(obj) -> list[str]:
             "    authentication password <redacted>; ## SECRET-DATA",
         ),
         (" ospf authentication-mode md5 1 cipher s3cr3t", " ospf authentication-mode md5 1 cipher <redacted>"),
+        (
+            'set system ntp authentication-key 1 type md5 value "$9$abc"',
+            'set system ntp authentication-key 1 type md5 value "<redacted>"',
+        ),
+        (
+            'set security authentication-key-chains key-chain KC key 0 secret "$9$x"',
+            'set security authentication-key-chains key-chain KC key 0 secret "<redacted>"',
+        ),
+        (" tacacs-server host 192.0.2.1 key 7 0822455D0A16", " tacacs-server host 192.0.2.1 key 7 <redacted>"),
+        (" ospf authentication-mode md5 1 plain s3cr3t", " ospf authentication-mode md5 1 plain <redacted>"),
+        (" isis authentication-mode simple plain s3cr3t", " isis authentication-mode simple plain <redacted>"),
         # Huawei cipher text is masked whole, whatever characters it contains
         (' password cipher %^%#a;b\\c"d}e%^%#', " password cipher <redacted>"),
         (
@@ -98,6 +109,10 @@ def test_each_secret_form_is_masked(line, expected):
         "ssh server algorithms cipher aes256-ctr",
         ' description "secret lab link"',
         ' description "password reset"',
+        # a key id or index followed by keywords is not a secret
+        "set system ntp authentication-key 1 type md5",
+        'set security authentication-key-chains key-chain KC key 0 start-time "2024-1-1.00:00:00 +0000"',
+        " description encrypted backhaul link",
     ],
 )
 def test_non_secrets_are_left_alone(line):
@@ -206,11 +221,35 @@ def test_junos_tree_survives_settings_that_mention_password():
     )
 
 
+def test_ntp_key_tree_keeps_its_shape():
+    text = 'set system ntp authentication-key 1 type md5 value "$9$abc"\n'
+    plain = clijson.parse(text, "show configuration | display set", "junos").data
+    masked = clijson.parse(text, "show configuration | display set", "junos", redact=True).data
+    assert masked == json.loads(json.dumps(plain).replace("$9$abc", "<redacted>"))
+
+
+@pytest.mark.parametrize("eol", ["\n", "\r\n"], ids=["lf", "crlf"])
+@pytest.mark.parametrize("wrapper", ["restconf-json", "json-rpc", "xml"])
+def test_snmp_community_masked_in_raw_of_wrapped_payloads(wrapper, eol):
+    body = eol.join(["snmp {", "    community public {", "        authorization read-only;", "    }", "}", ""])
+    payload = {
+        "restconf-json": lambda: json.dumps({"junos-stats:output": {"result": body}}),
+        "json-rpc": lambda: json.dumps({"jsonrpc": "2.0", "result": [{"name": "result", "value": body}]}),
+        "xml": lambda: f"<output><result>{body}</result></output>",
+    }[wrapper]()
+    res = clijson.parse(payload, "show configuration", "junos", redact=True)
+    assert "public" not in res.raw and "public" not in json.dumps(res.data)
+    assert res.data == {"snmp": {"community": {"<redacted>": {"authorization": "read-only"}}}}
+    if wrapper != "xml":
+        json.loads(res.raw)  # still valid JSON
+
+
 def test_redact_is_linear_on_hostile_input():
     import time
 
     hostile = "secret " + "1 " * 100_000 + "{\n" + "password " * 50_000 + "\n" + "$9$" * 100_000
-    hostile += "\n" + "%^%#" * 100_000 + "\n" + "cipher " * 50_000
+    hostile += "\n" + "%^%#" * 100_000 + "\n" + "cipher " * 50_000 + "\n" + "authentication-key 1 " * 40_000
+    hostile += "\n" + "\\n" * 100_000
     start = time.perf_counter()
     clijson.redact(hostile)
     assert time.perf_counter() - start < 2
