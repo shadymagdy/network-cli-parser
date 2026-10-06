@@ -260,15 +260,36 @@ def test_snmp_community_masked_in_raw_of_wrapped_payloads(wrapper, eol):
         json.loads(res.raw)  # still valid JSON
 
 
-def test_redact_is_linear_on_hostile_input():
+@pytest.mark.parametrize(
+    "unit",
+    [
+        "secret 1 ",
+        "password ",
+        "$9$",
+        "%^%#",
+        "cipher ",
+        "authentication-key 1 ",
+        "\\n",
+    ],
+    ids=["types", "password", "crypt", "huawei-marks", "cipher", "key-id", "escaped-newlines"],
+)
+def test_redact_is_linear_on_hostile_input(unit):
+    """Doubling the input must roughly double the time (a quadratic pattern would quadruple it).
+
+    Measured as a ratio so it holds on slow CI runners; the absolute bound only catches a hang.
+    """
     import time
 
-    hostile = "secret " + "1 " * 100_000 + "{\n" + "password " * 50_000 + "\n" + "$9$" * 100_000
-    hostile += "\n" + "%^%#" * 100_000 + "\n" + "cipher " * 50_000 + "\n" + "authentication-key 1 " * 40_000
-    hostile += "\n" + "\\n" * 100_000
-    start = time.perf_counter()
-    clijson.redact(hostile)
-    assert time.perf_counter() - start < 2
+    def timed(n: int) -> float:
+        text = unit * n
+        start = time.perf_counter()
+        clijson.redact(text)
+        return time.perf_counter() - start
+
+    timed(1_000)  # warm up
+    small, large = timed(40_000), timed(80_000)
+    assert large < 3 * small + 0.05, (small, large)
+    assert large < 10
 
 
 # --------------------------------------------------------------------------- #
