@@ -67,7 +67,9 @@ def _walk(node: Any, path: list[str]) -> Iterator[list[str]]:
         if not node:
             yield path
         for key, value in node.items():
-            yield from _walk(value, [*path, str(key)])
+            # "_value": the leaf of a statement that is also a container (`interface ae0.0` next to
+            # `interface ae1.0 { ... }`), so it belongs to this path, not under a "_value" key
+            yield from _walk(value, path if key == "_value" else [*path, str(key)])
     elif isinstance(node, list):
         for item in node:
             yield from _walk(item, path)

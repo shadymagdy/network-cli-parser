@@ -122,10 +122,10 @@ def test_vrp_vsi_summary_has_no_pw_model():
 
 
 # --------------------------------------------------------------------------- #
-# CJ-01: Junos rows without "Time last up" / "# Up trans"
+# Junos rows without "Time last up" / "# Up trans"
 # --------------------------------------------------------------------------- #
 
-CJ01 = """Layer-2 Circuit Connections:
+STANDBY_ROW = """Layer-2 Circuit Connections:
 
 Legend for connection status (St)
 RS -- remote site standby        HS -- Hot-standby Connection
@@ -137,8 +137,8 @@ Interface                 Type St      Time last up          # Up trans
 """
 
 
-def test_cj01_standby_row_without_time_columns_is_kept():
-    res = clijson.parse(CJ01, "show l2circuit connections interface ae22.100", "junos", normalize=True)
+def test_l2circuit_standby_row_without_time_columns_is_kept():
+    res = clijson.parse(STANDBY_ROW, "show l2circuit connections interface ae22.100", "junos", normalize=True)
     assert res.data == {
         "connections": [
             {
@@ -162,7 +162,7 @@ def test_cj01_standby_row_without_time_columns_is_kept():
     assert res.confidence == 1.0
 
 
-def test_cj01_piped_row_without_time_columns():
+def test_l2circuit_piped_row_without_time_columns():
     res = clijson.parse(
         "    ae22.100(vc 7000)         rmt   RS\n",
         "show l2circuit connections interface ae22.100 | match rmt",
@@ -178,7 +178,7 @@ def test_cj01_piped_row_without_time_columns():
 
 @pytest.mark.parametrize("code", sorted(STATUS_CODES))
 @pytest.mark.parametrize("with_time", [True, False], ids=["with-time", "without-time"])
-def test_cj01_every_legend_code(code, with_time):
+def test_l2circuit_every_legend_code(code, with_time):
     tail = "     Apr 17 05:43:09 2025           1" if with_time else ""
     text = f"Neighbor: 192.0.2.30\n    ae22.100(vc 7000)         rmt   {code}{tail}\n"
     res = clijson.parse(text, "show l2circuit connections", "junos", normalize=True)
@@ -197,7 +197,7 @@ def test_cj01_every_legend_code(code, with_time):
         assert pw["active"] is False and pw["role"] is None
 
 
-def test_cj01_time_without_count_keeps_the_year():
+def test_l2circuit_time_without_count_keeps_the_year():
     res = clijson.parse(
         "Neighbor: 192.0.2.30\n    ae22.100(vc 7000)   rmt   Up     Apr 17 05:43:09 2025\n",
         "show l2circuit connections",
@@ -207,7 +207,18 @@ def test_cj01_time_without_count_keeps_the_year():
     assert (row["last_up"], row["up_transitions"]) == ("Apr 17 05:43:09 2025", None)
 
 
-def test_cj01_vpls_row_without_time_columns():
+def test_l2circuit_last_up_keeps_its_spacing():
+    """Junos pads one-digit days ("Feb  2"); the value must stay as printed, like 0.5.0 returned it."""
+    res = clijson.parse(
+        "Neighbor: 192.0.2.1\n    ge-0/0/1.0(vc 0)  loc  Up  Feb  2 10:00:00 2024  1\n",
+        "show l2circuit connections",
+        "junos",
+    )
+    row = res.data["connections"][0]
+    assert (row["last_up"], row["up_transitions"]) == ("Feb  2 10:00:00 2024", 1)
+
+
+def test_l2circuit_vpls_row_without_time_columns():
     res = clijson.parse(
         "Instance: VPLS-A\n  VPLS-id: 7000\n    192.0.2.204(vpls-id 7000) rmt   RS\n",
         "show vpls connections instance VPLS-A",
@@ -219,14 +230,14 @@ def test_cj01_vpls_row_without_time_columns():
 
 
 # --------------------------------------------------------------------------- #
-# G-1: lines a table parser cannot place are reported, never dropped silently
+# Lines a table parser cannot place are reported, never dropped silently
 # --------------------------------------------------------------------------- #
 
 
 @pytest.mark.parametrize(
     ("platform", "command", "text", "junk"),
     [
-        ("junos", "show l2circuit connections", CJ01, "ae22.100 vc 7000 rmt RS garbled"),
+        ("junos", "show l2circuit connections", STANDBY_ROW, "ae22.100 vc 7000 rmt RS garbled"),
         (
             "vrp",
             "display vsi remote ldp",
@@ -262,7 +273,7 @@ def test_cj01_vpls_row_without_time_columns():
     ],
     ids=["junos-l2circuit", "vrp-vsi-remote", "vrp-peer-info", "junos-vpls-mac-table"],
 )
-def test_g1_unparsed_lines_are_reported(platform, command, text, junk):
+def test_unparsed_unparsed_lines_are_reported(platform, command, text, junk):
     clean = clijson.parse(text, command, platform)
     assert not [w for w in clean.warnings if w.startswith("unparsed")]
     assert clean.confidence == 1.0
@@ -274,18 +285,63 @@ def test_g1_unparsed_lines_are_reported(platform, command, text, junk):
     assert res.data == clean.data  # the recognised rows are still there
 
 
-def test_g1_long_unparsed_line_is_shortened():
+@pytest.mark.parametrize(
+    ("command", "text"),
+    [
+        (
+            "show vpls mac-table",
+            (
+                "MAC flags (S -static MAC, D -dynamic MAC, L -locally learned, C -Control MAC\n"
+                "    SE -Statistics enabled, NM -Non configured MAC, R -Remote PE MAC)\n\n"
+                "Routing instance : VPLS-A\n Bridging domain : __VPLS-A__, VLAN : none\n"
+                "   MAC                 MAC      Logical          NH     RTR\n"
+                "   address             flags    interface        Index  ID\n"
+                "   00:00:5e:00:53:01   D        ae2.100\n"
+            ),
+        ),
+        (
+            "show vpls connections",
+            (
+                "Instance: VPLS-A\n  Edge protection: Not-Primary\n  VPLS-id: 7000\n"
+                "    Neighbor                  Type  St     Time last up          # Up trans\n"
+                "    192.0.2.204(vpls-id 7000) rmt   Up     Apr 28 11:06:51 2026           1\n"
+            ),
+        ),
+    ],
+    ids=["older-mac-flags-legend", "instance-level-details"],
+)
+def test_unparsed_no_spurious_warning_on_legitimate_lines(command, text):
+    res = clijson.parse(text, command, "junos")
+    assert res.warnings == [] and res.confidence == 1.0
+    assert res.data[next(iter(res.data))]  # the row is there
+
+
+def test_unparsed_custom_parser_without_super_init_still_works():
+    class Legacy(clijson.Parser):
+        def __init__(self, params=None, command=""):  # does not call Parser.__init__
+            self.params = params or {}
+            self.command = command
+
+        def parse(self, text):
+            return {"text": text.strip()}
+
+    clijson.register("junos", "show zz-legacy-parser")(Legacy)
+    res = clijson.parse("hello", "show zz-legacy-parser", "junos")
+    assert (res.data, res.warnings, res.confidence) == ({"text": "hello"}, [], 1.0)
+
+
+def test_unparsed_long_unparsed_line_is_shortened():
     junk = "x" * 200
-    res = clijson.parse(CJ01 + junk + "\n", "show l2circuit connections", "junos")
+    res = clijson.parse(STANDBY_ROW + junk + "\n", "show l2circuit connections", "junos")
     (warning,) = [w for w in res.warnings if w.startswith("unparsed")]
     assert len(warning) < 120 and warning.endswith("...')")
 
 
 # --------------------------------------------------------------------------- #
-# G-4 / G-5: pseudowire fields and VRP peer-info
+# Pseudowire fields and VRP peer-info
 # --------------------------------------------------------------------------- #
 
-G5 = """VSI Name: VSI-A                                       Signaling: ldp
+PEER_INFO = """VSI Name: VSI-A                                       Signaling: ldp
 --------------------------------------------------------------------
 Peer                Transport Local       Remote      VC
 Addr                VC ID      VC Label   VC Label    State
@@ -294,8 +350,8 @@ Addr                VC ID      VC Label   VC Label    State
 """
 
 
-def test_g5_vrp_peer_info_is_normalized():
-    res = clijson.parse(G5, "display vsi name VSI-A peer-info", "vrp", normalize=True)
+def test_pseudowire_vrp_peer_info_is_normalized():
+    res = clijson.parse(PEER_INFO, "display vsi name VSI-A peer-info", "vrp", normalize=True)
     assert res.intent == "l2vpn.pseudowires"
     (pw,) = res.normalized
     assert {k: pw[k] for k in ("service", "neighbor", "pw_id", "local_label", "remote_label", "state", "active")} == {
@@ -310,8 +366,8 @@ def test_g5_vrp_peer_info_is_normalized():
     assert pw["status_code"] == "up"
 
 
-def test_g5_records_flatten_peers_with_the_vsi_name():
-    res = clijson.parse(G5, "display vsi name VSI-A peer-info", "vrp")
+def test_pseudowire_records_flatten_peers_with_the_vsi_name():
+    res = clijson.parse(PEER_INFO, "display vsi name VSI-A peer-info", "vrp")
     assert res.records() == [
         {
             "name": "VSI-A",
@@ -325,7 +381,7 @@ def test_g5_records_flatten_peers_with_the_vsi_name():
     ]
 
 
-def test_g4_vrp_vsi_remote_service_and_status_code():
+def test_pseudowire_vrp_vsi_remote_service_and_status_code():
     res = clijson.parse(
         "Vsi        Peer            VC      Group      Encap    MTU    Vsi    State\n"
         "ID         RouterID        Label   ID         Type     Value  Index  Code\n"
@@ -338,7 +394,7 @@ def test_g4_vrp_vsi_remote_service_and_status_code():
     assert (pw["service"], pw["status_code"], pw["state"]) == ("6000", "FORWARD", "up")
 
 
-def test_g4_junos_l2circuit_detail_fields():
+def test_pseudowire_junos_l2circuit_detail_fields():
     text = (FIX / "junos" / "show_l2circuit_connections_extensive" / "l2circuit_extensive_history.txt").read_text()
     res = clijson.parse(text, "show l2circuit connections extensive", "junos", normalize=True)
     pw = res.normalized[0]
@@ -352,7 +408,7 @@ def test_g4_junos_l2circuit_detail_fields():
     assert (pw["local_status_code"], pw["remote_status_code"]) == ("0x00000000", "0x00000000")
 
 
-def test_g4_iosxr_bridge_domain_detail_fields():
+def test_pseudowire_iosxr_bridge_domain_detail_fields():
     text = (FIX / "iosxr" / "show_l2vpn_bridge_domain_detail" / "bd_detail_backup_pw.txt").read_text()
     res = clijson.parse(text, "show l2vpn bridge-domain detail", "iosxr", normalize=True)
     primary, backup = res.normalized[:2]
@@ -361,7 +417,7 @@ def test_g4_iosxr_bridge_domain_detail_fields():
     assert (backup["status_code"], backup["role"]) == ("standby", "backup")
 
 
-def test_g4_new_fields_are_optional_and_appended():
+def test_pseudowire_new_fields_are_optional_and_appended():
     keys = SCHEMAS["l2vpn.pseudowires"]
     assert keys[:10] == [
         "service",

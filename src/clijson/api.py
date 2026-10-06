@@ -180,10 +180,11 @@ def _parse(
                 warnings.append(f"{parser.name} failed ({type(exc).__name__}: {exc}); falling back")
                 continue
             confidence = 1.0
-            if parser.unparsed:
-                first = parser.unparsed[0]
+            unparsed = getattr(parser, "unparsed", None)  # custom parsers may skip Parser.__init__
+            if unparsed:
+                first = unparsed[0]
                 first = first if len(first) <= 80 else first[:77] + "..."
-                warnings.append(f"unparsed line(s): {len(parser.unparsed)} (first: {first!r})")
+                warnings.append(f"unparsed line(s): {len(unparsed)} (first: {first!r})")
                 confidence = UNPARSED_CONFIDENCE
             result = ParseResult(
                 data=data,
@@ -196,7 +197,7 @@ def _parse(
                 params=dict(resolution.params),
                 warnings=warnings,
                 metadata=metadata,
-                record_path=parser.record_path,
+                record_path=getattr(parser, "record_path", None),
             )
             if normalize:
                 result.normalized = _normalize(parser, data, result)

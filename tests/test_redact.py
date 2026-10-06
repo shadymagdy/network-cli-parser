@@ -1,4 +1,4 @@
-"""G-2: secret redaction, and G-3: the public NSO unwrap API."""
+"""Secret redaction and the public NSO unwrap API."""
 
 import json
 from types import SimpleNamespace
@@ -52,6 +52,26 @@ def _leaks(obj) -> list[str]:
         (" authentication-mode md5 cipher %^%#xyz%^%#", " authentication-mode md5 cipher <redacted>"),
         ("snmp-agent community read cipher %^%#xyz%^%#", "snmp-agent community read cipher <redacted>"),
         ("snmp-agent community write public", "snmp-agent community write <redacted>"),
+        # secrets behind other keywords
+        (" lsp-password hmac-md5 encrypted 0822455D0A16", " lsp-password hmac-md5 encrypted <redacted>"),
+        (" message-digest-key 1 md5 encrypted 0822455D0A16", " message-digest-key 1 md5 encrypted <redacted>"),
+        (
+            "snmp-server user U G v3 auth sha encrypted 0822455D0A16 priv aes 128 encrypted 0822455D0A16",
+            "snmp-server user U G v3 auth sha encrypted <redacted> priv aes 128 encrypted <redacted>",
+        ),
+        ("  key-string 7 0822455D0A16", "  key-string 7 <redacted>"),
+        ("  password clear s3cr3t", "  password clear <redacted>"),
+        (
+            "    authentication password s3cr3t; ## SECRET-DATA",
+            "    authentication password <redacted>; ## SECRET-DATA",
+        ),
+        (" ospf authentication-mode md5 1 cipher s3cr3t", " ospf authentication-mode md5 1 cipher <redacted>"),
+        # Huawei cipher text is masked whole, whatever characters it contains
+        (' password cipher %^%#a;b\\c"d}e%^%#', " password cipher <redacted>"),
+        (
+            " local-user u password irreversible-cipher %$%$xy z%$%$",
+            " local-user u password irreversible-cipher <redacted>",
+        ),
     ],
 )
 def test_each_secret_form_is_masked(line, expected):
@@ -67,6 +87,17 @@ def test_each_secret_form_is_masked(line, expected):
         "set protocols isis interface ae0.0 level 2 hello-authentication-key-chain KC",
         "key chain KC",
         " key 1",
+        # settings that merely mention a password, secret or cipher
+        "system {\n    authentication-order [ radius password ];\n}",
+        "set system login password minimum-length 8",
+        "set system authentication-order [ password radius ]",
+        "password expire 0",
+        "password history record number 0",
+        "local-aaa-user password policy administrator",
+        "ssh client cipher aes256_ctr aes128_ctr",
+        "ssh server algorithms cipher aes256-ctr",
+        ' description "secret lab link"',
+        ' description "password reset"',
     ],
 )
 def test_non_secrets_are_left_alone(line):
@@ -167,17 +198,26 @@ def test_redact_inside_an_nso_json_payload():
     assert json.loads(res.raw)  # the payload is still valid JSON
 
 
+def test_junos_tree_survives_settings_that_mention_password():
+    text = "system {\n    authentication-order [ radius password ];\n    login { password { minimum-length 8; } }\n}\n"
+    assert (
+        clijson.parse(text, "show configuration", "junos", redact=True).data
+        == clijson.parse(text, "show configuration", "junos").data
+    )
+
+
 def test_redact_is_linear_on_hostile_input():
     import time
 
     hostile = "secret " + "1 " * 100_000 + "{\n" + "password " * 50_000 + "\n" + "$9$" * 100_000
+    hostile += "\n" + "%^%#" * 100_000 + "\n" + "cipher " * 50_000
     start = time.perf_counter()
     clijson.redact(hostile)
     assert time.perf_counter() - start < 2
 
 
 # --------------------------------------------------------------------------- #
-# G-3: public unwrap
+# Public unwrap
 # --------------------------------------------------------------------------- #
 
 BGP_ROW = "198.51.100.125        64500     711028     681994       0      29 32w2d 5:03:14 Establ"

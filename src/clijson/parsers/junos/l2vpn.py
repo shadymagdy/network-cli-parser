@@ -73,13 +73,15 @@ def _time_and_transitions(rest: str) -> tuple[str | None, int | None]:
     """``"Apr 17 05:43:09 2025           1"`` -> (``"Apr 17 05:43:09 2025"``, 1); ``""`` -> (None, None).
 
     The count is the last number, when it follows the year or a ``-----`` placeholder (or stands alone), so a time
-    without a count never loses its year.
+    without a count never loses its year. The time keeps its spacing as printed (``"Feb  2 ..."``).
     """
-    tokens = rest.split()
+    text = rest.strip()
+    tokens = text.split()
     trans = None
     if tokens and tokens[-1].isdigit() and (len(tokens) == 1 or tokens[-2].isdigit() or set(tokens[-2]) <= {"-"}):
-        trans = int(tokens.pop())
-    last_up = " ".join(tokens) or None
+        trans = int(tokens[-1])
+        text = text[: len(text) - len(tokens[-1])].rstrip()
+    last_up = text or None
     if last_up and set(last_up) <= {"-"}:
         last_up = None
     return last_up, trans
@@ -150,7 +152,10 @@ def parse_connections(text: str, section: str, command: str = "", parser: Parser
         if _is_header(s):
             continue
         if cur is None:
-            unparsed(s)
+            # section-level details before the first row ("Edge protection: Not-Primary", "Local site: ...")
+            # describe the instance, not a connection; anything else is unexpected
+            if not (":" in s and (group is not None or vpls_id is not None)):
+                unparsed(s)
             continue
         if s.startswith("Connection History"):
             in_history = True
@@ -241,10 +246,9 @@ class ShowVplsConnections(Parser):
 
 
 def _mac_table_header(s: str) -> bool:
-    """The flags legend (two lines), column headers and per-instance counters."""
+    """Column headers and per-instance counters (the flags legend is skipped by the caller)."""
     return (
-        s.startswith(("MAC flags", "MAC ", "address ", "O -", "Routing instance", "Bridging domain"))
-        or s.endswith("P -Pinned MAC)")
+        s.startswith(("MAC ", "address ", "Routing instance", "Bridging domain"))
         or "MAC address learned" in s
         or "MAC addresses learned" in s
     )
@@ -266,6 +270,7 @@ class ShowVplsMacTable(Parser):
         instance = _command_arg(self.command, "instance")
         domain: str | None = None
         vlan: Any = None
+        in_legend = False
         for raw in text.splitlines():
             s = raw.strip()
             m = re.match(r"^Routing instance\s*:\s*(\S+)", s)
@@ -276,6 +281,12 @@ class ShowVplsMacTable(Parser):
             if m:
                 domain = m.group(1)
                 vlan = None if not m.group(2) or m.group(2) == "none" else to_num(m.group(2))
+                continue
+            if in_legend:  # continuation of "MAC flags (...": up to the closing parenthesis
+                in_legend = ")" not in s
+                continue
+            if s.startswith("MAC flags"):
+                in_legend = ")" not in s
                 continue
             m = _MAC_ROW.match(s)
             if not m:

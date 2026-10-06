@@ -1,4 +1,4 @@
-"""G-6: clijson.config.has / lines behave the same on every configuration format."""
+"""clijson.config.has / lines behave the same on every configuration format; Junos prompt detection."""
 
 import pytest
 
@@ -121,6 +121,32 @@ def test_vrp_current_configuration():
     ]
 
 
+@pytest.mark.parametrize(
+    ("text", "command"),
+    [
+        (
+            "set protocols mpls interface ae0.0\nset protocols mpls interface ae1.0 admin-group red\n",
+            "show configuration | display set",
+        ),
+        (
+            (
+                "protocols {\n    mpls {\n        interface ae1.0 {\n            admin-group red;\n        }\n"
+                "        interface ae0.0;\n    }\n}\n"
+            ),
+            "show configuration",
+        ),
+    ],
+    ids=["set", "braces"],
+)
+def test_statement_that_is_also_a_container(text, command):
+    """The tree keeps `interface ae0.0` under "_value" next to the `interface ae1.0 { }` container."""
+    res = clijson.parse(text, command, "junos")
+    assert clijson.config.has(res, "protocols mpls interface ae0.0")
+    assert clijson.config.has(res, "protocols mpls interface ae1.0 admin-group red")
+    assert "protocols mpls interface ae0.0" in clijson.config.lines(res)
+    assert not any("_value" in line for line in clijson.config.lines(res))
+
+
 def test_works_on_plain_data_and_non_trees():
     res = clijson.parse(JUNOS_SET, "show configuration | display set", "junos")
     assert clijson.config.has(res.data, "routing-instances VRF-B interface ae24.100")
@@ -129,10 +155,10 @@ def test_works_on_plain_data_and_non_trees():
 
 
 # --------------------------------------------------------------------------- #
-# CJ-10: prompt auto-detection
+# Prompt auto-detection
 # --------------------------------------------------------------------------- #
 
-CJ10 = """@PE2-re1> show arp no-resolve interface ae4.100 | no-more
+EMPTY_USER_PROMPT = """@PE2-re1> show arp no-resolve interface ae4.100 | no-more
 Sep 17 06:08:37
 MAC Address       Address         Interface                Flags
 00:00:5e:00:53:10 198.51.100.2    ae4.100                  none
@@ -145,8 +171,8 @@ Total entries: 1
     ["@PE2-re1>", "PE2-re1>", "{master}\nPE2-re1>", "ops@PE2-re1>"],
     ids=["empty-user", "bare-host", "master", "user"],
 )
-def test_cj10_prompt_is_recognised_and_timestamp_stripped(prompt):
-    res = clijson.parse(CJ10.replace("@PE2-re1>", prompt, 1), normalize=True)
+def test_prompt_prompt_is_recognised_and_timestamp_stripped(prompt):
+    res = clijson.parse(EMPTY_USER_PROMPT.replace("@PE2-re1>", prompt, 1), normalize=True)
     assert res.platform == "junos"
     assert res.command == "show arp no-resolve interface ae4.100 | no-more"
     assert res.parser == "junos.show_arp"
@@ -161,7 +187,7 @@ def test_cj10_prompt_is_recognised_and_timestamp_stripped(prompt):
     assert res.metadata["detected_by"] == "prompt"
 
 
-def test_cj10_prompt_regex_is_linear():
+def test_prompt_prompt_regex_is_linear():
     import time
 
     from clijson.platforms import match_prompt
