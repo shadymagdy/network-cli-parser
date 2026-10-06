@@ -57,12 +57,19 @@
       "neighbor": "192.0.2.11",
       "pw_id": 3100,
       "state": "up",
-      "role": null,
+      "role": "primary",
       "active": true,
       "vc_type": "ethernet-vlan",
       "mtu": null,
       "local_label": 299872,
-      "remote_label": 300112
+      "remote_label": 300112,
+      "status_code": "Up",
+      "local_status_code": "0x00000000",
+      "remote_status_code": "0x00000000",
+      "control_word": false,
+      "pw_status_tlv": true,
+      "flow_label_tx": true,
+      "flow_label_rx": true
     }
   ]
 }

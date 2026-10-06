@@ -160,7 +160,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 24010,
-      "remote_label": 300160
+      "remote_label": 300160,
+      "status_code": "up",
+      "local_status_code": "0x0",
+      "remote_status_code": "0x0",
+      "control_word": false,
+      "pw_status_tlv": true,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     },
     {
       "service": "PE1-CE1-200",
@@ -172,7 +179,14 @@
       "vc_type": "ethernet-vlan",
       "mtu": 1500,
       "local_label": 24011,
-      "remote_label": 24019
+      "remote_label": 24019,
+      "status_code": "standby",
+      "local_status_code": "0x20",
+      "remote_status_code": "0x0",
+      "control_word": false,
+      "pw_status_tlv": true,
+      "flow_label_tx": null,
+      "flow_label_rx": null
     }
   ]
 }

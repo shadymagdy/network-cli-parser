@@ -15,11 +15,14 @@ from .engines.generic import parse_generic
 from .engines.structured import looks_like_json, looks_like_xml, parse_json, parse_xml
 from .exceptions import ParseError, ParserNotFound, PlatformDetectionError
 from .platforms import Platform, detect_platform, get_platform, match_prompt
+from .redact import redact as redact_text
 from .registry import REGISTRY, Resolution
 from .result import ParseResult
 from .textutils import XR_TIMESTAMP, clean_output, dedent
 
 DEFAULT_ENGINES: tuple[str, ...] = ("native", "ntc", "genie", "generic")
+#: Confidence of a dedicated parser's result when it reported lines it could not place.
+UNPARSED_CONFIDENCE = 0.8
 PathLike = Union[str, "os.PathLike[str]"]
 
 
@@ -32,6 +35,7 @@ def parse(
     engines: Sequence[str] | None = None,
     strict: bool = False,
     raise_on_error: bool = False,
+    redact: bool = False,
 ) -> ParseResult:
     """Parse the *output* of a show/display *command* into JSON-ready data.
 
@@ -53,14 +57,18 @@ def parse(
                      otherwise.
     :param raise_on_error: re-raise exceptions from dedicated parsers instead
                      of falling back to the next engine.
+    :param redact:   mask secrets (passwords, keys, SNMP communities, crypt strings) with
+                     ``<redacted>`` before parsing, in both ``data`` and ``raw``; sets
+                     ``metadata["redacted"]``. See :func:`clijson.redact`.
     """
     if isinstance(output, (bytes, bytearray)):
         output = output.decode("utf-8", errors="replace")
     unwrapped = unwrap_nso(output or "")
     if command is None and unwrapped.command:
         command = unwrapped.command
+    text = redact_text(unwrapped.text) if redact else unwrapped.text
     result = _parse(
-        unwrapped.text,
+        text,
         command,
         platform,
         normalize=normalize,
@@ -68,7 +76,9 @@ def parse(
         strict=strict,
         raise_on_error=raise_on_error,
     )
-    result.raw = output
+    result.raw = redact_text(output) if redact else output
+    if redact:
+        result.metadata["redacted"] = True
     if unwrapped.source:
         result.metadata["source"] = unwrapped.source
     if unwrapped.device:
@@ -169,17 +179,25 @@ def _parse(
                     raise ParseError(parser.name, f"{type(exc).__name__}: {exc}") from exc
                 warnings.append(f"{parser.name} failed ({type(exc).__name__}: {exc}); falling back")
                 continue
+            confidence = 1.0
+            unparsed = getattr(parser, "unparsed", None)  # custom parsers may skip Parser.__init__
+            if unparsed:
+                first = unparsed[0]
+                first = first if len(first) <= 80 else first[:77] + "..."
+                warnings.append(f"unparsed line(s): {len(unparsed)} (first: {first!r})")
+                confidence = UNPARSED_CONFIDENCE
             result = ParseResult(
                 data=data,
                 platform=plat.name if plat else None,
                 command=command,
                 engine="native",
                 parser=parser.name,
-                confidence=1.0,
+                confidence=confidence,
                 intent=parser.intent,
                 params=dict(resolution.params),
                 warnings=warnings,
                 metadata=metadata,
+                record_path=getattr(parser, "record_path", None),
             )
             if normalize:
                 result.normalized = _normalize(parser, data, result)
@@ -430,12 +448,14 @@ def split_session(text: str) -> list[SessionChunk]:
     return chunks
 
 
-def parse_session(text: str, platform: str | Platform | None = None, **kwargs: Any) -> list[ParseResult]:
-    """Parse every command found in a terminal session capture."""
+def parse_session(
+    text: str, platform: str | Platform | None = None, *, redact: bool = False, **kwargs: Any
+) -> list[ParseResult]:
+    """Parse every command found in a terminal session capture (``redact`` as in :func:`parse`)."""
     results = []
     for chunk in split_session(text):
         plat = platform or chunk.platform
-        res = parse(chunk.output, chunk.command, plat, **kwargs)
+        res = parse(chunk.output, chunk.command, plat, redact=redact, **kwargs)
         if chunk.hostname:
             res.metadata.setdefault("hostname", chunk.hostname)
         results.append(res)
@@ -443,14 +463,19 @@ def parse_session(text: str, platform: str | Platform | None = None, **kwargs: A
 
 
 def parse_file(
-    path: PathLike, command: str | None = None, platform: str | Platform | None = None, **kwargs: Any
+    path: PathLike,
+    command: str | None = None,
+    platform: str | Platform | None = None,
+    *,
+    redact: bool = False,
+    **kwargs: Any,
 ) -> ParseResult | list[ParseResult]:
-    """Parse a file. Session logs with several prompts yield a list of results."""
+    """Parse a file. Session logs with several prompts yield a list of results (``redact`` as in :func:`parse`)."""
     with open(path, encoding="utf-8", errors="replace") as fh:
         text = fh.read()
     if command is None and len(split_session(text)) > 1:
-        return parse_session(text, platform, **kwargs)
-    return parse(text, command, platform, **kwargs)
+        return parse_session(text, platform, redact=redact, **kwargs)
+    return parse(text, command, platform, redact=redact, **kwargs)
 
 
 def supported_commands(platform: str | Platform | None = None) -> list[dict[str, Any]]:

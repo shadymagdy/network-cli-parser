@@ -17,7 +17,7 @@ tested anywhere.
 
 Output that was already collected elsewhere, for example the RESTCONF response of
 ``/devices/device=pe1/live-status/tailf-ned-cisco-ios-xr-stats:exec/any`` or text pasted from ``ncs_cli``, can be
-given straight to :func:`clijson.parse`, which removes the NSO wrapping.
+given straight to :func:`clijson.parse`, which removes the NSO wrapping. :func:`unwrap` returns just the device text.
 """
 
 from __future__ import annotations
@@ -26,12 +26,13 @@ import contextlib
 from collections.abc import Iterable
 from typing import Any
 
+from ._nso_wrap import unwrap as _unwrap
 from .api import parse
 from .exceptions import CliJsonError
 from .platforms import get_platform
 from .result import ParseResult
 
-__all__ = ["NsoError", "exec_any", "platform_of", "show", "show_many"]
+__all__ = ["NsoError", "exec_any", "platform_of", "show", "show_many", "unwrap"]
 
 #: NED-id prefixes (``devices device X device-type cli ned-id``) -> clijson platform.
 NED_PLATFORMS: dict[str, str] = {
@@ -119,19 +120,37 @@ def exec_any(device: Any, command: str) -> str:
     return str(getattr(out, "result", "") or "")
 
 
-def show(device: Any, command: str, *, platform: str | None = None, **parse_kwargs: Any) -> ParseResult:
+def show(
+    device: Any, command: str, *, platform: str | None = None, redact: bool = False, **parse_kwargs: Any
+) -> ParseResult:
     """Run *command* on an NSO device and parse it. Keyword arguments go to :func:`clijson.parse`.
 
     The platform comes from the device's NED unless *platform* is given. ``result.metadata`` gets the device
-    name.
+    name. With ``redact=True`` secrets are masked in ``data`` and ``raw`` (see :func:`clijson.redact`).
     """
     text = exec_any(device, command)
-    res = parse(text, command, platform or platform_of(device), **parse_kwargs)
+    res = parse(text, command, platform or platform_of(device), redact=redact, **parse_kwargs)
     res.metadata.setdefault("device", _name(device))
     res.metadata.setdefault("source", "nso-live-status")
     return res
 
 
-def show_many(device: Any, commands: Iterable[str], **parse_kwargs: Any) -> dict[str, ParseResult]:
+def show_many(
+    device: Any, commands: Iterable[str], *, redact: bool = False, **parse_kwargs: Any
+) -> dict[str, ParseResult]:
     """Run several commands on one device; returns ``{command: ParseResult}`` in order."""
-    return {cmd: show(device, cmd, **parse_kwargs) for cmd in commands}
+    return {cmd: show(device, cmd, redact=redact, **parse_kwargs) for cmd in commands}
+
+
+def unwrap(payload: str | bytes) -> str:
+    """Strip Cisco NSO ``live-status exec`` wrapping from output collected outside :func:`show`. **Stable API.**
+
+    Accepts every form NSO returns the ``result`` in: the bare Python API string, RESTCONF / ``| display json``
+    JSON, JSON-RPC (nested or ``name``/``value`` pairs), RESTCONF / NETCONF / ``| display xml`` XML, ``ncs_cli``
+    transcripts (C-style and J-style, with or without NSO's own ``| match``) and text with literal ``\\r\\n``
+    escapes. Text that is not wrapped comes back unchanged. :func:`clijson.parse` does this by itself; use
+    ``unwrap`` when you need the device text, e.g. to store or hash it.
+    """
+    if isinstance(payload, (bytes, bytearray)):
+        payload = payload.decode("utf-8", errors="replace")
+    return _unwrap(payload or "").text

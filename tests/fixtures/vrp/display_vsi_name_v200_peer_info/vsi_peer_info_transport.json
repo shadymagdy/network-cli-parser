@@ -18,5 +18,26 @@
         "signaling": "ldp"
       }
     ]
-  }
+  },
+  "normalized": [
+    {
+      "service": "V200",
+      "neighbor": "192.0.2.18",
+      "pw_id": 6000,
+      "state": "up",
+      "role": null,
+      "active": true,
+      "vc_type": null,
+      "mtu": null,
+      "local_label": 48178,
+      "remote_label": 8189,
+      "status_code": "up",
+      "local_status_code": null,
+      "remote_status_code": null,
+      "control_word": null,
+      "pw_status_tlv": null,
+      "flow_label_tx": null,
+      "flow_label_rx": null
+    }
+  ]
 }

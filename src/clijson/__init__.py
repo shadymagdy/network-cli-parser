@@ -13,11 +13,12 @@ trees and falls back to a heuristic engine that structures *any* output.
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _dist_version
 
-from . import checks
+from . import checks, config
 from .api import find_parser, parse, parse_file, parse_session, split_session, supported_commands
 from .diff import Change, diff
 from .exceptions import CliJsonError, ParseError, ParserNotFound, PlatformDetectionError, UnknownPlatformError
 from .platforms import Platform, detect_platform, get_platform, list_platforms
+from .redact import REDACTED, redact
 from .registry import Parser, register
 from .result import ParseResult
 
@@ -27,6 +28,7 @@ except PackageNotFoundError:  # pragma: no cover - running from a source tree wi
     __version__ = "0.0.0+unknown"
 
 __all__ = [
+    "REDACTED",
     "Change",
     "CliJsonError",
     "ParseError",
@@ -38,6 +40,7 @@ __all__ = [
     "UnknownPlatformError",
     "__version__",
     "checks",
+    "config",
     "detect_platform",
     "diff",
     "find_parser",
@@ -46,6 +49,7 @@ __all__ = [
     "parse",
     "parse_file",
     "parse_session",
+    "redact",
     "register",
     "split_session",
     "supported_commands",

@@ -280,7 +280,7 @@ Grammar: `[optional]`, `(a | b)` alternatives, `<param>` single token, `<param..
 | `display vrrp <interface> <vrid> [(brief \| verbose)]` |  | `vrp.display_vrrp` | VRRP groups: VRID, state, interface, type and virtual IP (brief or verbose). |
 | `display vrrp [(brief \| verbose \| <interface> \| statistics)]` |  | `vrp.display_vrrp` | VRRP groups: VRID, state, interface, type and virtual IP (brief or verbose). |
 | `display vsi [name <vsi>] [verbose]` | `l2vpn.pseudowires` | `vrp.display_vsi` | VSIs: summary table (signaling, encapsulation, MTU, state) or verbose peers, ACs and PW labels/state. |
-| `display vsi [name <vsi>] peer-info` |  | `vrp.display_vsi_peer_info` | VSI peers: peer router ID, VC label, peer type, LDP session and tunnel, per VSI. |
+| `display vsi [name <vsi>] peer-info` | `l2vpn.pseudowires` | `vrp.display_vsi_peer_info` | VSI peers per VSI: transport VC ID, local / remote VC label and VC state, or peer type, session and tunnel. |
 | `display vsi [name <vsi>] protect-group [<group>]` | `l2vpn.pseudowires` | `vrp.display_vsi_protect_group` | VSI PW protect-groups: protect mode, reroute policy, members with preference and active/inactive state. |
 | `display vsi remote (ldp \| bgp) [(pw-id <pwid> \| router-id <peer> \| unicast \| unused)]` | `l2vpn.pseudowires` | `vrp.display_vsi_remote` | Remote VSI (PW) entries learned from peers: PW / VSI ID, peer, remote VC label, encapsulation, MTU, state code. |
 | `display vsi verbose` | `l2vpn.pseudowires` | `vrp.display_vsi` | VSIs: summary table (signaling, encapsulation, MTU, state) or verbose peers, ACs and PW labels/state. |

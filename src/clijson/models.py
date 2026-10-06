@@ -274,6 +274,15 @@ class Pseudowire(TypedDict):
     mtu: Annotated[int | None, "Negotiated / local PW MTU"]
     local_label: int | None
     remote_label: int | None
+    status_code: Annotated[
+        str | None, "Native status as printed: Junos Up / RS / HS ..., VRP FORWARD / up, IOS XR up / standby"
+    ]
+    local_status_code: Annotated[str | None, "Local PW status code (hex string, e.g. 0x00000000)"]
+    remote_status_code: Annotated[str | None, "Remote (neighbor) PW status code (hex string, e.g. 0x00000020)"]
+    control_word: Annotated[bool | None, "Control word negotiated / in use"]
+    pw_status_tlv: Annotated[bool | None, "PW status TLV negotiated / in use"]
+    flow_label_tx: Annotated[bool | None, "Flow label (FAT) transmit"]
+    flow_label_rx: Annotated[bool | None, "Flow label (FAT) receive"]
 
 
 class Ping(TypedDict):

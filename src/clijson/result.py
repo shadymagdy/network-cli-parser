@@ -35,6 +35,8 @@ class ParseResult:
     metadata: dict[str, Any] = field(default_factory=dict)
     #: The original text that was parsed (not included in ``to_dict``/``to_json``).
     raw: str | None = field(default=None, repr=False, compare=False)
+    #: Nested table that :meth:`records` flattens (set from the parser's ``record_path``).
+    record_path: tuple[str, str] | None = field(default=None, repr=False, compare=False)
 
     # -- convenience --------------------------------------------------------
     def __getitem__(self, key: Any) -> Any:
@@ -88,6 +90,10 @@ class ParseResult:
         Uses the normalized view when available, otherwise the largest list of records
         found in ``data`` (a dict keyed by name becomes rows with a ``name`` column).
         """
+        if self.normalized is None and self.record_path and isinstance(self.data, dict):
+            nested = _nested_rows(self.data, *self.record_path)
+            if nested is not None:
+                return nested
         return _rows(self.normalized if self.normalized is not None else self.data) or []
 
     def to_dataframe(self) -> Any:
@@ -132,6 +138,24 @@ def _rows(obj: Any) -> list[dict[str, Any]] | None:
                 best = r
         return best
     return None
+
+
+def _nested_rows(data: dict[str, Any], outer: str, inner: str) -> list[dict[str, Any]] | None:
+    """One row per ``data[outer][*][inner][*]`` item, with the parent's scalar fields (child keys win)."""
+    parents = data.get(outer)
+    if not isinstance(parents, list):
+        return None
+    rows = []
+    for parent in parents:
+        if not isinstance(parent, dict):
+            continue
+        scalars = {k: v for k, v in parent.items() if not isinstance(v, (dict, list))}
+        children = parent.get(inner)
+        if not isinstance(children, list) or not children:
+            rows.append(scalars)
+            continue
+        rows.extend({**scalars, **_flat(c)} for c in children if isinstance(c, dict))
+    return rows
 
 
 def _flat(row: dict[str, Any]) -> dict[str, Any]:
