@@ -259,6 +259,11 @@ The same flag exists on `clijson.parse()`, `parse_file()`, `parse_session()` and
 `clijson.redact(text)` masks any text, for example before you store a capture. Every secret becomes
 `<redacted>`, and keywords, quotes and `;` stay in place, so configuration trees parse the same.
 
+!!! warning "Pattern-based"
+    Redaction recognises the common Junos, IOS XR and VRP secret forms listed in the
+    [API reference](../reference/api.md#masking-secrets). It cannot know every vendor statement, so review a
+    capture before you share it outside your organisation.
+
 ## Stripping NSO wrapping yourself
 
 `clijson.parse()` removes NSO's wrapping by itself. When you need the device text, for example to store or hash

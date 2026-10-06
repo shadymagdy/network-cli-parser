@@ -18,13 +18,14 @@ Masked:
   statement's only value (``password s3cr3t;``);
 * Huawei ``cipher <value>`` after an authentication mode, key id or community (``authentication-mode md5
   cipher ...``, ``snmp-agent community read cipher ...``);
-* IOS XR ``key <n> ...``;
+* IOS XR ``key <n> ...`` and the community of ``snmp-server host <addr> traps|informs [version 1|2c] ...``;
+* Huawei ``authentication plain|cipher ...`` (RSVP-TE) and ``md5-password plain|cipher <peer> ...`` (LDP);
 * SNMP communities: Junos ``snmp community <name>`` (``set`` and ``{ }`` formats), IOS XR
   ``snmp-server community <name>`` and Huawei ``snmp-agent community read|write <name>``.
 
 Not masked, because they are settings rather than secrets: ``password minimum-length 8``, ``password expire 0``,
-``authentication-order [ radius password ]``, ``ssh client cipher aes256_ctr``, a description that mentions a
-password, and so on.
+``authentication-order [ radius password ]``, ``ssh client cipher aes256_ctr``, a description or remark that
+mentions a password or a secret, and so on.
 
 Every pattern is linear on any input.
 """
@@ -57,9 +58,18 @@ _KEYWORD = re.compile(
 _ENCRYPTED = re.compile(r"(?P<keep>(?<![\w-])encrypted[ \t]+)" + _VALUE)
 # Huawei: "authentication-mode md5 cipher X", "ospf authentication-mode md5 1 plain X", "community read cipher X"
 _HUAWEI = re.compile(
-    r"(?P<keep>(?<![\w-])(?:md5|hmac-md5|hmac-sha256|sha256|hmac-sha1|keychain|simple|read|write|\d+)[ \t]+"
-    r"(?:irreversible-cipher|cipher|plain)[ \t]+)" + _VALUE
+    r"(?P<keep>(?<![\w-])(?:md5|hmac-md5|hmac-sha256|sha256|hmac-sha1|keychain|simple|authentication|read|write|\d+)"
+    r"[ \t]+(?:irreversible-cipher|cipher|plain)[ \t]+)" + _VALUE
 )
+# Huawei LDP: "md5-password plain|cipher <peer> <key>"
+_HUAWEI_LDP = re.compile(r"(?P<keep>(?<![\w-])md5-password[ \t]+(?:plain|cipher)[ \t]+\S+[ \t]+)" + _VALUE)
+# IOS XR: "snmp-server host <addr> traps|informs [version 1|2c] [encrypted|clear] <community>" (v3 names a user)
+_XR_SNMP_HOST = re.compile(
+    r"(?P<keep>(?<![\w-])snmp-server[ \t]+host[ \t]+\S+[ \t]+(?:traps|informs)[ \t]+"
+    r"(?:version[ \t]+(?:1|2c)[ \t]+)?(?:(?:encrypted|clear)[ \t]+)?)(?!version\b)" + _VALUE
+)
+# free text in which "password" / "secret" are just words
+_FREE_TEXT = re.compile(r"(?<![\w-])(?:description|remark|alias)[ \t]")
 _XR_KEY = re.compile(r"(?P<keep>(?<![\w-])key[ \t]+\d+[ \t]+)" + _VALUE)
 _SNMP = re.compile(
     r"(?P<keep>(?<![\w-])(?:snmp[ \t]+community|snmp-server[ \t]+community(?:[ \t]+(?:clear|encrypted))?"
@@ -93,10 +103,12 @@ def _mask_when_secret(pattern: re.Pattern[str], line: str, *, hash_only: bool = 
     """Mask each match whose value is quoted, ends the statement or looks like a hash (``hash_only``: the latter)."""
     out: list[str] = []
     pos = 0
+    free_text = _FREE_TEXT.search(line)
     for m in pattern.finditer(line):
         value = m["value"]
+        in_text = free_text is not None and free_text.start() < m.start()
         secret = _looks_secret(value) or (
-            not hash_only and (value.startswith('"') or _ends_statement(line[m.end() : m.end() + 200]))
+            not hash_only and not in_text and (value.startswith('"') or _ends_statement(line[m.end() : m.end() + 200]))
         )
         if secret:
             out.append(line[pos : m.start()])
@@ -154,6 +166,8 @@ def _redact_line(line: str, blocks: list[str]) -> str:
     line = _mask_when_secret(_KEYWORD, line)
     line = _mask_when_secret(_ENCRYPTED, line, hash_only=True)
     line = _HUAWEI.sub(_mask, line)
+    line = _HUAWEI_LDP.sub(_mask, line)
+    line = _XR_SNMP_HOST.sub(_mask, line)
     line = _mask_when_secret(_XR_KEY, line)
     line = _SNMP.sub(_mask, line)
     if stripped.endswith("{"):

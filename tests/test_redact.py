@@ -77,6 +77,17 @@ def _leaks(obj) -> list[str]:
         (" tacacs-server host 192.0.2.1 key 7 0822455D0A16", " tacacs-server host 192.0.2.1 key 7 <redacted>"),
         (" ospf authentication-mode md5 1 plain s3cr3t", " ospf authentication-mode md5 1 plain <redacted>"),
         (" isis authentication-mode simple plain s3cr3t", " isis authentication-mode simple plain <redacted>"),
+        (" md5-password plain 192.0.2.2 s3cr3t", " md5-password plain 192.0.2.2 <redacted>"),
+        (" mpls rsvp-te authentication plain s3cr3t", " mpls rsvp-te authentication plain <redacted>"),
+        (
+            "snmp-server host 192.0.2.5 traps version 2c public",
+            "snmp-server host 192.0.2.5 traps version 2c <redacted>",
+        ),
+        (
+            "snmp-server host 192.0.2.5 traps public udp-port 162",
+            "snmp-server host 192.0.2.5 traps <redacted> udp-port 162",
+        ),
+        (" description key 7 0822455D0A16", " description key 7 <redacted>"),
         # Huawei cipher text is masked whole, whatever characters it contains
         (' password cipher %^%#a;b\\c"d}e%^%#', " password cipher <redacted>"),
         (
@@ -113,6 +124,11 @@ def test_each_secret_form_is_masked(line, expected):
         "set system ntp authentication-key 1 type md5",
         'set security authentication-key-chains key-chain KC key 0 start-time "2024-1-1.00:00:00 +0000"',
         " description encrypted backhaul link",
+        # descriptions and remarks are free text
+        " description link to password vault",
+        "interface GigabitEthernet0/0/0/0 description secret santa",
+        # SNMPv3 trap hosts name a user, not a community
+        "snmp-server host 192.0.2.5 traps version 3 priv USER1",
     ],
 )
 def test_non_secrets_are_left_alone(line):
