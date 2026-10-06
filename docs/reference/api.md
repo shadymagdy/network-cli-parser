@@ -16,6 +16,16 @@ Everything below is importable from the top-level `clijson` package unless noted
 
 ::: clijson.ParseResult
 
+## Masking secrets
+
+::: clijson.redact
+    options:
+      members: ["redact", "REDACTED"]
+
+## Configuration statements
+
+::: clijson.config
+
 ## Comparing captures
 
 ::: clijson.diff.diff

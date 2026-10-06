@@ -245,6 +245,30 @@ the same parsers.
     Every regression capture of every supported platform is parsed through each of the forms above. The test
     suite requires the result to be identical to parsing the plain capture.
 
+## Masking secrets
+
+Configuration commands return passwords, keys and SNMP communities as the device prints them. Pass
+`redact=True` to mask them before parsing, in both `data` and `raw`:
+
+```python
+res = clijson.nso.show(device, "show configuration | display set", redact=True)
+res.metadata["redacted"]   # True
+```
+
+The same flag exists on `clijson.parse()`, `parse_file()`, `parse_session()` and `clijson.nso.show_many()`, and
+`clijson.redact(text)` masks any text, for example before you store a capture. Every secret becomes
+`<redacted>`, and keywords, quotes and `;` stay in place, so configuration trees parse the same.
+
+## Stripping NSO wrapping yourself
+
+`clijson.parse()` removes NSO's wrapping by itself. When you need the device text, for example to store or hash
+it, use the stable `clijson.nso.unwrap(payload)`. It accepts every format in the table above and returns plain
+text:
+
+```python
+text = clijson.nso.unwrap(restconf_response_body)
+```
+
 ## Tips
 
 - **Long outputs** (full BGP tables, large MAC tables): raise the device's read timeout

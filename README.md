@@ -154,6 +154,22 @@ for r in clijson.parse_session(open("maintenance-window.log").read()):
     print(r.metadata.get("hostname"), r.command, r.parser)
 ```
 
+**Masking secrets** before results are stored or shared. Passwords, keys, SNMP communities and crypt strings
+become `<redacted>`, and configuration trees still parse:
+
+```python
+r = clijson.parse(config_text, "show configuration | display set", "junos", redact=True)
+clijson.redact(text)                     # mask any text
+```
+
+**Checking configuration statements**, the same way on Junos (`set` or `{ }`), IOS XR and VRP:
+
+```python
+r = clijson.parse(config_text, "show running-config", "iosxr")
+clijson.config.has(r, "router bgp 65000 neighbor 192.0.2.1 remote-as 65000")   # True / False
+clijson.config.lines(r)                  # one full-path line per statement
+```
+
 **Live devices** (via scrapli or netmiko). You can try it against containerlab XRd / cRPD / vJunos / VRP images:
 
 ```python
@@ -198,7 +214,8 @@ res = clijson.nso.show(root.devices.device["pe1"], "show bgp summary", normalize
 ```
 
 The platform comes from the device's NED. RESTCONF, JSON-RPC and `ncs_cli` output can also go straight to
-`clijson.parse()`. See **[docs/guides/cisco-nso.md](docs/guides/cisco-nso.md)**.
+`clijson.parse()`, and `clijson.nso.unwrap()` returns the device text from any of them. `redact=True` masks
+secrets. See **[docs/guides/cisco-nso.md](docs/guides/cisco-nso.md)**.
 
 ### AI assistants (MCP)
 
@@ -272,7 +289,7 @@ every vendor:
 | `bgp.summary` | neighbor, remote_as, state, established, uptime, uptime_seconds, prefixes_received, vrf, address_family |
 | `routes` | prefix, protocol, next_hops, distance, metric, vrf, age |
 | `lldp.neighbors` | local_interface, neighbor, neighbor_interface, chassis_id, capabilities, ttl |
-| `l2vpn.pseudowires` | service, neighbor, pw_id, state, role (primary/backup), active, vc_type, mtu, local_label, remote_label. See the [pseudowire checks guide](docs/guides/pseudowire-checks.md). |
+| `l2vpn.pseudowires` | service, neighbor, pw_id, state, role (primary/backup), active, vc_type, mtu, local_label, remote_label, status_code, local/remote_status_code, control_word, pw_status_tlv, flow_label_tx/rx. See the [pseudowire checks guide](docs/guides/pseudowire-checks.md). |
 | `ping` | target, sent, received, loss_percent, success, rtt_min, rtt_avg, rtt_max |
 | `ospf.neighbors`, `isis.adjacency`, `ldp.neighbors`, `bfd.sessions`, `arp`, `ipv6.neighbors`, `mac.table`, `lag`, `vrfs`, `inventory`, `cpu`, `interfaces.description` | see [docs/models.md](docs/models.md) |
 

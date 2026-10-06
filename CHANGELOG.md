@@ -6,6 +6,67 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.6.0 - 2026-10-06
+
+Fixes and additions requested for running clijson behind an NSO package. Data shapes and keys stay
+backward-compatible: fields were only added, none were renamed or removed.
+
+### Fixed
+
+* **CJ-01 (P1)** Junos `show l2circuit connections`: a row without the "Time last up" and "# Up trans" columns,
+  such as a standby circuit (`ae22.100(vc 7000)  rmt  RS`), was dropped silently. Rows now parse with
+  `last_up` / `up_transitions` set to `null`, their detail lines still attach, and they normalize to state
+  `standby`, `active: false`, role `backup`. This applies to every status code in the legend (`Up`, `RS`, `ST`,
+  `HS`, `BK`, `OL`, `NP`, `VC-Dn`, `CM`, `RD`, ...), with or without the time columns, and to the
+  `| match rmt` form (one row, `neighbor: null`, and the filter warning kept). VPLS rows get the same fix.
+  A time without a count no longer loses its year.
+* **CJ-10 (P4)** Prompt auto-detection: a Junos prompt with an empty user (`@host-re1>`) and a bare
+  routing-engine host (`host-re1>`) are recognised. The command, host name and platform are read from them, and
+  the `set cli timestamp` line that follows is stripped into `metadata["timestamp"]` instead of being parsed as
+  data.
+
+### Added
+
+* **G-1 (P1)** No silent data loss: the L2VPN and MAC table parsers report every line they cannot place
+  (neither header, legend, row nor detail). The result gets the warning
+  `unparsed line(s): N (first: '...')`, with the first line shortened to 80 characters, and
+  `confidence` drops to 0.8. This covers Junos `show l2circuit connections`, `show vpls connections` and
+  `show vpls/bridge/evpn mac-table`, and VRP `display vsi remote`, `display vsi peer-info` and the per-slot
+  `display mac-address`. Parsers opt in with `Parser.note_unparsed(line)`.
+* **G-2 (P2)** Secret redaction:
+  * `clijson.redact(text)` and a `redact=False` parameter on `parse()`, `parse_file()`, `parse_session()`,
+    `clijson.nso.show()` and `clijson.nso.show_many()`.
+  * When on, secrets are masked with `clijson.REDACTED` (`<redacted>`) before parsing, in both `data` and
+    `raw`, and `metadata["redacted"]` is `True`.
+  * Covered: Junos `$9$` and `$1$`/`$5$`/`$6$`/`$8$` crypt strings; `authentication-key`, `encrypted-password`,
+    `pre-shared-key`, `secret` and `password`; IOS XR `secret <n>`, `password <n>`, `password encrypted` and
+    `key <n>`; Huawei `cipher`, `password cipher` and `irreversible-cipher`; SNMP communities in Junos (`set`
+    and `{ }`), IOS XR and Huawei form.
+  * The surrounding syntax (keywords, key types, quotes, `;`) is kept, so configuration trees parse the same,
+    and NSO JSON payloads stay valid JSON.
+* **G-3 (P2)** `clijson.nso.unwrap(payload) -> str`, also available as `clijson.textutils.unwrap_nso`, strips
+  NSO `live-status` wrapping from output collected elsewhere. It is a stable, documented API. The private
+  `clijson._nso_wrap.unwrap` keeps its name and return value.
+* **G-4 (P3)** `l2vpn.pseudowires` has new optional fields: `status_code` (the native code: Junos `Up` / `RS` /
+  `HS` ..., VRP `FORWARD` / `up`, IOS XR `up` / `standby`), `local_status_code` and `remote_status_code` (hex),
+  `control_word`, `pw_status_tlv`, `flow_label_tx` and `flow_label_rx`. They are filled where the output shows
+  them: Junos l2circuit and VPLS, VRP `display vsi` verbose, `display vsi remote`, `display vsi peer-info`,
+  protect-group and `display mpls l2vc`, and IOS XR bridge-domain and xconnect detail. They are `null`
+  elsewhere.
+  * Junos l2circuit `role` is now `primary` for an `Up` circuit and `backup` for `RS` / `ST` / `HS` / `BK`
+    (it was `null`).
+  * VRP `display vsi remote` `service` is now the VSI ID (it was `null`).
+* **G-5 (P3)** VRP `display vsi name <vsi> peer-info` normalizes to `l2vpn.pseudowires`: service = VSI name,
+  neighbor, `pw_id` = VC ID, labels, state and `status_code`. Without `normalize`, `records()` gives one row per
+  peer, carrying the VSI name and signaling. Parsers opt into this with `Parser.record_path`, and `records()`
+  is unchanged for every other command.
+* **G-6 (P4)** `clijson.config.has(result, statement, anchored=True)` and `clijson.config.lines(result)`:
+  check a configuration statement from the root of the hierarchy, or flatten the tree into one full-path line
+  per statement. They behave the same for Junos `display set`, Junos `{ }`, IOS XR `running-config` and VRP
+  `current-configuration`, comparing word by word (quoting, whitespace and how the tree grouped words don't
+  matter).
+* Release notes now list the SHA-256 of the wheel and sdist published to PyPI.
+
 ## 0.5.0 - 2026-10-04
 
 ### Added

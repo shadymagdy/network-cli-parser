@@ -68,6 +68,16 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           awk -v v="$version" '$0 ~ "^## " v "( |$)" {on=1; next} /^## / && on {exit} on' CHANGELOG.md > notes.md
           test -s notes.md || echo "See CHANGELOG.md" > notes.md
+          {
+            echo
+            echo "### Checksums (SHA-256)"
+            echo
+            echo '```'
+            (cd dist && sha256sum -- *)
+            echo '```'
+            echo
+            echo "The same files are published to PyPI (pip checks these hashes with \`--require-hashes\`)."
+          } >> notes.md
       - name: Create or update release
         env:
           GH_TOKEN: ${{ github.token }}

@@ -18,6 +18,9 @@ Each pseudowire becomes one record. The fields are the same whatever the vendor:
 | `role` | `primary` / `backup` when PW redundancy is configured |
 | `active` | `True` for the forwarding PW, `False` for standby or down |
 | `vc_type`, `mtu`, `local_label`, `remote_label` | the parameters that must match on both ends |
+| `status_code` | the native status as printed: Junos `Up` / `RS` / `HS` ..., VRP `FORWARD` / `up`, IOS XR `up` / `standby` |
+| `local_status_code`, `remote_status_code` | PW status codes (hex) sent and received, e.g. `0x00000020` when the remote side is in standby |
+| `control_word`, `pw_status_tlv`, `flow_label_tx`, `flow_label_rx` | negotiated settings (`null` when the output doesn't show them) |
 
 ## Commands by device role
 
