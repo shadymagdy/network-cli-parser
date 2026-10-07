@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+## 0.6.1 - 2026-10-07
+
 ### Fixed
 
 * `clijson[scrapli]` now installs scrapli 1.x (`<2026.10`). scrapli 2026.10 is scrapli 2.x, a rewrite without
