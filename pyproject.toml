@@ -37,7 +37,7 @@ pretty = ["rich>=12"]
 ntc = ["ntc-templates>=4"]
 genie = ["pyats.topology", "genie.libs.parser"]
 netmiko = ["netmiko>=4"]
-scrapli = ["scrapli>=2023.7.30"]
+scrapli = ["scrapli>=2023.7.30,<2026.10"]  # 2026.10 is scrapli 2.x, a new API
 mcp = ["mcp>=2"]
 all = ["PyYAML>=5.4", "rich>=12", "ntc-templates>=4", "mcp>=2"]
 

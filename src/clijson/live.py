@@ -1,7 +1,8 @@
 """Collect and parse output from live devices.
 
-Uses `Scrapli <https://github.com/carlmontanari/scrapli>`_ if installed,
-otherwise `Netmiko <https://github.com/ktbyers/netmiko>`_::
+Uses `Scrapli <https://github.com/carlmontanari/scrapli>`_ 1.x if installed,
+otherwise `Netmiko <https://github.com/ktbyers/netmiko>`_. (scrapli 2.x, released as 2026.10, is a rewrite with a
+different API; ``clijson[scrapli]`` therefore installs scrapli 1.x)::
 
     pip install "clijson[netmiko]"     # or "clijson[scrapli]"
 
@@ -46,6 +47,11 @@ def collect(
     if outputs is None:
         outputs = _run_netmiko(plat, host, cmds, username, password, port, connection_kwargs)
     if outputs is None:
+        if _scrapli_2_installed():
+            raise DeviceError(
+                "scrapli 2.x (2026.10 and later) is installed, but clijson uses the scrapli 1.x API: "
+                "pip install 'scrapli<2026.10' (or 'clijson[scrapli]'), or use netmiko"
+            )
         raise DeviceError(
             "live collection needs scrapli or netmiko: pip install 'clijson[scrapli]' or 'clijson[netmiko]'"
         )
@@ -84,6 +90,15 @@ def _run_scrapli(
             return [r.result for r in conn.send_commands(cmds)]
     except Exception as exc:
         raise DeviceError(f"{host}: {exc}") from exc
+
+
+def _scrapli_2_installed() -> bool:
+    """scrapli 2.x (calendar version 2026.10+) dropped the ``Scrapli`` driver factory clijson uses."""
+    try:
+        import scrapli
+    except ImportError:
+        return False
+    return not hasattr(scrapli, "Scrapli")
 
 
 def _run_netmiko(

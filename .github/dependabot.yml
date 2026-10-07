@@ -18,5 +18,9 @@ updates:
     groups:
       dev-tools:
         patterns: ["*"]
+    ignore:
+      # scrapli 2.x (2026.10+) is a rewrite with a new API; clijson.live supports scrapli 1.x
+      - dependency-name: scrapli
+        versions: [">=2026.10"]
     commit-message:
       prefix: build
