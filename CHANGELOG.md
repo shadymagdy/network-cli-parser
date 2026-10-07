@@ -6,6 +6,17 @@ All notable changes to this project are documented here. The format follows
 
 ## Unreleased
 
+### Fixed
+
+* `clijson[scrapli]` now installs scrapli 1.x (`<2026.10`). scrapli 2026.10 is scrapli 2.x, a rewrite without
+  the `Scrapli` driver that `clijson.live` uses, so with it live collection silently skipped scrapli. If scrapli 2.x
+  is installed anyway, `clijson.live.collect()` now says so (or uses netmiko when it is installed).
+
+### Changed
+
+* Development tools updated: mcp 2.3.0, ruff 0.16.10, mypy 2.4.0 (lockfile only; the published package's
+  requirements are unchanged apart from the scrapli bound).
+
 ## 0.6.0 - 2026-10-06
 
 Data shapes and keys stay backward-compatible: fields were only added, none were renamed or removed.
